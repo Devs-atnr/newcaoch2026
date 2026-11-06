@@ -1,23 +1,45 @@
 {%- doc -%}
-  Renders the "Top products" shown in the header search panel before the shopper types anything.
-  Renders nothing when no collection is chosen.
+  Renders the product list shown in the header search before the shopper types
+  ("Best Selling Products"). With a collection it renders that collection's first products;
+  without one, the header script loads the store's best sellers from `url` on first open.
 
   @param {object} [collection] - Collection whose first products are shown
   @param {number} [limit] - How many products to show. Defaults to 4.
+  @param {string} [heading] - Heading above the list
+  @param {string} [url] - Section Rendering URL used to load best sellers when no collection is set
 
   @example
-  {% render 'coach-search-default', collection: section.settings.search_collection, limit: 4 %}
+  {% render 'coach-search-default', collection: section.settings.search_collection, limit: 4, heading: 'Best Selling Products', url: bestsellers_url %}
 {%- enddoc -%}
 {%- assign limit = limit | default: 4 -%}
-{%- if collection != blank and collection.products_count > 0 -%}
-  <div class="coach-search-results coach-search-results--default" data-search-default hidden>
-    <p class="coach-search-results__heading">{{ 'sections.coach_header.top_products' | t }}</p>
-    <ul class="coach-search-results__grid" role="list">
-      {%- for product in collection.products limit: limit -%}
-        <li class="coach-search-results__item">
-          {%- render 'coach-search-product', product: product -%}
-        </li>
-      {%- endfor -%}
-    </ul>
+{%- liquid
+  assign has_collection = false
+  if collection != blank and collection.products_count > 0
+    assign has_collection = true
+  endif
+-%}
+{%- if has_collection or url != blank -%}
+  <div
+    class="coach-search-results coach-search-results--default"
+    data-search-default
+    {% unless has_collection %}
+      data-url="{{ url | escape }}"
+    {% endunless %}
+    hidden
+  >
+    {%- if heading != blank -%}
+      <p class="coach-search-results__heading">{{ heading | escape }}</p>
+    {%- endif -%}
+    <div data-default-list>
+      {%- if has_collection -%}
+        <ul class="coach-search-results__grid" role="list">
+          {%- for product in collection.products limit: limit -%}
+            <li class="coach-search-results__item">
+              {%- render 'coach-search-product', product: product -%}
+            </li>
+          {%- endfor -%}
+        </ul>
+      {%- endif -%}
+    </div>
   </div>
 {%- endif -%}

@@ -1,0 +1,14 @@
+{%- comment -%}
+  Loaded by the Coach header search through the Section Rendering API:
+  /collections/all?sort_by=best-selling&section_id=coach-search-bestsellers
+  Renders the store's best-selling products as list items; the header keeps the first few.
+{%- endcomment -%}
+{%- if collection -%}
+  <ul class="coach-search-results__grid" role="list">
+    {%- for product in collection.products limit: 8 -%}
+      <li class="coach-search-results__item">
+        {%- render 'coach-search-product', product: product -%}
+      </li>
+    {%- endfor -%}
+  </ul>
+{%- endif -%}

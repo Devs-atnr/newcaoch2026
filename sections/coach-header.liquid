@@ -45,6 +45,20 @@
     endif
   endfor
 
+  assign help_url = section.settings.help_url
+  if help_url == blank
+    if routes.root_url == '/'
+      assign help_url = '/pages/contact'
+    else
+      assign help_url = routes.root_url | append: '/pages/contact'
+    endif
+  endif
+
+  assign bestsellers_url = ''
+  if section.settings.search_show_bestsellers
+    assign bestsellers_url = routes.all_products_collection_url | append: '?sort_by=best-selling&section_id=coach-search-bestsellers'
+  endif
+
   assign footer_items = 0
   if shop.customer_accounts_enabled
     assign footer_items = footer_items | plus: 1
@@ -52,7 +66,7 @@
   if section.settings.show_language_switcher
     assign footer_items = footer_items | plus: 1
   endif
-  if section.settings.help_url != blank
+  if section.settings.show_help
     assign footer_items = footer_items | plus: 1
   endif
 -%}
@@ -76,33 +90,35 @@
   "
 >
   <header class="coach-header__bar">
+    {%- comment -%} Mobile: dark bar with store tabs, bag and menu/search button {%- endcomment -%}
+    <div class="coach-header__mobile-bar">
+      {%- render 'coach-store-tabs',
+        logo: logo,
+        label: section.settings.store_tab_label,
+        second_label: section.settings.second_store_label,
+        second_logo: section.settings.second_store_logo,
+        second_url: section.settings.second_store_url,
+        eager: true
+      -%}
+      <div class="coach-header__mobile-icons">
+        <a href="{{ routes.cart_url }}" class="coach-icon-btn coach-header__cart" data-cart-mirror>
+          {%- render 'coach-cart-icon' -%}
+        </a>
+        <button
+          type="button"
+          class="coach-icon-btn coach-header__menu-btn"
+          aria-controls="CoachDrawer-{{ section.id }}"
+          aria-expanded="false"
+          data-drawer-open
+        >
+          {%- render 'coach-icon', icon: 'menu-search' -%}
+          <span class="visually-hidden">{{ 'sections.coach_header.open_menu' | t }}</span>
+        </button>
+      </div>
+    </div>
+
     <div class="coach-header__row coach-header__container">
       <div class="coach-header__left">
-        {%- if menu != blank -%}
-          <button
-            type="button"
-            class="coach-icon-btn coach-header__mobile-only"
-            aria-controls="CoachDrawer-{{ section.id }}"
-            aria-expanded="false"
-            data-drawer-open
-          >
-            {%- render 'coach-icon', icon: 'menu' -%}
-            <span class="visually-hidden">{{ 'sections.coach_header.open_menu' | t }}</span>
-          </button>
-        {%- endif -%}
-        {%- if section.settings.show_search -%}
-          <button
-            type="button"
-            class="coach-icon-btn coach-header__mobile-only"
-            aria-controls="CoachDrawer-{{ section.id }}"
-            aria-expanded="false"
-            data-drawer-open
-            data-drawer-search
-          >
-            {%- render 'coach-icon', icon: 'search' -%}
-            <span class="visually-hidden">{{ 'general.search.search' | t }}</span>
-          </button>
-        {%- endif -%}
         {%- if section.settings.show_language_switcher -%}
           <div class="coach-header__desktop-only">
             {%- render 'coach-language-switcher',
@@ -185,7 +201,12 @@
             </form>
             <div class="coach-search__panel" id="CoachSearchPanel-{{ section.id }}" hidden data-search-panel>
               <div class="coach-header__container">
-                {%- render 'coach-search-default', collection: section.settings.search_collection, limit: search_limit -%}
+                {%- render 'coach-search-default',
+                  collection: section.settings.search_collection,
+                  limit: search_limit,
+                  heading: section.settings.search_default_heading,
+                  url: bestsellers_url
+                -%}
                 <div class="coach-search__results" aria-live="polite" data-search-results></div>
               </div>
             </div>
@@ -200,15 +221,16 @@
         {%- endif -%}
 
         {%- if shop.customer_accounts_enabled -%}
-          <shopify-account
-            menu="{{ settings.customer_account_menu | default: 'customer-account-main-menu' }}"
-            class="coach-icon-btn coach-header__account coach-header__desktop-only"
-          >
-            <span slot="signed-out-avatar" class="coach-header__account-icon">
-              {%- render 'coach-icon', icon: 'account' -%}
+          <a href="{{ routes.account_url }}" class="coach-icon-btn coach-header__account">
+            {%- render 'coach-icon', icon: 'account' -%}
+            <span class="visually-hidden">
+              {%- if customer -%}
+                {{- 'sections.coach_header.account' | t -}}
+              {%- else -%}
+                {{- 'customer.log_in' | t -}}
+              {%- endif -%}
             </span>
-            <span slot="signed-out-avatar" class="visually-hidden">{{ 'customer.log_in' | t }}</span>
-          </shopify-account>
+          </a>
         {%- endif -%}
 
         {%- if has_app_block -%}
@@ -335,34 +357,26 @@
       data-drawer-panel
     >
       <div class="coach-drawer__top">
-        <div class="coach-drawer__stores">
-          <a href="{{ routes.root_url }}" class="coach-drawer__store is-current" aria-current="true">
-            {%- if logo != blank and section.settings.store_tab_label == blank -%}
-              {{
-                logo
-                | image_url: width: 300
-                | image_tag: class: 'coach-drawer__store-logo', alt: shop.name, loading: 'lazy'
-              }}
-            {%- else -%}
-              {{ section.settings.store_tab_label | default: shop.name | escape }}
-            {%- endif -%}
-          </a>
-          {%- if section.settings.second_store_url != blank -%}
-            <a href="{{ section.settings.second_store_url }}" class="coach-drawer__store">
-              {%- if section.settings.second_store_logo != blank -%}
-                {%- assign second_store_alt = section.settings.second_store_label | default: shop.name | escape -%}
-                {{
-                  section.settings.second_store_logo
-                  | image_url: width: 300
-                  | image_tag: class: 'coach-drawer__store-logo', alt: second_store_alt, loading: 'lazy'
-                }}
-              {%- else -%}
-                {{ section.settings.second_store_label | escape }}
-              {%- endif -%}
-            </a>
-          {%- endif -%}
-        </div>
+        {%- render 'coach-store-tabs',
+          logo: logo,
+          label: section.settings.store_tab_label,
+          second_label: section.settings.second_store_label,
+          second_logo: section.settings.second_store_logo,
+          second_url: section.settings.second_store_url
+        -%}
         <button type="button" class="coach-icon-btn coach-drawer__close" data-drawer-close>
+          {%- render 'coach-icon', icon: 'close' -%}
+          <span class="visually-hidden">{{ 'accessibility.close' | t }}</span>
+        </button>
+      </div>
+
+      {%- comment -%} Shown instead of the store tabs while searching {%- endcomment -%}
+      <div class="coach-drawer__search-top">
+        <button type="button" class="coach-icon-btn coach-drawer__back" data-search-back>
+          {%- render 'coach-icon', icon: 'back' -%}
+          <span class="visually-hidden">{{ 'sections.coach_header.back' | t }}</span>
+        </button>
+        <button type="button" class="coach-icon-btn coach-drawer__search-close" data-drawer-close>
           {%- render 'coach-icon', icon: 'close' -%}
           <span class="visually-hidden">{{ 'accessibility.close' | t }}</span>
         </button>
@@ -388,7 +402,7 @@
               class="coach-search__input"
               name="q"
               value="{{ search.terms | escape }}"
-              placeholder="{{ 'sections.coach_header.search' | t }}"
+              placeholder="{{ 'sections.coach_header.search_placeholder_mobile' | t }}"
               autocomplete="off"
               autocorrect="off"
               spellcheck="false"
@@ -403,7 +417,12 @@
             </button>
           </form>
           <div class="coach-search__panel" id="CoachDrawerSearchPanel-{{ section.id }}" hidden data-search-panel>
-            {%- render 'coach-search-default', collection: section.settings.search_collection, limit: search_limit -%}
+            {%- render 'coach-search-default',
+              collection: section.settings.search_collection,
+              limit: search_limit,
+              heading: section.settings.search_default_heading,
+              url: bestsellers_url
+            -%}
             <div class="coach-search__results" aria-live="polite" data-search-results></div>
           </div>
         </coach-search>
@@ -505,17 +524,17 @@
             </a>
           {%- endif -%}
           {%- if section.settings.show_language_switcher -%}
-            <div class="coach-drawer__util">
+            <div class="coach-drawer__util coach-drawer__util--lang">
               {%- render 'coach-language-switcher',
                 form_id: 'CoachLanguageMobile',
-                variant: 'inline',
+                variant: 'footer',
                 flag_code: section.settings.flag_country,
                 flag_image: section.settings.flag_image
               -%}
             </div>
           {%- endif -%}
-          {%- if section.settings.help_url != blank -%}
-            <a href="{{ section.settings.help_url }}" class="coach-drawer__util">
+          {%- if section.settings.show_help -%}
+            <a href="{{ help_url }}" class="coach-drawer__util">
               {%- render 'coach-icon', icon: 'help' -%}
               <span>{{ 'sections.coach_header.help' | t }}</span>
             </a>
@@ -684,10 +703,22 @@
       "default": 4
     },
     {
+      "type": "checkbox",
+      "id": "search_show_bestsellers",
+      "label": "Show best sellers before typing",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "search_default_heading",
+      "label": "Heading before typing",
+      "default": "Best Selling Products"
+    },
+    {
       "type": "collection",
       "id": "search_collection",
-      "label": "Top products before typing",
-      "info": "Optional. Shows these products when someone opens the search box."
+      "label": "Products before typing",
+      "info": "Optional. Shows this collection instead of the store's best sellers."
     },
     {
       "type": "header",
@@ -700,10 +731,16 @@
       "info": "Leave empty to hide the heart icon."
     },
     {
+      "type": "checkbox",
+      "id": "show_help",
+      "label": "Show Help in mobile menu",
+      "default": true
+    },
+    {
       "type": "url",
       "id": "help_url",
-      "label": "Help link (mobile menu)",
-      "info": "Leave empty to hide Help in the mobile menu."
+      "label": "Help link",
+      "info": "Leave empty to use the Contact page (/pages/contact)."
     },
     {
       "type": "header",

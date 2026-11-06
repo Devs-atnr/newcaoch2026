@@ -24,6 +24,8 @@
       this.panel = this.querySelector('[data-search-panel]');
       this.results = this.querySelector('[data-search-results]');
       this.defaultResults = this.querySelector('[data-search-default]');
+      this.defaultList = this.querySelector('[data-default-list]');
+      this.defaultUrl = this.defaultResults?.dataset.url || '';
       this.clearButton = this.querySelector('[data-search-clear]');
       if (!this.input || !this.panel) return;
 
@@ -45,13 +47,18 @@
         this.toggleClear();
         this.results.innerHTML = '';
         this.input.focus();
-        this.showDefaultOrClose();
+        this.showDefault();
       });
       this.addEventListener('keydown', (event) => {
         if (event.key === 'Escape' && this.isOpen) {
           event.stopPropagation();
-          this.close();
-          this.input.focus();
+          if (this.isDrawer) {
+            this.reset();
+            this.closest('[data-drawer-panel]')?.focus();
+          } else {
+            this.close();
+            this.input.focus();
+          }
         }
       });
       this.querySelector('form')?.addEventListener('submit', (event) => {
@@ -82,14 +89,14 @@
         this.open();
         if (!this.results.innerHTML.trim()) this.fetchResults(this.query);
       } else {
-        this.showDefaultOrClose();
+        this.showDefault();
       }
     }
 
     onInput() {
       if (!this.query) {
         this.results.innerHTML = '';
-        this.showDefaultOrClose();
+        this.showDefault();
         return;
       }
       if (this.defaultResults) this.defaultResults.hidden = true;
@@ -97,13 +104,51 @@
       this.fetchResults(this.query);
     }
 
-    showDefaultOrClose() {
-      if (this.defaultResults) {
-        this.defaultResults.hidden = false;
-        this.open();
-      } else {
-        this.close();
+    /* Products shown before typing: a chosen collection, or the store's best sellers loaded on demand.
+       The drawer always switches to its search screen, even with nothing to show yet. */
+    showDefault() {
+      const hasDefault = this.prepareDefault();
+      if (this.defaultResults) this.defaultResults.hidden = !hasDefault;
+      if (hasDefault || this.isDrawer) this.open();
+      else this.close();
+    }
+
+    prepareDefault() {
+      if (!this.defaultResults || !this.defaultList) return false;
+      if (this.defaultList.querySelector('li')) return true;
+      if (!this.defaultUrl || this.defaultFailed) return false;
+      if (!this.defaultLoading) this.loadDefault();
+      return true;
+    }
+
+    async loadDefault() {
+      this.defaultLoading = true;
+      try {
+        const response = await fetch(this.defaultUrl);
+        if (!response.ok) throw new Error(response.status);
+        const doc = new DOMParser().parseFromString(await response.text(), 'text/html');
+        const items = [...doc.querySelectorAll('.coach-search-results__item')].slice(0, this.limit);
+        if (!items.length) throw new Error('no products');
+        const list = document.createElement('ul');
+        list.className = 'coach-search-results__grid';
+        list.setAttribute('role', 'list');
+        items.forEach((item) => list.appendChild(document.importNode(item, true)));
+        this.defaultList.replaceChildren(list);
+      } catch (error) {
+        this.defaultFailed = true;
+        this.defaultResults.hidden = true;
+        if (!this.query && !this.isDrawer) this.close();
+      } finally {
+        this.defaultLoading = false;
       }
+    }
+
+    reset() {
+      this.abortController?.abort();
+      this.input.value = '';
+      this.results.innerHTML = '';
+      this.toggleClear();
+      this.close();
     }
 
     async fetchResults(term) {
@@ -188,6 +233,7 @@
 
       this.initMegaMenu();
       this.initDrawer();
+      this.initCartMirror();
       this.initLanguage();
       this.initHeightTracking();
       this.initSticky();
@@ -217,6 +263,7 @@
       document.removeEventListener('shopify:block:select', this.onBlockSelect);
       document.removeEventListener('shopify:block:deselect', this.onBlockDeselect);
       this.resizeObserver?.disconnect();
+      this.cartObserver?.disconnect();
       this.unlockScroll();
       this.section?.classList.remove('coach-is-overlaying');
     }
@@ -311,6 +358,13 @@
     resetL2(item) {
       item.querySelectorAll('.coach-mega__l2-item.is-active').forEach((el) => el.classList.remove('is-active'));
       this.showMedia(item, '0');
+      this.fitColumns(item, null);
+
+      // No main image for this menu: open the first sub-item's column so the panel isn't empty
+      if (!item.querySelector('[data-media="0"]')) {
+        const first = [...item.querySelectorAll('.coach-mega__l2-item')].find((l2) => l2.querySelector('.coach-mega__l3'));
+        if (first) this.setActiveL2(item, first);
+      }
     }
 
     setActiveL2(item, l2) {
@@ -318,6 +372,19 @@
       item.querySelectorAll('.coach-mega__l2-item.is-active').forEach((el) => el.classList.remove('is-active'));
       l2.classList.add('is-active');
       this.showMedia(item, l2.dataset.l2);
+      this.fitColumns(item, l2);
+    }
+
+    /* The third-level column is positioned beside the list, so grow the panel when it is taller */
+    fitColumns(item, l2) {
+      const lists = item.querySelector('.coach-mega__lists');
+      if (!lists) return;
+      lists.style.minHeight = '';
+      const l3 = l2 && l2.querySelector('.coach-mega__l3');
+      if (!l3) return;
+      const padding = parseFloat(getComputedStyle(lists).paddingBottom) || 0;
+      const needed = l3.getBoundingClientRect().bottom - lists.getBoundingClientRect().top + padding;
+      if (needed > lists.offsetHeight) lists.style.minHeight = `${Math.ceil(needed)}px`;
     }
 
     showMedia(item, index) {
@@ -358,6 +425,12 @@
       });
       this.drawer.querySelectorAll('[data-drawer-close]').forEach((button) => {
         button.addEventListener('click', () => this.closeDrawer());
+      });
+
+      this.drawerSearch = this.drawer.querySelector('coach-search');
+      this.drawer.querySelector('[data-search-back]')?.addEventListener('click', () => {
+        this.drawerSearch?.reset();
+        this.drawerPanel.focus();
       });
 
       const tabs = [...this.drawer.querySelectorAll('[role="tab"]')];
@@ -418,6 +491,8 @@
     closeDrawer() {
       if (!this.drawer?.classList.contains('is-open')) return;
       this.drawer.classList.remove('is-open');
+      this.closeLanguage(false);
+      setTimeout(() => this.drawerSearch?.reset(), 300);
       this.querySelectorAll('[data-drawer-open]').forEach((b) => b.setAttribute('aria-expanded', 'false'));
       this.unlockScroll();
       setTimeout(() => this.section?.classList.remove('coach-is-overlaying'), 300);
@@ -437,6 +512,25 @@
       if (DESKTOP.matches) this.closeDrawer();
       else this.closeMega();
       this.updateHeight();
+    }
+
+    /* ---------- Mobile bag ---------- */
+    initCartMirror() {
+      const source = document.getElementById('cart-icon-bubble');
+      const mirrors = [...this.querySelectorAll('[data-cart-mirror]')];
+      if (!source || !mirrors.length) return;
+      const sync = () => mirrors.forEach((mirror) => (mirror.innerHTML = source.innerHTML));
+      this.cartObserver = new MutationObserver(sync);
+      this.cartObserver.observe(source, { childList: true, subtree: true, characterData: true });
+      mirrors.forEach((mirror) =>
+        mirror.addEventListener('click', (event) => {
+          const cartDrawer = document.querySelector('cart-drawer');
+          if (cartDrawer && typeof cartDrawer.open === 'function') {
+            event.preventDefault();
+            cartDrawer.open(mirror);
+          }
+        })
+      );
     }
 
     /* ---------- Language dropdown ---------- */
@@ -489,10 +583,13 @@
     }
 
     onDocumentClick(event) {
-      if (!this.contains(event.target)) {
-        if (!this.editorPinned) this.closeMega();
-        this.closeLanguage(false);
-      }
+      if (!this.contains(event.target) && !this.editorPinned) this.closeMega();
+      this.querySelectorAll('[data-lang-switcher]').forEach((wrapper) => {
+        if (wrapper.contains(event.target)) return;
+        const toggle = wrapper.querySelector('[data-lang-toggle]');
+        const list = wrapper.querySelector('[data-lang-list]');
+        if (toggle && list && !list.hidden) this.setLanguageOpen(toggle, list, false);
+      });
     }
 
     /* ---------- Height + sticky ---------- */

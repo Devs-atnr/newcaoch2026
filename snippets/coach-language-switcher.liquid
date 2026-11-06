@@ -4,7 +4,7 @@
   Settings → Languages — including languages added and translated with Langify.
 
   @param {string} form_id - Unique id for the localization form
-  @param {string} [variant] - `dropdown` (desktop header) or `inline` (mobile menu footer). Defaults to `dropdown`.
+  @param {string} [variant] - `dropdown` (desktop header, opens down) or `footer` (mobile menu footer, opens up). Defaults to `dropdown`.
   @param {string} [flag_code] - Two-letter country code whose flag is shown. Defaults to `SA`.
   @param {image} [flag_image] - Optional uploaded flag image that replaces the built-in flag
 
@@ -17,6 +17,12 @@
   assign flag_country = localization.available_countries | where: 'iso_code', flag_code | first
   assign current_language = localization.language
   assign list_id = form_id | append: '-list'
+
+  if variant == 'footer'
+    assign current_label = current_language.endonym_name | capitalize
+  else
+    assign current_label = current_language.iso_code | slice: 0, 2 | upcase
+  endif
 -%}
 
 {%- capture flag -%}
@@ -38,68 +44,45 @@
 {%- endcapture -%}
 
 {%- if localization.available_languages.size > 1 -%}
-  {%- if variant == 'inline' -%}
-    {%- form 'localization', id: form_id, class: 'coach-lang coach-lang--inline' -%}
-      {{ flag }}
-      <span class="coach-lang__inline-options">
-        {%- for language in localization.available_languages -%}
-          <button
-            type="submit"
-            name="locale_code"
-            value="{{ language.iso_code }}"
-            lang="{{ language.iso_code }}"
-            class="coach-lang__inline-option"
-            {% if language.iso_code == current_language.iso_code %}
-              aria-current="true"
-            {% endif %}
-          >
-            {{- language.endonym_name | capitalize -}}
-          </button>
-          {%- unless forloop.last -%}
-            <span class="coach-lang__divider" aria-hidden="true">|</span>
-          {%- endunless -%}
-        {%- endfor -%}
-      </span>
-    {%- endform -%}
-  {%- else -%}
-    <div class="coach-lang coach-lang--dropdown" data-lang-switcher>
-      {%- form 'localization', id: form_id, class: 'coach-lang__form' -%}
-        <button
-          type="button"
-          class="coach-lang__toggle"
-          aria-expanded="false"
-          aria-controls="{{ list_id }}"
-          data-lang-toggle
-        >
-          {{ flag }}
-          <span class="coach-lang__code">{{ current_language.iso_code | slice: 0, 2 | upcase }}</span>
+  <div class="coach-lang coach-lang--{{ variant }}" data-lang-switcher>
+    {%- form 'localization', id: form_id, class: 'coach-lang__form' -%}
+      <button
+        type="button"
+        class="coach-lang__toggle"
+        aria-expanded="false"
+        aria-controls="{{ list_id }}"
+        data-lang-toggle
+      >
+        {{ flag }}
+        <span class="coach-lang__label">
+          <span class="coach-lang__code">{{ current_label }}</span>
           {%- render 'coach-icon', icon: 'caret' -%}
-          <span class="visually-hidden">{{ 'sections.coach_header.language' | t }}: {{ current_language.endonym_name }}</span>
-        </button>
-        <ul id="{{ list_id }}" class="coach-lang__list" role="list" hidden data-lang-list>
-          {%- for language in localization.available_languages -%}
-            <li>
-              <button
-                type="submit"
-                name="locale_code"
-                value="{{ language.iso_code }}"
-                lang="{{ language.iso_code }}"
-                class="coach-lang__option"
-                {% if language.iso_code == current_language.iso_code %}
-                  aria-current="true"
-                {% endif %}
-              >
-                {{- language.endonym_name | capitalize -}}
-              </button>
-            </li>
-          {%- endfor -%}
-        </ul>
-      {%- endform -%}
-    </div>
-  {%- endif -%}
+        </span>
+        <span class="visually-hidden">{{ 'sections.coach_header.language' | t }}: {{ current_language.endonym_name }}</span>
+      </button>
+      <ul id="{{ list_id }}" class="coach-lang__list" role="list" hidden data-lang-list>
+        {%- for language in localization.available_languages -%}
+          <li>
+            <button
+              type="submit"
+              name="locale_code"
+              value="{{ language.iso_code }}"
+              lang="{{ language.iso_code }}"
+              class="coach-lang__option"
+              {% if language.iso_code == current_language.iso_code %}
+                aria-current="true"
+              {% endif %}
+            >
+              {{- language.endonym_name | capitalize -}}
+            </button>
+          </li>
+        {%- endfor -%}
+      </ul>
+    {%- endform -%}
+  </div>
 {%- else -%}
   <span class="coach-lang coach-lang--static coach-lang--{{ variant }}">
     {{ flag }}
-    <span class="coach-lang__code">{{ current_language.iso_code | slice: 0, 2 | upcase }}</span>
+    <span class="coach-lang__code">{{ current_label }}</span>
   </span>
 {%- endif -%}

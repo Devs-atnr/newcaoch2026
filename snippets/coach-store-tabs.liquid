@@ -1,0 +1,48 @@
+{%- doc -%}
+  Renders the store tabs shown in the dark mobile bar and at the top of the mobile menu
+  (this store, highlighted, plus an optional second store such as an outlet).
+
+  @param {image} [logo] - Logo shown in the current-store tab
+  @param {string} [label] - Text for the current-store tab. Overrides the logo when set.
+  @param {string} [second_label] - Text for the second-store tab
+  @param {image} [second_logo] - Logo for the second-store tab (a white logo works best)
+  @param {string} [second_url] - Link of the second store. The second tab is hidden when empty.
+  @param {boolean} [eager] - Load logos eagerly (use for the always-visible mobile bar)
+
+  @example
+  {% render 'coach-store-tabs', logo: logo, second_url: section.settings.second_store_url, eager: true %}
+{%- enddoc -%}
+{%- liquid
+  assign loading = 'lazy'
+  if eager
+    assign loading = 'eager'
+  endif
+  assign fallback_label = shop.name | split: ' ' | first
+-%}
+<div class="coach-store-tabs">
+  <a href="{{ routes.root_url }}" class="coach-store-tabs__tab is-current" aria-current="true">
+    {%- if logo != blank and label == blank -%}
+      {{
+        logo
+        | image_url: width: 300
+        | image_tag: class: 'coach-store-tabs__logo', alt: shop.name, loading: loading
+      }}
+    {%- else -%}
+      {{ label | default: fallback_label | escape }}
+    {%- endif -%}
+  </a>
+  {%- if second_url != blank -%}
+    <a href="{{ second_url }}" class="coach-store-tabs__tab">
+      {%- if second_logo != blank -%}
+        {%- assign second_alt = second_label | default: shop.name | escape -%}
+        {{
+          second_logo
+          | image_url: width: 300
+          | image_tag: class: 'coach-store-tabs__logo', alt: second_alt, loading: loading
+        }}
+      {%- else -%}
+        {{ second_label | escape }}
+      {%- endif -%}
+    </a>
+  {%- endif -%}
+</div>

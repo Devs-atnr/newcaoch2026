@@ -27,8 +27,9 @@
       {{ 'product-1' | placeholder_svg_tag: 'coach-search-card__placeholder' }}
     {%- endif -%}
   </span>
-  <span class="coach-search-card__title">{{ product.title | escape }}</span>
-  <span class="coach-search-card__price">
+  <span class="coach-search-card__text">
+    <span class="coach-search-card__title">{{ product.title | escape }}</span>
+    <span class="coach-search-card__price">
     {%- if product.compare_at_price > product.price -%}
       <s class="coach-search-card__compare">{{ product.compare_at_price | money }}</s>
     {%- endif -%}
@@ -38,5 +39,6 @@
     {%- else -%}
       {{ product.price | money }}
     {%- endif -%}
+    </span>
   </span>
 </a>

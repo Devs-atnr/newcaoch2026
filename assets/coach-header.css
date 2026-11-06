@@ -90,9 +90,58 @@ coach-header {
   }
 }
 
-/* ---------- Top row ---------- */
+/* ---------- Mobile bar (dark, store tabs + bag + menu/search) ---------- */
+.coach-header__mobile-bar {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  min-height: 5.2rem;
+  padding-block-start: 0.8rem;
+  padding-inline: 0.8rem 0.2rem;
+  background: var(--ch-drawer-top);
+  color: #ffffff;
+}
+
+.coach-header__mobile-icons {
+  display: flex;
+  align-items: center;
+  align-self: center;
+  margin-block-start: -0.4rem;
+}
+
+.coach-header__mobile-icons .coach-icon-btn {
+  width: 4.4rem;
+  height: 4.4rem;
+}
+
+.coach-header__menu-btn .coach-icon--menu-search {
+  width: 2.6rem;
+  height: 2.1rem;
+}
+
+.coach-header__mobile-icons .coach-bag .coach-icon--bag {
+  width: 1.8rem;
+  height: 2.2rem;
+}
+
+@media screen and (min-width: 990px) {
+  .coach-header__mobile-bar {
+    display: none;
+  }
+}
+
+/* ---------- Top row (desktop) ---------- */
 .coach-header__row {
-  display: grid;
+  display: none;
+}
+
+@media screen and (min-width: 990px) {
+  .coach-header__row {
+    display: grid;
+  }
+}
+
+.coach-header__row {
   grid-template-columns: 1fr auto 1fr;
   align-items: center;
   min-height: 5.6rem;
@@ -216,23 +265,6 @@ coach-header {
   height: 2.1rem;
 }
 
-/* Account web component (new customer accounts) */
-shopify-account.coach-header__account {
-  --shopify-account-font-heading: var(--font-heading-family);
-  --shopify-account-font-body: var(--font-body-family);
-  --shopify-account-color-background: var(--ch-bg);
-  --shopify-account-color-text: var(--ch-text);
-  --shopify-account-dialog-position-top: var(--account-dialog-top, var(--header-height, 0px));
-}
-
-shopify-account.coach-header__account:not(:defined) {
-  display: inline-flex;
-}
-
-.coach-header__account-icon {
-  display: inline-flex;
-}
-
 /* Bag with count inside */
 .coach-bag {
   position: relative;
@@ -289,8 +321,13 @@ shopify-account.coach-header__account:not(:defined) {
   gap: 0.6rem;
 }
 
+.coach-lang__label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
 .coach-lang__toggle .coach-icon--caret {
-  margin-inline-start: 0.2rem;
   transition: transform 0.2s ease;
 }
 
@@ -333,34 +370,41 @@ shopify-account.coach-header__account:not(:defined) {
   text-underline-offset: 0.3rem;
 }
 
-.coach-lang--inline {
+/* Mobile menu footer: flag on top, language below, list opens upward */
+.coach-lang--footer .coach-lang__toggle {
   flex-direction: column;
   gap: 0.6rem;
+  min-height: 4.4rem;
+  font-size: 1.35rem;
+}
+
+.coach-lang--footer .coach-lang__flag {
+  width: 2.2rem;
+  height: 1.5rem;
+}
+
+.coach-lang--footer .coach-lang__list {
+  top: auto;
+  bottom: calc(100% + 1rem);
+  inset-inline-start: 50%;
+  transform: translateX(-50%);
+  min-width: 16rem;
   margin: 0;
+  text-align: center;
 }
 
-.coach-lang__inline-options {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
+.coach-header[dir='rtl'] .coach-lang--footer .coach-lang__list {
+  transform: translateX(50%);
 }
 
-.coach-lang__inline-option {
-  padding: 0;
-  background: none;
-  border: 0;
-  font-size: 1.3rem;
-  cursor: pointer;
-  opacity: 0.6;
+.coach-lang--footer .coach-lang__option {
+  text-align: center;
+  font-size: 1.5rem;
+  padding-block: 1.1rem;
 }
 
-.coach-lang__inline-option[aria-current='true'] {
-  opacity: 1;
-  font-weight: 700;
-}
-
-.coach-lang__divider {
-  opacity: 0.4;
+.coach-lang--footer.coach-lang--static {
+  flex-direction: column;
 }
 
 /* ---------- Desktop search ---------- */
@@ -524,6 +568,12 @@ shopify-account.coach-header__account:not(:defined) {
   height: 100%;
   object-fit: contain;
   mix-blend-mode: multiply;
+}
+
+.coach-search-card__text {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .coach-search-card__title {
@@ -817,13 +867,13 @@ shopify-account.coach-header__account:not(:defined) {
   background: var(--ch-drawer-top);
 }
 
-.coach-drawer__stores {
+.coach-store-tabs {
   display: flex;
   align-items: flex-end;
   min-width: 0;
 }
 
-.coach-drawer__store {
+.coach-store-tabs__tab {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -840,12 +890,12 @@ shopify-account.coach-header__account:not(:defined) {
   white-space: nowrap;
 }
 
-.coach-drawer__store.is-current {
+.coach-store-tabs__tab.is-current {
   background: var(--ch-bg);
   color: var(--ch-text) !important;
 }
 
-.coach-drawer__store-logo {
+.coach-store-tabs__logo {
   display: block;
   width: auto;
   max-width: 12rem;
@@ -862,6 +912,33 @@ shopify-account.coach-header__account:not(:defined) {
 .coach-drawer__close .coach-icon {
   width: 2.2rem;
   height: 2.2rem;
+}
+
+.coach-drawer__search-top {
+  display: none;
+  align-items: center;
+  justify-content: space-between;
+  flex: none;
+  padding: 0.6rem 0.4rem 0;
+}
+
+.coach-drawer__search-top .coach-icon {
+  width: 2.2rem;
+  height: 2.2rem;
+}
+
+.coach-drawer.is-searching .coach-drawer__top,
+.coach-drawer.is-searching .coach-drawer__body,
+.coach-drawer.is-searching .coach-drawer__footer {
+  display: none;
+}
+
+.coach-drawer.is-searching .coach-drawer__search-top {
+  display: flex;
+}
+
+.coach-header[dir='rtl'] .coach-icon--back {
+  transform: scaleX(-1);
 }
 
 /* Drawer search */
@@ -899,21 +976,61 @@ shopify-account.coach-header__account:not(:defined) {
   overflow-y: auto;
 }
 
-.coach-drawer.is-searching .coach-drawer__body {
-  display: none;
+.coach-search--drawer .coach-search__panel {
+  padding-block: 4.4rem 3rem;
 }
 
 .coach-search--drawer .coach-search-results__heading {
-  margin-bottom: 2rem;
+  margin: 0 0 3rem;
+  font-family: var(--ch-nav-font);
+  font-size: 1.6rem;
+  letter-spacing: 0;
+  text-transform: none;
+  opacity: 0.75;
+}
+
+.coach-search--drawer .coach-search-results__grid {
+  grid-template-columns: minmax(0, 1fr);
+  gap: 1.4rem;
+}
+
+.coach-search--drawer .coach-search-card {
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 1rem;
+  text-align: start;
+}
+
+.coach-search--drawer .coach-search-card__media {
+  flex: none;
+  width: 6.4rem;
+  aspect-ratio: 4 / 5;
+}
+
+.coach-search--drawer .coach-search-card__img {
+  object-fit: cover;
+}
+
+.coach-search--drawer .coach-search-card__text {
+  align-items: flex-start;
+  padding-block-start: 0.6rem;
 }
 
 .coach-search--drawer .coach-search-card__title {
-  margin-top: 1.2rem;
-  font-size: 1.4rem;
+  margin-top: 0;
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1.35;
 }
 
 .coach-search--drawer .coach-search-card__price {
   margin-top: 0.6rem;
+  font-family: var(--ch-nav-font);
+  font-size: 1.4rem;
+}
+
+.coach-search--drawer .coach-search-results__all {
+  margin-top: 2.4rem;
 }
 
 /* Drawer tabs + lists */
