@@ -42,6 +42,16 @@
         this.onInput();
       });
       this.input.addEventListener('focus', () => this.onFocus());
+      this.placeholder = this.input.getAttribute('placeholder');
+      if (this.input.dataset.placeholderFocus) {
+        this.input.addEventListener('focus', () => (this.input.placeholder = this.input.dataset.placeholderFocus));
+        this.input.addEventListener('blur', () => {
+          if (!this.isOpen) this.input.placeholder = this.placeholder;
+        });
+        this.addEventListener('coach-search:toggle', (e) => {
+          if (!e.detail.open && document.activeElement !== this.input) this.input.placeholder = this.placeholder;
+        });
+      }
       this.clearButton?.addEventListener('click', () => {
         this.input.value = '';
         this.toggleClear();

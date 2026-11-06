@@ -29,16 +29,6 @@
   </span>
   <span class="coach-search-card__text">
     <span class="coach-search-card__title">{{ product.title | escape }}</span>
-    <span class="coach-search-card__price">
-    {%- if product.compare_at_price > product.price -%}
-      <s class="coach-search-card__compare">{{ product.compare_at_price | money }}</s>
-    {%- endif -%}
-    {%- if product.price_varies -%}
-      {%- assign min_price = product.price_min | money -%}
-      {{ 'products.product.price.from_price_html' | t: price: min_price }}
-    {%- else -%}
-      {{ product.price | money }}
-    {%- endif -%}
-    </span>
+    <span class="coach-search-card__price">{{ product.price | money }}</span>
   </span>
 </a>

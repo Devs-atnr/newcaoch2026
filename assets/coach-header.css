@@ -496,6 +496,14 @@ coach-header {
   width: 21.6rem;
 }
 
+.coach-search__clear--text {
+  width: auto;
+  padding-inline: 0.6rem;
+  font-family: var(--ch-nav-font);
+  font-size: 1.4rem;
+  opacity: 0.6;
+}
+
 .coach-search--header .coach-search__panel {
   position: absolute;
   inset-inline: 0;
@@ -1021,15 +1029,19 @@ coach-header {
 }
 
 .coach-search--drawer .coach-search-card__text {
+  flex: 1;
   align-items: flex-start;
   padding-block-start: 0.6rem;
 }
 
 .coach-search--drawer .coach-search-card__title {
+  align-self: stretch;
   margin-top: 0;
-  font-size: 1.5rem;
-  font-weight: 700;
-  line-height: 1.35;
+  font-size: 1.4rem;
+  font-weight: 400;
+  line-height: 2rem;
+  letter-spacing: 0.02rem;
+  text-align: center;
 }
 
 .coach-search--drawer .coach-search-card__price {

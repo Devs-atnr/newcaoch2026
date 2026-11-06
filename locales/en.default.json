@@ -391,7 +391,8 @@
       "main_navigation": "Main navigation",
       "submenu": "Show {{ title }} menu",
       "search_placeholder_mobile": "What can we help you find?",
-      "back": "Back"
+      "back": "Back",
+      "clear": "clear"
     }
   },
   "localization": {

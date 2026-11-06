@@ -45,6 +45,15 @@
     endif
   endfor
 
+  assign wishlist_url = section.settings.wishlist_url
+  if wishlist_url == blank
+    if routes.root_url == '/'
+      assign wishlist_url = '/pages/wishlist'
+    else
+      assign wishlist_url = routes.root_url | append: '/pages/wishlist'
+    endif
+  endif
+
   assign help_url = section.settings.help_url
   if help_url == blank
     if routes.root_url == '/'
@@ -182,6 +191,7 @@
                 name="q"
                 value="{{ search.terms | escape }}"
                 placeholder="{{ 'sections.coach_header.search' | t }}"
+                data-placeholder-focus="{{ 'sections.coach_header.search_placeholder_mobile' | t }}"
                 autocomplete="off"
                 autocorrect="off"
                 spellcheck="false"
@@ -213,8 +223,8 @@
           </coach-search>
         {%- endif -%}
 
-        {%- if section.settings.wishlist_url != blank -%}
-          <a href="{{ section.settings.wishlist_url }}" class="coach-icon-btn">
+        {%- if section.settings.show_wishlist -%}
+          <a href="{{ wishlist_url }}" class="coach-icon-btn">
             {%- render 'coach-icon', icon: 'heart' -%}
             <span class="visually-hidden">{{ 'sections.coach_header.wishlist' | t }}</span>
           </a>
@@ -411,9 +421,8 @@
               data-search-input
             >
             <input type="hidden" name="options[prefix]" value="last">
-            <button type="button" class="coach-search__btn coach-search__clear" hidden data-search-clear>
-              {%- render 'coach-icon', icon: 'close' -%}
-              <span class="visually-hidden">{{ 'general.search.reset' | t }}</span>
+            <button type="button" class="coach-search__btn coach-search__clear coach-search__clear--text" hidden data-search-clear>
+              {{- 'sections.coach_header.clear' | t -}}
             </button>
           </form>
           <div class="coach-search__panel" id="CoachDrawerSearchPanel-{{ section.id }}" hidden data-search-panel>
@@ -725,10 +734,16 @@
       "content": "Icons and links"
     },
     {
+      "type": "checkbox",
+      "id": "show_wishlist",
+      "label": "Show wishlist icon",
+      "default": true
+    },
+    {
       "type": "url",
       "id": "wishlist_url",
       "label": "Wishlist link",
-      "info": "Leave empty to hide the heart icon."
+      "info": "Leave empty to use /pages/wishlist (or your wishlist app's page)."
     },
     {
       "type": "checkbox",
