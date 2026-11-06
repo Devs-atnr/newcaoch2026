@@ -2,7 +2,7 @@
   Renders the image shown on the right side of the desktop mega menu for one menu item.
   It looks for a "Menu image" block in the header whose "Menu item" matches the link title
   (use "Parent > Child" to target one sub-item exactly). Without a block it can fall back to the
-  linked collection's or product's image.
+  linked collection's image, or the first product in that collection.
 
   @param {object} link - The menu link (top-level or second-level)
   @param {object} blocks - The header section blocks
@@ -54,12 +54,28 @@
     assign media_image = match.settings.image
     assign media_url = match.settings.link | default: link.url
   elsif use_fallback
+    assign link_collection = nil
     case link.type
       when 'collection_link'
-        assign media_image = link.object.featured_image
+        assign link_collection = link.object
       when 'product_link'
         assign media_image = link.object.featured_image
+      else
+        if link.url contains '/collections/'
+          assign collection_handle = link.url | split: '/collections/' | last | split: '/' | first | split: '?' | first
+          assign link_collection = collections[collection_handle]
+        endif
     endcase
+
+    if link_collection != blank
+      comment
+        Collection image first, then the first product's image
+      endcomment
+      assign media_image = link_collection.image
+      if media_image == blank
+        assign media_image = link_collection.products.first.featured_image
+      endif
+    endif
     assign media_url = link.url
   endif
 -%}
