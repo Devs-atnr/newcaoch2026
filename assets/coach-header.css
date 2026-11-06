@@ -105,13 +105,12 @@ coach-header {
 .coach-header__mobile-icons {
   display: flex;
   align-items: center;
-  align-self: center;
-  margin-block-start: -0.4rem;
+  align-self: flex-end;
 }
 
 .coach-header__mobile-icons .coach-icon-btn {
   width: 4.4rem;
-  height: 4.4rem;
+  height: 3.9rem;
 }
 
 .coach-header__menu-btn .coach-icon--menu-search {
@@ -854,7 +853,7 @@ coach-header {
   inset-inline-end: 0;
   display: flex;
   flex-direction: column;
-  width: min(100%, 42rem);
+  width: 100%;
   height: 100%;
   background: var(--ch-bg);
   color: var(--ch-text);
@@ -879,6 +878,7 @@ coach-header {
   align-items: flex-end;
   justify-content: space-between;
   flex: none;
+  min-height: 4.8rem;
   padding-block-start: 0.9rem;
   padding-inline: 1.6rem 0.6rem;
   background: var(--ch-drawer-top);
@@ -919,19 +919,19 @@ coach-header {
   content: '';
   position: absolute;
   bottom: 0;
-  width: 0.6rem;
-  height: 0.6rem;
+  width: 0.8rem;
+  height: 0.8rem;
   pointer-events: none;
 }
 
 .coach-store-tabs__tab.is-current::before {
   right: 100%;
-  background: radial-gradient(circle at 0 0, transparent 0.6rem, var(--ch-bg) 0.62rem);
+  background: radial-gradient(circle at 0 0, transparent 0.8rem, var(--ch-bg) 0.82rem);
 }
 
 .coach-store-tabs__tab.is-current::after {
   left: 100%;
-  background: radial-gradient(circle at 100% 0, transparent 0.6rem, var(--ch-bg) 0.62rem);
+  background: radial-gradient(circle at 100% 0, transparent 0.8rem, var(--ch-bg) 0.82rem);
 }
 
 .coach-store-tabs__logo {
@@ -944,7 +944,8 @@ coach-header {
 
 .coach-drawer__close {
   align-self: center;
-  margin-block-end: 0.4rem;
+  height: 3.9rem;
+  margin-block-end: 0;
   color: #ffffff;
 }
 
