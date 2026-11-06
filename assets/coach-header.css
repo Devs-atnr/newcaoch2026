@@ -95,9 +95,9 @@ coach-header {
   display: flex;
   align-items: flex-end;
   justify-content: space-between;
-  min-height: 5.2rem;
-  padding-block-start: 0.8rem;
-  padding-inline: 0.8rem 0.2rem;
+  min-height: 4.8rem;
+  padding-block-start: 0.9rem;
+  padding-inline: 1.6rem 0.6rem;
   background: var(--ch-drawer-top);
   color: #ffffff;
 }
@@ -879,8 +879,8 @@ coach-header {
   align-items: flex-end;
   justify-content: space-between;
   flex: none;
-  padding-block-start: 0.8rem;
-  padding-inline: 0.8rem 0.4rem;
+  padding-block-start: 0.9rem;
+  padding-inline: 1.6rem 0.6rem;
   background: var(--ch-drawer-top);
 }
 
@@ -1234,5 +1234,18 @@ coach-header {
 @media screen and (min-width: 990px) {
   .coach-header.is-searching .coach-header__row {
     padding-block-end: 2.8rem;
+  }
+}
+
+/* Mobile store tabs: coach.com sizing */
+@media screen and (max-width: 989px) {
+  .coach-store-tabs__tab {
+    height: 3.9rem;
+    min-width: 10.6rem;
+    padding-inline: 1.8rem;
+  }
+
+  .coach-store-tabs__logo {
+    height: 1rem;
   }
 }
