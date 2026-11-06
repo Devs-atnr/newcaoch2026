@@ -360,11 +360,6 @@
       this.showMedia(item, '0');
       this.fitColumns(item, null);
 
-      // No main image for this menu: open the first sub-item's column so the panel isn't empty
-      if (!item.querySelector('[data-media="0"]')) {
-        const first = [...item.querySelectorAll('.coach-mega__l2-item')].find((l2) => l2.querySelector('.coach-mega__l3'));
-        if (first) this.setActiveL2(item, first);
-      }
     }
 
     setActiveL2(item, l2) {
