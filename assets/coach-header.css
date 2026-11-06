@@ -1249,3 +1249,21 @@ coach-header {
     height: 1rem;
   }
 }
+
+/* Search cards (desktop grid): titles always take two lines so prices line up */
+.coach-search--header .coach-search-card__title {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  min-height: 4.4rem;
+}
+
+.coach-search-card__price {
+  white-space: nowrap;
+}
+
+/* Store tab logo: equal space above and below */
+.coach-store-tabs__tab {
+  padding-block: 0.8rem;
+}
