@@ -176,7 +176,7 @@
       const params = new URLSearchParams({
         q: term,
         'resources[type]': 'product',
-        'resources[limit]': String(this.limit),
+        'resources[limit]': '10',
         'resources[options][unavailable_products]': 'last',
         section_id: this.sectionId,
       });
@@ -199,6 +199,10 @@
     renderResults(html) {
       if (this.defaultResults) this.defaultResults.hidden = true;
       this.results.innerHTML = html;
+      // The section returns every matching product; keep the first few
+      [...this.results.querySelectorAll('.coach-search-results__item')]
+        .slice(this.limit)
+        .forEach((item) => item.remove());
     }
 
     open() {

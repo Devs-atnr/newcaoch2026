@@ -1,21 +1,44 @@
 {%- comment -%}
   Rendered by the Coach header search through the Section Rendering API:
   /search/suggest?q=...&resources[type]=product&section_id=coach-predictive-search
+  Shopify's predictive search can also return "similar" products that don't contain the
+  search words, so only products whose title, type, vendor or tags contain a search word are kept.
+  The header script then shows the first few.
 {%- endcomment -%}
 {%- if predictive_search.performed -%}
   {%- liquid
     assign terms = predictive_search.terms | escape
-    assign products = predictive_search.resources.products
+    assign words = predictive_search.terms | downcase | strip | split: ' '
+
+    assign matched = 0
+    capture items
+      for product in predictive_search.resources.products
+        assign haystack = product.title | append: ' ' | append: product.type | append: ' ' | append: product.vendor
+        assign tag_text = product.tags | join: ' '
+        assign haystack = haystack | append: ' ' | append: tag_text | downcase
+
+        assign is_match = false
+        for word in words
+          if word.size > 1 and haystack contains word
+            assign is_match = true
+            break
+          endif
+        endfor
+
+        if is_match
+          assign matched = matched | plus: 1
+          echo '<li class="coach-search-results__item">'
+          render 'coach-search-product', product: product
+          echo '</li>'
+        endif
+      endfor
+    endcapture
   -%}
-  <div class="coach-search-results" data-results-count="{{ products.size }}">
-    {%- if products.size > 0 -%}
+  <div class="coach-search-results" data-results-count="{{ matched }}">
+    {%- if matched > 0 -%}
       <p class="coach-search-results__heading">{{ 'sections.coach_header.top_products' | t }}</p>
       <ul class="coach-search-results__grid" role="list">
-        {%- for product in products -%}
-          <li class="coach-search-results__item">
-            {%- render 'coach-search-product', product: product -%}
-          </li>
-        {%- endfor -%}
+        {{- items -}}
       </ul>
       <a
         class="coach-search-results__all"
