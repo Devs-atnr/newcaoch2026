@@ -851,19 +851,19 @@ coach-header {
 .coach-drawer__panel {
   position: absolute;
   inset-block: 0;
-  inset-inline-start: 0;
+  inset-inline-end: 0;
   display: flex;
   flex-direction: column;
   width: min(100%, 42rem);
   height: 100%;
   background: var(--ch-bg);
   color: var(--ch-text);
-  transform: translateX(-100%);
+  transform: translateX(100%);
   transition: transform 0.3s ease;
 }
 
 .coach-header[dir='rtl'] .coach-drawer__panel {
-  transform: translateX(100%);
+  transform: translateX(-100%);
 }
 
 .coach-drawer.is-open .coach-drawer__panel {
@@ -908,8 +908,30 @@ coach-header {
 }
 
 .coach-store-tabs__tab.is-current {
+  position: relative;
   background: var(--ch-bg);
   color: var(--ch-text) !important;
+}
+
+/* Small inward curves where the active tab meets the page */
+.coach-store-tabs__tab.is-current::before,
+.coach-store-tabs__tab.is-current::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  width: 0.6rem;
+  height: 0.6rem;
+  pointer-events: none;
+}
+
+.coach-store-tabs__tab.is-current::before {
+  right: 100%;
+  background: radial-gradient(circle at 0 0, transparent 0.6rem, var(--ch-bg) 0.62rem);
+}
+
+.coach-store-tabs__tab.is-current::after {
+  left: 100%;
+  background: radial-gradient(circle at 100% 0, transparent 0.6rem, var(--ch-bg) 0.62rem);
 }
 
 .coach-store-tabs__logo {
@@ -1201,4 +1223,9 @@ coach-header {
   .coach-mega {
     transition-duration: 0.01ms !important;
   }
+}
+
+.coach-lang--footer .coach-icon--caret {
+  width: 0.8rem;
+  height: 0.5rem;
 }
