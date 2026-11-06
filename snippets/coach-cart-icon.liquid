@@ -1,0 +1,17 @@
+{%- doc -%}
+  Renders the shopping-bag icon with the item count printed inside it.
+  Used by the Coach header and by the `cart-icon-bubble` section, so the icon keeps its look
+  when Dawn's cart scripts refresh the count after an add-to-cart.
+
+  @example
+  {% render 'coach-cart-icon' %}
+{%- enddoc -%}
+<span class="coach-bag" aria-hidden="true">
+  {%- render 'coach-icon', icon: 'bag' -%}
+  <span class="coach-bag__count">
+    {%- if cart.item_count < 100 -%}{{ cart.item_count }}{%- else -%}99+{%- endif -%}
+  </span>
+</span>
+<span class="visually-hidden">
+  {{- 'templates.cart.cart' | t }}, {{ 'sections.header.cart_count' | t: count: cart.item_count -}}
+</span>

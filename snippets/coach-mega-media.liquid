@@ -1,0 +1,90 @@
+{%- doc -%}
+  Renders the image shown on the right side of the desktop mega menu for one menu item.
+  It looks for a "Menu image" block in the header whose "Menu item" matches the link title
+  (use "Parent > Child" to target one sub-item exactly). Without a block it can fall back to the
+  linked collection's or product's image.
+
+  @param {object} link - The menu link (top-level or second-level)
+  @param {object} blocks - The header section blocks
+  @param {number} index - 0 for the top-level image, otherwise the position of the second-level item
+  @param {string} [parent_title] - Title of the parent link when `link` is a second-level item
+  @param {boolean} [use_fallback] - Use collection or product images when no block matches
+
+  @example
+  {% render 'coach-mega-media', link: link, blocks: section.blocks, index: 0, use_fallback: true %}
+{%- enddoc -%}
+{%- liquid
+  assign key_short = link.title | handleize
+  assign key_handle = link.handle | handleize
+  assign key_full = ''
+  if parent_title != blank
+    assign key_full = parent_title | append: ' ' | append: link.title | handleize
+  endif
+
+  assign match = nil
+  if key_full != blank
+    for block in blocks
+      if block.type == 'menu_image' and block.settings.image != blank
+        assign block_key = block.settings.menu_item | handleize
+        if block_key != blank and block_key == key_full
+          assign match = block
+          break
+        endif
+      endif
+    endfor
+  endif
+
+  if match == nil
+    for block in blocks
+      if block.type == 'menu_image' and block.settings.image != blank
+        assign block_key = block.settings.menu_item | handleize
+        if block_key != blank
+          if block_key == key_short or block_key == key_handle
+            assign match = block
+            break
+          endif
+        endif
+      endif
+    endfor
+  endif
+
+  assign media_image = nil
+  assign media_url = nil
+  if match != nil
+    assign media_image = match.settings.image
+    assign media_url = match.settings.link | default: link.url
+  elsif use_fallback
+    case link.type
+      when 'collection_link'
+        assign media_image = link.object.featured_image
+      when 'product_link'
+        assign media_image = link.object.featured_image
+    endcase
+    assign media_url = link.url
+  endif
+-%}
+{%- if media_image != blank -%}
+  <div
+    class="coach-mega__media"
+    data-media="{{ index }}"
+    {% if index != 0 %}
+      hidden
+    {% endif %}
+    {% if match != nil %}
+      {{ match.shopify_attributes }}
+    {% endif %}
+  >
+    <a href="{{ media_url }}" class="coach-mega__media-link" tabindex="-1" aria-hidden="true">
+      {{
+        media_image
+        | image_url: width: 1400
+        | image_tag:
+          class: 'coach-mega__img',
+          loading: 'lazy',
+          widths: '400, 600, 800, 1000, 1200, 1400',
+          sizes: '(min-width: 990px) 40vw, 100vw',
+          alt: ''
+      }}
+    </a>
+  </div>
+{%- endif -%}

@@ -274,7 +274,6 @@
       "announcement": "Announcement",
       "announcement_bar": "Announcement bar"
     },
-
     "header": {
       "announcement": "Announcement",
       "menu": "Menu",
@@ -376,6 +375,21 @@
       "min_error": "This item has a minimum of {{ min }}",
       "max_error": "This item has a maximum of {{ max }}",
       "step_error": "You can only add this item in increments of {{ step }}"
+    },
+    "coach_header": {
+      "search": "Search",
+      "search_label": "Search the store",
+      "top_products": "Top products",
+      "view_all": "View all results",
+      "no_results": "No results for “{{ terms }}”",
+      "wishlist": "Wishlist",
+      "account": "Account",
+      "login": "Login",
+      "help": "Help",
+      "language": "Language",
+      "open_menu": "Open menu",
+      "main_navigation": "Main navigation",
+      "submenu": "Show {{ title }} menu"
     }
   },
   "localization": {

@@ -1,0 +1,23 @@
+{%- doc -%}
+  Renders the "Top products" shown in the header search panel before the shopper types anything.
+  Renders nothing when no collection is chosen.
+
+  @param {object} [collection] - Collection whose first products are shown
+  @param {number} [limit] - How many products to show. Defaults to 4.
+
+  @example
+  {% render 'coach-search-default', collection: section.settings.search_collection, limit: 4 %}
+{%- enddoc -%}
+{%- assign limit = limit | default: 4 -%}
+{%- if collection != blank and collection.products_count > 0 -%}
+  <div class="coach-search-results coach-search-results--default" data-search-default hidden>
+    <p class="coach-search-results__heading">{{ 'sections.coach_header.top_products' | t }}</p>
+    <ul class="coach-search-results__grid" role="list">
+      {%- for product in collection.products limit: limit -%}
+        <li class="coach-search-results__item">
+          {%- render 'coach-search-product', product: product -%}
+        </li>
+      {%- endfor -%}
+    </ul>
+  </div>
+{%- endif -%}

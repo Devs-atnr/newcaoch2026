@@ -1,0 +1,856 @@
+{{ 'coach-header.css' | asset_url | stylesheet_tag }}
+<link
+  rel="stylesheet"
+  href="{{ 'component-cart-notification.css' | asset_url }}"
+  media="print"
+  onload="this.media='all'"
+>
+<script src="{{ 'coach-header.js' | asset_url }}" defer="defer"></script>
+<script src="{{ 'cart-notification.js' | asset_url }}" defer="defer"></script>
+
+{%- liquid
+  assign menu = section.settings.menu
+  assign logo = section.settings.logo | default: settings.logo
+
+  assign rtl_languages = 'ar,he,fa,ur' | split: ','
+  assign lang_short = request.locale.iso_code | slice: 0, 2 | downcase
+  assign text_direction = 'ltr'
+  if rtl_languages contains lang_short
+    assign text_direction = 'rtl'
+  endif
+
+  case section.settings.nav_font
+    when 'body'
+      assign nav_font = 'var(--font-body-family)'
+    when 'heading'
+      assign nav_font = 'var(--font-heading-family)'
+    else
+      assign nav_font = "'Helvetica Neue', Helvetica, Arial, sans-serif"
+  endcase
+
+  case section.settings.mega_font
+    when 'body'
+      assign mega_font = 'var(--font-body-family)'
+    when 'heading'
+      assign mega_font = 'var(--font-heading-family)'
+    else
+      assign mega_font = "'Times New Roman', Times, Georgia, serif"
+  endcase
+
+  assign search_limit = section.settings.search_products_limit
+  assign has_app_block = false
+  for block in section.blocks
+    if block.type == '@app'
+      assign has_app_block = true
+    endif
+  endfor
+
+  assign footer_items = 0
+  if shop.customer_accounts_enabled
+    assign footer_items = footer_items | plus: 1
+  endif
+  if section.settings.show_language_switcher
+    assign footer_items = footer_items | plus: 1
+  endif
+  if section.settings.help_url != blank
+    assign footer_items = footer_items | plus: 1
+  endif
+-%}
+
+<coach-header
+  class="coach-header{% if section.settings.show_border %} coach-header--border{% endif %}"
+  dir="{{ text_direction }}"
+  data-sticky="{{ section.settings.sticky }}"
+  style="
+    --ch-bg: {{ section.settings.color_background }};
+    --ch-text: {{ section.settings.color_text }};
+    --ch-drawer-top: {{ section.settings.color_drawer_top }};
+    --ch-footer-bg: {{ section.settings.color_drawer_footer }};
+    --ch-max: {{ section.settings.max_width }}px;
+    --ch-logo-w: {{ section.settings.logo_width }}px;
+    --ch-logo-w-mobile: {{ section.settings.mobile_logo_width }}px;
+    --ch-mega-img-h: {{ section.settings.mega_image_height }}px;
+    --ch-nav-font: {{ nav_font }};
+    --ch-mega-font: {{ mega_font }};
+    --ch-footer-cols: {{ footer_items | at_least: 1 }};
+  "
+>
+  <header class="coach-header__bar">
+    <div class="coach-header__row coach-header__container">
+      <div class="coach-header__left">
+        {%- if menu != blank -%}
+          <button
+            type="button"
+            class="coach-icon-btn coach-header__mobile-only"
+            aria-controls="CoachDrawer-{{ section.id }}"
+            aria-expanded="false"
+            data-drawer-open
+          >
+            {%- render 'coach-icon', icon: 'menu' -%}
+            <span class="visually-hidden">{{ 'sections.coach_header.open_menu' | t }}</span>
+          </button>
+        {%- endif -%}
+        {%- if section.settings.show_search -%}
+          <button
+            type="button"
+            class="coach-icon-btn coach-header__mobile-only"
+            aria-controls="CoachDrawer-{{ section.id }}"
+            aria-expanded="false"
+            data-drawer-open
+            data-drawer-search
+          >
+            {%- render 'coach-icon', icon: 'search' -%}
+            <span class="visually-hidden">{{ 'general.search.search' | t }}</span>
+          </button>
+        {%- endif -%}
+        {%- if section.settings.show_language_switcher -%}
+          <div class="coach-header__desktop-only">
+            {%- render 'coach-language-switcher',
+              form_id: 'CoachLanguageDesktop',
+              variant: 'dropdown',
+              flag_code: section.settings.flag_country,
+              flag_image: section.settings.flag_image
+            -%}
+          </div>
+        {%- endif -%}
+      </div>
+
+      {%- if request.page_type == 'index' -%}
+        <h1 class="coach-header__logo">
+      {%- else -%}
+        <div class="coach-header__logo">
+      {%- endif -%}
+      <a href="{{ routes.root_url }}" class="coach-header__logo-link">
+        {%- if logo != blank -%}
+          {%- liquid
+            assign logo_alt = logo.alt | default: shop.name | escape
+            assign logo_height = section.settings.logo_width | divided_by: logo.aspect_ratio | round
+          -%}
+          {{
+            logo
+            | image_url: width: 600
+            | image_tag:
+              class: 'coach-header__logo-img',
+              width: section.settings.logo_width,
+              height: logo_height,
+              widths: '150, 250, 300, 450, 600',
+              sizes: '(min-width: 990px) 250px, 160px',
+              alt: logo_alt,
+              preload: true
+          }}
+        {%- else -%}
+          <span class="coach-header__logo-text">{{ shop.name }}</span>
+        {%- endif -%}
+      </a>
+      {%- if request.page_type == 'index' -%}
+        </h1>
+      {%- else -%}
+        </div>
+      {%- endif -%}
+
+      <div class="coach-header__right">
+        {%- if section.settings.show_search -%}
+          <coach-search
+            class="coach-search coach-search--header coach-header__desktop-only"
+            data-section="coach-predictive-search"
+            data-limit="{{ search_limit }}"
+          >
+            <form action="{{ routes.search_url }}" method="get" role="search" class="coach-search__form">
+              <label class="visually-hidden" for="CoachSearch-{{ section.id }}">
+                {{- 'sections.coach_header.search_label' | t -}}
+              </label>
+              <input
+                type="search"
+                id="CoachSearch-{{ section.id }}"
+                class="coach-search__input"
+                name="q"
+                value="{{ search.terms | escape }}"
+                placeholder="{{ 'sections.coach_header.search' | t }}"
+                autocomplete="off"
+                autocorrect="off"
+                spellcheck="false"
+                aria-controls="CoachSearchPanel-{{ section.id }}"
+                aria-expanded="false"
+                data-search-input
+              >
+              <input type="hidden" name="options[prefix]" value="last">
+              <button type="button" class="coach-search__btn coach-search__clear" hidden data-search-clear>
+                {%- render 'coach-icon', icon: 'close' -%}
+                <span class="visually-hidden">{{ 'general.search.reset' | t }}</span>
+              </button>
+              <button type="submit" class="coach-search__btn coach-search__submit">
+                {%- render 'coach-icon', icon: 'search' -%}
+                <span class="visually-hidden">{{ 'general.search.search' | t }}</span>
+              </button>
+            </form>
+            <div class="coach-search__panel" id="CoachSearchPanel-{{ section.id }}" hidden data-search-panel>
+              <div class="coach-header__container">
+                {%- render 'coach-search-default', collection: section.settings.search_collection, limit: search_limit -%}
+                <div class="coach-search__results" aria-live="polite" data-search-results></div>
+              </div>
+            </div>
+          </coach-search>
+        {%- endif -%}
+
+        {%- if section.settings.wishlist_url != blank -%}
+          <a href="{{ section.settings.wishlist_url }}" class="coach-icon-btn">
+            {%- render 'coach-icon', icon: 'heart' -%}
+            <span class="visually-hidden">{{ 'sections.coach_header.wishlist' | t }}</span>
+          </a>
+        {%- endif -%}
+
+        {%- if shop.customer_accounts_enabled -%}
+          <shopify-account
+            menu="{{ settings.customer_account_menu | default: 'customer-account-main-menu' }}"
+            class="coach-icon-btn coach-header__account coach-header__desktop-only"
+          >
+            <span slot="signed-out-avatar" class="coach-header__account-icon">
+              {%- render 'coach-icon', icon: 'account' -%}
+            </span>
+            <span slot="signed-out-avatar" class="visually-hidden">{{ 'customer.log_in' | t }}</span>
+          </shopify-account>
+        {%- endif -%}
+
+        {%- if has_app_block -%}
+          {%- for block in section.blocks -%}
+            {%- if block.type == '@app' -%}
+              {% render block %}
+            {%- endif -%}
+          {%- endfor -%}
+        {%- endif -%}
+
+        <a href="{{ routes.cart_url }}" class="coach-icon-btn coach-header__cart" id="cart-icon-bubble">
+          {%- render 'coach-cart-icon' -%}
+        </a>
+      </div>
+    </div>
+
+    {%- if menu != blank -%}
+      <nav class="coach-nav" aria-label="{{ 'sections.coach_header.main_navigation' | t }}">
+        <ul class="coach-nav__list coach-header__container" role="list">
+          {%- for link in menu.links -%}
+            {%- liquid
+              assign top_index = forloop.index
+              assign has_mega = false
+              if link.links.size > 0
+                assign has_mega = true
+              endif
+            -%}
+            <li class="coach-nav__item{% if has_mega %} coach-nav__item--mega{% endif %}" data-nav-item>
+              <a
+                href="{{ link.url }}"
+                class="coach-nav__link{% if link.current or link.child_active %} is-current{% endif %}"
+                {% if link.current %}
+                  aria-current="page"
+                {% endif %}
+              >
+                {{- link.title | escape -}}
+              </a>
+              {%- if has_mega -%}
+                <button
+                  type="button"
+                  class="coach-nav__toggle"
+                  aria-expanded="false"
+                  aria-controls="CoachMega-{{ section.id }}-{{ top_index }}"
+                  data-mega-toggle
+                >
+                  {%- render 'coach-icon', icon: 'caret' -%}
+                  <span class="visually-hidden">
+                    {{- 'sections.coach_header.submenu' | t: title: link.title -}}
+                  </span>
+                </button>
+
+                <div class="coach-mega" id="CoachMega-{{ section.id }}-{{ top_index }}" data-mega>
+                  <div class="coach-mega__inner coach-header__container">
+                    <div class="coach-mega__lists">
+                      <ul class="coach-mega__l2" role="list">
+                        {%- for child in link.links -%}
+                          <li class="coach-mega__l2-item" data-l2="{{ forloop.index }}">
+                            <a
+                              href="{{ child.url }}"
+                              class="coach-mega__l2-link"
+                              {% if child.current %}
+                                aria-current="page"
+                              {% endif %}
+                            >
+                              {{- child.title | escape -}}
+                            </a>
+                            {%- if child.links.size > 0 -%}
+                              <ul class="coach-mega__l3" role="list">
+                                {%- for grandchild in child.links -%}
+                                  <li>
+                                    <a
+                                      href="{{ grandchild.url }}"
+                                      class="coach-mega__l3-link"
+                                      {% if grandchild.current %}
+                                        aria-current="page"
+                                      {% endif %}
+                                    >
+                                      {{- grandchild.title | escape -}}
+                                    </a>
+                                  </li>
+                                {%- endfor -%}
+                              </ul>
+                            {%- endif -%}
+                          </li>
+                        {%- endfor -%}
+                      </ul>
+                    </div>
+                    <div class="coach-mega__media-wrap">
+                      {%- render 'coach-mega-media',
+                        link: link,
+                        blocks: section.blocks,
+                        index: 0,
+                        use_fallback: section.settings.mega_image_fallback
+                      -%}
+                      {%- for child in link.links -%}
+                        {%- render 'coach-mega-media',
+                          link: child,
+                          parent_title: link.title,
+                          blocks: section.blocks,
+                          index: forloop.index,
+                          use_fallback: section.settings.mega_image_fallback
+                        -%}
+                      {%- endfor -%}
+                    </div>
+                  </div>
+                </div>
+              {%- endif -%}
+            </li>
+          {%- endfor -%}
+        </ul>
+      </nav>
+    {%- endif -%}
+  </header>
+
+  {%- comment -%} Mobile menu drawer {%- endcomment -%}
+  <div class="coach-drawer" id="CoachDrawer-{{ section.id }}" data-drawer>
+    <div class="coach-drawer__overlay" data-drawer-close></div>
+    <div
+      class="coach-drawer__panel"
+      role="dialog"
+      aria-modal="true"
+      aria-label="{{ 'sections.header.menu' | t }}"
+      tabindex="-1"
+      data-drawer-panel
+    >
+      <div class="coach-drawer__top">
+        <div class="coach-drawer__stores">
+          <a href="{{ routes.root_url }}" class="coach-drawer__store is-current" aria-current="true">
+            {%- if logo != blank and section.settings.store_tab_label == blank -%}
+              {{
+                logo
+                | image_url: width: 300
+                | image_tag: class: 'coach-drawer__store-logo', alt: shop.name, loading: 'lazy'
+              }}
+            {%- else -%}
+              {{ section.settings.store_tab_label | default: shop.name | escape }}
+            {%- endif -%}
+          </a>
+          {%- if section.settings.second_store_url != blank -%}
+            <a href="{{ section.settings.second_store_url }}" class="coach-drawer__store">
+              {%- if section.settings.second_store_logo != blank -%}
+                {%- assign second_store_alt = section.settings.second_store_label | default: shop.name | escape -%}
+                {{
+                  section.settings.second_store_logo
+                  | image_url: width: 300
+                  | image_tag: class: 'coach-drawer__store-logo', alt: second_store_alt, loading: 'lazy'
+                }}
+              {%- else -%}
+                {{ section.settings.second_store_label | escape }}
+              {%- endif -%}
+            </a>
+          {%- endif -%}
+        </div>
+        <button type="button" class="coach-icon-btn coach-drawer__close" data-drawer-close>
+          {%- render 'coach-icon', icon: 'close' -%}
+          <span class="visually-hidden">{{ 'accessibility.close' | t }}</span>
+        </button>
+      </div>
+
+      {%- if section.settings.show_search -%}
+        <coach-search
+          class="coach-search coach-search--drawer"
+          data-section="coach-predictive-search"
+          data-limit="{{ search_limit }}"
+        >
+          <form action="{{ routes.search_url }}" method="get" role="search" class="coach-search__form">
+            <label class="visually-hidden" for="CoachDrawerSearch-{{ section.id }}">
+              {{- 'sections.coach_header.search_label' | t -}}
+            </label>
+            <button type="submit" class="coach-search__btn coach-search__submit">
+              {%- render 'coach-icon', icon: 'search' -%}
+              <span class="visually-hidden">{{ 'general.search.search' | t }}</span>
+            </button>
+            <input
+              type="search"
+              id="CoachDrawerSearch-{{ section.id }}"
+              class="coach-search__input"
+              name="q"
+              value="{{ search.terms | escape }}"
+              placeholder="{{ 'sections.coach_header.search' | t }}"
+              autocomplete="off"
+              autocorrect="off"
+              spellcheck="false"
+              aria-controls="CoachDrawerSearchPanel-{{ section.id }}"
+              aria-expanded="false"
+              data-search-input
+            >
+            <input type="hidden" name="options[prefix]" value="last">
+            <button type="button" class="coach-search__btn coach-search__clear" hidden data-search-clear>
+              {%- render 'coach-icon', icon: 'close' -%}
+              <span class="visually-hidden">{{ 'general.search.reset' | t }}</span>
+            </button>
+          </form>
+          <div class="coach-search__panel" id="CoachDrawerSearchPanel-{{ section.id }}" hidden data-search-panel>
+            {%- render 'coach-search-default', collection: section.settings.search_collection, limit: search_limit -%}
+            <div class="coach-search__results" aria-live="polite" data-search-results></div>
+          </div>
+        </coach-search>
+      {%- endif -%}
+
+      <div class="coach-drawer__body" data-drawer-body>
+        {%- if menu != blank -%}
+          <div
+            class="coach-drawer__tabs"
+            role="tablist"
+            aria-label="{{ 'sections.coach_header.main_navigation' | t }}"
+            data-drawer-tabs
+          >
+            {%- for link in menu.links -%}
+              <button
+                type="button"
+                role="tab"
+                class="coach-drawer__tab"
+                id="CoachTab-{{ section.id }}-{{ forloop.index }}"
+                aria-controls="CoachTabPanel-{{ section.id }}-{{ forloop.index }}"
+                aria-selected="{% if forloop.first %}true{% else %}false{% endif %}"
+                tabindex="{% if forloop.first %}0{% else %}-1{% endif %}"
+              >
+                {{- link.title | escape -}}
+              </button>
+            {%- endfor -%}
+          </div>
+
+          {%- for link in menu.links -%}
+            {%- assign top_index = forloop.index -%}
+            <div
+              class="coach-drawer__tabpanel"
+              role="tabpanel"
+              id="CoachTabPanel-{{ section.id }}-{{ top_index }}"
+              aria-labelledby="CoachTab-{{ section.id }}-{{ top_index }}"
+              {% unless forloop.first %}
+                hidden
+              {% endunless %}
+            >
+              <ul class="coach-drawer__l2" role="list">
+                {%- if link.links.size == 0 -%}
+                  <li>
+                    <a href="{{ link.url }}" class="coach-drawer__l2-link">{{ link.title | escape }}</a>
+                  </li>
+                {%- endif -%}
+                {%- for child in link.links -%}
+                  <li class="coach-drawer__l2-item">
+                    {%- if child.links.size > 0 -%}
+                      <button
+                        type="button"
+                        class="coach-drawer__l2-link coach-drawer__l2-toggle"
+                        aria-expanded="false"
+                        aria-controls="CoachAccordion-{{ section.id }}-{{ top_index }}-{{ forloop.index }}"
+                        data-accordion-toggle
+                      >
+                        <span>{{ child.title | escape }}</span>
+                        <span class="coach-drawer__l2-icon">
+                          {%- render 'coach-icon', icon: 'plus' -%}
+                          {%- render 'coach-icon', icon: 'minus' -%}
+                        </span>
+                      </button>
+                      <ul
+                        class="coach-drawer__l3"
+                        id="CoachAccordion-{{ section.id }}-{{ top_index }}-{{ forloop.index }}"
+                        role="list"
+                        hidden
+                      >
+                        {%- for grandchild in child.links -%}
+                          <li>
+                            <a href="{{ grandchild.url }}" class="coach-drawer__l3-link">
+                              {{- grandchild.title | escape -}}
+                            </a>
+                          </li>
+                        {%- endfor -%}
+                      </ul>
+                    {%- else -%}
+                      <a href="{{ child.url }}" class="coach-drawer__l2-link">{{ child.title | escape }}</a>
+                    {%- endif -%}
+                  </li>
+                {%- endfor -%}
+              </ul>
+            </div>
+          {%- endfor -%}
+        {%- endif -%}
+      </div>
+
+      {%- if footer_items > 0 -%}
+        <div class="coach-drawer__footer">
+          {%- if shop.customer_accounts_enabled -%}
+            <a href="{{ routes.account_url }}" class="coach-drawer__util">
+              {%- render 'coach-icon', icon: 'account' -%}
+              <span>
+                {%- if customer -%}
+                  {{- 'sections.coach_header.account' | t -}}
+                {%- else -%}
+                  {{- 'sections.coach_header.login' | t -}}
+                {%- endif -%}
+              </span>
+            </a>
+          {%- endif -%}
+          {%- if section.settings.show_language_switcher -%}
+            <div class="coach-drawer__util">
+              {%- render 'coach-language-switcher',
+                form_id: 'CoachLanguageMobile',
+                variant: 'inline',
+                flag_code: section.settings.flag_country,
+                flag_image: section.settings.flag_image
+              -%}
+            </div>
+          {%- endif -%}
+          {%- if section.settings.help_url != blank -%}
+            <a href="{{ section.settings.help_url }}" class="coach-drawer__util">
+              {%- render 'coach-icon', icon: 'help' -%}
+              <span>{{ 'sections.coach_header.help' | t }}</span>
+            </a>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+</coach-header>
+
+{%- if settings.cart_type == 'notification' -%}
+  {%- render 'cart-notification', color_scheme: section.settings.cart_color_scheme -%}
+{%- endif -%}
+
+<script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "Organization",
+    "name": {{ shop.name | json }},
+    {% if logo %}
+      "logo": {{ logo | image_url: width: 500 | prepend: "https:" | json }},
+    {% endif %}
+    "url": {{ request.origin | append: page.url | json }}
+  }
+</script>
+
+{%- if request.page_type == 'index' -%}
+  {%- assign potential_action_target = request.origin | append: routes.search_url | append: '?q={search_term_string}' -%}
+  <script type="application/ld+json">
+    {
+      "@context": "http://schema.org",
+      "@type": "WebSite",
+      "name": {{ shop.name | json }},
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": {{ potential_action_target | json }},
+        "query-input": "required name=search_term_string"
+      },
+      "url": {{ request.origin | append: page.url | json }}
+    }
+  </script>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Coach header",
+  "tag": "div",
+  "class": "section-header coach-header-section",
+  "max_blocks": 50,
+  "enabled_on": {
+    "groups": ["header"]
+  },
+  "settings": [
+    {
+      "type": "header",
+      "content": "Navigation"
+    },
+    {
+      "type": "link_list",
+      "id": "menu",
+      "default": "main-menu",
+      "label": "Menu",
+      "info": "Top-level items show in the bar (New, Women, Men…). Their sub-items open the mega menu; third-level items show in the second column."
+    },
+    {
+      "type": "select",
+      "id": "sticky",
+      "label": "Sticky header",
+      "options": [
+        { "value": "none", "label": "None" },
+        { "value": "on-scroll-up", "label": "On scroll up" },
+        { "value": "always", "label": "Always" }
+      ],
+      "default": "on-scroll-up"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_border",
+      "label": "Show bottom border",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "max_width",
+      "label": "Content width",
+      "min": 1000,
+      "max": 1600,
+      "step": 20,
+      "unit": "px",
+      "default": 1340
+    },
+    {
+      "type": "header",
+      "content": "Logo"
+    },
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "Logo",
+      "info": "Leave empty to use the logo from Theme settings."
+    },
+    {
+      "type": "range",
+      "id": "logo_width",
+      "label": "Desktop logo width",
+      "min": 60,
+      "max": 250,
+      "step": 5,
+      "unit": "px",
+      "default": 115
+    },
+    {
+      "type": "range",
+      "id": "mobile_logo_width",
+      "label": "Mobile logo width",
+      "min": 50,
+      "max": 200,
+      "step": 5,
+      "unit": "px",
+      "default": 95
+    },
+    {
+      "type": "header",
+      "content": "Language switcher"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_language_switcher",
+      "label": "Show language switcher",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "flag_country",
+      "label": "Flag country code",
+      "default": "SA",
+      "info": "Two-letter code of the flag shown next to the language (SA = Saudi Arabia)."
+    },
+    {
+      "type": "image_picker",
+      "id": "flag_image",
+      "label": "Custom flag image",
+      "info": "Optional. Replaces the built-in flag."
+    },
+    {
+      "type": "paragraph",
+      "content": "The switcher lists every language published in Settings → Languages, including Arabic added through Langify. When only one language is published, just the flag and code show."
+    },
+    {
+      "type": "header",
+      "content": "Search"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_search",
+      "label": "Show search",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "search_products_limit",
+      "label": "Products in search results",
+      "min": 2,
+      "max": 8,
+      "step": 1,
+      "default": 4
+    },
+    {
+      "type": "collection",
+      "id": "search_collection",
+      "label": "Top products before typing",
+      "info": "Optional. Shows these products when someone opens the search box."
+    },
+    {
+      "type": "header",
+      "content": "Icons and links"
+    },
+    {
+      "type": "url",
+      "id": "wishlist_url",
+      "label": "Wishlist link",
+      "info": "Leave empty to hide the heart icon."
+    },
+    {
+      "type": "url",
+      "id": "help_url",
+      "label": "Help link (mobile menu)",
+      "info": "Leave empty to hide Help in the mobile menu."
+    },
+    {
+      "type": "header",
+      "content": "Mega menu"
+    },
+    {
+      "type": "range",
+      "id": "mega_image_height",
+      "label": "Image height",
+      "min": 300,
+      "max": 600,
+      "step": 10,
+      "unit": "px",
+      "default": 460
+    },
+    {
+      "type": "checkbox",
+      "id": "mega_image_fallback",
+      "label": "Use collection images when no menu image is set",
+      "default": true
+    },
+    {
+      "type": "paragraph",
+      "content": "Add \"Menu image\" blocks to choose the picture for a menu item. Type the item title (New) or Parent > Child (New > Men's New Arrivals)."
+    },
+    {
+      "type": "header",
+      "content": "Mobile menu"
+    },
+    {
+      "type": "text",
+      "id": "store_tab_label",
+      "label": "This store tab label",
+      "info": "Leave empty to show the logo."
+    },
+    {
+      "type": "text",
+      "id": "second_store_label",
+      "label": "Second store tab label",
+      "placeholder": "COACH OUTLET"
+    },
+    {
+      "type": "image_picker",
+      "id": "second_store_logo",
+      "label": "Second store tab logo",
+      "info": "Optional. Use a white logo."
+    },
+    {
+      "type": "url",
+      "id": "second_store_url",
+      "label": "Second store link",
+      "info": "Leave empty to hide the second tab."
+    },
+    {
+      "type": "header",
+      "content": "Typography"
+    },
+    {
+      "type": "select",
+      "id": "nav_font",
+      "label": "Menu bar font",
+      "options": [
+        { "value": "system_sans", "label": "Helvetica (classic)" },
+        { "value": "body", "label": "Theme body font" },
+        { "value": "heading", "label": "Theme heading font" }
+      ],
+      "default": "system_sans"
+    },
+    {
+      "type": "select",
+      "id": "mega_font",
+      "label": "Mega menu font",
+      "options": [
+        { "value": "system_serif", "label": "Serif (classic)" },
+        { "value": "body", "label": "Theme body font" },
+        { "value": "heading", "label": "Theme heading font" }
+      ],
+      "default": "system_serif"
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "color_background",
+      "label": "Background",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "color_text",
+      "label": "Text and icons",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "color_drawer_top",
+      "label": "Mobile menu top bar",
+      "default": "#333333"
+    },
+    {
+      "type": "color",
+      "id": "color_drawer_footer",
+      "label": "Mobile menu footer",
+      "default": "#efefef"
+    },
+    {
+      "type": "color_scheme",
+      "id": "cart_color_scheme",
+      "label": "Cart popup color scheme",
+      "default": "scheme-1"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "menu_image",
+      "name": "Menu image",
+      "settings": [
+        {
+          "type": "text",
+          "id": "menu_item",
+          "label": "Menu item",
+          "placeholder": "New > Men's New Arrivals",
+          "info": "Title of a top-level item, or Parent > Child for a sub-item."
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Image link",
+          "info": "Optional. Defaults to the menu item link."
+        }
+      ]
+    },
+    {
+      "type": "@app"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Coach header"
+    }
+  ]
+}
+{% endschema %}

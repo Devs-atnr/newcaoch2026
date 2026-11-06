@@ -1,0 +1,30 @@
+{%- comment -%}
+  Rendered by the Coach header search through the Section Rendering API:
+  /search/suggest?q=...&resources[type]=product&section_id=coach-predictive-search
+{%- endcomment -%}
+{%- if predictive_search.performed -%}
+  {%- liquid
+    assign terms = predictive_search.terms | escape
+    assign products = predictive_search.resources.products
+  -%}
+  <div class="coach-search-results" data-results-count="{{ products.size }}">
+    {%- if products.size > 0 -%}
+      <p class="coach-search-results__heading">{{ 'sections.coach_header.top_products' | t }}</p>
+      <ul class="coach-search-results__grid" role="list">
+        {%- for product in products -%}
+          <li class="coach-search-results__item">
+            {%- render 'coach-search-product', product: product -%}
+          </li>
+        {%- endfor -%}
+      </ul>
+      <a
+        class="coach-search-results__all"
+        href="{{ routes.search_url }}?q={{ predictive_search.terms | url_encode }}&options%5Bprefix%5D=last"
+      >
+        {{- 'sections.coach_header.view_all' | t -}}
+      </a>
+    {%- else -%}
+      <p class="coach-search-results__empty">{{ 'sections.coach_header.no_results' | t: terms: terms }}</p>
+    {%- endif -%}
+  </div>
+{%- endif -%}

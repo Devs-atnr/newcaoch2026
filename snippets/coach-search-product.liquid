@@ -1,0 +1,42 @@
+{%- doc -%}
+  Renders one compact product card for the header search panel ("Top products").
+
+  @param {object} product - The product to show
+
+  @example
+  {% render 'coach-search-product', product: product %}
+{%- enddoc -%}
+{%- liquid
+  assign media = product.featured_media
+  assign media_alt = media.alt | default: product.title | escape
+-%}
+<a href="{{ product.url }}" class="coach-search-card">
+  <span class="coach-search-card__media">
+    {%- if media -%}
+      {{
+        media
+        | image_url: width: 600
+        | image_tag:
+          class: 'coach-search-card__img',
+          loading: 'lazy',
+          widths: '200, 300, 400, 500, 600',
+          sizes: '(min-width: 990px) 182px, 45vw',
+          alt: media_alt
+      }}
+    {%- else -%}
+      {{ 'product-1' | placeholder_svg_tag: 'coach-search-card__placeholder' }}
+    {%- endif -%}
+  </span>
+  <span class="coach-search-card__title">{{ product.title | escape }}</span>
+  <span class="coach-search-card__price">
+    {%- if product.compare_at_price > product.price -%}
+      <s class="coach-search-card__compare">{{ product.compare_at_price | money }}</s>
+    {%- endif -%}
+    {%- if product.price_varies -%}
+      {%- assign min_price = product.price_min | money -%}
+      {{ 'products.product.price.from_price_html' | t: price: min_price }}
+    {%- else -%}
+      {{ product.price | money }}
+    {%- endif -%}
+  </span>
+</a>
