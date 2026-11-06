@@ -1229,3 +1229,10 @@ coach-header {
   width: 0.8rem;
   height: 0.5rem;
 }
+
+/* Menu bar is hidden while searching: keep the header the same breathing room as coach.com */
+@media screen and (min-width: 990px) {
+  .coach-header.is-searching .coach-header__row {
+    padding-block-end: 2.8rem;
+  }
+}
