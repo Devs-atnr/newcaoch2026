@@ -1,0 +1,463 @@
+/**
+ * Coach Luxury Collection Interactive Scripts
+ * - Filter pills & floating popovers with smooth toggle & outside-click close
+ * - Best Matches sort dropdown
+ * - Seamless AJAX filter & sort updates using Section Rendering API
+ * - Product card image slider (< >)
+ * - Color variant swatches (swaps image, price, and Add to Bag variant ID)
+ * - "Add To Bag" AJAX quick-add with Dawn cart-drawer & header bubble integration
+ */
+
+class CoachCollection {
+  constructor() {
+    this.wrapper = document.querySelector('.coach-collection-wrapper');
+    if (!this.wrapper) return;
+
+    this.sectionId = this.wrapper.dataset.sectionId;
+    this.init();
+  }
+
+  init() {
+    this.bindPopovers();
+    this.bindSort();
+    this.bindFilterInputs();
+    this.bindPriceFilter();
+    this.bindProductCards();
+  }
+
+  /* -------------------------------------------------------------------------
+     Filter Popovers
+     ------------------------------------------------------------------------- */
+  bindPopovers() {
+    const filterItems = this.wrapper.querySelectorAll('.js-coach-filter-item');
+
+    filterItems.forEach((item) => {
+      const pillBtn = item.querySelector('.js-coach-filter-pill');
+      const closeBtn = item.querySelector('.js-coach-close-popover');
+
+      if (pillBtn) {
+        pillBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const isOpen = item.classList.contains('is-open');
+
+          // Close all other popovers
+          this.closeAllPopovers();
+
+          if (!isOpen) {
+            item.classList.add('is-open');
+            pillBtn.setAttribute('aria-expanded', 'true');
+          }
+        });
+      }
+
+      if (closeBtn) {
+        closeBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          item.classList.remove('is-open');
+          pillBtn?.setAttribute('aria-expanded', 'false');
+        });
+      }
+    });
+
+    // Close on click outside
+    document.addEventListener('click', (e) => {
+      if (!e.target.closest('.js-coach-filter-item')) {
+        this.closeAllPopovers();
+      }
+    });
+
+    // Close on Escape key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        this.closeAllPopovers();
+        this.closeSort();
+      }
+    });
+  }
+
+  closeAllPopovers() {
+    const openItems = this.wrapper.querySelectorAll('.js-coach-filter-item.is-open');
+    openItems.forEach((item) => {
+      item.classList.remove('is-open');
+      const pill = item.querySelector('.js-coach-filter-pill');
+      pill?.setAttribute('aria-expanded', 'false');
+    });
+  }
+
+  /* -------------------------------------------------------------------------
+     Sort Dropdown
+     ------------------------------------------------------------------------- */
+  bindSort() {
+    const sortWrap = this.wrapper.querySelector('.js-coach-sort-container');
+    if (!sortWrap) return;
+
+    const sortBtn = sortWrap.querySelector('.js-coach-sort-btn');
+    const sortOptions = sortWrap.querySelectorAll('.coach-sort-item');
+    const hiddenSelect = sortWrap.querySelector('.js-coach-sort-select');
+
+    if (sortBtn) {
+      sortBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const isOpen = sortWrap.classList.contains('is-open');
+        this.closeAllPopovers();
+        sortWrap.classList.toggle('is-open', !isOpen);
+        sortBtn.setAttribute('aria-expanded', !isOpen ? 'true' : 'false');
+      });
+    }
+
+    sortOptions.forEach((option) => {
+      option.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const val = option.dataset.sortValue;
+        if (hiddenSelect && val) {
+          hiddenSelect.value = val;
+          this.closeSort();
+          this.submitFilters();
+        }
+      });
+    });
+
+    document.addEventListener('click', (e) => {
+      if (!e.target.closest('.js-coach-sort-container')) {
+        this.closeSort();
+      }
+    });
+  }
+
+  closeSort() {
+    const sortWrap = this.wrapper.querySelector('.js-coach-sort-container.is-open');
+    if (sortWrap) {
+      sortWrap.classList.remove('is-open');
+      sortWrap.querySelector('.js-coach-sort-btn')?.setAttribute('aria-expanded', 'false');
+    }
+  }
+
+  /* -------------------------------------------------------------------------
+     AJAX Filtering
+     ------------------------------------------------------------------------- */
+  bindFilterInputs() {
+    const form = this.wrapper.querySelector('#CoachFacetFiltersForm');
+    if (!form) return;
+
+    form.querySelectorAll('.js-filter-input').forEach((input) => {
+      input.addEventListener('change', () => {
+        this.submitFilters();
+      });
+    });
+  }
+
+  bindPriceFilter() {
+    const priceApplyBtn = this.wrapper.querySelector('.js-coach-price-apply');
+    if (priceApplyBtn) {
+      priceApplyBtn.addEventListener('click', () => {
+        this.submitFilters();
+      });
+    }
+
+    // Reset link
+    const resetLinks = this.wrapper.querySelectorAll('.js-facet-remove');
+    resetLinks.forEach((link) => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        this.fetchFilteredSection(link.href);
+      });
+    });
+  }
+
+  submitFilters() {
+    const form = this.wrapper.querySelector('#CoachFacetFiltersForm');
+    if (!form) return;
+
+    const formData = new FormData(form);
+    const searchParams = new URLSearchParams();
+
+    for (const [key, value] of formData.entries()) {
+      if (value !== '' && value !== null) {
+        searchParams.append(key, value);
+      }
+    }
+
+    const currentPath = window.location.pathname;
+    const queryString = searchParams.toString();
+    const newUrl = queryString ? `${currentPath}?${queryString}` : currentPath;
+
+    window.history.pushState({ path: newUrl }, '', newUrl);
+    this.fetchFilteredSection(newUrl);
+  }
+
+  async fetchFilteredSection(url) {
+    const grid = this.wrapper.querySelector('.coach-product-grid');
+    if (grid) grid.classList.add('is-loading');
+
+    const separator = url.includes('?') ? '&' : '?';
+    const fetchUrl = `${url}${separator}section_id=${this.sectionId}`;
+
+    try {
+      const res = await fetch(fetchUrl);
+      if (!res.ok) throw new Error('Network error');
+      const htmlText = await res.text();
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(htmlText, 'text/html');
+
+      // 1. Update Product Grid
+      const newGridContainer = doc.querySelector('#CoachProductGridContainer');
+      const currentGridContainer = this.wrapper.querySelector('#CoachProductGridContainer');
+      if (newGridContainer && currentGridContainer) {
+        currentGridContainer.innerHTML = newGridContainer.innerHTML;
+      }
+
+      // 2. Update Count
+      const newCount = doc.querySelector('#CoachCollectionCount');
+      const currentCount = this.wrapper.querySelector('#CoachCollectionCount');
+      if (newCount && currentCount) {
+        currentCount.innerHTML = newCount.innerHTML;
+      }
+
+      // 3. Update Facets Bar
+      const newFacets = doc.querySelector('#CoachFacetsBar');
+      const currentFacets = this.wrapper.querySelector('#CoachFacetsBar');
+      if (newFacets && currentFacets) {
+        currentFacets.innerHTML = newFacets.innerHTML;
+      }
+
+      // 4. Update Pagination
+      const newPagination = doc.querySelector('.coach-pagination');
+      const currentPagination = this.wrapper.querySelector('.coach-pagination');
+      if (newPagination && currentPagination) {
+        currentPagination.innerHTML = newPagination.innerHTML;
+      } else if (!newPagination && currentPagination) {
+        currentPagination.remove();
+      }
+
+      // Rebind events
+      this.bindPopovers();
+      this.bindSort();
+      this.bindFilterInputs();
+      this.bindPriceFilter();
+      this.bindProductCards();
+
+    } catch (err) {
+      console.error('Error filtering collection:', err);
+    } finally {
+      const refreshedGrid = this.wrapper.querySelector('.coach-product-grid');
+      if (refreshedGrid) refreshedGrid.classList.remove('is-loading');
+    }
+  }
+
+  /* -------------------------------------------------------------------------
+     Product Card Interactions
+     ------------------------------------------------------------------------- */
+  bindProductCards() {
+    const cards = this.wrapper.querySelectorAll('.coach-card');
+
+    cards.forEach((card) => {
+      // 1. Image Slider (< >)
+      const prevBtn = card.querySelector('.coach-card__arrow--prev');
+      const nextBtn = card.querySelector('.coach-card__arrow--next');
+      const images = card.querySelectorAll('.coach-card__img');
+
+      if (images.length > 1) {
+        let activeIdx = 0;
+
+        const updateImage = (newIdx) => {
+          images.forEach((img, idx) => {
+            img.classList.toggle('coach-card__img--active', idx === newIdx);
+          });
+          activeIdx = newIdx;
+        };
+
+        if (prevBtn) {
+          prevBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            const nextIdx = (activeIdx - 1 + images.length) % images.length;
+            updateImage(nextIdx);
+          });
+        }
+
+        if (nextBtn) {
+          nextBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            const nextIdx = (activeIdx + 1) % images.length;
+            updateImage(nextIdx);
+          });
+        }
+      }
+
+      // 2. Color Swatches
+      const swatchDots = card.querySelectorAll('.coach-card__swatch-dot');
+      const quickAddBtn = card.querySelector('.coach-card__quick-add-btn');
+      const priceRegular = card.querySelector('.coach-card__price-regular');
+      const priceSale = card.querySelector('.coach-card__price-sale');
+      const priceCompare = card.querySelector('.coach-card__price-compare');
+
+      swatchDots.forEach((dot) => {
+        dot.addEventListener('click', (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+
+          // Active state
+          swatchDots.forEach((d) => d.classList.remove('coach-card__swatch-dot--active'));
+          dot.classList.add('coach-card__swatch-dot--active');
+
+          const variantId = dot.dataset.variantId;
+          const isAvailable = dot.dataset.variantAvailable === 'true';
+          const price = dot.dataset.variantPrice;
+          const comparePrice = dot.dataset.variantComparePrice;
+          const imgSrc = dot.dataset.variantImageSrc;
+
+          // Update Quick Add button
+          if (quickAddBtn) {
+            quickAddBtn.dataset.variantId = variantId;
+            if (isAvailable) {
+              quickAddBtn.classList.remove('coach-card__quick-add-btn--disabled');
+              quickAddBtn.removeAttribute('disabled');
+              const textSpan = quickAddBtn.querySelector('.coach-card__quick-add-text');
+              if (textSpan) textSpan.textContent = 'Add To Bag';
+            } else {
+              quickAddBtn.classList.add('coach-card__quick-add-btn--disabled');
+              quickAddBtn.setAttribute('disabled', 'disabled');
+              const textSpan = quickAddBtn.querySelector('.coach-card__quick-add-text');
+              if (textSpan) textSpan.textContent = 'Sold Out';
+            }
+          }
+
+          // Update Price
+          if (comparePrice && priceSale && priceCompare) {
+            priceSale.textContent = price;
+            priceCompare.textContent = comparePrice;
+          } else if (priceRegular) {
+            priceRegular.textContent = price;
+          }
+
+          // Update Image if available
+          if (imgSrc && images.length > 0) {
+            let matched = false;
+            images.forEach((img, idx) => {
+              if (img.src.includes(imgSrc) || imgSrc.includes(img.src)) {
+                images.forEach((i) => i.classList.remove('coach-card__img--active'));
+                img.classList.add('coach-card__img--active');
+                matched = true;
+              }
+            });
+            if (!matched && images[0]) {
+              images[0].src = imgSrc;
+              images.forEach((i, idx) => i.classList.toggle('coach-card__img--active', idx === 0));
+            }
+          }
+        });
+      });
+
+      // 3. Quick Add to Bag
+      if (quickAddBtn && !quickAddBtn.dataset.bound) {
+        quickAddBtn.dataset.bound = 'true';
+        quickAddBtn.addEventListener('click', (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          const variantId = quickAddBtn.dataset.variantId;
+          if (!variantId) return;
+
+          this.handleQuickAdd(quickAddBtn, variantId);
+        });
+      }
+    });
+  }
+
+  /* -------------------------------------------------------------------------
+     AJAX Add To Bag
+     ------------------------------------------------------------------------- */
+  async handleQuickAdd(button, variantId) {
+    button.classList.add('is-loading');
+
+    try {
+      const routes = window.routes || { cart_add_url: '/cart/add.js', cart_url: '/cart' };
+      const formData = {
+        items: [
+          {
+            id: parseInt(variantId, 10),
+            quantity: 1,
+          },
+        ],
+      };
+
+      // Include cart drawer sections if cart-drawer exists
+      const cartDrawer = document.querySelector('cart-drawer');
+      const cartNotification = document.querySelector('cart-notification');
+
+      const response = await fetch(routes.cart_add_url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/javascript',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      const resData = await response.json();
+
+      if (!response.ok) {
+        throw new Error(resData.description || 'Could not add to bag');
+      }
+
+      // Success feedback
+      const textSpan = button.querySelector('.coach-card__quick-add-text');
+      const originalText = textSpan ? textSpan.textContent : 'Add To Bag';
+      if (textSpan) textSpan.textContent = 'Added ✓';
+
+      setTimeout(() => {
+        if (textSpan) textSpan.textContent = originalText;
+      }, 1800);
+
+      // Trigger Cart Drawer / Cart Notification
+      if (cartDrawer && typeof cartDrawer.renderContents === 'function') {
+        cartDrawer.renderContents(resData);
+      } else if (cartNotification && typeof cartNotification.renderContents === 'function') {
+        cartNotification.renderContents(resData);
+      } else {
+        // Fallback: update bubble & open drawer
+        this.updateHeaderCartCount();
+      }
+
+      // Publish Dawn PubSub event if active
+      if (typeof window.publish === 'function' && window.PUB_SUB_EVENTS) {
+        window.publish(window.PUB_SUB_EVENTS.cartUpdate, {
+          source: 'coach-collection',
+          cartData: resData,
+        });
+      }
+
+    } catch (err) {
+      console.error('Quick Add error:', err);
+      alert(err.message || 'Error adding product to bag.');
+    } finally {
+      button.classList.remove('is-loading');
+    }
+  }
+
+  async updateHeaderCartCount() {
+    try {
+      const res = await fetch('/cart.js');
+      const cart = await res.json();
+      const countBubbles = document.querySelectorAll('.cart-count-bubble, .coach-header__cart-count');
+      countBubbles.forEach((bubble) => {
+        bubble.textContent = cart.item_count;
+        bubble.classList.remove('hidden');
+      });
+    } catch (e) {
+      console.warn('Could not update cart count bubble', e);
+    }
+  }
+}
+
+// Auto-initialize when DOM is ready
+document.addEventListener('DOMContentLoaded', () => {
+  window.coachCollection = new CoachCollection();
+});
+
+// Support Shopify section editor reload
+if (Shopify && Shopify.designMode) {
+  document.addEventListener('shopify:section:load', () => {
+    window.coachCollection = new CoachCollection();
+  });
+}

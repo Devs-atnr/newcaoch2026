@@ -1,0 +1,289 @@
+{% comment %}
+  Coach Luxury Filter Bar & Popovers
+  - Horizontal pill-style filter buttons
+  - Floating popovers with close 'X'
+  - 2-Column Color Swatches grid with sold-out diagonal slashes
+  - Material / Category list items styled with pill borders & radio circles
+  - Price range inputs
+  - Luxury "Sort by Best Matches" dropdown
+{% endcomment %}
+
+{%- liquid
+  assign sort_by = results.sort_by | default: results.default_sort_by
+  assign active_sort_name = 'Best Matches'
+  for option in results.sort_options
+    if option.value == sort_by
+      assign active_sort_name = option.name
+      break
+    endif
+  endfor
+-%}
+
+<div class="coach-facets-bar" id="CoachFacetsBar">
+  <form id="CoachFacetFiltersForm" class="coach-facets-form">
+    {%- if results.terms -%}
+      <input type="hidden" name="q" value="{{ results.terms | escape }}">
+      <input name="options[prefix]" type="hidden" value="last">
+    {%- endif -%}
+
+    {%- if enable_filtering and results.filters != empty -%}
+      <div class="coach-filter-pills-row" id="CoachFilterPillsRow">
+        {%- for filter in results.filters -%}
+          {%- liquid
+            assign filter_label_lower = filter.label | downcase
+            assign is_color = false
+            if filter_label_lower contains 'color' or filter_label_lower contains 'colour' or filter_label_lower contains 'couleur' or filter_label_lower contains 'farbe' or filter.presentation == 'swatch'
+              assign is_color = true
+            endif
+            assign has_active = false
+            if filter.active_values.size > 0
+              assign has_active = true
+            elsif filter.type == 'price_range'
+              if filter.min_value.value != null or filter.max_value.value != null
+                assign has_active = true
+              endif
+            endif
+          -%}
+
+          <div class="coach-filter-item js-coach-filter-item" data-index="{{ forloop.index }}">
+            <button
+              type="button"
+              class="coach-filter-pill js-coach-filter-pill{% if has_active %} coach-filter-pill--active{% endif %}"
+              aria-expanded="false"
+              aria-controls="CoachPopover-{{ forloop.index }}"
+            >
+              <span class="coach-filter-pill__label">{{ filter.label | escape }}</span>
+              {%- if filter.active_values.size > 0 -%}
+                <span class="coach-filter-pill__badge">{{ filter.active_values.size }}</span>
+              {%- endif -%}
+              <span class="coach-filter-pill__arrow">
+                <svg width="9" height="6" viewBox="0 0 10 6" fill="none">
+                  <path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </span>
+            </button>
+
+            {%- comment -%} Floating Filter Popover {%- endcomment -%}
+            <div
+              id="CoachPopover-{{ forloop.index }}"
+              class="coach-filter-popover js-coach-popover{% if is_color %} coach-filter-popover--color{% else %} coach-filter-popover--list{% endif %}"
+              role="dialog"
+              aria-label="{{ filter.label | escape }} Filter"
+              hidden
+            >
+              <button
+                type="button"
+                class="coach-filter-popover__close js-coach-close-popover"
+                aria-label="Close"
+              >
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="18" y1="6" x2="6" y2="18"></line>
+                  <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+              </button>
+
+              <div class="coach-filter-popover__content">
+                {%- case filter.type -%}
+                  {%- when 'boolean', 'list' -%}
+                    {%- if is_color -%}
+                      {%- comment -%} 2-Column Color Swatches Grid (Image 1) {%- endcomment -%}
+                      <div class="coach-color-grid">
+                        {%- for value in filter.values -%}
+                          {%- liquid
+                            assign color_slug = value.label | strip | downcase
+                            assign is_disabled = false
+                            if value.count == 0 and value.active == false
+                              assign is_disabled = true
+                            endif
+                          -%}
+
+                          {%- capture swatch_color_style -%}
+                            {%- case color_slug -%}
+                              {%- when 'red', 'rouge' -%}background-color: #d91b24;
+                              {%- when 'beige', 'sand', 'nude' -%}background-color: #f5f0e6; border: 1px solid #dcd6cb;
+                              {%- when 'black', 'noir' -%}background-color: #111111;
+                              {%- when 'blue', 'navy', 'bleu' -%}background-color: #163b82;
+                              {%- when 'brown', 'chocolat', 'tan', 'saddle' -%}background-color: #6f3f20;
+                              {%- when 'green', 'vert', 'sage', 'olive' -%}background-color: #b3c1a9;
+                              {%- when 'grey', 'gray', 'gris' -%}background-color: #9e9e9e;
+                              {%- when 'orange' -%}background-color: #ff7e39;
+                              {%- when 'pink', 'rose' -%}background-color: #ff8fa3;
+                              {%- when 'purple', 'violet' -%}background-color: #7b4bb7;
+                              {%- when 'silver', 'argent' -%}background: linear-gradient(135deg, #e0e0e0, #f8f8f8, #c0c0c0); border: 1px solid #d5d5d5;
+                              {%- when 'gold', 'or' -%}background: linear-gradient(135deg, #d4af37, #f3e5ab, #aa820a);
+                              {%- when 'white', 'blanc' -%}background-color: #ffffff; border: 1px solid #d0d0d0;
+                              {%- when 'multic...', 'multi', 'multicolor', 'multic' -%}background: conic-gradient(#d91b24, #f5f0e6, #163b82, #b3c1a9, #7b4bb7, #d91b24);
+                              {%- else -%}
+                                {%- if value.swatch.color -%}
+                                  background-color: rgb({{ value.swatch.color.rgb }});
+                                {%- elsif value.swatch.image -%}
+                                  background-image: url('{{ value.swatch.image | image_url: width: 40 }}'); background-size: cover;
+                                {%- else -%}
+                                  background-color: {{ color_slug }};
+                                {%- endif -%}
+                            {%- endcase -%}
+                          {%- endcapture -%}
+
+                          <label class="coach-color-item{% if value.active %} coach-color-item--active{% endif %}{% if is_disabled %} coach-color-item--disabled{% endif %}">
+                            <input
+                              type="checkbox"
+                              name="{{ value.param_name }}"
+                              value="{{ value.value }}"
+                              class="coach-sr-only js-filter-input"
+                              {% if value.active %}checked{% endif %}
+                              {% if is_disabled %}disabled{% endif %}
+                            >
+                            <span class="coach-color-dot" style="{{ swatch_color_style | strip }}">
+                              {%- if is_disabled -%}
+                                <span class="coach-color-dot__slash"></span>
+                              {%- endif -%}
+                            </span>
+                            <span class="coach-color-item__label{% if is_disabled %} coach-color-item__label--disabled{% endif %}">
+                              {{ value.label | escape }}
+                            </span>
+                          </label>
+                        {%- endfor -%}
+                      </div>
+
+                    {%- else -%}
+                      {%- comment -%} Pill List (Material, Category, Size etc. - Image 2) {%- endcomment -%}
+                      <div class="coach-pill-list">
+                        {%- for value in filter.values -%}
+                          {%- liquid
+                            assign is_disabled = false
+                            if value.count == 0 and value.active == false
+                              assign is_disabled = true
+                            endif
+                          -%}
+
+                          <label class="coach-list-row{% if value.active %} coach-list-row--active{% endif %}{% if is_disabled %} coach-list-row--disabled{% endif %}">
+                            <input
+                              type="checkbox"
+                              name="{{ value.param_name }}"
+                              value="{{ value.value }}"
+                              class="coach-sr-only js-filter-input"
+                              {% if value.active %}checked{% endif %}
+                              {% if is_disabled %}disabled{% endif %}
+                            >
+                            <span class="coach-list-radio">
+                              <span class="coach-list-radio__inner"></span>
+                            </span>
+                            <span class="coach-list-row__text">
+                              {{ value.label | escape }}
+                            </span>
+                            {%- if show_filter_counts and value.count > 0 -%}
+                              <span class="coach-list-row__count">({{ value.count }})</span>
+                            {%- endif -%}
+                          </label>
+                        {%- endfor -%}
+                      </div>
+                    {%- endif -%}
+
+                  {%- when 'price_range' -%}
+                    {%- comment -%} Price Range Inputs {%- endcomment -%}
+                    <div class="coach-price-popover">
+                      <div class="coach-price-fields">
+                        <div class="coach-price-input-box">
+                          <span class="coach-price-currency">{{ cart.currency.symbol }}</span>
+                          <input
+                            type="number"
+                            name="{{ filter.min_value.param_name }}"
+                            id="CoachFilter-{{ filter.param_name }}-min"
+                            class="coach-price-input js-filter-input-price"
+                            placeholder="0"
+                            min="0"
+                            max="{{ filter.range_max | divided_by: 100 }}"
+                            {% if filter.min_value.value %}
+                              value="{{ filter.min_value.value | divided_by: 100 }}"
+                            {% endif %}
+                          >
+                        </div>
+                        <span class="coach-price-separator">to</span>
+                        <div class="coach-price-input-box">
+                          <span class="coach-price-currency">{{ cart.currency.symbol }}</span>
+                          <input
+                            type="number"
+                            name="{{ filter.max_value.param_name }}"
+                            id="CoachFilter-{{ filter.param_name }}-max"
+                            class="coach-price-input js-filter-input-price"
+                            placeholder="{{ filter.range_max | divided_by: 100 }}"
+                            min="0"
+                            max="{{ filter.range_max | divided_by: 100 }}"
+                            {% if filter.max_value.value %}
+                              value="{{ filter.max_value.value | divided_by: 100 }}"
+                            {% endif %}
+                          >
+                        </div>
+                      </div>
+                      <div class="coach-price-actions">
+                        <button type="button" class="coach-price-apply-btn js-coach-price-apply">Apply</button>
+                        {%- if filter.min_value.value or filter.max_value.value -%}
+                          <a href="{{ filter.url_to_remove }}" class="coach-price-reset-link js-facet-remove">Reset</a>
+                        {%- endif -%}
+                      </div>
+                    </div>
+                {%- endcase -%}
+              </div>
+            </div>
+          </div>
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+
+    {%- comment -%} Sort By Dropdown (Image 5) {%- endcomment -%}
+    {%- if enable_sorting -%}
+      <div class="coach-sort-container js-coach-sort-container">
+        <button
+          type="button"
+          class="coach-sort-btn js-coach-sort-btn"
+          aria-expanded="false"
+          aria-controls="CoachSortDropdown"
+        >
+          <span class="coach-sort-btn__label">Sort by <strong>{{ active_sort_name }}</strong></span>
+          <span class="coach-sort-btn__arrow">
+            <svg width="9" height="6" viewBox="0 0 10 6" fill="none">
+              <path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </span>
+        </button>
+
+        <div id="CoachSortDropdown" class="coach-sort-dropdown js-coach-sort-dropdown" hidden>
+          <ul class="coach-sort-list" role="listbox">
+            {%- for option in results.sort_options -%}
+              {%- assign is_selected = false -%}
+              {%- if option.value == sort_by -%}
+                {%- assign is_selected = true -%}
+              {%- endif -%}
+              <li
+                class="coach-sort-item{% if is_selected %} coach-sort-item--active{% endif %}"
+                role="option"
+                aria-selected="{{ is_selected }}"
+                data-sort-value="{{ option.value }}"
+              >
+                <span class="coach-sort-item__check">
+                  {%- if is_selected -%}
+                    <svg width="12" height="10" viewBox="0 0 12 10" fill="none">
+                      <polyline points="1.5 5 4.5 8 10.5 2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                  {%- endif -%}
+                </span>
+                <span class="coach-sort-item__name">{{ option.name | escape }}</span>
+              </li>
+            {%- endfor -%}
+          </ul>
+        </div>
+
+        <select name="sort_by" class="coach-sr-only js-filter-input js-coach-sort-select">
+          {%- for option in results.sort_options -%}
+            <option
+              value="{{ option.value }}"
+              {% if option.value == sort_by %}selected="selected"{% endif %}
+            >
+              {{ option.name | escape }}
+            </option>
+          {%- endfor -%}
+        </select>
+      </div>
+    {%- endif -%}
+  </form>
+</div>

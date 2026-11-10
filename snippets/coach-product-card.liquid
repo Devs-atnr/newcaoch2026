@@ -1,0 +1,264 @@
+{% comment %}
+  Coach Luxury Product Card
+  - Image carousel (< and > arrows)
+  - "Add To Bag" hover bar
+  - Badges (Sold Out, New Arrival speech bubble, Coming Soon)
+  - Color variant swatches with active ring & sold-out slash
+  - View Similar button
+  - Bold price & two-line title
+{% endcomment %}
+
+{%- liquid
+  assign image_ratio = image_ratio | default: 'portrait'
+  assign enable_slider = enable_slider | default: true
+  assign show_quick_add = show_quick_add | default: true
+  assign show_swatches = show_swatches | default: true
+  assign show_view_similar = show_view_similar | default: true
+  assign new_tags = new_badge_tag | default: 'new, New Arrival, New, new-arrival' | split: ','
+  assign coming_soon_tags = coming_soon_badge_tag | default: 'coming soon, Coming Soon, coming-soon' | split: ','
+
+  assign is_new = false
+  for tag in new_tags
+    assign clean_tag = tag | strip | downcase
+    for prod_tag in card_product.tags
+      assign p_tag = prod_tag | strip | downcase
+      if p_tag == clean_tag
+        assign is_new = true
+        break
+      endif
+    endfor
+    if is_new
+      break
+    endif
+  endfor
+
+  assign is_coming_soon = false
+  for tag in coming_soon_tags
+    assign clean_tag = tag | strip | downcase
+    for prod_tag in card_product.tags
+      assign p_tag = prod_tag | strip | downcase
+      if p_tag == clean_tag
+        assign is_coming_soon = true
+        break
+      endif
+    endfor
+    if is_coming_soon
+      break
+    endif
+  endfor
+
+  assign current_variant = card_product.selected_or_first_available_variant
+  assign featured_img = current_variant.featured_image | default: card_product.featured_media.preview_image | default: card_product.featured_image
+
+  # Find color option index
+  assign color_option_index = -1
+  for option in card_product.options_with_values
+    assign opt_name = option.name | downcase
+    if opt_name == 'color' or opt_name == 'colour' or opt_name == 'couleur' or opt_name == 'farbe'
+      assign color_option_index = forloop.index0
+      break
+    endif
+  endfor
+-%}
+
+<div
+  class="coach-card{% unless card_product.available %} coach-card--sold-out{% endunless %}"
+  data-product-id="{{ card_product.id }}"
+  data-current-variant-id="{{ current_variant.id }}"
+>
+  <div class="coach-card__media-wrap coach-card__media-wrap--{{ image_ratio }}">
+    {%- comment -%} Badges {%- endcomment -%}
+    <div class="coach-card__badges">
+      {%- unless card_product.available -%}
+        <span class="coach-badge coach-badge--sold-out">{{ 'products.product.sold_out' | t | default: 'Sold Out' }}</span>
+      {%- elsif is_new -%}
+        <span class="coach-badge coach-badge--bubble coach-badge--new">New Arrival</span>
+      {%- elsif is_coming_soon -%}
+        <span class="coach-badge coach-badge--bubble coach-badge--coming-soon">COMING SOON</span>
+      {%- elsif card_product.compare_at_price > card_product.price -%}
+        <span class="coach-badge coach-badge--sale">{{ 'products.product.on_sale' | t | default: 'Sale' }}</span>
+      {%- endunless -%}
+    </div>
+
+    {%- comment -%} View Similar Button (Top Right / Overlay) {%- endcomment -%}
+    {%- if show_view_similar -%}
+      <a
+        href="{{ card_product.collections.first.url | default: routes.all_products_collection_url }}"
+        class="coach-card__view-similar"
+        aria-label="View Similar products"
+        title="View Similar"
+      >
+        <svg class="coach-icon-similar" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"></circle>
+          <circle cx="12" cy="12" r="4"></circle>
+          <line x1="4.93" y1="4.93" x2="9.17" y2="9.17"></line>
+          <line x1="14.83" y1="14.83" x2="19.07" y2="19.07"></line>
+          <line x1="14.83" y1="9.17" x2="19.07" y2="4.93"></line>
+          <line x1="4.93" y1="19.07" x2="9.17" y2="14.83"></line>
+        </svg>
+        <span>View Similar</span>
+      </a>
+    {%- endif -%}
+
+    {%- comment -%} Product Image Slider {%- endcomment -%}
+    <a href="{{ card_product.url }}" class="coach-card__media-link" tabindex="-1">
+      <div class="coach-card__images-container">
+        {%- if card_product.media.size > 0 -%}
+          {%- for media in card_product.media -%}
+            {%- if media.media_type == 'image' -%}
+              <img
+                src="{{ media | image_url: width: 600 }}"
+                srcset="{{ media | image_url: width: 360 }} 360w, {{ media | image_url: width: 540 }} 540w, {{ media | image_url: width: 720 }} 720w"
+                sizes="(min-width: 990px) calc((100vw - 100px) / 4), (min-width: 750px) 33vw, 50vw"
+                alt="{{ media.alt | default: card_product.title | escape }}"
+                loading="lazy"
+                width="{{ media.width }}"
+                height="{{ media.height }}"
+                class="coach-card__img{% if forloop.first %} coach-card__img--active{% endif %}"
+                data-image-index="{{ forloop.index0 }}"
+              >
+            {%- endif -%}
+          {%- endfor -%}
+        {%- else -%}
+          {{ 'product-1' | placeholder_svg_tag: 'coach-card__placeholder' }}
+        {%- endif -%}
+      </div>
+    </a>
+
+    {%- comment -%} Carousel Arrows (< and >) {%- endcomment -%}
+    {%- if enable_slider and card_product.media.size > 1 -%}
+      <button
+        type="button"
+        class="coach-card__arrow coach-card__arrow--prev"
+        aria-label="Previous image"
+      >
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="15 18 9 12 15 6"></polyline>
+        </svg>
+      </button>
+      <button
+        type="button"
+        class="coach-card__arrow coach-card__arrow--next"
+        aria-label="Next image"
+      >
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="9 18 15 12 9 6"></polyline>
+        </svg>
+      </button>
+    {%- endif -%}
+
+    {%- comment -%} "Add To Bag" Hover Button Bar {%- endcomment -%}
+    {%- if show_quick_add -%}
+      <div class="coach-card__quick-add-wrap">
+        {%- if card_product.available -%}
+          <button
+            type="button"
+            class="coach-card__quick-add-btn"
+            data-variant-id="{{ current_variant.id }}"
+            aria-label="Add to Bag - {{ card_product.title | escape }}"
+          >
+            <span class="coach-card__quick-add-icon">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+                <line x1="3" y1="6" x2="21" y2="6"></line>
+                <path d="M16 10a4 4 0 0 1-8 0"></path>
+                <line x1="12" y1="13" x2="12" y2="17"></line>
+                <line x1="10" y1="15" x2="14" y2="15"></line>
+              </svg>
+            </span>
+            <span class="coach-card__quick-add-text">Add To Bag</span>
+            <span class="coach-card__quick-add-spinner" style="display:none;"></span>
+          </button>
+        {%- else -%}
+          <button type="button" class="coach-card__quick-add-btn coach-card__quick-add-btn--disabled" disabled>
+            <span>Sold Out</span>
+          </button>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+  </div>
+
+  {%- comment -%} Product Information {%- endcomment -%}
+  <div class="coach-card__info">
+    <h3 class="coach-card__title">
+      <a href="{{ card_product.url }}" class="coach-card__title-link">
+        {{ card_product.title | escape }}
+      </a>
+    </h3>
+
+    {%- comment -%} Variant Color Swatches {%- endcomment -%}
+    {%- if show_swatches and color_option_index >= 0 -%}
+      <div class="coach-card__swatches" role="radiogroup" aria-label="Color options">
+        {%- assign rendered_colors = '' -%}
+        {%- for variant in card_product.variants -%}
+          {%- assign color_val = variant.options[color_option_index] -%}
+          {%- assign color_slug = color_val | strip | downcase -%}
+          {%- unless rendered_colors contains color_slug -%}
+            {%- assign rendered_colors = rendered_colors | append: ',' | append: color_slug -%}
+            {%- assign is_active_swatch = false -%}
+            {%- if variant.id == current_variant.id -%}
+              {%- assign is_active_swatch = true -%}
+            {%- endif -%}
+
+            {%- comment -%} Color mapping {%- endcomment -%}
+            {%- capture swatch_style -%}
+              {%- case color_slug -%}
+                {%- when 'black', 'noir' -%}background-color: #111111;
+                {%- when 'red', 'rouge' -%}background-color: #d91b24;
+                {%- when 'beige', 'sand', 'nude' -%}background-color: #f5f0e6;
+                {%- when 'brown', 'chocolat', 'tan', 'saddle' -%}background-color: #6f3f20;
+                {%- when 'blue', 'navy', 'bleu' -%}background-color: #163b82;
+                {%- when 'green', 'vert', 'sage', 'olive' -%}background-color: #9cb197;
+                {%- when 'grey', 'gray', 'gris' -%}background-color: #9e9e9e;
+                {%- when 'orange' -%}background-color: #ff7e39;
+                {%- when 'pink', 'rose' -%}background-color: #ff8fa3;
+                {%- when 'purple', 'violet' -%}background-color: #7b4bb7;
+                {%- when 'silver', 'argent' -%}background: linear-gradient(135deg, #e0e0e0, #f5f5f5, #b8b8b8);
+                {%- when 'gold', 'or' -%}background: linear-gradient(135deg, #d4af37, #f3e5ab, #aa820a);
+                {%- when 'white', 'blanc' -%}background-color: #ffffff; border: 1px solid #d5d5d5;
+                {%- when 'multic...', 'multi', 'multicolor', 'multic' -%}background: conic-gradient(#d91b24, #f5f0e6, #163b82, #9cb197, #7b4bb7, #d91b24);
+                {%- else -%}
+                  {%- if variant.featured_image -%}
+                    background-image: url('{{ variant.featured_image | image_url: width: 60 }}'); background-size: cover;
+                  {%- else -%}
+                    background-color: {{ color_slug }};
+                  {%- endif -%}
+              {%- endcase -%}
+            {%- endcapture -%}
+
+            <button
+              type="button"
+              class="coach-card__swatch-dot{% if is_active_swatch %} coach-card__swatch-dot--active{% endif %}{% unless variant.available %} coach-card__swatch-dot--sold-out{% endunless %}"
+              style="{{ swatch_style | strip }}"
+              title="{{ color_val | escape }}"
+              aria-label="{{ color_val | escape }}"
+              data-variant-id="{{ variant.id }}"
+              data-variant-available="{{ variant.available }}"
+              data-variant-price="{{ variant.price | money }}"
+              {% if variant.compare_at_price > variant.price %}
+                data-variant-compare-price="{{ variant.compare_at_price | money }}"
+              {% endif %}
+              {% if variant.featured_image %}
+                data-variant-image-src="{{ variant.featured_image | image_url: width: 600 }}"
+              {% endif %}
+            >
+              {%- unless variant.available -%}
+                <span class="coach-card__swatch-slash"></span>
+              {%- endunless -%}
+            </button>
+          {%- endunless -%}
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+
+    {%- comment -%} Price {%- endcomment -%}
+    <div class="coach-card__price">
+      {%- if current_variant.compare_at_price > current_variant.price -%}
+        <span class="coach-card__price-sale">{{ current_variant.price | money }}</span>
+        <span class="coach-card__price-compare">{{ current_variant.compare_at_price | money }}</span>
+      {%- else -%}
+        <span class="coach-card__price-regular">{{ current_variant.price | money }}</span>
+      {%- endif -%}
+    </div>
+  </div>
+</div>

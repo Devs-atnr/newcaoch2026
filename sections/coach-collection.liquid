@@ -1,0 +1,310 @@
+{{ 'coach-collection.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'coach-collection.js' | asset_url }}" defer="defer"></script>
+
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+{%- endstyle -%}
+
+<div
+  class="coach-collection-wrapper section-{{ section.id }}-padding"
+  data-section-id="{{ section.id }}"
+  style="
+    --coach-cols-desktop: {{ section.settings.columns_desktop }};
+    --coach-cols-mobile: {{ section.settings.columns_mobile }};
+    --coach-card-bg: {{ section.settings.card_bg_color }};
+  "
+>
+  {%- paginate collection.products by section.settings.products_per_page -%}
+    {%- comment -%} Collection Header {%- endcomment -%}
+    {%- if section.settings.show_collection_title -%}
+      <div class="coach-collection-header">
+        <div class="coach-collection-title-wrap">
+          <h1 class="coach-collection-title">
+            {{ collection.title | escape }}
+          </h1>
+          {%- if section.settings.show_product_count -%}
+            <span class="coach-collection-count" id="CoachCollectionCount">
+              {{ collection.products_count }} {{ 'products.facets.product_count_simple.other' | t | default: 'Products' }}
+            </span>
+          {%- endif -%}
+        </div>
+        {%- if section.settings.show_collection_description and collection.description != blank -%}
+          <div class="coach-collection-description rte">
+            {{ collection.description }}
+          </div>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
+    {%- comment -%} Filter and Sort Bar {%- endcomment -%}
+    {%- if section.settings.enable_filtering or section.settings.enable_sorting -%}
+      {% render 'coach-facets',
+        results: collection,
+        enable_filtering: section.settings.enable_filtering,
+        enable_sorting: section.settings.enable_sorting,
+        show_filter_counts: section.settings.show_filter_counts
+      %}
+    {%- endif -%}
+
+    {%- comment -%} Product Grid Container {%- endcomment -%}
+    <div id="CoachProductGridContainer">
+      {%- if collection.products.size == 0 -%}
+        <div class="coach-collection--empty">
+          <h2 class="coach-collection--empty-title">
+            {{ 'sections.collection_template.empty' | t | default: 'No products found' }}
+          </h2>
+          <a href="{{ collection.url }}" class="coach-collection--empty-clear">
+            {{ 'products.facets.clear_all' | t | default: 'Clear all filters' }}
+          </a>
+        </div>
+      {%- else -%}
+        <ul class="coach-product-grid" id="CoachProductGrid" role="list">
+          {%- for product in collection.products -%}
+            <li class="coach-product-grid__item">
+              {% render 'coach-product-card',
+                card_product: product,
+                image_ratio: section.settings.image_ratio,
+                enable_slider: section.settings.enable_slider,
+                show_quick_add: section.settings.show_quick_add,
+                show_swatches: section.settings.show_swatches,
+                show_view_similar: section.settings.show_view_similar,
+                new_badge_tag: section.settings.new_badge_tag,
+                coming_soon_badge_tag: section.settings.coming_soon_badge_tag
+              %}
+            </li>
+          {%- endfor -%}
+        </ul>
+
+        {%- if paginate.pages > 1 -%}
+          <div class="coach-pagination">
+            {%- if paginate.previous -%}
+              <a href="{{ paginate.previous.url }}" class="coach-pagination__item coach-pagination__item--prev" aria-label="Previous page">
+                <svg width="8" height="12" viewBox="0 0 8 12" fill="none">
+                  <path d="M7 1L2 6L7 11" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </a>
+            {%- endif -%}
+
+            {%- for part in paginate.parts -%}
+              {%- if part.is_link -%}
+                <a href="{{ part.url }}" class="coach-pagination__item">{{ part.title }}</a>
+              {%- elsif part.title == paginate.current_page -%}
+                <span class="coach-pagination__item coach-pagination__item--current" aria-current="page">{{ part.title }}</span>
+              {%- else -%}
+                <span class="coach-pagination__item coach-pagination__item--dots">{{ part.title }}</span>
+              {%- endif -%}
+            {%- endfor -%}
+
+            {%- if paginate.next -%}
+              <a href="{{ paginate.next.url }}" class="coach-pagination__item coach-pagination__item--next" aria-label="Next page">
+                <svg width="8" height="12" viewBox="0 0 8 12" fill="none">
+                  <path d="M1 1L6 6L1 11" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </a>
+            {%- endif -%}
+          </div>
+        {%- endif -%}
+      {%- endif -%}
+    </div>
+  {%- endpaginate -%}
+</div>
+
+{% schema %}
+{
+  "name": "Coach Collection",
+  "class": "section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Collection Header"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_collection_title",
+      "default": true,
+      "label": "Show collection title"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_product_count",
+      "default": true,
+      "label": "Show product count next to title"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_collection_description",
+      "default": false,
+      "label": "Show collection description"
+    },
+    {
+      "type": "header",
+      "content": "Grid & Layout"
+    },
+    {
+      "type": "range",
+      "id": "columns_desktop",
+      "min": 2,
+      "max": 5,
+      "step": 1,
+      "default": 4,
+      "label": "Desktop columns"
+    },
+    {
+      "type": "select",
+      "id": "columns_mobile",
+      "default": "2",
+      "label": "Mobile columns",
+      "options": [
+        {
+          "value": "1",
+          "label": "1 column"
+        },
+        {
+          "value": "2",
+          "label": "2 columns"
+        }
+      ]
+    },
+    {
+      "type": "range",
+      "id": "products_per_page",
+      "min": 8,
+      "max": 48,
+      "step": 4,
+      "default": 16,
+      "label": "Products per page"
+    },
+    {
+      "type": "header",
+      "content": "Filtering & Sorting (Coach Style)"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_filtering",
+      "default": true,
+      "label": "Enable horizontal filter pills & popovers"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_sorting",
+      "default": true,
+      "label": "Enable 'Sort by Best Matches' dropdown"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_filter_counts",
+      "default": true,
+      "label": "Show item count next to filter options"
+    },
+    {
+      "type": "header",
+      "content": "Product Cards"
+    },
+    {
+      "type": "select",
+      "id": "image_ratio",
+      "options": [
+        {
+          "value": "adapt",
+          "label": "Adapt to image"
+        },
+        {
+          "value": "portrait",
+          "label": "Portrait (4:5)"
+        },
+        {
+          "value": "square",
+          "label": "Square (1:1)"
+        }
+      ],
+      "default": "portrait",
+      "label": "Product image ratio"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_slider",
+      "default": true,
+      "label": "Enable image carousel (< and > arrows on card)"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_quick_add",
+      "default": true,
+      "label": "Show 'Add To Bag' hover button"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_swatches",
+      "default": true,
+      "label": "Show variant color circles under title"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_view_similar",
+      "default": true,
+      "label": "Show 'View Similar' overlay button"
+    },
+    {
+      "type": "header",
+      "content": "Badges"
+    },
+    {
+      "type": "text",
+      "id": "new_badge_tag",
+      "default": "new, New Arrival, New, new-arrival",
+      "label": "Tags for 'New Arrival' speech bubble badge (comma-separated)"
+    },
+    {
+      "type": "text",
+      "id": "coming_soon_badge_tag",
+      "default": "coming soon, Coming Soon, coming-soon",
+      "label": "Tags for 'COMING SOON' speech bubble badge (comma-separated)"
+    },
+    {
+      "type": "header",
+      "content": "Colors & Spacing"
+    },
+    {
+      "type": "color",
+      "id": "card_bg_color",
+      "default": "#f6f6f6",
+      "label": "Product image background color"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Top padding",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Bottom padding",
+      "default": 48
+    }
+  ],
+  "presets": [
+    {
+      "name": "Coach Collection"
+    }
+  ]
+}
+{% endschema %}
