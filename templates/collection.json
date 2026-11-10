@@ -19,7 +19,7 @@
         "show_view_similar": true,
         "new_badge_tag": "new, New Arrival, New, new-arrival",
         "coming_soon_badge_tag": "coming soon, Coming Soon, coming-soon",
-        "card_bg_color": "#f6f6f6",
+        "body_bg_color": "#f4f4f4",
         "padding_top": 36,
         "padding_bottom": 48
       }

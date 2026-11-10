@@ -16,14 +16,17 @@
 {%- endstyle -%}
 
 <div
-  class="coach-collection-wrapper section-{{ section.id }}-padding"
-  data-section-id="{{ section.id }}"
-  style="
-    --coach-cols-desktop: {{ section.settings.columns_desktop }};
-    --coach-cols-mobile: {{ section.settings.columns_mobile }};
-    --coach-card-bg: {{ section.settings.card_bg_color }};
-  "
+  class="coach-collection-section section-{{ section.id }}-padding"
+  style="background-color: {{ section.settings.body_bg_color | default: '#f4f4f4' }};"
 >
+  <div
+    class="coach-collection-wrapper"
+    data-section-id="{{ section.id }}"
+    style="
+      --coach-cols-desktop: {{ section.settings.columns_desktop }};
+      --coach-cols-mobile: {{ section.settings.columns_mobile }};
+    "
+  >
   {%- paginate collection.products by section.settings.products_per_page -%}
     {%- comment -%} Collection Header {%- endcomment -%}
     {%- if section.settings.show_collection_title -%}
@@ -117,6 +120,7 @@
       {%- endif -%}
     </div>
   {%- endpaginate -%}
+  </div>
 </div>
 
 {% schema %}
@@ -276,9 +280,9 @@
     },
     {
       "type": "color",
-      "id": "card_bg_color",
-      "default": "#f6f6f6",
-      "label": "Product image background color"
+      "id": "body_bg_color",
+      "default": "#f4f4f4",
+      "label": "Collection body background color"
     },
     {
       "type": "range",

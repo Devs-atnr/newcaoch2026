@@ -38,9 +38,11 @@ class CoachCollection {
     filterItems.forEach((item) => {
       const pillBtn = item.querySelector('.js-coach-filter-pill');
       const closeBtn = item.querySelector('.js-coach-close-popover');
+      const popover = item.querySelector('.js-coach-popover');
 
-      if (pillBtn) {
+      if (pillBtn && popover) {
         pillBtn.addEventListener('click', (e) => {
+          e.preventDefault();
           e.stopPropagation();
           const isOpen = item.classList.contains('is-open');
 
@@ -50,12 +52,14 @@ class CoachCollection {
           if (!isOpen) {
             item.classList.add('is-open');
             pillBtn.setAttribute('aria-expanded', 'true');
+            popover.removeAttribute('hidden');
           }
         });
       }
 
-      if (closeBtn) {
+      if (closeBtn && popover) {
         closeBtn.addEventListener('click', (e) => {
+          e.preventDefault();
           e.stopPropagation();
           item.classList.remove('is-open');
           pillBtn?.setAttribute('aria-expanded', 'false');
@@ -456,14 +460,17 @@ class CoachCollection {
   }
 }
 
-// Auto-initialize when DOM is ready
-document.addEventListener('DOMContentLoaded', () => {
+function initCoachCollection() {
   window.coachCollection = new CoachCollection();
-});
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initCoachCollection);
+} else {
+  initCoachCollection();
+}
 
 // Support Shopify section editor reload
-if (Shopify && Shopify.designMode) {
-  document.addEventListener('shopify:section:load', () => {
-    window.coachCollection = new CoachCollection();
-  });
+if (typeof Shopify !== 'undefined' && Shopify.designMode) {
+  document.addEventListener('shopify:section:load', initCoachCollection);
 }

@@ -13,6 +13,12 @@
      * Centered title, swatches (with double-ring outline & white slash), and bold price
    ========================================================================== */
 
+.coach-collection-section {
+  width: 100%;
+  background-color: var(--coach-body-bg, #f4f4f4);
+  min-height: 100vh;
+}
+
 .coach-collection-wrapper {
   max-width: var(--ch-max, 1340px);
   margin-inline: auto;
@@ -167,26 +173,21 @@
    Floating Popovers
    ========================================================================== */
 .coach-filter-popover {
+  display: none !important;
   position: absolute;
   top: calc(100% + 8px);
   left: 0;
-  z-index: 50;
+  z-index: 999;
   background: #ffffff;
   border: 1px solid #e5e5e5;
   border-radius: 16px;
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.14);
   padding: 22px 20px;
   min-width: 290px;
-  opacity: 0;
-  visibility: hidden;
-  transform: translateY(-6px);
-  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .coach-filter-item.is-open .coach-filter-popover {
-  opacity: 1;
-  visibility: visible;
-  transform: translateY(0);
+  display: block !important;
 }
 
 .coach-filter-popover__close {
@@ -504,26 +505,21 @@
 }
 
 .coach-sort-dropdown {
+  display: none !important;
   position: absolute;
   top: calc(100% + 4px);
   right: 0;
-  z-index: 55;
+  z-index: 999;
   min-width: 190px;
   background: #ffffff;
   border-radius: 12px;
   border: 1px solid #ededed;
-  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.14);
   padding: 8px 0;
-  opacity: 0;
-  visibility: hidden;
-  transform: translateY(-6px);
-  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .coach-sort-container.is-open .coach-sort-dropdown {
-  opacity: 1;
-  visibility: visible;
-  transform: translateY(0);
+  display: block !important;
 }
 
 .coach-sort-list {
@@ -612,13 +608,14 @@
   position: relative;
   display: flex;
   flex-direction: column;
+  background-color: transparent !important;
 }
 
 .coach-card__media-wrap {
   position: relative;
   overflow: hidden;
-  background-color: var(--coach-card-bg, #f6f6f6);
-  border-radius: 2px;
+  background-color: transparent !important;
+  border-radius: 0;
 }
 
 .coach-card__media-wrap--portrait {
@@ -727,46 +724,7 @@
   border-top-color: #d91b24;
 }
 
-/* View Similar Button (Top Right / Overlay) */
-.coach-card__view-similar {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  z-index: 12;
-  background: rgba(255, 255, 255, 0.92);
-  backdrop-filter: blur(4px);
-  border: 1px solid #e6e6e6;
-  border-radius: 9999px;
-  padding: 4px 10px;
-  font-size: 0.72rem;
-  font-weight: 500;
-  color: #111111;
-  text-decoration: none;
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
-  opacity: 0;
-  transform: translateY(-4px);
-  transition: all 0.2s ease;
-}
 
-.coach-card:hover .coach-card__view-similar {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-.coach-card__view-similar:hover {
-  background: #ffffff;
-  border-color: #111111;
-}
-
-@media screen and (max-width: 989px) {
-  .coach-card__view-similar {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
 
 /* Minimalist Chevron Arrows (< and >) - Images 1 & 2 */
 .coach-card__arrow {

@@ -80,7 +80,6 @@
               class="coach-filter-popover js-coach-popover{% if is_color %} coach-filter-popover--color{% else %} coach-filter-popover--list{% endif %}"
               role="dialog"
               aria-label="{{ filter.label | escape }} Filter"
-              hidden
             >
               <button
                 type="button"
@@ -262,7 +261,7 @@
           </span>
         </button>
 
-        <div id="CoachSortDropdown" class="coach-sort-dropdown js-coach-sort-dropdown" hidden>
+        <div id="CoachSortDropdown" class="coach-sort-dropdown js-coach-sort-dropdown">
           <ul class="coach-sort-list" role="listbox">
             {%- for option in results.sort_options -%}
               {%- assign is_selected = false -%}
