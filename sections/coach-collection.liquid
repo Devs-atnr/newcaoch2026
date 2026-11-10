@@ -34,7 +34,7 @@
           </h1>
           {%- if section.settings.show_product_count -%}
             <span class="coach-collection-count" id="CoachCollectionCount">
-              {{ collection.products_count }} {{ 'products.facets.product_count_simple.other' | t | default: 'Products' }}
+              {{ 'products.facets.product_count_simple' | t: count: collection.products_count }}
             </span>
           {%- endif -%}
         </div>
