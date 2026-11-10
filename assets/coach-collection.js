@@ -23,6 +23,10 @@ class CoachCollection {
     this.bindFilterInputs();
     this.bindPriceFilter();
     this.bindProductCards();
+
+    window.addEventListener('popstate', () => {
+      this.fetchFilteredSection(window.location.href);
+    });
   }
 
   /* -------------------------------------------------------------------------
@@ -311,15 +315,17 @@ class CoachCollection {
           if (quickAddBtn) {
             quickAddBtn.dataset.variantId = variantId;
             if (isAvailable) {
-              quickAddBtn.classList.remove('coach-card__quick-add-btn--disabled');
+              quickAddBtn.classList.remove('coach-card__quick-add-btn--sold-out');
+              quickAddBtn.classList.add('coach-card__quick-add-btn--available');
               quickAddBtn.removeAttribute('disabled');
               const textSpan = quickAddBtn.querySelector('.coach-card__quick-add-text');
               if (textSpan) textSpan.textContent = 'Add To Bag';
             } else {
-              quickAddBtn.classList.add('coach-card__quick-add-btn--disabled');
+              quickAddBtn.classList.remove('coach-card__quick-add-btn--available');
+              quickAddBtn.classList.add('coach-card__quick-add-btn--sold-out');
               quickAddBtn.setAttribute('disabled', 'disabled');
               const textSpan = quickAddBtn.querySelector('.coach-card__quick-add-text');
-              if (textSpan) textSpan.textContent = 'Sold Out';
+              if (textSpan) textSpan.textContent = 'Add To Bag';
             }
           }
 

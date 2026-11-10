@@ -3,7 +3,8 @@
   - Horizontal pill-style filter buttons
   - Floating popovers with close 'X'
   - 2-Column Color Swatches grid with sold-out diagonal slashes
-  - Material / Category list items styled with pill borders & radio circles
+  - Material / Category list items with 2px black border & checkmark when selected
+  - Active filter chips row ([Suede X] Clear All)
   - Price range inputs
   - Luxury "Sort by Best Matches" dropdown
 {% endcomment %}
@@ -15,6 +16,16 @@
     if option.value == sort_by
       assign active_sort_name = option.name
       break
+    endif
+  endfor
+
+  assign total_active = 0
+  for filter in results.filters
+    assign total_active = total_active | plus: filter.active_values.size
+    if filter.type == 'price_range'
+      if filter.min_value.value != null or filter.max_value.value != null
+        assign total_active = total_active | plus: 1
+      endif
     endif
   endfor
 -%}
@@ -86,7 +97,7 @@
                 {%- case filter.type -%}
                   {%- when 'boolean', 'list' -%}
                     {%- if is_color -%}
-                      {%- comment -%} 2-Column Color Swatches Grid (Image 1) {%- endcomment -%}
+                      {%- comment -%} 2-Column Color Swatches Grid (Image 3) {%- endcomment -%}
                       <div class="coach-color-grid">
                         {%- for value in filter.values -%}
                           {%- liquid
@@ -146,7 +157,7 @@
                       </div>
 
                     {%- else -%}
-                      {%- comment -%} Pill List (Material, Category, Size etc. - Image 2) {%- endcomment -%}
+                      {%- comment -%} Pill List (Material, Category, Size etc. - Image 4) {%- endcomment -%}
                       <div class="coach-pill-list">
                         {%- for value in filter.values -%}
                           {%- liquid
@@ -165,8 +176,12 @@
                               {% if value.active %}checked{% endif %}
                               {% if is_disabled %}disabled{% endif %}
                             >
-                            <span class="coach-list-radio">
-                              <span class="coach-list-radio__inner"></span>
+                            <span class="coach-list-radio{% if value.active %} coach-list-radio--checked{% endif %}">
+                              {%- if value.active -%}
+                                <svg width="10" height="8" viewBox="0 0 10 8" fill="none">
+                                  <path d="M1.5 4L3.8 6.5L8.5 1.5" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                              {%- endif -%}
                             </span>
                             <span class="coach-list-row__text">
                               {{ value.label | escape }}
@@ -230,7 +245,7 @@
       </div>
     {%- endif -%}
 
-    {%- comment -%} Sort By Dropdown (Image 5) {%- endcomment -%}
+    {%- comment -%} Sort By Dropdown (Image 3 & 4) {%- endcomment -%}
     {%- if enable_sorting -%}
       <div class="coach-sort-container js-coach-sort-container">
         <button
@@ -286,4 +301,49 @@
       </div>
     {%- endif -%}
   </form>
+
+  {%- comment -%} Active Filter Chips Row (Images 4 & 5: [Suede X] Clear All) {%- endcomment -%}
+  {%- if total_active > 0 -%}
+    <div class="coach-active-facets" id="CoachActiveFacets">
+      {%- for filter in results.filters -%}
+        {%- for value in filter.active_values -%}
+          <a
+            href="{{ value.url_to_remove }}"
+            class="coach-active-chip js-facet-remove"
+            aria-label="Remove {{ value.label | escape }}"
+          >
+            <span>{{ value.label | escape }}</span>
+            <span class="coach-active-chip__icon">
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+              </svg>
+            </span>
+          </a>
+        {%- endfor -%}
+
+        {%- if filter.type == 'price_range' -%}
+          {%- if filter.min_value.value != null or filter.max_value.value != null -%}
+            <a
+              href="{{ filter.url_to_remove }}"
+              class="coach-active-chip js-facet-remove"
+              aria-label="Remove price filter"
+            >
+              <span>{{ filter.min_value.value | default: 0 | money_without_trailing_zeros }} - {{ filter.max_value.value | default: filter.range_max | money_without_trailing_zeros }}</span>
+              <span class="coach-active-chip__icon">
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="18" y1="6" x2="6" y2="18"></line>
+                  <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+              </span>
+            </a>
+          {%- endif -%}
+        {%- endif -%}
+      {%- endfor -%}
+
+      <a href="{{ results.url | default: collection.url }}" class="coach-active-clear-all js-facet-remove">
+        Clear All
+      </a>
+    </div>
+  {%- endif -%}
 </div>
