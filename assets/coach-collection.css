@@ -99,27 +99,20 @@
    ========================================================================== */
 .coach-collection-section,
 .coach-collection-wrapper,
-.coach-facets-bar,
 .coach-facets-form,
 .coach-product-grid {
-  border: none !important;
-  box-shadow: none !important;
-}
-
-.coach-collection-section::before,
-.coach-collection-section::after,
-.coach-facets-bar::before,
-.coach-facets-bar::after,
-.coach-product-grid::before,
-.coach-product-grid::after {
-  content: none;
-  display: none;
+  border: none;
+  box-shadow: none;
 }
 
 .coach-facets-bar {
-  margin-bottom: 28px;
+  margin-bottom: 0;
+  padding-bottom: 18px;
   position: relative;
   z-index: 20;
+  border: none;
+  border-bottom: 1px solid #e4e4e4;
+  box-shadow: none;
 }
 
 .coach-facets-form {
@@ -711,17 +704,23 @@ button.coach-sort-btn {
 }
 
 .coach-sort-dropdown {
-  display: none !important;
+  display: block !important;
   position: absolute;
   top: 100%;
-  right: 0;
+  left: 0;
+  right: auto;
   z-index: 999;
   width: 228px;
-  padding-top: 10px;
+  padding-top: 8px;
   background: transparent;
   border: none;
   box-shadow: none;
   overflow: visible;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transform: translateY(-4px);
+  transition: opacity 0.16s ease, transform 0.16s ease, visibility 0.16s ease;
 }
 
 .coach-sort-list {
@@ -735,7 +734,10 @@ button.coach-sort-btn {
 }
 
 .coach-sort-container.is-open .coach-sort-dropdown {
-  display: block !important;
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transform: translateY(0);
 }
 
 .coach-sort-item {
@@ -782,9 +784,10 @@ button.coach-sort-btn {
   grid-template-columns: repeat(var(--coach-cols-desktop, 4), minmax(0, 1fr));
   gap: var(--coach-grid-row-gap, 12px) var(--coach-grid-column-gap, 18px);
   list-style: none;
-  padding: 0;
+  padding: 22px 0 0;
   margin: 0 0 3rem 0;
   transition: opacity 0.2s ease;
+  border: none;
 }
 
 .coach-product-grid.is-loading {
@@ -879,7 +882,8 @@ button.coach-sort-btn {
   object-fit: contain;
   opacity: 0;
   transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-  mix-blend-mode: multiply;
+  mix-blend-mode: normal;
+  background: transparent;
   pointer-events: none;
   padding: 0;
   box-sizing: border-box;
@@ -1014,7 +1018,7 @@ button.coach-sort-btn {
   min-width: 0 !important;
   border-radius: 0 !important;
   font-family: HelveticaLTPro-Roman, "Helvetica Neue", Helvetica, Arial, sans-serif !important;
-  font-size: 12px !important;
+  font-size: 14px !important;
   font-weight: 400 !important;
   letter-spacing: 0 !important;
   line-height: 1 !important;
@@ -1144,7 +1148,7 @@ button.coach-sort-btn {
   scrollbar-width: none;
   -ms-overflow-style: none;
   scroll-behavior: smooth;
-  max-width: 168px;
+  max-width: 188px;
   padding: 6px 2px;
 }
 
@@ -1182,8 +1186,8 @@ button.coach-sort-btn {
 }
 
 .coach-card__swatch-dot {
-  width: 28px;
-  height: 28px;
+  width: 32px;
+  height: 32px;
   border-radius: 50%;
   border: none !important;
   background: transparent !important;
@@ -1208,16 +1212,17 @@ button.coach-sort-btn {
 }
 
 .coach-card__swatch-fill {
-  width: 24px;
-  height: 24px;
+  width: 26px;
+  height: 26px;
   border-radius: 50%;
   display: block;
   pointer-events: none;
   box-sizing: border-box;
-  background-color: #c4c4c4;
+  background-color: transparent;
   background-size: cover;
   background-position: center;
-  border: 1px solid rgba(0, 0, 0, 0.15);
+  background-repeat: no-repeat;
+  border: 1px solid rgba(0, 0, 0, 0.12);
 }
 
 .coach-card__swatch-dot:hover .coach-card__swatch-fill {
@@ -1230,19 +1235,19 @@ button.coach-sort-btn {
 }
 
 .coach-card__swatch-dot--sold-out {
-  opacity: 0.85;
+  opacity: 1;
 }
 
-/* Sold-out Diagonal White Slash (Image 1 & 4) */
 .coach-card__swatch-slash {
   position: absolute;
   top: 50%;
-  left: -1px;
-  width: calc(100% + 2px);
-  height: 1px;
-  background: #5c5c5c;
-  transform: rotate(-45deg);
+  left: 50%;
+  width: 28px;
+  height: 1.5px;
+  background: #1a1a1a;
+  transform: translate(-50%, -50%) rotate(-42deg);
   pointer-events: none;
+  z-index: 2;
 }
 
 /* Price (Centered - Images 1, 2, 4, 5) */

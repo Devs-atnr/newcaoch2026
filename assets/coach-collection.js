@@ -18,6 +18,7 @@ class CoachCollection {
   }
 
   init() {
+    this.clearIdleFilters();
     this.bindPopovers();
     this.bindSort();
     this.bindFilterInputs();
@@ -27,6 +28,59 @@ class CoachCollection {
     window.addEventListener('popstate', () => {
       this.fetchFilteredSection(window.location.href);
     });
+  }
+
+  /* Filters stay unchecked until the shopper chooses one. */
+  clearIdleFilters() {
+    const params = new URLSearchParams(window.location.search);
+    let hasFilter = false;
+    params.forEach((value, key) => {
+      if (key.indexOf('filter.') === 0 && value !== '') hasFilter = true;
+    });
+    if (hasFilter) return;
+
+    this.wrapper.querySelectorAll('.js-coach-filter-item .js-filter-input').forEach((input) => {
+      if (input.type === 'checkbox' || input.type === 'radio') input.checked = false;
+    });
+    this.wrapper.querySelectorAll('.js-price-min-param, .js-price-max-param').forEach((input) => {
+      input.value = '';
+    });
+    this.wrapper.querySelectorAll('.coach-filter-pill--active').forEach((pill) => {
+      pill.classList.remove('coach-filter-pill--active');
+    });
+    this.wrapper.querySelectorAll('.coach-list-row--active').forEach((row) => {
+      row.classList.remove('coach-list-row--active');
+    });
+    this.wrapper.querySelectorAll('.coach-list-radio--checked').forEach((radio) => {
+      radio.classList.remove('coach-list-radio--checked');
+    });
+    this.wrapper.querySelectorAll('.coach-color-item--active').forEach((item) => {
+      item.classList.remove('coach-color-item--active');
+    });
+  }
+
+  alignSortDropdown() {
+    const sortWrap = this.wrapper.querySelector('.js-coach-sort-container');
+    if (!sortWrap) return;
+    const valueEl = sortWrap.querySelector('.coach-sort-btn__value');
+    const dropdown = sortWrap.querySelector('.coach-sort-dropdown');
+    if (!valueEl || !dropdown) return;
+
+    if (window.innerWidth < 750) {
+      dropdown.style.left = 'auto';
+      dropdown.style.right = '0px';
+      return;
+    }
+
+    const wrapRect = sortWrap.getBoundingClientRect();
+    const valueRect = valueEl.getBoundingClientRect();
+    const menuWidth = dropdown.offsetWidth || 228;
+    let left = valueRect.left - wrapRect.left;
+    const viewportRight = window.innerWidth - 16;
+    const overflow = wrapRect.left + left + menuWidth - viewportRight;
+    if (overflow > 0) left -= overflow;
+    dropdown.style.right = 'auto';
+    dropdown.style.left = `${Math.max(0, Math.round(left))}px`;
   }
 
   /* -------------------------------------------------------------------------
@@ -107,6 +161,7 @@ class CoachCollection {
 
     const openSort = () => {
       this.closeAllPopovers();
+      this.alignSortDropdown();
       sortWrap.classList.add('is-open');
       sortBtn?.setAttribute('aria-expanded', 'true');
     };
@@ -123,6 +178,12 @@ class CoachCollection {
         if (isOpen) closeThisSort();
         else openSort();
       });
+    }
+
+    this.alignSortDropdown();
+    if (!this.sortResizeBound) {
+      this.sortResizeBound = true;
+      window.addEventListener('resize', () => this.alignSortDropdown());
     }
 
     if (window.matchMedia('(hover: hover) and (min-width: 990px)').matches) {
@@ -323,6 +384,7 @@ class CoachCollection {
       }
 
       // Rebind events
+      this.clearIdleFilters();
       this.bindPopovers();
       this.bindSort();
       this.bindFilterInputs();
@@ -475,20 +537,23 @@ class CoachCollection {
             priceRegular.textContent = price;
           }
 
-          // Update Image if available
-          if (imgSrc && images.length > 0) {
-            let matched = false;
-            images.forEach((img, idx) => {
-              if (img.src.includes(imgSrc) || imgSrc.includes(img.src)) {
-                images.forEach((i) => i.classList.remove('coach-card__img--active'));
-                img.classList.add('coach-card__img--active');
-                matched = true;
-              }
-            });
-            if (!matched && images[0]) {
-              images[0].src = imgSrc;
-              images.forEach((i, idx) => i.classList.toggle('coach-card__img--active', idx === 0));
+          const badgeWrap = card.querySelector('.coach-card__badges');
+          if (badgeWrap) {
+            if (!badgeWrap.dataset.originalHtml) badgeWrap.dataset.originalHtml = badgeWrap.innerHTML;
+            if (!isAvailable) {
+              badgeWrap.innerHTML = '<span class="coach-badge coach-badge--sold-out">Sold Out</span>';
+            } else {
+              badgeWrap.innerHTML = badgeWrap.dataset.originalHtml;
             }
+          }
+
+          if (imgSrc && images.length > 0) {
+            const primary = images[0];
+            primary.removeAttribute('srcset');
+            primary.src = imgSrc;
+            images.forEach((img, idx) => {
+              img.classList.toggle('coach-card__img--active', idx === 0);
+            });
           }
         });
       });
