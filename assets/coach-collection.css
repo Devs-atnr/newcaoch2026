@@ -17,7 +17,8 @@
   width: 100%;
   background-color: var(--coach-page-bg, #f0f0f0);
   min-height: 100vh;
-  overflow: visible;
+  overflow-x: clip;
+  overflow-y: visible;
 }
 
 .coach-collection-wrapper {
@@ -131,7 +132,7 @@
 
 .coach-facets-form {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
   gap: 16px 24px;
   flex-wrap: wrap;
@@ -139,13 +140,19 @@
 
 .coach-filter-pills-row {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 8px;
   flex-wrap: wrap;
+  flex: 1 1 auto;
+  min-height: 40px;
 }
 
 .coach-filter-item {
   position: relative;
+  display: block;
+  flex: 0 0 auto;
+  align-self: flex-start;
+  height: 40px;
 }
 
 /* Pill Button */
@@ -212,10 +219,13 @@ button.coach-filter-pill.coach-filter-pill--active,
    ========================================================================== */
 .coach-filter-popover {
   display: none !important;
-  position: absolute;
-  top: calc(100% + 8px);
-  left: 0;
-  z-index: 999;
+  position: absolute !important;
+  top: calc(100% + 8px) !important;
+  left: 0 !important;
+  right: auto !important;
+  bottom: auto !important;
+  margin: 0 !important;
+  z-index: 40;
   background: var(--coach-popover-bg, #ffffff);
   border: none;
   border-radius: 16px;
@@ -675,7 +685,11 @@ button.coach-filter-pill.coach-filter-pill--active,
 .coach-sort-container {
   position: relative;
   margin-left: auto;
-  flex-shrink: 0;
+  flex: 0 0 auto;
+  align-self: flex-start;
+  display: flex;
+  align-items: center;
+  height: 40px;
 }
 
 button.coach-sort-btn {
@@ -727,7 +741,7 @@ button.coach-sort-btn {
 
 .coach-sort-dropdown {
   display: block !important;
-  position: absolute;
+  position: absolute !important;
   top: 100%;
   left: 0;
   right: auto;
@@ -802,6 +816,8 @@ button.coach-sort-btn {
    Product Grid
    ========================================================================== */
 .coach-product-grid {
+  position: relative;
+  z-index: 1;
   display: grid;
   grid-template-columns: repeat(var(--coach-cols-desktop, 4), minmax(0, 1fr));
   list-style: none;
