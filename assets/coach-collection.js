@@ -98,6 +98,7 @@ class CoachCollection {
         const openItem = () => {
           this.closeAllPopovers();
           this.closeSort();
+          this.openFilterIndex = item.dataset.index;
           item.classList.add('is-open');
           pillBtn.setAttribute('aria-expanded', 'true');
           popover.removeAttribute('hidden');
@@ -113,14 +114,15 @@ class CoachCollection {
         });
       }
 
-      if (closeBtn && popover) {
-        closeBtn.addEventListener('click', (e) => {
-          e.preventDefault();
-          e.stopPropagation();
-          item.classList.remove('is-open');
-          pillBtn?.setAttribute('aria-expanded', 'false');
-        });
-      }
+        if (closeBtn && popover) {
+          closeBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            this.openFilterIndex = null;
+            item.classList.remove('is-open');
+            pillBtn?.setAttribute('aria-expanded', 'false');
+          });
+        }
     });
 
     // Close on click outside
@@ -139,7 +141,21 @@ class CoachCollection {
     });
   }
 
+  restoreOpenFilter() {
+    if (!this.openFilterIndex) return;
+    const item = this.wrapper.querySelector(
+      `.js-coach-filter-item[data-index="${this.openFilterIndex}"]`
+    );
+    if (!item) return;
+    const pill = item.querySelector('.js-coach-filter-pill');
+    const popover = item.querySelector('.js-coach-popover');
+    item.classList.add('is-open');
+    pill?.setAttribute('aria-expanded', 'true');
+    popover?.removeAttribute('hidden');
+  }
+
   closeAllPopovers() {
+    this.openFilterIndex = null;
     const openItems = this.wrapper.querySelectorAll('.js-coach-filter-item.is-open');
     openItems.forEach((item) => {
       item.classList.remove('is-open');
@@ -322,6 +338,9 @@ class CoachCollection {
     const form = this.wrapper.querySelector('#CoachFacetFiltersForm');
     if (!form) return;
 
+    const openItem = this.wrapper.querySelector('.js-coach-filter-item.is-open');
+    this.openFilterIndex = openItem ? openItem.dataset.index : null;
+
     const formData = new FormData(form);
     const searchParams = new URLSearchParams();
 
@@ -386,6 +405,7 @@ class CoachCollection {
       // Rebind events
       this.clearIdleFilters();
       this.bindPopovers();
+      this.restoreOpenFilter();
       this.bindSort();
       this.bindFilterInputs();
       this.bindPriceFilter();
