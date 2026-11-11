@@ -97,6 +97,25 @@
 /* ==========================================================================
    Filter & Sort Bar
    ========================================================================== */
+.coach-collection-section,
+.coach-collection-wrapper,
+.coach-facets-bar,
+.coach-facets-form,
+.coach-product-grid {
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.coach-collection-section::before,
+.coach-collection-section::after,
+.coach-facets-bar::before,
+.coach-facets-bar::after,
+.coach-product-grid::before,
+.coach-product-grid::after {
+  content: none;
+  display: none;
+}
+
 .coach-facets-bar {
   margin-bottom: 28px;
   position: relative;
@@ -694,26 +713,29 @@ button.coach-sort-btn {
 .coach-sort-dropdown {
   display: none !important;
   position: absolute;
-  top: calc(100% + 10px);
+  top: 100%;
   right: 0;
   z-index: 999;
   width: 228px;
+  padding-top: 10px;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  overflow: visible;
+}
+
+.coach-sort-list {
+  margin: 0;
+  padding: 8px 0;
+  list-style: none;
   background: #ffffff;
   border-radius: 12px;
-  border: none;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
-  padding: 8px 0;
   overflow: hidden;
 }
 
 .coach-sort-container.is-open .coach-sort-dropdown {
   display: block !important;
-}
-
-.coach-sort-list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
 }
 
 .coach-sort-item {
@@ -871,7 +893,7 @@ button.coach-sort-btn {
 /* Badges - Refined Rounded Pill Style (Reference Images 3 & 4) */
 .coach-card__badges {
   position: absolute;
-  top: 12px;
+  top: 16px;
   left: 50%;
   transform: translateX(-50%);
   z-index: 10;
@@ -884,17 +906,17 @@ button.coach-sort-btn {
 
 .coach-badge {
   font-family: HelveticaLTPro-Roman, "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-size: 12px;
-  font-weight: 400;
+  font-size: 12px !important;
+  font-weight: 400 !important;
   letter-spacing: 0;
-  padding: 4px 12px;
-  border-radius: 9999px;
+  padding: 5px 12px;
+  border-radius: 999px;
   white-space: nowrap;
   background: #ffffff;
   color: #1a1a1a;
   border: none;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
-  line-height: 1.2;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+  line-height: 1.15;
 }
 
 .coach-badge--sold-out {
@@ -967,57 +989,72 @@ button.coach-sort-btn {
   }
 }
 
-/* "Add To Bag" Button Bar (Images 1 & 2) */
+/* "Add To Bag" — black bar, flush to the image, shown on hover */
 .coach-card__quick-add-wrap {
   position: absolute;
-  bottom: 8px;
-  left: 8px;
-  right: 8px;
+  bottom: 0;
+  left: 0;
+  right: 0;
   z-index: 14;
   opacity: 0;
-  transform: translateY(6px);
-  transition: opacity 0.18s ease, transform 0.18s ease;
+  pointer-events: none;
+  transition: opacity 0.18s ease;
 }
 
-.coach-card:hover .coach-card__quick-add-wrap {
+.coach-card:hover .coach-card__quick-add-wrap,
+.coach-card:focus-within .coach-card__quick-add-wrap {
   opacity: 1;
-  transform: translateY(0);
+  pointer-events: auto;
 }
 
 .coach-card__quick-add-btn {
-  width: 100%;
-  height: 40px;
-  border-radius: 3px;
-  font-size: 12px;
-  font-weight: 400;
-  letter-spacing: 0;
+  width: 100% !important;
+  height: 40px !important;
+  min-height: 40px !important;
+  min-width: 0 !important;
+  border-radius: 0 !important;
+  font-family: HelveticaLTPro-Roman, "Helvetica Neue", Helvetica, Arial, sans-serif !important;
+  font-size: 12px !important;
+  font-weight: 400 !important;
+  letter-spacing: 0 !important;
+  line-height: 1 !important;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
-  transition: background-color 0.15s ease, color 0.15s ease;
+  padding: 0 12px !important;
+  box-sizing: border-box;
 }
 
 .coach-card__quick-add-btn--available,
 .coach-card__quick-add-btn--sold-out {
-  background: #e1e1e1;
-  color: #1a202c;
-  border: none;
+  background: #000000 !important;
+  color: #ffffff !important;
+  border: none !important;
 }
 
 .coach-card__quick-add-btn--available:hover {
-  background: #dcdcdc;
-  color: #111111;
+  background: #000000 !important;
+  color: #ffffff !important;
+}
+
+.coach-card__quick-add-icon {
+  display: inline-flex;
+  width: 16px;
+  height: 16px;
+  color: #ffffff;
+}
+
+.coach-card__quick-add-icon svg {
+  width: 16px;
+  height: 16px;
+  stroke: #ffffff;
 }
 
 .coach-card__quick-add-btn--sold-out {
-  color: #8a8a8a;
   cursor: not-allowed;
-}
-
-.coach-card__quick-add-btn--sold-out .coach-card__quick-add-icon svg {
-  stroke: #666666;
+  opacity: 0.72;
 }
 
 .coach-card__quick-add-btn.is-loading .coach-card__quick-add-text,
@@ -1042,9 +1079,13 @@ button.coach-sort-btn {
 @media screen and (max-width: 989px) {
   .coach-card__quick-add-wrap {
     opacity: 1;
-    transform: translateY(0);
+    pointer-events: auto;
     position: static;
     margin-top: 8px;
+  }
+
+  .coach-card__quick-add-btn {
+    border-radius: 0 !important;
   }
 }
 
@@ -1097,14 +1138,14 @@ button.coach-sort-btn {
 .coach-card__swatches {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
   overflow-x: auto;
   overflow-y: hidden;
   scrollbar-width: none;
   -ms-overflow-style: none;
   scroll-behavior: smooth;
-  max-width: 136px;
-  padding: 4px 2px;
+  max-width: 168px;
+  padding: 6px 2px;
 }
 
 .coach-card__swatches::-webkit-scrollbar {
@@ -1141,28 +1182,51 @@ button.coach-sort-btn {
 }
 
 .coach-card__swatch-dot {
-  width: 18px;
-  height: 18px;
+  width: 28px;
+  height: 28px;
   border-radius: 50%;
-  border: 1px solid rgba(0, 0, 0, 0.12);
-  background-size: cover;
-  background-position: center;
+  border: none !important;
+  background: transparent !important;
   cursor: pointer;
   position: relative;
   padding: 0;
   outline: none;
   flex-shrink: 0;
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: none !important;
 }
 
-.coach-card__swatch-dot:hover {
-  transform: scale(1.12);
+.coach-card__swatch-dot:hover,
+.coach-card__swatch-dot:focus,
+.coach-card__swatch-dot:focus-visible,
+.coach-card__swatch-dot:active {
+  background: transparent !important;
+  box-shadow: none !important;
+  outline: none;
 }
 
-/* Active Swatch Double Ring (Images 1 & 2) */
-.coach-card__swatch-dot--active {
+.coach-card__swatch-fill {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: block;
+  pointer-events: none;
+  box-sizing: border-box;
+  background-color: #c4c4c4;
+  background-size: cover;
+  background-position: center;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+}
+
+.coach-card__swatch-dot:hover .coach-card__swatch-fill {
+  transform: scale(1.06);
+}
+
+.coach-card__swatch-dot--active .coach-card__swatch-fill {
+  border: 2px solid #111111 !important;
   box-shadow: none;
-  border: 2px solid #111111;
 }
 
 .coach-card__swatch-dot--sold-out {

@@ -257,7 +257,6 @@
               <button
                 type="button"
                 class="coach-card__swatch-dot{% if is_active_swatch %} coach-card__swatch-dot--active{% endif %}{% unless variant.available %} coach-card__swatch-dot--sold-out{% endunless %}"
-                style="{{ swatch_style | strip }}"
                 title="{{ color_val | escape }}"
                 aria-label="{{ color_val | escape }}"
                 data-variant-id="{{ variant.id }}"
@@ -270,6 +269,7 @@
                   data-variant-image-src="{{ var_img_src }}"
                 {% endif %}
               >
+                <span class="coach-card__swatch-fill" style="{{ swatch_style | strip }}"></span>
                 {%- unless variant.available -%}
                   <span class="coach-card__swatch-slash"></span>
                 {%- endunless -%}

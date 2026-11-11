@@ -57,14 +57,6 @@ class CoachCollection {
           this.closeSort();
           if (!isOpen) openItem();
         });
-
-        if (window.matchMedia('(hover: hover) and (min-width: 990px)').matches) {
-          item.addEventListener('mouseenter', openItem);
-          item.addEventListener('mouseleave', () => {
-            item.classList.remove('is-open');
-            pillBtn.setAttribute('aria-expanded', 'false');
-          });
-        }
       }
 
       if (closeBtn && popover) {
@@ -134,8 +126,17 @@ class CoachCollection {
     }
 
     if (window.matchMedia('(hover: hover) and (min-width: 990px)').matches) {
-      sortWrap.addEventListener('mouseenter', openSort);
-      sortWrap.addEventListener('mouseleave', closeThisSort);
+      let closeTimer = null;
+      sortWrap.addEventListener('mouseenter', () => {
+        if (closeTimer) {
+          clearTimeout(closeTimer);
+          closeTimer = null;
+        }
+        openSort();
+      });
+      sortWrap.addEventListener('mouseleave', () => {
+        closeTimer = setTimeout(closeThisSort, 280);
+      });
     }
 
     sortOptions.forEach((option) => {
