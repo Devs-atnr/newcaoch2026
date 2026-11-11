@@ -15,12 +15,12 @@
 
 .coach-collection-section {
   width: 100%;
-  background-color: var(--coach-page-bg, #f6f6f6);
+  background-color: var(--coach-page-bg, #f0f0f0);
   min-height: 100vh;
 }
 
 .coach-collection-wrapper {
-  max-width: var(--coach-content-width, var(--ch-max, 1240px));
+  max-width: var(--coach-content-width, var(--ch-max, 1440px));
   margin-inline: auto;
   padding-inline: var(--coach-side-padding, 24px);
   color: #111111;
@@ -66,7 +66,7 @@
 }
 
 .coach-collection-title {
-  font-size: var(--coach-title-size, 26px);
+  font-size: var(--coach-title-size, 24px);
   font-weight: 700;
   color: #111111;
   letter-spacing: -0.03em;
@@ -75,9 +75,9 @@
 }
 
 .coach-collection-count {
-  font-size: var(--coach-count-size, 14px);
+  font-size: var(--coach-count-size, 16px);
   font-weight: 400;
-  color: #8a8a8a;
+  color: #575757;
   letter-spacing: 0;
 }
 
@@ -119,19 +119,19 @@
 
 /* Pill Button */
 .coach-filter-pill {
-  height: 36px;
-  padding: 0 14px;
+  height: 48px;
+  padding: 0 12px 0 16px;
   border-radius: 9999px;
-  border: 1px solid var(--coach-filter-pill-border, #e4e4e4);
+  border: 1px solid var(--coach-filter-pill-border, #e1e1e1);
   background: var(--coach-filter-pill-bg, #ffffff);
-  color: var(--coach-filter-pill-text, #1a1a1a);
+  color: #333333;
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 400;
   letter-spacing: 0;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
   transition: border-color 0.15s ease, box-shadow 0.15s ease;
   user-select: none;
   line-height: 1;
@@ -693,7 +693,7 @@
 .coach-product-grid {
   display: grid;
   grid-template-columns: repeat(var(--coach-cols-desktop, 4), minmax(0, 1fr));
-  gap: var(--coach-grid-row-gap, 40px) var(--coach-grid-column-gap, 18px);
+  gap: var(--coach-grid-row-gap, 12px) var(--coach-grid-column-gap, 18px);
   list-style: none;
   padding: 0;
   margin: 0 0 3rem 0;
@@ -794,7 +794,7 @@
   transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   mix-blend-mode: multiply;
   pointer-events: none;
-  padding: 8% 4% 2%;
+  padding: 0;
   box-sizing: border-box;
 }
 
@@ -904,9 +904,9 @@
 /* "Add To Bag" Button Bar (Images 1 & 2) */
 .coach-card__quick-add-wrap {
   position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
+  bottom: 8px;
+  left: 8px;
+  right: 8px;
   z-index: 14;
   opacity: 0;
   transform: translateY(6px);
@@ -920,10 +920,10 @@
 
 .coach-card__quick-add-btn {
   width: 100%;
-  height: 44px;
-  border-radius: 0;
-  font-size: 14px;
-  font-weight: 500;
+  height: 40px;
+  border-radius: 3px;
+  font-size: 12px;
+  font-weight: 400;
   letter-spacing: 0;
   cursor: pointer;
   display: flex;
@@ -935,8 +935,8 @@
 
 .coach-card__quick-add-btn--available,
 .coach-card__quick-add-btn--sold-out {
-  background: #e6e6e6;
-  color: #3a3a3a;
+  background: #e1e1e1;
+  color: #1a202c;
   border: none;
 }
 
@@ -984,7 +984,7 @@
 
 /* Product Info below media (Centered - Images 1, 2, 4, 5) */
 .coach-card__info {
-  padding-top: 14px;
+  padding-top: 8px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -1003,7 +1003,7 @@
 }
 
 .coach-card__title-link {
-  color: #1c1c1c;
+  color: #000000;
   text-decoration: none;
   display: block;
   white-space: nowrap;
@@ -1074,8 +1074,8 @@
 }
 
 .coach-card__swatch-dot {
-  width: 14px;
-  height: 14px;
+  width: 18px;
+  height: 18px;
   border-radius: 50%;
   border: 1px solid rgba(0, 0, 0, 0.12);
   background-size: cover;
@@ -1094,7 +1094,7 @@
 
 /* Active Swatch Double Ring (Images 1 & 2) */
 .coach-card__swatch-dot--active {
-  box-shadow: 0 0 0 2px var(--coach-page-bg, #f6f6f6), 0 0 0 3px #111111;
+  box-shadow: 0 0 0 3px var(--coach-page-bg, #f0f0f0), 0 0 0 4px #1a202c;
 }
 
 .coach-card__swatch-dot--sold-out {
@@ -1117,7 +1117,7 @@
 .coach-card__price {
   font-size: var(--coach-card-price-size, 14px);
   font-weight: 700;
-  color: #111111;
+  color: #1a202c;
   margin-top: 8px;
   text-align: center;
   letter-spacing: 0;
