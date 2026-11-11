@@ -15,6 +15,7 @@
   assign show_view_similar = show_view_similar | default: true
   assign new_tags = new_badge_tag | default: 'new, New Arrival, New, new-arrival' | split: ','
   assign coming_soon_tags = coming_soon_badge_tag | default: 'coming soon, Coming Soon, coming-soon' | split: ','
+  assign almost_gone_tags = almost_gone_badge_tag | default: 'almost gone, Almost Gone, almost-gone, low stock, Low Stock' | split: ','
 
   assign is_new = false
   for tag in new_tags
@@ -27,6 +28,21 @@
       endif
     endfor
     if is_new
+      break
+    endif
+  endfor
+
+  assign is_almost_gone = false
+  for tag in almost_gone_tags
+    assign clean_tag = tag | strip | downcase
+    for prod_tag in card_product.tags
+      assign p_tag = prod_tag | strip | downcase
+      if p_tag == clean_tag
+        assign is_almost_gone = true
+        break
+      endif
+    endfor
+    if is_almost_gone
       break
     endif
   endfor
@@ -65,18 +81,20 @@
   data-current-variant-id="{{ current_variant.id }}"
 >
   <div class="coach-card__media-wrap coach-card__media-wrap--{{ image_ratio }}">
-    {%- comment -%} Speech-Bubble Badges (Images 1, 2, 4) {%- endcomment -%}
+    {%- comment -%} Badges (Images 3 & 4 - Clean Rounded Pill Tag) {%- endcomment -%}
     <div class="coach-card__badges">
       {%- unless card_product.available -%}
-        <span class="coach-badge coach-badge--bubble coach-badge--sold-out">
+        <span class="coach-badge coach-badge--sold-out">
           {{ 'products.product.sold_out' | t | default: 'Sold Out' }}
         </span>
+      {%- elsif is_almost_gone -%}
+        <span class="coach-badge coach-badge--almost-gone">Almost Gone</span>
       {%- elsif is_new -%}
-        <span class="coach-badge coach-badge--bubble coach-badge--new">New Arrival</span>
+        <span class="coach-badge coach-badge--new">New Arrival</span>
       {%- elsif is_coming_soon -%}
-        <span class="coach-badge coach-badge--bubble coach-badge--coming-soon">COMING SOON</span>
+        <span class="coach-badge coach-badge--coming-soon">Coming Soon</span>
       {%- elsif card_product.compare_at_price > card_product.price -%}
-        <span class="coach-badge coach-badge--bubble coach-badge--sale">Sale</span>
+        <span class="coach-badge coach-badge--sale">Sale</span>
       {%- endunless -%}
     </div>
 
@@ -181,78 +199,100 @@
       </a>
     </h3>
 
-    {%- comment -%} Variant Color Swatches (Centered) {%- endcomment -%}
+    {%- comment -%} Variant Color Swatches Slider (Centered - Images 1 & 3) {%- endcomment -%}
     {%- if show_swatches and color_option_index >= 0 -%}
-      <div class="coach-card__swatches" role="radiogroup" aria-label="Color options">
-        {%- assign rendered_colors = '' -%}
-        {%- for variant in card_product.variants -%}
-          {%- assign color_val = variant.options[color_option_index] -%}
-          {%- assign color_slug = color_val | strip | downcase -%}
-          {%- unless rendered_colors contains color_slug -%}
-            {%- assign rendered_colors = rendered_colors | append: ',' | append: color_slug -%}
-            {%- assign is_active_swatch = false -%}
-            {%- if variant.id == current_variant.id -%}
-              {%- assign is_active_swatch = true -%}
-            {%- endif -%}
+      <div class="coach-card__swatches-wrapper js-coach-swatches-wrapper">
+        <button
+          type="button"
+          class="coach-card__swatch-nav coach-card__swatch-nav--prev js-swatch-nav-prev"
+          aria-label="Previous colors"
+        >
+          <svg width="6" height="10" viewBox="0 0 6 10" fill="none">
+            <path d="M5 1L1.5 5L5 9" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
 
-            {%- assign var_price = variant.price | money | strip_html | escape -%}
-            {%- assign var_compare_price = '' -%}
-            {%- if variant.compare_at_price > variant.price -%}
-              {%- assign var_compare_price = variant.compare_at_price | money | strip_html | escape -%}
-            {%- endif -%}
-            {%- assign var_img_src = '' -%}
-            {%- if variant.featured_image -%}
-              {%- assign var_img_src = variant.featured_image | image_url: width: 600 | escape -%}
-            {%- endif -%}
+        <div class="coach-card__swatches js-swatches-track" role="radiogroup" aria-label="Color options">
+          {%- assign rendered_colors = '' -%}
+          {%- for variant in card_product.variants -%}
+            {%- assign color_val = variant.options[color_option_index] -%}
+            {%- assign color_slug = color_val | strip | downcase -%}
+            {%- unless rendered_colors contains color_slug -%}
+              {%- assign rendered_colors = rendered_colors | append: ',' | append: color_slug -%}
+              {%- assign is_active_swatch = false -%}
+              {%- if variant.id == current_variant.id -%}
+                {%- assign is_active_swatch = true -%}
+              {%- endif -%}
 
-            {%- comment -%} Color mapping {%- endcomment -%}
-            {%- capture swatch_style -%}
-              {%- case color_slug -%}
-                {%- when 'black', 'noir' -%}background-color:#111111;
-                {%- when 'red', 'rouge' -%}background-color:#d91b24;
-                {%- when 'beige', 'sand', 'nude' -%}background-color:#f5f0e6;border:1px solid #dcd6cb;
-                {%- when 'brown', 'chocolat', 'tan', 'saddle' -%}background-color:#6f3f20;
-                {%- when 'blue', 'navy', 'bleu' -%}background-color:#163b82;
-                {%- when 'green', 'vert', 'sage', 'olive' -%}background-color:#b3c1a9;
-                {%- when 'grey', 'gray', 'gris' -%}background-color:#9e9e9e;
-                {%- when 'orange' -%}background-color:#ff7e39;
-                {%- when 'pink', 'rose' -%}background-color:#ff8fa3;
-                {%- when 'purple', 'violet' -%}background-color:#7b4bb7;
-                {%- when 'silver', 'argent' -%}background:linear-gradient(135deg,#e0e0e0,#f5f5f5,#b8b8b8);border:1px solid #d5d5d5;
-                {%- when 'gold', 'or' -%}background:linear-gradient(135deg,#d4af37,#f3e5ab,#aa820a);
-                {%- when 'white', 'blanc' -%}background-color:#ffffff;border:1px solid #d5d5d5;
-                {%- when 'multic...', 'multi', 'multicolor', 'multic' -%}background:conic-gradient(#d91b24,#f5f0e6,#163b82,#9cb197,#7b4bb7,#d91b24);
-                {%- else -%}
-                  {%- if variant.featured_image -%}
-                    background-image:url({{ variant.featured_image | image_url: width: 60 }});background-size:cover;
+              {%- assign var_price = variant.price | money | strip_html | escape -%}
+              {%- assign var_compare_price = '' -%}
+              {%- if variant.compare_at_price > variant.price -%}
+                {%- assign var_compare_price = variant.compare_at_price | money | strip_html | escape -%}
+              {%- endif -%}
+              {%- assign var_img_src = '' -%}
+              {%- if variant.featured_image -%}
+                {%- assign var_img_src = variant.featured_image | image_url: width: 600 | escape -%}
+              {%- endif -%}
+
+              {%- comment -%} Color mapping {%- endcomment -%}
+              {%- capture swatch_style -%}
+                {%- case color_slug -%}
+                  {%- when 'black', 'noir' -%}background-color:#111111;
+                  {%- when 'red', 'rouge' -%}background-color:#d91b24;
+                  {%- when 'beige', 'sand', 'nude' -%}background-color:#f5f0e6;border:1px solid #dcd6cb;
+                  {%- when 'brown', 'chocolat', 'tan', 'saddle' -%}background-color:#6f3f20;
+                  {%- when 'blue', 'navy', 'bleu' -%}background-color:#163b82;
+                  {%- when 'green', 'vert', 'sage', 'olive' -%}background-color:#b3c1a9;
+                  {%- when 'grey', 'gray', 'gris' -%}background-color:#9e9e9e;
+                  {%- when 'orange' -%}background-color:#ff7e39;
+                  {%- when 'pink', 'rose' -%}background-color:#ff8fa3;
+                  {%- when 'purple', 'violet' -%}background-color:#7b4bb7;
+                  {%- when 'silver', 'argent' -%}background:linear-gradient(135deg,#e0e0e0,#f5f5f5,#b8b8b8);border:1px solid #d5d5d5;
+                  {%- when 'gold', 'or' -%}background:linear-gradient(135deg,#d4af37,#f3e5ab,#aa820a);
+                  {%- when 'white', 'blanc' -%}background-color:#ffffff;border:1px solid #d5d5d5;
+                  {%- when 'multic...', 'multi', 'multicolor', 'multic' -%}background:conic-gradient(#d91b24,#f5f0e6,#163b82,#9cb197,#7b4bb7,#d91b24);
                   {%- else -%}
-                    background-color:{{ color_slug }};
-                  {%- endif -%}
-              {%- endcase -%}
-            {%- endcapture -%}
+                    {%- if variant.featured_image -%}
+                      background-image:url({{ variant.featured_image | image_url: width: 60 }});background-size:cover;
+                    {%- else -%}
+                      background-color:{{ color_slug }};
+                    {%- endif -%}
+                {%- endcase -%}
+              {%- endcapture -%}
 
-            <button
-              type="button"
-              class="coach-card__swatch-dot{% if is_active_swatch %} coach-card__swatch-dot--active{% endif %}{% unless variant.available %} coach-card__swatch-dot--sold-out{% endunless %}"
-              style="{{ swatch_style | strip }}"
-              title="{{ color_val | escape }}"
-              aria-label="{{ color_val | escape }}"
-              data-variant-id="{{ variant.id }}"
-              data-variant-available="{{ variant.available }}"
-              data-variant-price="{{ var_price }}"
-              {% if var_compare_price != blank %}
-                data-variant-compare-price="{{ var_compare_price }}"
-              {% endif %}
-              {% if var_img_src != blank %}
-                data-variant-image-src="{{ var_img_src }}"
-              {% endif %}
-            >
-              {%- unless variant.available -%}
-                <span class="coach-card__swatch-slash"></span>
-              {%- endunless -%}
-            </button>
-          {%- endunless -%}
-        {%- endfor -%}
+              <button
+                type="button"
+                class="coach-card__swatch-dot{% if is_active_swatch %} coach-card__swatch-dot--active{% endif %}{% unless variant.available %} coach-card__swatch-dot--sold-out{% endunless %}"
+                style="{{ swatch_style | strip }}"
+                title="{{ color_val | escape }}"
+                aria-label="{{ color_val | escape }}"
+                data-variant-id="{{ variant.id }}"
+                data-variant-available="{{ variant.available }}"
+                data-variant-price="{{ var_price }}"
+                {% if var_compare_price != blank %}
+                  data-variant-compare-price="{{ var_compare_price }}"
+                {% endif %}
+                {% if var_img_src != blank %}
+                  data-variant-image-src="{{ var_img_src }}"
+                {% endif %}
+              >
+                {%- unless variant.available -%}
+                  <span class="coach-card__swatch-slash"></span>
+                {%- endunless -%}
+              </button>
+            {%- endunless -%}
+          {%- endfor -%}
+        </div>
+
+        <button
+          type="button"
+          class="coach-card__swatch-nav coach-card__swatch-nav--next js-swatch-nav-next"
+          aria-label="Next colors"
+        >
+          <svg width="6" height="10" viewBox="0 0 6 10" fill="none">
+            <path d="M1 1.5L4.5 5L1 8.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
       </div>
     {%- endif -%}
 

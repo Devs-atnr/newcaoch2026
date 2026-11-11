@@ -25,6 +25,20 @@
     style="
       --coach-cols-desktop: {{ section.settings.columns_desktop }};
       --coach-cols-mobile: {{ section.settings.columns_mobile }};
+      --coach-content-width: {{ section.settings.content_width }}px;
+      --coach-side-padding: {{ section.settings.side_padding }}px;
+      --coach-grid-row-gap: {{ section.settings.grid_row_gap }}px;
+      --coach-grid-column-gap: {{ section.settings.grid_column_gap }}px;
+      --coach-title-size: {{ section.settings.title_size }}px;
+      --coach-count-size: {{ section.settings.count_size }}px;
+      --coach-card-title-size: {{ section.settings.card_title_size }}px;
+      --coach-card-price-size: {{ section.settings.card_price_size }}px;
+      --coach-header-gap: {{ section.settings.header_bottom_gap }}px;
+      --coach-filter-pill-bg: {{ section.settings.filter_pill_bg }};
+      --coach-filter-pill-text: {{ section.settings.filter_pill_text }};
+      --coach-filter-pill-border: {{ section.settings.filter_pill_border }};
+      --coach-popover-bg: {{ section.settings.popover_bg }};
+      --coach-popover-radius: {{ section.settings.popover_radius }}px;
     "
   >
   {%- paginate collection.products by section.settings.products_per_page -%}
@@ -82,7 +96,8 @@
                 show_swatches: section.settings.show_swatches,
                 show_view_similar: section.settings.show_view_similar,
                 new_badge_tag: section.settings.new_badge_tag,
-                coming_soon_badge_tag: section.settings.coming_soon_badge_tag
+                coming_soon_badge_tag: section.settings.coming_soon_badge_tag,
+                almost_gone_badge_tag: section.settings.almost_gone_badge_tag
               %}
             </li>
           {%- endfor -%}
@@ -156,6 +171,26 @@
     },
     {
       "type": "range",
+      "id": "content_width",
+      "min": 1000,
+      "max": 1800,
+      "step": 50,
+      "unit": "px",
+      "default": 1340,
+      "label": "Maximum content width"
+    },
+    {
+      "type": "range",
+      "id": "side_padding",
+      "min": 8,
+      "max": 64,
+      "step": 4,
+      "unit": "px",
+      "default": 40,
+      "label": "Desktop side padding"
+    },
+    {
+      "type": "range",
       "id": "columns_desktop",
       "min": 2,
       "max": 5,
@@ -189,6 +224,26 @@
       "label": "Products per page"
     },
     {
+      "type": "range",
+      "id": "grid_row_gap",
+      "min": 8,
+      "max": 64,
+      "step": 4,
+      "unit": "px",
+      "default": 36,
+      "label": "Product row spacing"
+    },
+    {
+      "type": "range",
+      "id": "grid_column_gap",
+      "min": 8,
+      "max": 64,
+      "step": 4,
+      "unit": "px",
+      "default": 24,
+      "label": "Product column spacing"
+    },
+    {
       "type": "header",
       "content": "Filtering & Sorting (Coach Style)"
     },
@@ -213,6 +268,26 @@
     {
       "type": "header",
       "content": "Product Cards"
+    },
+    {
+      "type": "range",
+      "id": "card_title_size",
+      "min": 12,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "default": 14,
+      "label": "Product title size"
+    },
+    {
+      "type": "range",
+      "id": "card_price_size",
+      "min": 12,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "default": 15,
+      "label": "Product price size"
     },
     {
       "type": "select",
@@ -266,17 +341,87 @@
       "type": "text",
       "id": "new_badge_tag",
       "default": "new, New Arrival, New, new-arrival",
-      "label": "Tags for 'New Arrival' speech bubble badge (comma-separated)"
+      "label": "Tags for 'New Arrival' badge (comma-separated)"
+    },
+    {
+      "type": "text",
+      "id": "almost_gone_badge_tag",
+      "default": "almost gone, Almost Gone, almost-gone, low stock, Low Stock",
+      "label": "Tags for 'Almost Gone' badge (comma-separated)"
     },
     {
       "type": "text",
       "id": "coming_soon_badge_tag",
       "default": "coming soon, Coming Soon, coming-soon",
-      "label": "Tags for 'COMING SOON' speech bubble badge (comma-separated)"
+      "label": "Tags for 'COMING SOON' badge (comma-separated)"
     },
     {
       "type": "header",
       "content": "Colors & Spacing"
+    },
+    {
+      "type": "range",
+      "id": "title_size",
+      "min": 20,
+      "max": 48,
+      "step": 2,
+      "unit": "px",
+      "default": 32,
+      "label": "Collection title size"
+    },
+    {
+      "type": "range",
+      "id": "count_size",
+      "min": 12,
+      "max": 22,
+      "step": 1,
+      "unit": "px",
+      "default": 15,
+      "label": "Product count size"
+    },
+    {
+      "type": "range",
+      "id": "header_bottom_gap",
+      "min": 8,
+      "max": 64,
+      "step": 4,
+      "unit": "px",
+      "default": 24,
+      "label": "Space below collection header"
+    },
+    {
+      "type": "color",
+      "id": "filter_pill_bg",
+      "default": "#ffffff",
+      "label": "Filter button background"
+    },
+    {
+      "type": "color",
+      "id": "filter_pill_text",
+      "default": "#111111",
+      "label": "Filter button text"
+    },
+    {
+      "type": "color",
+      "id": "filter_pill_border",
+      "default": "#dfdfdf",
+      "label": "Filter button border"
+    },
+    {
+      "type": "color",
+      "id": "popover_bg",
+      "default": "#ffffff",
+      "label": "Filter menu background"
+    },
+    {
+      "type": "range",
+      "id": "popover_radius",
+      "min": 0,
+      "max": 32,
+      "step": 2,
+      "unit": "px",
+      "default": 16,
+      "label": "Filter menu corner radius"
     },
     {
       "type": "color",

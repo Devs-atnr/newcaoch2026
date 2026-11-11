@@ -293,12 +293,61 @@ class CoachCollection {
         }
       }
 
-      // 2. Color Swatches
+      // 2. Color Swatches Slider (< >) & Variant Selection
+      const swatchesWrap = card.querySelector('.js-coach-swatches-wrapper');
+      const swatchesTrack = card.querySelector('.js-swatches-track');
+      const swatchPrevBtn = card.querySelector('.js-swatch-nav-prev');
+      const swatchNextBtn = card.querySelector('.js-swatch-nav-next');
       const swatchDots = card.querySelectorAll('.coach-card__swatch-dot');
       const quickAddBtn = card.querySelector('.coach-card__quick-add-btn');
       const priceRegular = card.querySelector('.coach-card__price-regular');
       const priceSale = card.querySelector('.coach-card__price-sale');
       const priceCompare = card.querySelector('.coach-card__price-compare');
+
+      if (swatchesWrap && swatchesTrack) {
+        if (swatchDots.length <= 4) {
+          swatchesWrap.classList.add('coach-card__swatches-wrapper--no-arrows');
+        } else {
+          const updateSwatchArrows = () => {
+            const maxScroll = swatchesTrack.scrollWidth - swatchesTrack.clientWidth;
+            if (swatchPrevBtn) {
+              if (swatchesTrack.scrollLeft <= 2) {
+                swatchPrevBtn.setAttribute('disabled', 'disabled');
+              } else {
+                swatchPrevBtn.removeAttribute('disabled');
+              }
+            }
+            if (swatchNextBtn) {
+              if (swatchesTrack.scrollLeft >= maxScroll - 2) {
+                swatchNextBtn.setAttribute('disabled', 'disabled');
+              } else {
+                swatchNextBtn.removeAttribute('disabled');
+              }
+            }
+          };
+
+          if (swatchPrevBtn) {
+            swatchPrevBtn.addEventListener('click', (e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              swatchesTrack.scrollBy({ left: -48, behavior: 'smooth' });
+              setTimeout(updateSwatchArrows, 250);
+            });
+          }
+
+          if (swatchNextBtn) {
+            swatchNextBtn.addEventListener('click', (e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              swatchesTrack.scrollBy({ left: 48, behavior: 'smooth' });
+              setTimeout(updateSwatchArrows, 250);
+            });
+          }
+
+          swatchesTrack.addEventListener('scroll', updateSwatchArrows, { passive: true });
+          updateSwatchArrows();
+        }
+      }
 
       swatchDots.forEach((dot) => {
         dot.addEventListener('click', (e) => {
