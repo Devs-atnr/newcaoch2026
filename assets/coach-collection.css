@@ -1138,7 +1138,7 @@ button.coach-sort-btn {
   display: inline-flex;
   width: 16px;
   height: 16px;
-  color: #ffffff;
+  color: currentColor;
 }
 
 .coach-card__quick-add-icon svg {
