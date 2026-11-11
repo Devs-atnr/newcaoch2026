@@ -25,9 +25,10 @@
         "enable_slider": true,
         "show_quick_add": true,
         "show_swatches": true,
+        "show_view_similar": true,
         "new_badge_tag": "new, New Arrival, New, new-arrival",
         "coming_soon_badge_tag": "coming soon, Coming Soon, coming-soon",
-        "body_bg_color": "#f4f4f4",
+        "body_bg_color": "#E6E6E6",
         "padding_top": 60,
         "padding_bottom": 48
       }
