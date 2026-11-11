@@ -154,44 +154,43 @@
         </svg>
       </button>
     {%- endif -%}
-
-    {%- comment -%} "Add To Bag" Button Bar (Images 1 & 2) {%- endcomment -%}
-    {%- if show_quick_add -%}
-      <div class="coach-card__quick-add-wrap">
-        {%- if card_product.available -%}
-          <button
-            type="button"
-            class="coach-card__quick-add-btn coach-card__quick-add-btn--available"
-            data-variant-id="{{ current_variant.id }}"
-            aria-label="Add to Bag - {{ card_product.title | escape }}"
-          >
-            <span class="coach-card__quick-add-icon">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M6.5 8h11l-.8 12H7.3L6.5 8z"></path>
-                <path d="M9 8V6.8a3 3 0 0 1 6 0V8"></path>
-              </svg>
-            </span>
-            <span class="coach-card__quick-add-text">Add To Bag</span>
-            <span class="coach-card__quick-add-spinner" style="display:none;"></span>
-          </button>
-        {%- else -%}
-          <button
-            type="button"
-            class="coach-card__quick-add-btn coach-card__quick-add-btn--sold-out"
-            disabled
-          >
-            <span class="coach-card__quick-add-icon">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M6.5 8h11l-.8 12H7.3L6.5 8z"></path>
-                <path d="M9 8V6.8a3 3 0 0 1 6 0V8"></path>
-              </svg>
-            </span>
-            <span class="coach-card__quick-add-text">Add To Bag</span>
-          </button>
-        {%- endif -%}
-      </div>
-    {%- endif -%}
   </div>
+
+  {%- if show_quick_add -%}
+    <div class="coach-card__quick-add-wrap">
+      {%- if card_product.available -%}
+        <button
+          type="button"
+          class="coach-card__quick-add-btn coach-card__quick-add-btn--available"
+          data-variant-id="{{ current_variant.id }}"
+          aria-label="Add to Bag - {{ card_product.title | escape }}"
+        >
+          <span class="coach-card__quick-add-icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M6.5 8h11l-.8 12H7.3L6.5 8z"></path>
+              <path d="M9 8V6.8a3 3 0 0 1 6 0V8"></path>
+            </svg>
+          </span>
+          <span class="coach-card__quick-add-text">Add To Bag</span>
+          <span class="coach-card__quick-add-spinner" style="display:none;"></span>
+        </button>
+      {%- else -%}
+        <button
+          type="button"
+          class="coach-card__quick-add-btn coach-card__quick-add-btn--sold-out"
+          disabled
+        >
+          <span class="coach-card__quick-add-icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M6.5 8h11l-.8 12H7.3L6.5 8z"></path>
+              <path d="M9 8V6.8a3 3 0 0 1 6 0V8"></path>
+            </svg>
+          </span>
+          <span class="coach-card__quick-add-text">Add To Bag</span>
+        </button>
+      {%- endif -%}
+    </div>
+  {%- endif -%}
 
   {%- comment -%} Product Information (Centered - Images 1, 2, 4, 5) {%- endcomment -%}
   <div class="coach-card__info">

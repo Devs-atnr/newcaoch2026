@@ -170,6 +170,11 @@
                             <span class="coach-color-item__label{% if is_disabled %} coach-color-item__label--disabled{% endif %}">
                               {{ value.label | escape }}
                             </span>
+                            <span class="coach-option-check" aria-hidden="true">
+                              <svg width="12" height="10" viewBox="0 0 12 10" fill="none">
+                                <polyline points="1.5 5.2 4.4 8 10.5 1.8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+                              </svg>
+                            </span>
                           </label>
                         {%- endfor -%}
                       </div>
@@ -197,6 +202,11 @@
                             <span class="coach-list-radio{% if value.active %} coach-list-radio--checked{% endif %}"></span>
                             <span class="coach-list-row__text">
                               {{ value.label | escape }}
+                            </span>
+                            <span class="coach-option-check" aria-hidden="true">
+                              <svg width="12" height="10" viewBox="0 0 12 10" fill="none">
+                                <polyline points="1.5 5.2 4.4 8 10.5 1.8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+                              </svg>
                             </span>
                             {%- if show_filter_counts and value.count > 0 -%}
                               <span class="coach-list-row__count">({{ value.count }})</span>
