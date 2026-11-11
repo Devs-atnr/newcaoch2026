@@ -18,16 +18,38 @@ class CoachCollection {
   }
 
   init() {
+    const cleanUrl = this.stripFiltersFromUrl();
     this.clearIdleFilters();
     this.bindPopovers();
     this.bindSort();
     this.bindFilterInputs();
     this.bindPriceFilter();
     this.bindProductCards();
+    if (cleanUrl) this.fetchFilteredSection(cleanUrl);
 
     window.addEventListener('popstate', () => {
       this.fetchFilteredSection(window.location.href);
     });
+  }
+
+  /* Drop filter query params on a fresh page load. Sort is kept. */
+  stripFiltersFromUrl() {
+    const params = new URLSearchParams(window.location.search);
+    let hasFilter = false;
+    const next = new URLSearchParams();
+    params.forEach((value, key) => {
+      if (key.indexOf('filter.') === 0) {
+        hasFilter = true;
+        return;
+      }
+      next.append(key, value);
+    });
+    if (!hasFilter) return null;
+
+    const query = next.toString();
+    const cleanUrl = query ? `${window.location.pathname}?${query}` : window.location.pathname;
+    window.history.replaceState({ path: cleanUrl }, '', cleanUrl);
+    return cleanUrl;
   }
 
   /* Filters stay unchecked until the shopper chooses one. */
@@ -56,6 +78,11 @@ class CoachCollection {
     });
     this.wrapper.querySelectorAll('.coach-color-item--active').forEach((item) => {
       item.classList.remove('coach-color-item--active');
+    });
+    const chips = this.wrapper.querySelector('#CoachActiveFacets');
+    if (chips) chips.remove();
+    this.wrapper.querySelectorAll('.coach-filter-pill__badge').forEach((badge) => {
+      badge.remove();
     });
   }
 

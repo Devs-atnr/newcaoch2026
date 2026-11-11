@@ -7,7 +7,11 @@
    ========================================================================== */
 
 .section-header.coach-header-section {
-  z-index: 3;
+  z-index: 30;
+}
+
+.section-header.coach-header-section:not(.shopify-section-header-sticky) {
+  position: relative;
 }
 
 .section-header.shopify-section-group-header-group.coach-header-section.coach-is-overlaying {
