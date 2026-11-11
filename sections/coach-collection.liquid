@@ -40,6 +40,18 @@
       --coach-popover-bg: {{ section.settings.popover_bg }};
       --coach-popover-radius: {{ section.settings.popover_radius }}px;
       --coach-page-bg: {{ section.settings.body_bg_color | default: '#f6f6f6' }};
+      --coach-title-color: {{ section.settings.title_color | default: '#000000' }};
+      --coach-count-color: {{ section.settings.count_color | default: '#575757' }};
+      --coach-filter-font-size: {{ section.settings.filter_font_size | default: 14 }}px;
+      --coach-sort-font-size: {{ section.settings.sort_font_size | default: 16 }}px;
+      --coach-badge-size: {{ section.settings.badge_font_size | default: 12 }}px;
+      --coach-badge-bg: {{ section.settings.badge_bg | default: '#ffffff' }};
+      --coach-badge-text: {{ section.settings.badge_text | default: '#111111' }};
+      --coach-card-title-color: {{ section.settings.card_title_color | default: '#000000' }};
+      --coach-price-color: {{ section.settings.price_color | default: '#1a202c' }};
+      --coach-bag-font-size: {{ section.settings.bag_font_size | default: 14 }}px;
+      --coach-bag-bg: {{ section.settings.bag_bg | default: '#000000' }};
+      --coach-bag-text: {{ section.settings.bag_text | default: '#ffffff' }};
     "
   >
   {%- paginate collection.products by section.settings.products_per_page -%}
@@ -434,6 +446,94 @@
       "id": "body_bg_color",
       "default": "#f0f0f0",
       "label": "Collection body background color"
+    },
+    {
+      "type": "color",
+      "id": "title_color",
+      "default": "#000000",
+      "label": "Collection title color"
+    },
+    {
+      "type": "color",
+      "id": "count_color",
+      "default": "#575757",
+      "label": "Product count color"
+    },
+    {
+      "type": "range",
+      "id": "filter_font_size",
+      "min": 12,
+      "max": 18,
+      "step": 1,
+      "unit": "px",
+      "default": 14,
+      "label": "Filter button font size"
+    },
+    {
+      "type": "range",
+      "id": "sort_font_size",
+      "min": 12,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "default": 16,
+      "label": "Sort font size"
+    },
+    {
+      "type": "range",
+      "id": "badge_font_size",
+      "min": 10,
+      "max": 16,
+      "step": 1,
+      "unit": "px",
+      "default": 12,
+      "label": "Badge font size"
+    },
+    {
+      "type": "color",
+      "id": "badge_bg",
+      "default": "#ffffff",
+      "label": "Badge background"
+    },
+    {
+      "type": "color",
+      "id": "badge_text",
+      "default": "#111111",
+      "label": "Badge text"
+    },
+    {
+      "type": "color",
+      "id": "card_title_color",
+      "default": "#000000",
+      "label": "Product title color"
+    },
+    {
+      "type": "color",
+      "id": "price_color",
+      "default": "#1a202c",
+      "label": "Price color"
+    },
+    {
+      "type": "range",
+      "id": "bag_font_size",
+      "min": 12,
+      "max": 18,
+      "step": 1,
+      "unit": "px",
+      "default": 14,
+      "label": "Add To Bag font size"
+    },
+    {
+      "type": "color",
+      "id": "bag_bg",
+      "default": "#000000",
+      "label": "Add To Bag background"
+    },
+    {
+      "type": "color",
+      "id": "bag_text",
+      "default": "#ffffff",
+      "label": "Add To Bag text"
     },
     {
       "type": "range",

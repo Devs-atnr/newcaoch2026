@@ -15,7 +15,7 @@
       "type": "coach-header",
       "settings": {
         "menu": "main-menu",
-        "sticky": "on-scroll-up",
+        "sticky": "always",
         "show_border": false,
         "max_width": 1340,
         "logo_width": 115,
