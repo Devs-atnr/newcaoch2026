@@ -24,7 +24,7 @@
   margin-inline: auto;
   padding-inline: var(--coach-side-padding, 24px);
   color: #111111;
-  font-family: var(--ch-nav-font, 'Helvetica Neue', Helvetica, Arial, sans-serif);
+  font-family: HelveticaLTPro-Roman, "Helvetica Neue", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
 }
 
@@ -66,7 +66,7 @@
 }
 
 .coach-collection-wrapper h1.coach-collection-title {
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif !important;
+  font-family: HelveticaLTPro-Roman, "Helvetica Neue", Helvetica, Arial, sans-serif !important;
   font-size: 24px !important;
   font-weight: 700 !important;
   font-style: normal !important;
@@ -78,7 +78,7 @@
 }
 
 .coach-collection-count {
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif !important;
+  font-family: HelveticaLTPro-Roman, "Helvetica Neue", Helvetica, Arial, sans-serif !important;
   font-size: 16px !important;
   font-weight: 400 !important;
   color: #575757 !important;
@@ -132,7 +132,7 @@ button.coach-filter-pill {
   border: 1px solid var(--coach-filter-pill-border, #e1e1e1) !important;
   background: #ffffff !important;
   color: #333333 !important;
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif !important;
+  font-family: HelveticaLTPro-Roman, "Helvetica Neue", Helvetica, Arial, sans-serif !important;
   font-size: 14px !important;
   font-weight: 400 !important;
   letter-spacing: 0 !important;
@@ -207,7 +207,9 @@ button.coach-filter-pill.coach-filter-pill--active,
 }
 
 .coach-filter-popover--price {
-  width: 360px;
+  width: 340px;
+  overflow: visible;
+  padding-bottom: 24px;
 }
 
 .coach-filter-popover__content {
@@ -403,7 +405,7 @@ button.coach-filter-pill.coach-filter-pill--active,
 }
 
 .coach-list-row__text {
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: HelveticaLTPro-Roman, "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: 14px;
   font-weight: 400;
   line-height: 1;
@@ -454,7 +456,7 @@ button.coach-filter-pill.coach-filter-pill--active,
   left: 10px;
   background: #ffffff;
   padding: 0 4px;
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: HelveticaLTPro-Roman, "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: 12px;
   font-weight: 400;
   color: #111111;
@@ -507,8 +509,9 @@ button.coach-filter-pill.coach-filter-pill--active,
 
 .coach-price-slider {
   position: relative;
-  height: 28px;
-  margin: 16px 4px 4px;
+  height: 44px;
+  margin: 20px 8px 0;
+  overflow: visible;
 }
 
 .coach-price-slider__track,
@@ -538,7 +541,7 @@ button.coach-filter-pill.coach-filter-pill--active,
   left: 0;
   top: 0;
   width: 100%;
-  height: 28px;
+  height: 44px;
   margin: 0;
   background: none;
   pointer-events: none;
@@ -649,8 +652,8 @@ button.coach-sort-btn {
   min-height: 0 !important;
   height: auto !important;
   cursor: pointer;
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif !important;
-  font-size: 14px !important;
+  font-family: HelveticaLTPro-Roman, "Helvetica Neue", Helvetica, Arial, sans-serif !important;
+  font-size: 16px !important;
   font-weight: 400 !important;
   letter-spacing: 0 !important;
   text-transform: none !important;
@@ -665,13 +668,15 @@ button.coach-sort-btn {
 }
 
 .coach-sort-btn__prefix {
+  font-family: HelveticaLTPro-Roman, "Helvetica Neue", Helvetica, Arial, sans-serif;
   color: #6a6a6a;
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 400;
 }
 
 .coach-sort-btn__label strong {
-  font-size: 14px;
+  font-family: HelveticaLTPro-Roman, "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 16px;
   font-weight: 700;
   color: #000000;
 }
@@ -692,7 +697,7 @@ button.coach-sort-btn {
   top: calc(100% + 10px);
   right: 0;
   z-index: 999;
-  width: 196px;
+  width: 228px;
   background: #ffffff;
   border-radius: 12px;
   border: none;
@@ -720,8 +725,8 @@ button.coach-sort-btn {
   min-height: 36px;
   padding: 0 14px;
   box-sizing: border-box;
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-size: 14px;
+  font-family: HelveticaLTPro-Roman, "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 16px;
   font-weight: 400;
   line-height: 1;
   color: #1a1a1a;
@@ -878,8 +883,9 @@ button.coach-sort-btn {
 }
 
 .coach-badge {
+  font-family: HelveticaLTPro-Roman, "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: 12px;
-  font-weight: 500;
+  font-weight: 400;
   letter-spacing: 0;
   padding: 4px 12px;
   border-radius: 9999px;
@@ -904,10 +910,10 @@ button.coach-sort-btn {
 }
 
 .coach-badge--coming-soon {
-  text-transform: uppercase;
-  font-weight: 600;
-  font-size: 0.62rem;
-  letter-spacing: 0.04em;
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: 0;
+  text-transform: none;
 }
 
 .coach-badge--sale {
@@ -1053,7 +1059,8 @@ button.coach-sort-btn {
 }
 
 .coach-card__title {
-  font-size: var(--coach-card-title-size, 13px);
+  font-family: HelveticaLTPro-Roman, "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 16px !important;
   font-weight: 400;
   line-height: 1.3;
   margin: 0;
@@ -1154,7 +1161,8 @@ button.coach-sort-btn {
 
 /* Active Swatch Double Ring (Images 1 & 2) */
 .coach-card__swatch-dot--active {
-  box-shadow: 0 0 0 3px var(--coach-page-bg, #f0f0f0), 0 0 0 4px #1a202c;
+  box-shadow: none;
+  border: 2px solid #111111;
 }
 
 .coach-card__swatch-dot--sold-out {
@@ -1175,7 +1183,8 @@ button.coach-sort-btn {
 
 /* Price (Centered - Images 1, 2, 4, 5) */
 .coach-card__price {
-  font-size: var(--coach-card-price-size, 14px);
+  font-family: HelveticaLTPro-Roman, "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 16px !important;
   font-weight: 700;
   color: #1a202c;
   margin-top: 8px;

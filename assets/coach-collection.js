@@ -41,20 +41,30 @@ class CoachCollection {
       const popover = item.querySelector('.js-coach-popover');
 
       if (pillBtn && popover) {
+        const openItem = () => {
+          this.closeAllPopovers();
+          this.closeSort();
+          item.classList.add('is-open');
+          pillBtn.setAttribute('aria-expanded', 'true');
+          popover.removeAttribute('hidden');
+        };
+
         pillBtn.addEventListener('click', (e) => {
           e.preventDefault();
           e.stopPropagation();
           const isOpen = item.classList.contains('is-open');
-
-          // Close all other popovers
           this.closeAllPopovers();
-
-          if (!isOpen) {
-            item.classList.add('is-open');
-            pillBtn.setAttribute('aria-expanded', 'true');
-            popover.removeAttribute('hidden');
-          }
+          this.closeSort();
+          if (!isOpen) openItem();
         });
+
+        if (window.matchMedia('(hover: hover) and (min-width: 990px)').matches) {
+          item.addEventListener('mouseenter', openItem);
+          item.addEventListener('mouseleave', () => {
+            item.classList.remove('is-open');
+            pillBtn.setAttribute('aria-expanded', 'false');
+          });
+        }
       }
 
       if (closeBtn && popover) {
@@ -103,14 +113,29 @@ class CoachCollection {
     const sortOptions = sortWrap.querySelectorAll('.coach-sort-item');
     const hiddenSelect = sortWrap.querySelector('.js-coach-sort-select');
 
+    const openSort = () => {
+      this.closeAllPopovers();
+      sortWrap.classList.add('is-open');
+      sortBtn?.setAttribute('aria-expanded', 'true');
+    };
+    const closeThisSort = () => {
+      sortWrap.classList.remove('is-open');
+      sortBtn?.setAttribute('aria-expanded', 'false');
+    };
+
     if (sortBtn) {
       sortBtn.addEventListener('click', (e) => {
         e.stopPropagation();
         const isOpen = sortWrap.classList.contains('is-open');
         this.closeAllPopovers();
-        sortWrap.classList.toggle('is-open', !isOpen);
-        sortBtn.setAttribute('aria-expanded', !isOpen ? 'true' : 'false');
+        if (isOpen) closeThisSort();
+        else openSort();
       });
+    }
+
+    if (window.matchMedia('(hover: hover) and (min-width: 990px)').matches) {
+      sortWrap.addEventListener('mouseenter', openSort);
+      sortWrap.addEventListener('mouseleave', closeThisSort);
     }
 
     sortOptions.forEach((option) => {
