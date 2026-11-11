@@ -12,12 +12,25 @@
 {%- liquid
   assign sort_by = results.sort_by | default: results.default_sort_by
   assign active_sort_name = 'Best Matches'
-  for option in results.sort_options
-    if option.value == sort_by
-      assign active_sort_name = option.name
-      break
-    endif
-  endfor
+  case sort_by
+    when 'manual', 'relevance'
+      assign active_sort_name = 'Best Matches'
+    when 'created-descending'
+      assign active_sort_name = 'Just Added'
+    when 'best-selling'
+      assign active_sort_name = 'Bestsellers'
+    when 'price-ascending'
+      assign active_sort_name = 'Price Low To High'
+    when 'price-descending'
+      assign active_sort_name = 'Price High To Low'
+    else
+      for option in results.sort_options
+        if option.value == sort_by
+          assign active_sort_name = option.name
+          break
+        endif
+      endfor
+  endcase
 
   assign total_active = 0
   for filter in results.filters
@@ -54,6 +67,12 @@
                 assign has_active = true
               endif
             endif
+            assign popover_kind = 'list'
+            if is_color
+              assign popover_kind = 'color'
+            elsif filter.type == 'price_range'
+              assign popover_kind = 'price'
+            endif
           -%}
 
           <div class="coach-filter-item js-coach-filter-item" data-index="{{ forloop.index }}">
@@ -77,7 +96,7 @@
             {%- comment -%} Floating Filter Popover {%- endcomment -%}
             <div
               id="CoachPopover-{{ forloop.index }}"
-              class="coach-filter-popover js-coach-popover{% if is_color %} coach-filter-popover--color{% else %} coach-filter-popover--list{% endif %}"
+              class="coach-filter-popover coach-filter-popover--{{ popover_kind }} js-coach-popover"
               role="dialog"
               aria-label="{{ filter.label | escape }} Filter"
             >
@@ -175,13 +194,7 @@
                               {% if value.active %}checked{% endif %}
                               {% if is_disabled %}disabled{% endif %}
                             >
-                            <span class="coach-list-radio{% if value.active %} coach-list-radio--checked{% endif %}">
-                              {%- if value.active -%}
-                                <svg width="10" height="8" viewBox="0 0 10 8" fill="none">
-                                  <path d="M1.5 4L3.8 6.5L8.5 1.5" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                </svg>
-                              {%- endif -%}
-                            </span>
+                            <span class="coach-list-radio{% if value.active %} coach-list-radio--checked{% endif %}"></span>
                             <span class="coach-list-row__text">
                               {{ value.label | escape }}
                             </span>
@@ -194,47 +207,95 @@
                     {%- endif -%}
 
                   {%- when 'price_range' -%}
-                    {%- comment -%} Price Range Inputs {%- endcomment -%}
-                    <div class="coach-price-popover">
+                    {%- liquid
+                      assign price_floor = 0
+                      assign price_ceil = filter.range_max | divided_by: 100
+                      if price_ceil < 1
+                        assign price_ceil = 1
+                      endif
+                      assign price_min = price_floor
+                      assign price_max = price_ceil
+                      if filter.min_value.value != null
+                        assign price_min = filter.min_value.value | divided_by: 100
+                      endif
+                      if filter.max_value.value != null
+                        assign price_max = filter.max_value.value | divided_by: 100
+                      endif
+                    -%}
+                    <div
+                      class="coach-price-popover js-coach-price-slider"
+                      data-floor="{{ price_floor }}"
+                      data-ceil="{{ price_ceil }}"
+                    >
                       <div class="coach-price-fields">
-                        <div class="coach-price-input-box">
-                          <span class="coach-price-currency">{{ cart.currency.symbol }}</span>
-                          <input
-                            type="number"
-                            name="{{ filter.min_value.param_name }}"
-                            id="CoachFilter-{{ filter.param_name }}-min"
-                            class="coach-price-input js-filter-input-price"
-                            placeholder="0"
-                            min="0"
-                            max="{{ filter.range_max | divided_by: 100 }}"
-                            {% if filter.min_value.value %}
-                              value="{{ filter.min_value.value | divided_by: 100 }}"
-                            {% endif %}
-                          >
-                        </div>
-                        <span class="coach-price-separator">to</span>
-                        <div class="coach-price-input-box">
-                          <span class="coach-price-currency">{{ cart.currency.symbol }}</span>
-                          <input
-                            type="number"
-                            name="{{ filter.max_value.param_name }}"
-                            id="CoachFilter-{{ filter.param_name }}-max"
-                            class="coach-price-input js-filter-input-price"
-                            placeholder="{{ filter.range_max | divided_by: 100 }}"
-                            min="0"
-                            max="{{ filter.range_max | divided_by: 100 }}"
-                            {% if filter.max_value.value %}
-                              value="{{ filter.max_value.value | divided_by: 100 }}"
-                            {% endif %}
-                          >
-                        </div>
+                        <label class="coach-price-field" for="CoachFilter-{{ filter.param_name }}-min">
+                          <span class="coach-price-field__label">Min Price</span>
+                          <span class="coach-price-input-box">
+                            <input
+                              type="number"
+                              id="CoachFilter-{{ filter.param_name }}-min"
+                              class="coach-price-input js-price-min"
+                              min="{{ price_floor }}"
+                              max="{{ price_ceil }}"
+                              step="1"
+                              value="{{ price_min }}"
+                              inputmode="numeric"
+                            >
+                            <span class="coach-price-currency">{{ cart.currency.symbol }}</span>
+                          </span>
+                        </label>
+                        <span class="coach-price-separator" aria-hidden="true"></span>
+                        <label class="coach-price-field" for="CoachFilter-{{ filter.param_name }}-max">
+                          <span class="coach-price-field__label">Max Price</span>
+                          <span class="coach-price-input-box">
+                            <input
+                              type="number"
+                              id="CoachFilter-{{ filter.param_name }}-max"
+                              class="coach-price-input js-price-max"
+                              min="{{ price_floor }}"
+                              max="{{ price_ceil }}"
+                              step="1"
+                              value="{{ price_max }}"
+                              inputmode="numeric"
+                            >
+                            <span class="coach-price-currency">{{ cart.currency.symbol }}</span>
+                          </span>
+                        </label>
                       </div>
-                      <div class="coach-price-actions">
-                        <button type="button" class="coach-price-apply-btn js-coach-price-apply">Apply</button>
-                        {%- if filter.min_value.value or filter.max_value.value -%}
-                          <a href="{{ filter.url_to_remove }}" class="coach-price-reset-link js-facet-remove">Reset</a>
-                        {%- endif -%}
+                      <div class="coach-price-slider">
+                        <div class="coach-price-slider__track"></div>
+                        <div class="coach-price-slider__range"></div>
+                        <input
+                          type="range"
+                          class="coach-price-range coach-price-range--min js-price-range-min"
+                          min="{{ price_floor }}"
+                          max="{{ price_ceil }}"
+                          value="{{ price_min }}"
+                          step="1"
+                          aria-label="Min Price"
+                        >
+                        <input
+                          type="range"
+                          class="coach-price-range coach-price-range--max js-price-range-max"
+                          min="{{ price_floor }}"
+                          max="{{ price_ceil }}"
+                          value="{{ price_max }}"
+                          step="1"
+                          aria-label="Max Price"
+                        >
                       </div>
+                      <input
+                        type="hidden"
+                        class="js-price-min-param"
+                        name="{{ filter.min_value.param_name }}"
+                        {% if filter.min_value.value != null %}value="{{ price_min }}"{% endif %}
+                      >
+                      <input
+                        type="hidden"
+                        class="js-price-max-param"
+                        name="{{ filter.max_value.param_name }}"
+                        {% if filter.max_value.value != null %}value="{{ price_max }}"{% endif %}
+                      >
                     </div>
                 {%- endcase -%}
               </div>
@@ -253,7 +314,7 @@
           aria-expanded="false"
           aria-controls="CoachSortDropdown"
         >
-          <span class="coach-sort-btn__label">Sort by <strong>{{ active_sort_name }}</strong></span>
+          <span class="coach-sort-btn__label"><span class="coach-sort-btn__prefix">Sort by</span> <strong>{{ active_sort_name }}</strong></span>
           <span class="coach-sort-btn__arrow">
             <svg width="9" height="6" viewBox="0 0 10 6" fill="none">
               <path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
@@ -263,27 +324,63 @@
 
         <div id="CoachSortDropdown" class="coach-sort-dropdown js-coach-sort-dropdown">
           <ul class="coach-sort-list" role="listbox">
-            {%- for option in results.sort_options -%}
-              {%- assign is_selected = false -%}
-              {%- if option.value == sort_by -%}
-                {%- assign is_selected = true -%}
+            {%- assign coach_sort_keys = 'manual,created-descending,best-selling,price-ascending,price-descending' | split: ',' -%}
+            {%- assign coach_sort_labels = 'Best Matches,Just Added,Bestsellers,Price Low To High,Price High To Low' | split: ',' -%}
+            {%- assign rendered_sorts = 0 -%}
+            {%- for sort_key in coach_sort_keys -%}
+              {%- assign sort_exists = false -%}
+              {%- for option in results.sort_options -%}
+                {%- if option.value == sort_key -%}
+                  {%- assign sort_exists = true -%}
+                  {%- break -%}
+                {%- endif -%}
+              {%- endfor -%}
+              {%- if sort_exists -%}
+                {%- assign rendered_sorts = rendered_sorts | plus: 1 -%}
+                {%- assign is_selected = false -%}
+                {%- if sort_key == sort_by -%}
+                  {%- assign is_selected = true -%}
+                {%- endif -%}
+                <li
+                  class="coach-sort-item{% if is_selected %} coach-sort-item--active{% endif %}"
+                  role="option"
+                  aria-selected="{{ is_selected }}"
+                  data-sort-value="{{ sort_key }}"
+                >
+                  <span class="coach-sort-item__check">
+                    {%- if is_selected -%}
+                      <svg width="12" height="10" viewBox="0 0 12 10" fill="none">
+                        <polyline points="1.5 5 4.5 8 10.5 2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                      </svg>
+                    {%- endif -%}
+                  </span>
+                  <span class="coach-sort-item__name">{{ coach_sort_labels[forloop.index0] }}</span>
+                </li>
               {%- endif -%}
-              <li
-                class="coach-sort-item{% if is_selected %} coach-sort-item--active{% endif %}"
-                role="option"
-                aria-selected="{{ is_selected }}"
-                data-sort-value="{{ option.value }}"
-              >
-                <span class="coach-sort-item__check">
-                  {%- if is_selected -%}
-                    <svg width="12" height="10" viewBox="0 0 12 10" fill="none">
-                      <polyline points="1.5 5 4.5 8 10.5 2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                  {%- endif -%}
-                </span>
-                <span class="coach-sort-item__name">{{ option.name | escape }}</span>
-              </li>
             {%- endfor -%}
+            {%- if rendered_sorts == 0 -%}
+              {%- for option in results.sort_options -%}
+                {%- assign is_selected = false -%}
+                {%- if option.value == sort_by -%}
+                  {%- assign is_selected = true -%}
+                {%- endif -%}
+                <li
+                  class="coach-sort-item{% if is_selected %} coach-sort-item--active{% endif %}"
+                  role="option"
+                  aria-selected="{{ is_selected }}"
+                  data-sort-value="{{ option.value }}"
+                >
+                  <span class="coach-sort-item__check">
+                    {%- if is_selected -%}
+                      <svg width="12" height="10" viewBox="0 0 12 10" fill="none">
+                        <polyline points="1.5 5 4.5 8 10.5 2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                      </svg>
+                    {%- endif -%}
+                  </span>
+                  <span class="coach-sort-item__name">{{ option.name | escape }}</span>
+                </li>
+              {%- endfor -%}
+            {%- endif -%}
           </ul>
         </div>
 

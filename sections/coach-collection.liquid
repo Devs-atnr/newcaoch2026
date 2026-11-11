@@ -39,6 +39,7 @@
       --coach-filter-pill-border: {{ section.settings.filter_pill_border }};
       --coach-popover-bg: {{ section.settings.popover_bg }};
       --coach-popover-radius: {{ section.settings.popover_radius }}px;
+      --coach-page-bg: {{ section.settings.body_bg_color | default: '#f6f6f6' }};
     "
   >
   {%- paginate collection.products by section.settings.products_per_page -%}
@@ -51,7 +52,12 @@
           </h1>
           {%- if section.settings.show_product_count -%}
             <span class="coach-collection-count" id="CoachCollectionCount">
-              {{ 'products.facets.product_count_simple' | t: count: collection.products_count }}
+              {{ collection.products_count }}
+              {%- if collection.products_count == 1 -%}
+                Product
+              {%- else -%}
+                Products
+              {%- endif -%}
             </span>
           {%- endif -%}
         </div>
@@ -176,7 +182,7 @@
       "max": 1800,
       "step": 50,
       "unit": "px",
-      "default": 1340,
+      "default": 1240,
       "label": "Maximum content width"
     },
     {
@@ -230,7 +236,7 @@
       "max": 64,
       "step": 4,
       "unit": "px",
-      "default": 36,
+      "default": 40,
       "label": "Product row spacing"
     },
     {
@@ -240,7 +246,7 @@
       "max": 64,
       "step": 4,
       "unit": "px",
-      "default": 24,
+      "default": 18,
       "label": "Product column spacing"
     },
     {
@@ -262,7 +268,7 @@
     {
       "type": "checkbox",
       "id": "show_filter_counts",
-      "default": true,
+      "default": false,
       "label": "Show item count next to filter options"
     },
     {
@@ -276,7 +282,7 @@
       "max": 20,
       "step": 1,
       "unit": "px",
-      "default": 14,
+      "default": 13,
       "label": "Product title size"
     },
     {
@@ -286,7 +292,7 @@
       "max": 20,
       "step": 1,
       "unit": "px",
-      "default": 15,
+      "default": 14,
       "label": "Product price size"
     },
     {
@@ -366,7 +372,7 @@
       "max": 48,
       "step": 2,
       "unit": "px",
-      "default": 32,
+      "default": 26,
       "label": "Collection title size"
     },
     {
@@ -376,7 +382,7 @@
       "max": 22,
       "step": 1,
       "unit": "px",
-      "default": 15,
+      "default": 14,
       "label": "Product count size"
     },
     {
@@ -426,7 +432,7 @@
     {
       "type": "color",
       "id": "body_bg_color",
-      "default": "#f4f4f4",
+      "default": "#f6f6f6",
       "label": "Collection body background color"
     },
     {
@@ -437,7 +443,7 @@
       "step": 4,
       "unit": "px",
       "label": "Top padding",
-      "default": 36
+      "default": 32
     },
     {
       "type": "range",

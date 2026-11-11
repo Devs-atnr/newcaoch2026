@@ -155,14 +155,73 @@ class CoachCollection {
   }
 
   bindPriceFilter() {
-    const priceApplyBtn = this.wrapper.querySelector('.js-coach-price-apply');
-    if (priceApplyBtn) {
-      priceApplyBtn.addEventListener('click', () => {
+    const slider = this.wrapper.querySelector('.js-coach-price-slider');
+    if (slider) {
+      const floor = Number(slider.dataset.floor || 0);
+      const ceil = Number(slider.dataset.ceil || 0);
+      const minRange = slider.querySelector('.js-price-range-min');
+      const maxRange = slider.querySelector('.js-price-range-max');
+      const minInput = slider.querySelector('.js-price-min');
+      const maxInput = slider.querySelector('.js-price-max');
+      const minHidden = slider.querySelector('.js-price-min-param');
+      const maxHidden = slider.querySelector('.js-price-max-param');
+
+      const paint = () => {
+        const min = Number(minRange.value);
+        const max = Number(maxRange.value);
+        const span = Math.max(ceil - floor, 1);
+        const left = ((min - floor) / span) * 100;
+        const right = 100 - ((max - floor) / span) * 100;
+        slider.style.setProperty('--coach-price-left', `${left}%`);
+        slider.style.setProperty('--coach-price-right', `${right}%`);
+      };
+
+      const writeHidden = () => {
+        const min = Number(minInput.value);
+        const max = Number(maxInput.value);
+        if (minHidden) minHidden.value = min <= floor ? '' : String(min);
+        if (maxHidden) maxHidden.value = max >= ceil ? '' : String(max);
+      };
+
+      const clampPair = (source) => {
+        let min = Number(source === 'input' ? minInput.value : minRange.value);
+        let max = Number(source === 'input' ? maxInput.value : maxRange.value);
+        if (Number.isNaN(min)) min = floor;
+        if (Number.isNaN(max)) max = ceil;
+        min = Math.min(Math.max(min, floor), ceil);
+        max = Math.min(Math.max(max, floor), ceil);
+        if (min > max) {
+          if (source === 'min') min = max;
+          else if (source === 'max') max = min;
+          else {
+            const swap = min;
+            min = max;
+            max = swap;
+          }
+        }
+        minInput.value = min;
+        maxInput.value = max;
+        minRange.value = min;
+        maxRange.value = max;
+        writeHidden();
+        paint();
+      };
+
+      minRange.addEventListener('input', () => clampPair('min'));
+      maxRange.addEventListener('input', () => clampPair('max'));
+      minRange.addEventListener('change', () => this.submitFilters());
+      maxRange.addEventListener('change', () => this.submitFilters());
+      minInput.addEventListener('change', () => {
+        clampPair('input');
         this.submitFilters();
       });
+      maxInput.addEventListener('change', () => {
+        clampPair('input');
+        this.submitFilters();
+      });
+      paint();
     }
 
-    // Reset link
     const resetLinks = this.wrapper.querySelectorAll('.js-facet-remove');
     resetLinks.forEach((link) => {
       link.addEventListener('click', (e) => {
