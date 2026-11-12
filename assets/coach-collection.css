@@ -1257,20 +1257,49 @@ button.coach-sort-btn {
   pointer-events: none;
 }
 
+.coach-card__add-spinner,
 .coach-size-picker__spinner {
   display: none;
   position: absolute;
-  left: 10%;
-  top: 38%;
-  width: 58px;
-  height: 58px;
-  border: 3px solid #ececec;
-  border-top-color: #222222;
+  left: 50%;
+  top: 42%;
+  z-index: 18;
+  width: 54px;
+  height: 54px;
+  margin: -27px 0 0 -27px;
+  border: 3px solid #e8e8e8;
+  border-top-color: #111111;
   border-radius: 50%;
   animation: coach-spin 0.7s linear infinite;
+  pointer-events: none;
 }
 
+.coach-card.is-adding .coach-card__add-spinner,
 .coach-card.is-adding .coach-size-picker__spinner {
+  display: block;
+}
+
+.coach-card.is-adding .coach-size-picker__size {
+  pointer-events: none;
+}
+
+.coach-card__add-error {
+  display: none;
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  bottom: 56px;
+  z-index: 19;
+  margin: 0;
+  padding: 10px 12px;
+  background: #ffffff;
+  color: #111111;
+  font-size: 13px;
+  line-height: 1.3;
+  text-align: center;
+}
+
+.coach-card.is-add-error .coach-card__add-error {
   display: block;
 }
 

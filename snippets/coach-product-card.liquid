@@ -183,6 +183,9 @@
       </div>
     {%- endif -%}
 
+    <span class="coach-card__add-spinner" aria-hidden="true"></span>
+    <p class="coach-card__add-error" role="alert"></p>
+
     {%- if size_option_index >= 0 -%}
       <div class="coach-size-picker">
         <button type="button" class="coach-size-picker__nav coach-size-picker__nav--prev" aria-label="Previous sizes">
@@ -334,6 +337,7 @@
             </svg>
           </span>
           <span class="coach-card__quick-add-text">Add To Bag</span>
+          <span class="coach-card__quick-add-spinner" style="display:none;"></span>
         </button>
       {%- else -%}
         <a class="coach-card__mobile-btn coach-card__mobile-btn--notify" href="{{ card_product.url }}">Notify Me</a>

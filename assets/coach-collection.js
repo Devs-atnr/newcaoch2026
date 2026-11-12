@@ -562,6 +562,7 @@ class CoachCollection {
       this.sizePickerBound = true;
       document.addEventListener('click', (event) => {
         this.wrapper.querySelectorAll('.coach-card.is-choosing-size').forEach((openCard) => {
+          if (openCard.dataset.adding === 'true') return;
           if (!openCard.contains(event.target)) openCard.classList.remove('is-choosing-size');
         });
       });
@@ -799,7 +800,7 @@ class CoachCollection {
           sizeButton.addEventListener('click', (event) => {
             event.preventDefault();
             event.stopPropagation();
-            if (!variant.available || card.classList.contains('is-adding')) return;
+            if (!variant.available || card.dataset.adding === 'true') return;
             this.handleQuickAdd(sizeButton, variant.id, card);
           });
           sizeGrid.appendChild(sizeButton);
@@ -832,6 +833,7 @@ class CoachCollection {
         button.addEventListener('click', (e) => {
           e.preventDefault();
           e.stopPropagation();
+          if (card.dataset.adding === 'true') return;
           if (button.dataset.notify === 'true') {
             const productLink = card.querySelector('.coach-card__title-link');
             if (productLink) window.location.href = productLink.href;
@@ -857,40 +859,44 @@ class CoachCollection {
      AJAX Add To Bag
      ------------------------------------------------------------------------- */
   async handleQuickAdd(button, variantId, card) {
-    button.classList.add('is-loading');
-    if (card) card.classList.add('is-adding');
+    if (!card || card.dataset.adding === 'true' || !variantId) return;
+    card.dataset.adding = 'true';
+    card.classList.add('is-adding');
+    card.classList.remove('is-add-error');
+    if (button) {
+      button.classList.add('is-loading');
+      button.setAttribute('aria-busy', 'true');
+    }
 
+    const started = Date.now();
     try {
       const routes = window.routes || { cart_add_url: '/cart/add.js', cart_url: '/cart' };
-      const formData = {
-        items: [
-          {
-            id: parseInt(variantId, 10),
-            quantity: 1,
-          },
-        ],
-      };
-
       const response = await fetch(routes.cart_add_url, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Accept': 'application/javascript',
+          Accept: 'application/json',
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({
+          items: [{ id: parseInt(variantId, 10), quantity: 1 }],
+        }),
       });
 
-      const resData = await response.json();
-
-      if (!response.ok) {
-        throw new Error(resData.description || 'Could not add to bag');
+      const resData = await response.json().catch(() => ({}));
+      const elapsed = Date.now() - started;
+      if (elapsed < 1000) {
+        await new Promise((resolve) => setTimeout(resolve, 1000 - elapsed));
       }
 
-      if (card) card.classList.remove('is-choosing-size');
+      if (!response.ok) {
+        throw new Error(resData.description || resData.message || 'Could not add this product to your bag.');
+      }
+
+      card.classList.remove('is-choosing-size');
       if (window.CoachMiniBag && typeof window.CoachMiniBag.open === 'function') {
-        window.CoachMiniBag.open();
+        await window.CoachMiniBag.open();
       } else {
-        this.updateHeaderCartCount();
+        await this.updateHeaderCartCount();
       }
 
       if (typeof window.publish === 'function' && window.PUB_SUB_EVENTS) {
@@ -899,23 +905,28 @@ class CoachCollection {
           cartData: resData,
         });
       }
-
     } catch (err) {
-      console.error('Quick Add error:', err);
-      alert(err.message || 'Error adding product to bag.');
+      const errorEl = card.querySelector('.coach-card__add-error');
+      if (errorEl) errorEl.textContent = err.message || 'Could not add this product to your bag.';
+      card.classList.add('is-add-error');
+      window.setTimeout(() => card.classList.remove('is-add-error'), 2800);
     } finally {
-      button.classList.remove('is-loading');
-      if (card) card.classList.remove('is-adding');
+      card.dataset.adding = 'false';
+      card.classList.remove('is-adding');
+      if (button) {
+        button.classList.remove('is-loading');
+        button.removeAttribute('aria-busy');
+      }
     }
   }
 
   async updateHeaderCartCount() {
     try {
-      const res = await fetch('/cart.js');
+      const res = await fetch('/cart.js', { headers: { Accept: 'application/json' } });
       const cart = await res.json();
-      const countBubbles = document.querySelectorAll('.cart-count-bubble, .coach-header__cart-count');
-      countBubbles.forEach((bubble) => {
-        bubble.textContent = cart.item_count;
+      const count = cart.item_count < 100 ? String(cart.item_count) : '99+';
+      document.querySelectorAll('.cart-count-bubble, .coach-header__cart-count, .coach-bag__count').forEach((bubble) => {
+        bubble.textContent = count;
         bubble.classList.remove('hidden');
       });
     } catch (e) {
