@@ -49,9 +49,13 @@
       --coach-badge-text: {{ section.settings.badge_text | default: '#111111' }};
       --coach-card-title-color: {{ section.settings.card_title_color | default: '#000000' }};
       --coach-price-color: {{ section.settings.price_color | default: '#1a202c' }};
+      --coach-font: {{ section.settings.font_family | default: "HelveticaLTPro-Roman, 'Helvetica Neue', Helvetica, Arial, sans-serif" }};
       --coach-bag-font-size: {{ section.settings.bag_font_size | default: 14 }}px;
-      --coach-bag-bg: {{ section.settings.bag_bg | default: '#000000' }};
-      --coach-bag-text: {{ section.settings.bag_text | default: '#ffffff' }};
+      --coach-bag-bg: {{ section.settings.bag_bg | default: '#ffffff' }};
+      --coach-bag-text: {{ section.settings.bag_text | default: '#111111' }};
+      --coach-bag-hover-bg: {{ section.settings.bag_hover_bg | default: '#000000' }};
+      --coach-bag-hover-text: {{ section.settings.bag_hover_text | default: '#ffffff' }};
+      --coach-swatch-size: {{ section.settings.swatch_size | default: 28 }}px;
     "
   >
   {%- paginate collection.products by section.settings.products_per_page -%}
@@ -514,6 +518,12 @@
       "label": "Price color"
     },
     {
+      "type": "text",
+      "id": "font_family",
+      "label": "Font family",
+      "default": "HelveticaLTPro-Roman, 'Helvetica Neue', Helvetica, Arial, sans-serif"
+    },
+    {
       "type": "range",
       "id": "bag_font_size",
       "min": 12,
@@ -526,14 +536,36 @@
     {
       "type": "color",
       "id": "bag_bg",
-      "default": "#000000",
+      "default": "#ffffff",
       "label": "Add To Bag background"
     },
     {
       "type": "color",
       "id": "bag_text",
-      "default": "#ffffff",
+      "default": "#111111",
       "label": "Add To Bag text"
+    },
+    {
+      "type": "color",
+      "id": "bag_hover_bg",
+      "default": "#000000",
+      "label": "Add To Bag hover background"
+    },
+    {
+      "type": "color",
+      "id": "bag_hover_text",
+      "default": "#ffffff",
+      "label": "Add To Bag hover text"
+    },
+    {
+      "type": "range",
+      "id": "swatch_size",
+      "min": 18,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "default": 28,
+      "label": "Color swatch size"
     },
     {
       "type": "range",

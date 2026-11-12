@@ -29,7 +29,7 @@
   padding-inline: var(--coach-side-padding, 24px);
   overflow: visible;
   color: #111111;
-  font-family: HelveticaLTPro-Roman, "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: var(--coach-font, HelveticaLTPro-Roman, "Helvetica Neue", Helvetica, Arial, sans-serif);
   -webkit-font-smoothing: antialiased;
 }
 
@@ -1077,25 +1077,24 @@ button.coach-sort-btn {
   }
 }
 
-/* Add To Bag sits under the image and stays visible while the card is hovered */
+/* Add To Bag overlays the bottom of the image and does not move the title or price */
 .coach-card__quick-add-wrap {
-  position: relative;
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
   z-index: 14;
-  height: 0;
   margin: 0;
+  padding: 0;
+  height: auto;
   opacity: 0;
-  overflow: hidden;
   pointer-events: none;
   transition: opacity 0.16s ease;
 }
 
 .coach-card:hover .coach-card__quick-add-wrap,
-.coach-card:focus-within .coach-card__quick-add-wrap,
-.coach-card__quick-add-wrap:hover {
-  height: auto;
-  padding-top: 8px;
+.coach-card:focus-within .coach-card__quick-add-wrap {
   opacity: 1;
-  overflow: visible;
   pointer-events: auto;
 }
 
@@ -1105,7 +1104,7 @@ button.coach-sort-btn {
   min-height: 44px !important;
   min-width: 0 !important;
   border-radius: 4px !important;
-  font-family: HelveticaLTPro-Roman, "Helvetica Neue", Helvetica, Arial, sans-serif !important;
+  font-family: var(--coach-font, HelveticaLTPro-Roman, "Helvetica Neue", Helvetica, Arial, sans-serif) !important;
   font-size: var(--coach-bag-font-size, 14px) !important;
   font-weight: 400 !important;
   letter-spacing: 0 !important;
@@ -1120,18 +1119,20 @@ button.coach-sort-btn {
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
 }
 
-.coach-card__quick-add-btn--available,
-.coach-card__quick-add-btn--sold-out {
-  background: var(--coach-bag-bg, #000000) !important;
-  color: var(--coach-bag-text, #ffffff) !important;
+.coach-card__quick-add-btn--available {
+  background: var(--coach-bag-bg, #ffffff) !important;
+  color: var(--coach-bag-text, #111111) !important;
   border: none !important;
 }
 
 .coach-card__quick-add-btn--available:hover,
-.coach-card__quick-add-btn--available:focus,
-.coach-card__quick-add-btn--sold-out:hover {
-  background: var(--coach-bag-bg, #000000) !important;
-  color: var(--coach-bag-text, #ffffff) !important;
+.coach-card__quick-add-btn--available:focus {
+  background: var(--coach-bag-hover-bg, #000000) !important;
+  color: var(--coach-bag-hover-text, #ffffff) !important;
+}
+
+.coach-card__quick-add-btn--sold-out {
+  display: none !important;
 }
 
 .coach-card__quick-add-icon {
@@ -1173,10 +1174,13 @@ button.coach-sort-btn {
 
 @media screen and (max-width: 989px) {
   .coach-card__quick-add-wrap {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
     height: auto;
-    padding-top: 8px;
+    padding: 0;
     opacity: 1;
-    overflow: visible;
     pointer-events: auto;
   }
 }
@@ -1186,13 +1190,14 @@ button.coach-sort-btn {
   padding-top: 10px;
   display: flex;
   flex-direction: column;
+  flex-wrap: nowrap;
   align-items: center;
   text-align: center;
   width: 100%;
 }
 
 .coach-card__title {
-  font-family: HelveticaLTPro-Roman, "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: var(--coach-font, HelveticaLTPro-Roman, "Helvetica Neue", Helvetica, Arial, sans-serif);
   font-size: var(--coach-card-title-size, 16px) !important;
   color: var(--coach-card-title-color, #000000);
   font-weight: 400;
@@ -1219,13 +1224,21 @@ button.coach-sort-btn {
 
 /* Variant Color Swatches Slider (Images 1 & 3) */
 .coach-card__swatches-wrapper {
-  display: inline-flex;
+  display: flex;
   align-items: center;
   justify-content: center;
   gap: 3px;
+  width: 100%;
+  min-height: calc(var(--coach-swatch-size, 28px) + 8px);
   margin: 8px auto 0 auto;
   position: relative;
   max-width: 100%;
+  flex: 0 0 auto;
+}
+
+.coach-card__swatches-wrapper--empty {
+  visibility: hidden;
+  pointer-events: none;
 }
 
 .coach-card__swatches {
@@ -1275,8 +1288,8 @@ button.coach-sort-btn {
 }
 
 .coach-card__swatch-dot {
-  width: 32px;
-  height: 32px;
+  width: calc(var(--coach-swatch-size, 28px) + 4px);
+  height: calc(var(--coach-swatch-size, 28px) + 4px);
   border-radius: 50%;
   border: none !important;
   background: transparent !important;
@@ -1301,8 +1314,8 @@ button.coach-sort-btn {
 }
 
 .coach-card__swatch-fill {
-  width: 26px;
-  height: 26px;
+  width: var(--coach-swatch-size, 28px);
+  height: var(--coach-swatch-size, 28px);
   border-radius: 50%;
   display: block;
   pointer-events: none;
@@ -1325,15 +1338,18 @@ button.coach-sort-btn {
 
 .coach-card__swatch-dot--sold-out {
   opacity: 1;
+  overflow: hidden;
+  border-radius: 50%;
 }
 
 .coach-card__swatch-slash {
   position: absolute;
   top: 50%;
   left: 50%;
-  width: 28px;
-  height: 1.5px;
-  background: #1a1a1a;
+  width: 150%;
+  height: 2px;
+  background: #ffffff;
+  box-shadow: 0 0 0 0.5px rgba(0, 0, 0, 0.45);
   transform: translate(-50%, -50%) rotate(-42deg);
   pointer-events: none;
   z-index: 2;
@@ -1341,13 +1357,17 @@ button.coach-sort-btn {
 
 /* Price (Centered - Images 1, 2, 4, 5) */
 .coach-card__price {
-  font-family: HelveticaLTPro-Roman, "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: var(--coach-font, HelveticaLTPro-Roman, "Helvetica Neue", Helvetica, Arial, sans-serif);
   font-size: var(--coach-card-price-size, 16px) !important;
   font-weight: 700;
   color: var(--coach-price-color, #1a202c);
+  display: block;
+  width: 100%;
   margin-top: 6px;
   text-align: center;
   letter-spacing: 0;
+  flex: 0 0 auto;
+  position: static;
 }
 
 .coach-card__price-sale {
