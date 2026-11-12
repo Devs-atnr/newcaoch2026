@@ -137,7 +137,7 @@
               hidden
             {% endif %}
           ></div>
-        {%- elsif paginate.pages > 1 -%}
+        {%- elsif paginate.pages > 1 and section.settings.hide_page_numbers == false -%}
           <div class="coach-pagination">
             {%- if paginate.previous -%}
               <a href="{{ paginate.previous.url }}" class="coach-pagination__item coach-pagination__item--prev" aria-label="Previous page">
@@ -686,6 +686,12 @@
       "id": "enable_infinite_scroll",
       "default": true,
       "label": "Load more products on scroll"
+    },
+    {
+      "type": "checkbox",
+      "id": "hide_page_numbers",
+      "default": true,
+      "label": "Hide page numbers"
     },
     {
       "type": "range",

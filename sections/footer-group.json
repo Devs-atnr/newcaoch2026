@@ -28,9 +28,19 @@
           "settings": {
             "heading": "About Us"
           }
-        }
+        },
+        "terms": { "type": "legal_link", "settings": { "label": "Terms of use" } },
+        "privacy": { "type": "legal_link", "settings": { "label": "Privacy policy" } },
+        "transparency": { "type": "legal_link", "settings": { "label": "CA Transparency & UK Modern Slavery Act" } },
+        "cookies": { "type": "legal_link", "settings": { "label": "Manage cookies" } },
+        "brand": { "type": "legal_link", "settings": { "label": "Brand protection" } },
+        "accessibility": { "type": "legal_link", "settings": { "label": "Accessibility" } },
+        "customer-care": { "type": "legal_link", "settings": { "label": "Customer care" } },
+        "section-172": { "type": "legal_link", "settings": { "label": "Section 172 statement" } },
+        "feedback": { "type": "legal_link", "settings": { "label": "Feedback" } },
+        "sitemap": { "type": "legal_link", "settings": { "label": "Site map" } }
       },
-      "block_order": ["care", "services", "sustainability", "about"],
+      "block_order": ["care", "services", "sustainability", "about", "terms", "privacy", "transparency", "cookies", "brand", "accessibility", "customer-care", "section-172", "feedback", "sitemap"],
       "settings": {
         "show_search": true,
         "search_placeholder": "Search",
@@ -44,6 +54,9 @@
         "success_message": "Thanks for subscribing.",
         "show_social": true,
         "copyright_text": "© [year] COACH. ALL RIGHTS RESERVED.",
+        "show_legal_links": true,
+        "show_top_border": true,
+        "top_border_color": "#d5d5d5",
         "show_back_to_top": true,
         "back_to_top_label": "Back to top",
         "font_family": "HelveticaLTPro-Roman, 'Helvetica Neue', Helvetica, Arial, sans-serif",

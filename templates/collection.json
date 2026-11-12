@@ -49,6 +49,7 @@
         "breadcrumb_size": 12,
         "breadcrumb_color": "#8a8a8a",
         "enable_infinite_scroll": true,
+        "hide_page_numbers": true,
         "padding_top": 32,
         "padding_bottom": 48
       }

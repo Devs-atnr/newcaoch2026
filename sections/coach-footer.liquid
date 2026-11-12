@@ -7,7 +7,7 @@
 -%}
 
 <footer
-  class="coach-footer"
+  class="coach-footer{% if section.settings.show_top_border %} coach-footer--border{% endif %}"
   style="
     --cf-font: {{ section.settings.font_family }};
     --cf-bg: {{ section.settings.background }};
@@ -28,6 +28,7 @@
     --cf-search-size: {{ section.settings.search_size }}px;
     --cf-search-pad-top: {{ section.settings.search_padding_top }}px;
     --cf-search-pad-bottom: {{ section.settings.search_padding_bottom }}px;
+    --cf-top-border: {{ section.settings.top_border_color }};
   "
 >
   {%- if section.settings.show_search -%}
@@ -165,10 +166,17 @@
       {%- endif -%}
     </div>
 
-    {%- if section.settings.legal_menu != blank -%}
+    {%- if section.settings.show_legal_links -%}
       <nav class="coach-footer__legal" aria-label="Legal">
-        {%- for link in section.settings.legal_menu.links -%}
-          <a href="{{ link.url }}">{{ link.title | escape }}</a>
+        {%- if section.settings.legal_menu != blank -%}
+          {%- for link in section.settings.legal_menu.links -%}
+            <a href="{{ link.url }}">{{ link.title | escape }}</a>
+          {%- endfor -%}
+        {%- endif -%}
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'legal_link' and block.settings.label != blank -%}
+            <a href="{{ block.settings.link | default: '#' }}" {{ block.shopify_attributes }}>{{ block.settings.label | escape }}</a>
+          {%- endif -%}
         {%- endfor -%}
       </nav>
     {%- endif -%}
@@ -379,9 +387,28 @@
       "content": "Legal"
     },
     {
+      "type": "checkbox",
+      "id": "show_legal_links",
+      "label": "Show bottom links",
+      "default": true
+    },
+    {
       "type": "link_list",
       "id": "legal_menu",
-      "label": "Legal menu"
+      "label": "Bottom links menu",
+      "info": "Optional. Individual bottom links can also be added as blocks."
+    },
+    {
+      "type": "checkbox",
+      "id": "show_top_border",
+      "label": "Show top border line",
+      "default": true
+    },
+    {
+      "type": "color",
+      "id": "top_border_color",
+      "label": "Top border color",
+      "default": "#d5d5d5"
     },
     {
       "type": "text",
@@ -548,9 +575,26 @@
           "label": "Menu"
         }
       ]
+    },
+    {
+      "type": "legal_link",
+      "name": "Bottom link",
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Label",
+          "default": "Terms of use"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link"
+        }
+      ]
     }
   ],
-  "max_blocks": 6,
+  "max_blocks": 24,
   "presets": [
     {
       "name": "Coach Footer",
