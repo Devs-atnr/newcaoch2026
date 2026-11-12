@@ -598,13 +598,44 @@ class CoachCollection {
 
       if (images.length > 1) {
         let activeIdx = 0;
+        const scroller = card.querySelector('.coach-card__images-container');
+        const imageBar = card.querySelector('.coach-card__image-bar span');
+        const mobileImages = window.matchMedia('(max-width: 989px)');
+
+        const syncImageBar = () => {
+          if (!imageBar || !scroller) return;
+          const max = scroller.scrollWidth - scroller.clientWidth;
+          const ratio = max > 0 ? scroller.scrollLeft / max : 0;
+          const thumb = 100 / images.length;
+          imageBar.style.width = `${thumb}%`;
+          imageBar.style.marginLeft = `${ratio * (100 - thumb)}%`;
+        };
 
         const updateImage = (newIdx) => {
           images.forEach((img, idx) => {
             img.classList.toggle('coach-card__img--active', idx === newIdx);
           });
           activeIdx = newIdx;
+          if (mobileImages.matches && scroller) {
+            scroller.scrollTo({ left: newIdx * scroller.clientWidth, behavior: 'smooth' });
+          }
         };
+
+        if (scroller) {
+          scroller.addEventListener('scroll', () => {
+            if (!mobileImages.matches) return;
+            const width = scroller.clientWidth || 1;
+            const idx = Math.round(scroller.scrollLeft / width);
+            if (idx !== activeIdx && idx >= 0 && idx < images.length) {
+              images.forEach((img, imageIndex) => {
+                img.classList.toggle('coach-card__img--active', imageIndex === idx);
+              });
+              activeIdx = idx;
+            }
+            syncImageBar();
+          }, { passive: true });
+          syncImageBar();
+        }
 
         if (prevBtn) {
           prevBtn.addEventListener('click', (e) => {
@@ -622,22 +653,6 @@ class CoachCollection {
             const nextIdx = (activeIdx + 1) % images.length;
             updateImage(nextIdx);
           });
-        }
-
-        const mediaWrap = card.querySelector('.coach-card__media-wrap');
-        if (mediaWrap) {
-          let startX = 0;
-          mediaWrap.addEventListener('touchstart', (event) => {
-            startX = event.changedTouches[0].clientX;
-          }, { passive: true });
-          mediaWrap.addEventListener('touchend', (event) => {
-            const delta = event.changedTouches[0].clientX - startX;
-            if (Math.abs(delta) < 36) return;
-            const nextIdx = delta < 0
-              ? (activeIdx + 1) % images.length
-              : (activeIdx - 1 + images.length) % images.length;
-            updateImage(nextIdx);
-          }, { passive: true });
         }
       }
 

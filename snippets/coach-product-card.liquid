@@ -139,6 +139,9 @@
         {%- endif -%}
       </div>
     </a>
+    {%- if card_product.media.size > 1 -%}
+      <div class="coach-card__image-bar" aria-hidden="true"><span></span></div>
+    {%- endif -%}
 
     {%- comment -%} Minimalist Chevron Arrows (< and >) {%- endcomment -%}
     {%- if enable_slider and card_product.media.size > 1 -%}

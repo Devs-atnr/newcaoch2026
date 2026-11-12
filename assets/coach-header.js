@@ -752,9 +752,11 @@
       };
 
       const open = async () => {
+        if (window.matchMedia('(max-width: 989px)').matches) return;
         panel.hidden = false;
         document.body.classList.add('coach-bag-open');
         place();
+        requestAnimationFrame(() => panel.classList.add('is-open'));
         try {
           const res = await fetch('/cart.js', { headers: { Accept: 'application/json' } });
           if (res.ok) render(await res.json());
@@ -764,8 +766,11 @@
       };
 
       const close = () => {
-        panel.hidden = true;
+        panel.classList.remove('is-open');
         document.body.classList.remove('coach-bag-open');
+        window.setTimeout(() => {
+          if (!panel.classList.contains('is-open')) panel.hidden = true;
+        }, 280);
       };
 
       panel.querySelectorAll('[data-bag-close]').forEach((button) => {
@@ -775,6 +780,10 @@
       const openFromIcon = (event) => {
         event.preventDefault();
         event.stopPropagation();
+        if (window.matchMedia('(max-width: 989px)').matches) {
+          window.location.href = event.currentTarget.getAttribute('href') || '/cart';
+          return;
+        }
         if (panel.hidden) open();
         else close();
       };

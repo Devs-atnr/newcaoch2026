@@ -788,8 +788,9 @@ button.coach-sort-btn {
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
-  transform: translateY(-4px);
-  transition: opacity 0.16s ease, transform 0.16s ease, visibility 0.16s ease;
+  transform-origin: top center;
+  transform: translateY(-10px) scale(0.96);
+  transition: opacity 0.22s ease, transform 0.28s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.28s ease;
 }
 
 .coach-sort-list {
@@ -806,7 +807,7 @@ button.coach-sort-btn {
   opacity: 1;
   visibility: visible;
   pointer-events: auto;
-  transform: translateY(0);
+  transform: translateY(0) scale(1);
 }
 
 .coach-sort-item {
@@ -943,6 +944,10 @@ button.coach-sort-btn {
   position: relative;
   width: 100%;
   height: 100%;
+}
+
+.coach-card__image-bar {
+  display: none;
 }
 
 .coach-card__img {
@@ -1173,7 +1178,7 @@ button.coach-sort-btn {
 }
 
 .coach-size-picker {
-  display: none;
+  display: flex;
   position: absolute;
   inset: 0;
   z-index: 16;
@@ -1181,11 +1186,15 @@ button.coach-sort-btn {
   justify-content: center;
   padding: 12px 12px 8px;
   pointer-events: none;
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.22s ease, visibility 0.22s ease;
 }
 
 .coach-card.is-choosing-size .coach-size-picker,
 .coach-card.is-adding .coach-size-picker {
-  display: flex;
+  visibility: visible;
+  opacity: 1;
   pointer-events: auto;
 }
 
@@ -1209,6 +1218,15 @@ button.coach-sort-btn {
   background: rgba(255, 255, 255, 0.96);
   padding: 14px 12px 12px;
   box-sizing: border-box;
+  transform: translateY(18px);
+  opacity: 0;
+  transition: transform 0.32s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.22s ease;
+}
+
+.coach-card.is-choosing-size .coach-size-picker__panel,
+.coach-card.is-adding .coach-size-picker__panel {
+  transform: translateY(0);
+  opacity: 1;
 }
 
 .coach-size-picker__head,
@@ -1268,14 +1286,25 @@ button.coach-sort-btn {
     overflow: hidden;
   }
 
-  .coach-card.is-choosing-size .coach-size-picker,
-  .coach-card.is-adding .coach-size-picker {
+  .coach-size-picker {
     position: fixed;
     inset: 0;
     z-index: 500;
     align-items: flex-end;
     padding: 0;
     background: rgba(0, 0, 0, 0.55);
+    transition: opacity 0.28s ease, visibility 0.28s ease;
+  }
+
+  .coach-size-picker__panel {
+    transform: translateY(100%);
+    opacity: 1;
+    transition: transform 0.42s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .coach-card.is-choosing-size .coach-size-picker__panel,
+  .coach-card.is-adding .coach-size-picker__panel {
+    transform: translateY(0);
   }
 
   .coach-card.is-adding .coach-card__add-spinner {
@@ -2229,12 +2258,33 @@ button.coach-sort-btn {
     cursor: pointer;
   }
 
+  .coach-card__image-bar {
+    display: block;
+    position: absolute;
+    left: 18%;
+    right: 18%;
+    bottom: 8px;
+    z-index: 4;
+    height: 2px;
+    background: #e4e4e4;
+    pointer-events: none;
+  }
+
+  .coach-card__image-bar span {
+    display: block;
+    height: 100%;
+    width: 28%;
+    background: #9a9a9a;
+    transition: margin-left 0.25s ease;
+  }
+
   .coach-card__images-container {
     display: flex;
     height: 100%;
     overflow-x: auto;
     overflow-y: hidden;
     scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
     scrollbar-width: none;
   }
 

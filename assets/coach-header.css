@@ -286,8 +286,8 @@ coach-header {
 
 .coach-bag__count {
   position: absolute;
-  top: -4px;
-  right: -8px;
+  top: -6px;
+  right: -6px;
   inset: auto;
   display: flex;
   align-items: center;
@@ -296,7 +296,7 @@ coach-header {
   height: 16px;
   padding: 0 4px;
   border-radius: 999px;
-  background: #1f9d55;
+  background: #111111;
   color: #ffffff;
   font-family: var(--ch-nav-font);
   font-size: 10px;
@@ -1308,6 +1308,12 @@ body.coach-bag-open {
   padding: 0;
   background: rgba(0, 0, 0, 0.55);
   cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.24s ease;
+}
+
+.coach-bag-panel.is-open .coach-bag-panel__overlay {
+  opacity: 1;
 }
 
 .coach-bag-panel__sheet {
@@ -1321,6 +1327,14 @@ body.coach-bag-open {
   flex-direction: column;
   box-sizing: border-box;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: opacity 0.24s ease, transform 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.coach-bag-panel.is-open .coach-bag-panel__sheet {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 .coach-bag-panel__sheet::before {
