@@ -565,6 +565,9 @@ class CoachCollection {
           if (openCard.dataset.adding === 'true') return;
           if (!openCard.contains(event.target)) openCard.classList.remove('is-choosing-size');
         });
+        if (!this.wrapper.querySelector('.coach-card.is-choosing-size')) {
+          document.body.classList.remove('coach-size-open');
+        }
       });
     }
 
@@ -796,15 +799,28 @@ class CoachCollection {
           sizeButton.type = 'button';
           sizeButton.className = 'coach-size-picker__size' + (variant.available ? '' : ' is-sold-out');
           sizeButton.textContent = label;
+          sizeButton.dataset.variantId = String(variant.id);
           if (!variant.available) sizeButton.setAttribute('aria-disabled', 'true');
           sizeButton.addEventListener('click', (event) => {
             event.preventDefault();
             event.stopPropagation();
             if (!variant.available || card.dataset.adding === 'true') return;
+            const mobileSheet = window.matchMedia('(max-width: 989px)').matches;
+            if (mobileSheet) {
+              sizeGrid.querySelectorAll('.is-selected').forEach((item) => item.classList.remove('is-selected'));
+              sizeButton.classList.add('is-selected');
+              card.dataset.selectedSize = String(variant.id);
+              const confirmButton = card.querySelector('.coach-size-picker__confirm');
+              if (confirmButton) confirmButton.disabled = false;
+              return;
+            }
             this.handleQuickAdd(sizeButton, variant.id, card);
           });
           sizeGrid.appendChild(sizeButton);
         });
+        card.dataset.selectedSize = '';
+        const confirmButton = card.querySelector('.coach-size-picker__confirm');
+        if (confirmButton) confirmButton.disabled = true;
       };
       renderSizes();
 
@@ -823,6 +839,25 @@ class CoachCollection {
           event.preventDefault();
           event.stopPropagation();
           scrollSizes(1);
+        });
+        sizePicker.addEventListener('click', (event) => {
+          if (event.target !== sizePicker || card.dataset.adding === 'true') return;
+          card.classList.remove('is-choosing-size');
+          document.body.classList.remove('coach-size-open');
+        });
+        sizePicker.querySelector('.coach-size-picker__close')?.addEventListener('click', (event) => {
+          event.preventDefault();
+          event.stopPropagation();
+          if (card.dataset.adding === 'true') return;
+          card.classList.remove('is-choosing-size');
+          document.body.classList.remove('coach-size-open');
+        });
+        sizePicker.querySelector('.coach-size-picker__confirm')?.addEventListener('click', (event) => {
+          event.preventDefault();
+          event.stopPropagation();
+          const variantId = card.dataset.selectedSize;
+          if (!variantId || card.dataset.adding === 'true') return;
+          this.handleQuickAdd(event.currentTarget, variantId, card);
         });
       }
 
@@ -845,6 +880,9 @@ class CoachCollection {
               if (openCard !== card) openCard.classList.remove('is-choosing-size');
             });
             card.classList.add('is-choosing-size');
+            if (window.matchMedia('(max-width: 989px)').matches) {
+              document.body.classList.add('coach-size-open');
+            }
             return;
           }
           const variantId = button.dataset.variantId;
