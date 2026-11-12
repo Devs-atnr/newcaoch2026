@@ -109,11 +109,7 @@ class CoachCollection {
 
     const wrapRect = sortWrap.getBoundingClientRect();
     const valueRect = valueEl.getBoundingClientRect();
-    const menuWidth = dropdown.offsetWidth || 228;
-    let left = valueRect.left - wrapRect.left;
-    const viewportRight = window.innerWidth - 16;
-    const overflow = wrapRect.left + left + menuWidth - viewportRight;
-    if (overflow > 0) left -= overflow;
+    const left = valueRect.left - wrapRect.left;
     dropdown.style.right = 'auto';
     dropdown.style.left = `${Math.max(0, Math.round(left))}px`;
   }
@@ -237,19 +233,20 @@ class CoachCollection {
       window.addEventListener('resize', () => this.alignSortDropdown());
     }
 
-    if (window.matchMedia('(hover: hover) and (min-width: 990px)').matches) {
-      let closeTimer = null;
-      sortWrap.addEventListener('mouseenter', () => {
-        if (closeTimer) {
-          clearTimeout(closeTimer);
-          closeTimer = null;
-        }
-        openSort();
-      });
-      sortWrap.addEventListener('mouseleave', () => {
-        closeTimer = setTimeout(closeThisSort, 280);
-      });
-    }
+    const canHoverSort = () => window.matchMedia('(hover: hover) and (min-width: 990px)').matches;
+    let closeTimer = null;
+    sortWrap.addEventListener('mouseenter', () => {
+      if (!canHoverSort()) return;
+      if (closeTimer) {
+        clearTimeout(closeTimer);
+        closeTimer = null;
+      }
+      openSort();
+    });
+    sortWrap.addEventListener('mouseleave', () => {
+      if (!canHoverSort()) return;
+      closeTimer = setTimeout(closeThisSort, 80);
+    });
 
     sortOptions.forEach((option) => {
       option.addEventListener('click', (e) => {
