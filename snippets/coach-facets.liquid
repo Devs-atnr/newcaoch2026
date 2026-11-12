@@ -44,7 +44,20 @@
 -%}
 
 <div class="coach-facets-bar" id="CoachFacetsBar">
+  <button type="button" class="coach-mobile-filter-btn js-mobile-filter-open">
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+      <path d="M2 4h12M4 8h8M6 12h4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+    </svg>
+    Filter / Sort
+  </button>
   <form id="CoachFacetFiltersForm" class="coach-facets-form">
+    <div class="coach-mobile-drawer-top">
+      <button type="button" class="coach-mobile-filter-close js-mobile-filter-close" aria-label="Close">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+          <path d="M1 1L13 13M13 1L1 13" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+        </svg>
+      </button>
+    </div>
     {%- if results.terms -%}
       <input type="hidden" name="q" value="{{ results.terms | escape }}">
       <input name="options[prefix]" type="hidden" value="last">
@@ -318,7 +331,16 @@
 
     {%- comment -%} Sort By Dropdown (Image 3 & 4) {%- endcomment -%}
     {%- if enable_sorting -%}
+      <div class="coach-mobile-filter-head">
+        <span>Filter by</span>
+        {%- if total_active > 0 -%}
+          <a href="{{ results.url }}" class="coach-mobile-clear js-facet-remove">Clear all</a>
+        {%- else -%}
+          <button type="button" class="coach-mobile-clear" disabled>Clear all</button>
+        {%- endif -%}
+      </div>
       <div class="coach-sort-container js-coach-sort-container">
+        <p class="coach-mobile-sort-label">Sort by</p>
         <button
           type="button"
           class="coach-sort-btn js-coach-sort-btn"
@@ -453,4 +475,10 @@
       </a>
     </div>
   {%- endif -%}
+
+  <div class="coach-mobile-view-bar">
+    <button type="button" class="coach-mobile-view js-mobile-filter-close">
+      View {{ results.products_count }} {% if results.products_count == 1 %}Product{% else %}Products{% endif %}
+    </button>
+  </div>
 </div>

@@ -26,6 +26,7 @@ class CoachCollection {
     this.bindPriceFilter();
     this.bindProductCards();
     this.bindInfiniteScroll();
+    this.bindMobileFilters();
     if (cleanUrl) this.fetchFilteredSection(cleanUrl);
 
     window.addEventListener('popstate', () => {
@@ -439,6 +440,8 @@ class CoachCollection {
       this.bindPriceFilter();
       this.bindProductCards();
       this.bindInfiniteScroll();
+      this.bindMobileFilters();
+      if (this.mobileDrawerOpen) this.openMobileDrawer();
 
     } catch (err) {
       console.error('Error filtering collection:', err);
@@ -446,6 +449,46 @@ class CoachCollection {
       const refreshedGrid = this.wrapper.querySelector('.coach-product-grid');
       if (refreshedGrid) refreshedGrid.classList.remove('is-loading');
     }
+  }
+
+  bindMobileFilters() {
+    if (this.mobileBound) return;
+    this.mobileBound = true;
+
+    this.wrapper.addEventListener('click', (event) => {
+      if (event.target.closest('.js-mobile-filter-open')) {
+        event.preventDefault();
+        this.mobileDrawerOpen = true;
+        this.openMobileDrawer();
+      }
+      if (event.target.closest('.js-mobile-filter-close')) {
+        event.preventDefault();
+        this.closeMobileDrawer();
+      }
+      const more = event.target.closest('.js-collection-more');
+      if (more) {
+        const copy = more.parentElement.querySelector('.coach-collection-more__copy');
+        const open = copy && copy.classList.toggle('is-open');
+        more.setAttribute('aria-expanded', open ? 'true' : 'false');
+        const label = more.querySelector('span');
+        if (label) label.textContent = open ? 'Show less' : 'Show more';
+      }
+    });
+  }
+
+  openMobileDrawer() {
+    const bar = this.wrapper.querySelector('.coach-facets-bar');
+    if (!bar) return;
+    bar.classList.add('is-drawer-open');
+    document.body.classList.add('coach-filters-open');
+    bar.querySelectorAll('.js-coach-filter-item').forEach((item) => item.classList.add('is-open'));
+  }
+
+  closeMobileDrawer() {
+    this.mobileDrawerOpen = false;
+    const bar = this.wrapper.querySelector('.coach-facets-bar');
+    if (bar) bar.classList.remove('is-drawer-open');
+    document.body.classList.remove('coach-filters-open');
   }
 
   /* -------------------------------------------------------------------------
@@ -552,7 +595,8 @@ class CoachCollection {
       const swatchPrevBtn = card.querySelector('.js-swatch-nav-prev');
       const swatchNextBtn = card.querySelector('.js-swatch-nav-next');
       const swatchDots = card.querySelectorAll('.coach-card__swatch-dot');
-      const quickAddBtn = card.querySelector('.coach-card__quick-add-btn');
+      const quickAddBtns = [...card.querySelectorAll('.coach-card__quick-add-btn')];
+      const quickAddBtn = quickAddBtns[0];
       const priceRegular = card.querySelector('.coach-card__price-regular');
       const priceSale = card.querySelector('.coach-card__price-sale');
       const priceCompare = card.querySelector('.coach-card__price-compare');
@@ -618,22 +662,29 @@ class CoachCollection {
           const imgSrc = dot.dataset.variantImageSrc;
 
           // Update Quick Add button
-          if (quickAddBtn) {
-            quickAddBtn.dataset.variantId = variantId;
+          quickAddBtns.forEach((button) => {
+            button.dataset.variantId = variantId;
+            const textSpan = button.querySelector('.coach-card__quick-add-text');
+            const isMobileBtn = button.classList.contains('coach-card__mobile-btn');
             if (isAvailable) {
-              quickAddBtn.classList.remove('coach-card__quick-add-btn--sold-out');
-              quickAddBtn.classList.add('coach-card__quick-add-btn--available');
-              quickAddBtn.removeAttribute('disabled');
-              const textSpan = quickAddBtn.querySelector('.coach-card__quick-add-text');
+              button.classList.remove('coach-card__quick-add-btn--sold-out');
+              button.classList.add('coach-card__quick-add-btn--available');
+              button.removeAttribute('disabled');
+              delete button.dataset.notify;
               if (textSpan) textSpan.textContent = 'Add To Bag';
             } else {
-              quickAddBtn.classList.remove('coach-card__quick-add-btn--available');
-              quickAddBtn.classList.add('coach-card__quick-add-btn--sold-out');
-              quickAddBtn.setAttribute('disabled', 'disabled');
-              const textSpan = quickAddBtn.querySelector('.coach-card__quick-add-text');
-              if (textSpan) textSpan.textContent = 'Add To Bag';
+              button.classList.remove('coach-card__quick-add-btn--available');
+              button.classList.add('coach-card__quick-add-btn--sold-out');
+              if (isMobileBtn) {
+                button.removeAttribute('disabled');
+                button.dataset.notify = 'true';
+                if (textSpan) textSpan.textContent = 'Notify Me';
+              } else {
+                button.setAttribute('disabled', 'disabled');
+                if (textSpan) textSpan.textContent = 'Add To Bag';
+              }
             }
-          }
+          });
 
           // Update Price and keep the currency icon
           const setMoney = (node, html) => {
@@ -681,18 +732,23 @@ class CoachCollection {
       });
 
       // 3. Quick Add to Bag
-      if (quickAddBtn && !quickAddBtn.dataset.bound) {
-        quickAddBtn.dataset.bound = 'true';
-        quickAddBtn.addEventListener('click', (e) => {
+      quickAddBtns.forEach((button) => {
+        if (button.dataset.bound) return;
+        button.dataset.bound = 'true';
+        button.addEventListener('click', (e) => {
           e.preventDefault();
           e.stopPropagation();
-          if (quickAddBtn.disabled || quickAddBtn.classList.contains('coach-card__quick-add-btn--sold-out')) return;
-          const variantId = quickAddBtn.dataset.variantId;
+          if (button.dataset.notify === 'true') {
+            const productLink = card.querySelector('.coach-card__title-link');
+            if (productLink) window.location.href = productLink.href;
+            return;
+          }
+          if (button.disabled || button.classList.contains('coach-card__quick-add-btn--sold-out')) return;
+          const variantId = button.dataset.variantId;
           if (!variantId) return;
-
-          this.handleQuickAdd(quickAddBtn, variantId);
+          this.handleQuickAdd(button, variantId);
         });
-      }
+      });
     });
   }
 

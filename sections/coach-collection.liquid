@@ -226,6 +226,18 @@
         {%- endunless -%}
       </nav>
     {%- endif -%}
+
+    {%- if collection.description != blank -%}
+      <div class="coach-collection-more">
+        <div class="coach-collection-more__copy">{{ collection.description }}</div>
+        <button type="button" class="coach-collection-more__toggle js-collection-more" aria-expanded="false">
+          <span>Show more</span>
+          <svg width="10" height="6" viewBox="0 0 10 6" fill="none" aria-hidden="true">
+            <path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+      </div>
+    {%- endif -%}
   {%- endpaginate -%}
   </div>
 </div>
