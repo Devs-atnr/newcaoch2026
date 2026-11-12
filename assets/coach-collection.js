@@ -514,7 +514,7 @@ class CoachCollection {
 
     this.infiniteObserver = new IntersectionObserver((entries) => {
       if (entries.some((entry) => entry.isIntersecting)) this.loadMoreProducts();
-    }, { rootMargin: '700px 0px' });
+    }, { rootMargin: '1400px 0px' });
     this.infiniteObserver.observe(sentinel);
   }
 
@@ -546,12 +546,26 @@ class CoachCollection {
       }
 
       this.bindProductCards();
+      const stillNear = sentinel.isConnected && sentinel.dataset.nextUrl && this.isNearViewport(sentinel);
+      if (stillNear) {
+        this.loadingMore = false;
+        if (sentinel.isConnected) sentinel.classList.remove('is-loading');
+        this.loadMoreProducts();
+        return;
+      }
     } catch (err) {
       console.error('Error loading more products:', err);
     } finally {
-      this.loadingMore = false;
-      if (sentinel.isConnected) sentinel.classList.remove('is-loading');
+      if (this.loadingMore) {
+        this.loadingMore = false;
+        if (sentinel.isConnected) sentinel.classList.remove('is-loading');
+      }
     }
+  }
+
+  isNearViewport(node) {
+    const rect = node.getBoundingClientRect();
+    return rect.top < window.innerHeight + 1400;
   }
 
   /* -------------------------------------------------------------------------

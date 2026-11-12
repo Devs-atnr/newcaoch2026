@@ -140,10 +140,16 @@
     </div>
 
     {%- if section.settings.show_breadcrumb -%}
+      {%- liquid
+        assign crumb_menu = section.settings.breadcrumb_menu
+        if crumb_menu == blank
+          assign crumb_menu = linklists['main-menu']
+        endif
+      -%}
       <nav class="coach-breadcrumb" aria-label="Breadcrumb">
         <a href="{{ routes.root_url }}">{{ section.settings.breadcrumb_home | default: 'Coach' | escape }}</a>
-        {%- if section.settings.breadcrumb_menu != blank -%}
-          {%- for link in section.settings.breadcrumb_menu.links -%}
+        {%- if crumb_menu != blank -%}
+          {%- for link in crumb_menu.links -%}
             {%- if link.active or link.child_active -%}
               <span class="coach-breadcrumb__sep" aria-hidden="true">/</span>
               <a href="{{ link.url }}">{{ link.title | escape }}</a>
@@ -171,8 +177,8 @@
           {%- endfor -%}
         {%- endif -%}
         {%- assign breadcrumb_has_current = false -%}
-        {%- if section.settings.breadcrumb_menu != blank -%}
-          {%- for link in section.settings.breadcrumb_menu.links -%}
+        {%- if crumb_menu != blank -%}
+          {%- for link in crumb_menu.links -%}
             {%- if link.url == collection.url or link.child_active -%}
               {%- for child in link.links -%}
                 {%- if child.url == collection.url -%}
