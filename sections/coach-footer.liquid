@@ -2,7 +2,6 @@
 
 {%- liquid
   assign search_limit = section.settings.search_products_limit
-  assign bestsellers_url = routes.all_products_collection_url | append: '?sort_by=best-selling&section_id=coach-search-bestsellers'
   assign year = 'now' | date: '%Y'
   assign copyright_text = section.settings.copyright_text | replace: '[year]', year
 -%}
@@ -27,6 +26,8 @@
     --cf-link-size: {{ section.settings.link_size }}px;
     --cf-legal-size: {{ section.settings.legal_size }}px;
     --cf-search-size: {{ section.settings.search_size }}px;
+    --cf-search-pad-top: {{ section.settings.search_padding_top }}px;
+    --cf-search-pad-bottom: {{ section.settings.search_padding_bottom }}px;
   "
 >
   {%- if section.settings.show_search -%}
@@ -36,6 +37,9 @@
           class="coach-search coach-search--footer"
           data-section="coach-predictive-search"
           data-limit="{{ search_limit }}"
+          data-money-format="{{ shop.money_format | escape }}"
+          data-search-url="{{ routes.search_url }}"
+          data-recent-label="{{ section.settings.recent_searches_heading | escape }}"
         >
           <form action="{{ routes.search_url }}" method="get" role="search" class="coach-search__form">
             <label class="visually-hidden" for="CoachFooterSearch-{{ section.id }}">
@@ -64,12 +68,10 @@
             </button>
           </form>
           <div class="coach-search__panel" hidden data-search-panel>
-            {%- render 'coach-search-default',
-              collection: section.settings.search_collection,
-              limit: search_limit,
-              heading: section.settings.search_products_heading,
-              url: bestsellers_url
-            -%}
+            <div class="coach-search-results coach-footer-search__viewed" data-search-default>
+              <p class="coach-search-results__heading">{{ section.settings.recently_viewed_heading | escape }}</p>
+              <div data-default-list></div>
+            </div>
             <div class="coach-search__results" aria-live="polite" data-search-results></div>
           </div>
         </coach-search>
@@ -187,6 +189,19 @@
 
 <script>
   (function () {
+    var productMatch = window.location.pathname.match(/\/products\/([^/?#]+)/);
+    if (productMatch) {
+      try {
+        var handle = decodeURIComponent(productMatch[1]);
+        var key = 'coach-recently-viewed';
+        var list = JSON.parse(localStorage.getItem(key) || '[]');
+        if (!Array.isArray(list)) list = [];
+        list = list.filter(function (item) { return item !== handle; });
+        list.unshift(handle);
+        localStorage.setItem(key, JSON.stringify(list.slice(0, 8)));
+      } catch (error) {}
+    }
+
     var button = document.querySelector('[data-footer-top]');
     if (!button) return;
     var toggle = function () {
@@ -236,6 +251,38 @@
       "id": "search_products_heading",
       "label": "Product heading",
       "default": "Top Products"
+    },
+    {
+      "type": "text",
+      "id": "recently_viewed_heading",
+      "label": "Recently viewed heading",
+      "default": "Recently viewed products"
+    },
+    {
+      "type": "text",
+      "id": "recent_searches_heading",
+      "label": "Recent searches heading",
+      "default": "Recent searches"
+    },
+    {
+      "type": "range",
+      "id": "search_padding_top",
+      "min": 24,
+      "max": 140,
+      "step": 4,
+      "unit": "px",
+      "label": "Search padding top",
+      "default": 88
+    },
+    {
+      "type": "range",
+      "id": "search_padding_bottom",
+      "min": 24,
+      "max": 140,
+      "step": 4,
+      "unit": "px",
+      "label": "Search padding bottom",
+      "default": 72
     },
     {
       "type": "collection",

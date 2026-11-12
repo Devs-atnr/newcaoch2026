@@ -117,6 +117,12 @@
     /* Products shown before typing: a chosen collection, or the store's best sellers loaded on demand.
        The drawer always switches to its search screen, even with nothing to show yet. */
     showDefault() {
+      if (this.classList.contains('coach-search--footer')) {
+        if (this.defaultResults) this.defaultResults.hidden = false;
+        this.open();
+        this.renderRecentlyViewed();
+        return;
+      }
       const hasDefault = this.prepareDefault();
       if (this.defaultResults) this.defaultResults.hidden = !hasDefault;
       if (hasDefault || this.isDrawer) this.open();
@@ -203,6 +209,136 @@
       [...this.results.querySelectorAll('.coach-search-results__item')]
         .slice(this.limit)
         .forEach((item) => item.remove());
+
+      if (!this.classList.contains('coach-search--footer')) return;
+
+      const count = this.results.querySelector('[data-results-count]')?.dataset.resultsCount;
+      if (this.query) this.rememberSearch(this.query, count);
+      this.mountRecentSearches();
+    }
+
+    renderRecentlyViewed() {
+      if (!this.defaultList) return;
+      const handles = this.storedHandles().slice(0, this.limit);
+      this.defaultList.replaceChildren();
+      if (!handles.length) return;
+
+      Promise.all(handles.map((handle) => this.fetchProduct(handle))).then((products) => {
+        const valid = products.filter(Boolean);
+        if (!valid.length || this.query) return;
+        const list = document.createElement('ul');
+        list.className = 'coach-search-results__grid';
+        list.setAttribute('role', 'list');
+        valid.forEach((product) => {
+          const item = document.createElement('li');
+          item.className = 'coach-search-results__item';
+          item.appendChild(this.productCard(product));
+          list.appendChild(item);
+        });
+        this.defaultList.replaceChildren(list);
+      });
+    }
+
+    async fetchProduct(handle) {
+      try {
+        const response = await fetch(`/products/${encodeURIComponent(handle)}.js`);
+        if (!response.ok) return null;
+        return response.json();
+      } catch (error) {
+        return null;
+      }
+    }
+
+    productCard(product) {
+      const link = document.createElement('a');
+      link.className = 'coach-search-card';
+      link.href = product.url || `/products/${product.handle}`;
+      const media = document.createElement('span');
+      media.className = 'coach-search-card__media';
+      if (product.featured_image) {
+        const image = document.createElement('img');
+        image.className = 'coach-search-card__img';
+        image.alt = product.title || '';
+        image.src = product.featured_image;
+        media.appendChild(image);
+      }
+      const text = document.createElement('span');
+      text.className = 'coach-search-card__text';
+      const title = document.createElement('span');
+      title.className = 'coach-search-card__title';
+      title.textContent = product.title || '';
+      const price = document.createElement('span');
+      price.className = 'coach-search-card__price';
+      price.innerHTML = this.formatMoney(product.price);
+      text.append(title, price);
+      link.append(media, text);
+      return link;
+    }
+
+    formatMoney(cents) {
+      const format = this.dataset.moneyFormat || '{{amount}}';
+      const value = (Number(cents) || 0) / 100;
+      const amount = value.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+      const noDecimals = Math.round(value).toLocaleString('en-US');
+      const comma = value.toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+      const commaNoDecimals = Math.round(value).toLocaleString('de-DE');
+      return format
+        .replace(/\{\{\s*amount_no_decimals_with_comma_separator\s*\}\}/, commaNoDecimals)
+        .replace(/\{\{\s*amount_no_decimals\s*\}\}/, noDecimals)
+        .replace(/\{\{\s*amount_with_comma_separator\s*\}\}/, comma)
+        .replace(/\{\{\s*amount_with_apostrophe_separator\s*\}\}/, amount.replace(/,/g, "'"))
+        .replace(/\{\{\s*amount\s*\}\}/, amount);
+    }
+
+    storedHandles() {
+      try {
+        const value = JSON.parse(localStorage.getItem('coach-recently-viewed') || '[]');
+        return Array.isArray(value) ? value.filter((handle) => typeof handle === 'string' && handle) : [];
+      } catch (error) {
+        return [];
+      }
+    }
+
+    recentSearches() {
+      try {
+        const value = JSON.parse(localStorage.getItem('coach-recent-searches') || '[]');
+        return Array.isArray(value) ? value : [];
+      } catch (error) {
+        return [];
+      }
+    }
+
+    rememberSearch(term, count) {
+      const searches = this.recentSearches().filter((item) => item && item.term && item.term.toLowerCase() !== term.toLowerCase());
+      searches.unshift({ term, count: count || '' });
+      localStorage.setItem('coach-recent-searches', JSON.stringify(searches.slice(0, 6)));
+    }
+
+    mountRecentSearches() {
+      const searches = this.recentSearches();
+      if (!searches.length) return;
+      const layout = document.createElement('div');
+      layout.className = 'coach-footer-search__layout';
+      const aside = document.createElement('div');
+      aside.className = 'coach-footer-search__recent';
+      const heading = document.createElement('p');
+      heading.className = 'coach-search-results__heading';
+      heading.textContent = this.dataset.recentLabel || 'Recent searches';
+      const list = document.createElement('div');
+      list.className = 'coach-footer-search__recent-list';
+      searches.forEach((item) => {
+        const link = document.createElement('a');
+        const params = new URLSearchParams({ q: item.term, 'options[prefix]': 'last' });
+        link.href = `${this.dataset.searchUrl || '/search'}?${params.toString()}`;
+        link.textContent = item.count ? `${item.term} (${item.count})` : item.term;
+        list.appendChild(link);
+      });
+      aside.append(heading, list);
+      const products = document.createElement('div');
+      products.className = 'coach-footer-search__products';
+      while (this.results.firstChild) products.appendChild(this.results.firstChild);
+      layout.append(aside, products);
+      this.results.appendChild(layout);
     }
 
     open() {

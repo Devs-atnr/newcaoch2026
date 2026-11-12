@@ -17,11 +17,11 @@
 
 .coach-footer__search {
   background: var(--cf-search-bg, #ffffff);
-  padding: 28px var(--cf-side, 40px) 18px;
+  padding: var(--cf-search-pad-top, 88px) var(--cf-side, 40px) var(--cf-search-pad-bottom, 72px);
 }
 
 .coach-footer__search-inner {
-  max-width: 760px;
+  max-width: var(--cf-width, 1240px);
   margin: 0 auto;
 }
 
@@ -38,14 +38,83 @@
 }
 
 .coach-footer .coach-search--footer .coach-search__input::placeholder {
-  color: #9a9a9a;
+  color: #6f6f6f;
 }
 
 .coach-footer .coach-search--footer .coach-search__panel {
   position: static;
   display: block;
   background: var(--cf-search-bg, #ffffff);
-  padding: 28px 0 8px;
+  padding: 56px 0 8px;
+}
+
+.coach-footer .coach-search--footer .coach-search-results__heading {
+  margin: 0 0 22px;
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #111111;
+}
+
+.coach-footer .coach-footer-search__viewed .coach-search-results__heading {
+  margin: 8px 0 28px;
+  text-align: center;
+}
+
+.coach-footer .coach-search--footer .coach-search-results__grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 20px 16px;
+  width: 100%;
+}
+
+.coach-footer .coach-search--footer .coach-search-card__media {
+  background: #f2f2f2;
+  aspect-ratio: 1 / 1;
+}
+
+.coach-footer .coach-search--footer .coach-search-card__title {
+  margin-top: 16px;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.35;
+  letter-spacing: 0;
+}
+
+.coach-footer .coach-search--footer .coach-search-card__price {
+  margin-top: 8px;
+  font-family: inherit;
+  font-size: 14px;
+}
+
+.coach-footer .coach-search--footer .coach-search-results__all {
+  display: none;
+}
+
+.coach-footer-search__layout {
+  display: grid;
+  grid-template-columns: 180px minmax(0, 1fr);
+  gap: 28px 48px;
+  align-items: start;
+}
+
+.coach-footer-search__recent-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.coach-footer-search__recent-list a {
+  font-size: 14px;
+  color: #111111;
+  text-decoration: none;
+}
+
+.coach-footer-search__recent-list a:hover {
+  text-decoration: underline;
 }
 
 .coach-footer .coach-search--footer .coach-search__panel[hidden] {
@@ -239,8 +308,13 @@
   }
 
   .coach-footer__layout,
-  .coach-footer__columns {
+  .coach-footer__columns,
+  .coach-footer-search__layout {
     grid-template-columns: 1fr;
     gap: 28px;
+  }
+
+  .coach-footer .coach-search--footer .coach-search-results__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
