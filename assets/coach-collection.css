@@ -1157,15 +1157,6 @@ button.coach-sort-btn {
   fill: currentColor;
 }
 
-.coach-card__swatch-dot--active,
-.coach-card__swatch-dot--active:hover,
-.coach-card__swatch-dot--active:focus,
-.coach-card__swatch-dot--active:focus-visible,
-.coach-card__swatch-dot--active:active {
-  outline: 1.5px solid #111111 !important;
-  outline-offset: 1px;
-}
-
 .coach-card__quick-add-btn.is-loading .coach-card__quick-add-text,
 .coach-card__quick-add-btn.is-loading .coach-card__quick-add-icon {
   display: none;
@@ -1345,8 +1336,18 @@ button.coach-sort-btn {
 }
 
 .coach-card__swatch-dot--active .coach-card__swatch-fill {
-  border: 2px solid #111111 !important;
-  box-shadow: none;
+  border: 1.5px solid #111111 !important;
+  box-shadow: none !important;
+  outline: none !important;
+}
+
+.coach-card__swatch-dot--active,
+.coach-card__swatch-dot--active:hover,
+.coach-card__swatch-dot--active:focus,
+.coach-card__swatch-dot--active:focus-visible,
+.coach-card__swatch-dot--active:active {
+  outline: none !important;
+  box-shadow: none !important;
 }
 
 .coach-card__swatch-dot--sold-out {
