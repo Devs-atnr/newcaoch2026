@@ -286,20 +286,20 @@ coach-header {
 
 .coach-bag__count {
   position: absolute;
-  top: -6px;
-  right: -6px;
+  top: -5px;
+  right: -8px;
   inset: auto;
   display: flex;
   align-items: center;
   justify-content: center;
-  min-width: 16px;
-  height: 16px;
+  min-width: 18px;
+  height: 18px;
   padding: 0 4px;
   border-radius: 999px;
   background: #111111;
   color: #ffffff;
   font-family: var(--ch-nav-font);
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 700;
   line-height: 1;
   letter-spacing: 0;
@@ -1293,14 +1293,11 @@ coach-header {
   padding-block: 0.8rem;
 }
 
-body.coach-bag-open {
-  overflow: hidden;
-}
-
 .coach-bag-panel {
   position: fixed;
   inset: 0;
   z-index: 400;
+  pointer-events: none;
 }
 
 .coach-bag-panel[hidden] {
@@ -1309,12 +1306,16 @@ body.coach-bag-open {
 
 .coach-bag-panel__overlay {
   position: absolute;
-  inset: 0;
+  top: var(--header-height, 88px);
+  right: 0;
+  bottom: 0;
+  left: 0;
   border: 0;
   padding: 0;
   background: rgba(0, 0, 0, 0.55);
   cursor: pointer;
   opacity: 0;
+  pointer-events: auto;
   transition: opacity 0.24s ease;
 }
 
@@ -1324,18 +1325,20 @@ body.coach-bag-open {
 
 .coach-bag-panel__sheet {
   position: absolute;
-  width: 360px;
+  width: 400px;
   background: #ffffff;
   color: #111111;
-  padding: 16px 16px 14px;
-  max-height: min(560px, calc(100vh - 96px));
+  padding: 18px 14px 16px 18px;
+  max-height: min(620px, calc(100vh - 96px));
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.16);
+  pointer-events: auto;
   opacity: 0;
-  transform: translateY(-10px);
-  transition: opacity 0.24s ease, transform 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+  transform-origin: top right;
+  transform: translateY(-8px);
+  transition: opacity 0.22s ease, transform 0.28s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .coach-bag-panel.is-open .coach-bag-panel__sheet {
@@ -1355,10 +1358,10 @@ body.coach-bag-open {
 
 .coach-bag-panel__head {
   display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
+  align-items: center;
   gap: 12px;
-  margin-bottom: 14px;
+  margin-bottom: 12px;
+  padding-right: 4px;
 }
 
 .coach-bag-panel__title {
@@ -1381,6 +1384,7 @@ body.coach-bag-open {
 }
 
 .coach-bag-panel__close {
+  margin-left: auto;
   border: 0;
   background: transparent;
   font-size: 22px;
@@ -1391,8 +1395,24 @@ body.coach-bag-open {
 }
 
 .coach-bag-panel__items {
-  overflow: auto;
+  overflow-y: auto;
+  max-height: 292px;
   border-top: 1px solid #ececec;
+  padding-right: 8px;
+  scrollbar-width: thin;
+  scrollbar-color: #bdbdbd #efefef;
+}
+
+.coach-bag-panel__items::-webkit-scrollbar {
+  width: 6px;
+}
+
+.coach-bag-panel__items::-webkit-scrollbar-track {
+  background: #efefef;
+}
+
+.coach-bag-panel__items::-webkit-scrollbar-thumb {
+  background: #bdbdbd;
 }
 
 .coach-bag-panel__empty {
@@ -1402,9 +1422,9 @@ body.coach-bag-open {
 
 .coach-bag-item {
   display: grid;
-  grid-template-columns: 74px 1fr;
-  gap: 12px;
-  padding: 14px 0;
+  grid-template-columns: 92px 1fr;
+  gap: 14px;
+  padding: 16px 4px 16px 0;
   border-bottom: 1px dashed #d5d5d5;
 }
 
@@ -1448,7 +1468,7 @@ body.coach-bag-open {
 .coach-bag-panel__actions {
   display: grid;
   gap: 10px;
-  padding-top: 14px;
+  padding: 14px 10px 0 0;
 }
 
 .coach-bag-panel.is-empty .coach-bag-panel__actions {

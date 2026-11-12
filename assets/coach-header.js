@@ -736,10 +736,10 @@
         const icon = document.getElementById('cart-icon-bubble') || document.querySelector('.coach-header__cart');
         if (!icon || !sheet) return;
         const rect = icon.getBoundingClientRect();
-        const width = Math.min(360, window.innerWidth - 24);
-        let right = Math.max(12, window.innerWidth - rect.right - 4);
+        const width = Math.min(400, window.innerWidth - 24);
+        let right = Math.max(12, window.innerWidth - rect.right - 8);
         if (right + width > window.innerWidth - 12) right = 12;
-        sheet.style.top = `${rect.bottom + 12}px`;
+        sheet.style.top = `${rect.bottom + 14}px`;
         sheet.style.right = `${right}px`;
         sheet.style.width = `${width}px`;
         const iconCenter = rect.left + rect.width / 2;
@@ -747,8 +747,15 @@
         sheet.style.setProperty('--bag-caret', `${Math.max(18, sheetLeft + width - iconCenter - 8)}px`);
       };
 
+      const desktopBag = () => window.matchMedia('(min-width: 990px)').matches;
+      let closeTimer = null;
+
       const open = async () => {
-        if (window.matchMedia('(max-width: 989px)').matches) return;
+        if (!desktopBag()) return;
+        if (closeTimer) {
+          clearTimeout(closeTimer);
+          closeTimer = null;
+        }
         panel.hidden = false;
         document.body.classList.add('coach-bag-open');
         place();
@@ -769,22 +776,50 @@
         }, 280);
       };
 
+      const scheduleClose = () => {
+        if (closeTimer) clearTimeout(closeTimer);
+        closeTimer = window.setTimeout(close, 140);
+      };
+
       panel.querySelectorAll('[data-bag-close]').forEach((button) => {
         button.addEventListener('click', close);
       });
 
       const openFromIcon = (event) => {
-        event.preventDefault();
-        event.stopPropagation();
-        if (window.matchMedia('(max-width: 989px)').matches) {
+        if (!desktopBag()) {
+          event.preventDefault();
+          event.stopPropagation();
           window.location.href = event.currentTarget.getAttribute('href') || '/cart';
           return;
         }
-        if (panel.hidden) open();
-        else close();
+        event.preventDefault();
+        event.stopPropagation();
       };
       document.querySelectorAll('#cart-icon-bubble, [data-cart-mirror]').forEach((link) => {
         link.addEventListener('click', openFromIcon, true);
+        link.addEventListener('mouseenter', () => {
+          if (!desktopBag()) return;
+          if (closeTimer) {
+            clearTimeout(closeTimer);
+            closeTimer = null;
+          }
+          open();
+        });
+        link.addEventListener('mouseleave', () => {
+          if (!desktopBag()) return;
+          scheduleClose();
+        });
+      });
+      sheet.addEventListener('mouseenter', () => {
+        if (!desktopBag()) return;
+        if (closeTimer) {
+          clearTimeout(closeTimer);
+          closeTimer = null;
+        }
+      });
+      sheet.addEventListener('mouseleave', () => {
+        if (!desktopBag()) return;
+        scheduleClose();
       });
 
       this.closeMiniBag = close;
