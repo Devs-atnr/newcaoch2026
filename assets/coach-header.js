@@ -736,7 +736,8 @@
         const icon = document.getElementById('cart-icon-bubble') || document.querySelector('.coach-header__cart');
         if (!icon || !sheet) return;
         const rect = icon.getBoundingClientRect();
-        const width = Math.min(400, window.innerWidth - 24);
+        const configured = parseFloat(getComputedStyle(sheet).getPropertyValue('--bag-width')) || 400;
+        const width = Math.min(configured, window.innerWidth - 24);
         let right = Math.max(12, window.innerWidth - rect.right - 8);
         if (right + width > window.innerWidth - 12) right = 12;
         sheet.style.top = `${rect.bottom + 14}px`;

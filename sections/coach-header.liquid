@@ -37,6 +37,15 @@
       assign mega_font = "GaramondMTProRegular, 'Adobe Garamond Pro', 'EB Garamond', Garamond, 'Times New Roman', serif"
   endcase
 
+  case section.settings.bag_font
+    when 'body'
+      assign bag_font = 'var(--font-body-family)'
+    when 'heading'
+      assign bag_font = 'var(--font-heading-family)'
+    else
+      assign bag_font = "HelveticaLTPro-Roman, 'Helvetica Neue', Helvetica, Arial, sans-serif"
+  endcase
+
   assign search_limit = section.settings.search_products_limit
   assign has_app_block = false
   for block in section.blocks
@@ -95,6 +104,9 @@
     --ch-mega-img-h: {{ section.settings.mega_image_height }}px;
     --ch-nav-font: {{ nav_font }};
     --ch-mega-font: {{ mega_font }};
+    --bag-count-bg: {{ section.settings.bag_count_bg | default: '#111111' }};
+    --bag-count-text: {{ section.settings.bag_count_text | default: '#ffffff' }};
+    --bag-count-size: {{ section.settings.bag_count_size | default: 11 }}px;
     --ch-footer-cols: {{ footer_items | at_least: 1 }};
   "
 >
@@ -553,12 +565,39 @@
     </div>
   </div>
 
-  <div class="coach-bag-panel" data-bag-panel hidden data-money-format="{{ shop.money_format | escape }}">
+  <div
+    class="coach-bag-panel"
+    data-bag-panel
+    hidden
+    data-money-format="{{ shop.money_format | escape }}"
+    style="
+      --bag-width: {{ section.settings.bag_width | default: 400 }}px;
+      --bag-list-height: {{ section.settings.bag_list_height | default: 292 }}px;
+      --bag-image: {{ section.settings.bag_image_size | default: 92 }}px;
+      --bag-font: {{ bag_font }};
+      --bag-title-size: {{ section.settings.bag_title_size | default: 16 }}px;
+      --bag-item-size: {{ section.settings.bag_item_size | default: 15 }}px;
+      --bag-detail-size: {{ section.settings.bag_detail_size | default: 12 }}px;
+      --bag-price-size: {{ section.settings.bag_price_size | default: 15 }}px;
+      --bag-button-size: {{ section.settings.bag_button_size | default: 14 }}px;
+      --bag-bg: {{ section.settings.bag_bg | default: '#ffffff' }};
+      --bag-text: {{ section.settings.bag_text | default: '#111111' }};
+      --bag-muted: {{ section.settings.bag_muted | default: '#444444' }};
+      --bag-line: {{ section.settings.bag_line | default: '#d5d5d5' }};
+      --bag-checkout-bg: {{ section.settings.bag_checkout_bg | default: '#111111' }};
+      --bag-checkout-text: {{ section.settings.bag_checkout_text | default: '#ffffff' }};
+      --bag-view-bg: {{ section.settings.bag_view_bg | default: '#ffffff' }};
+      --bag-view-text: {{ section.settings.bag_view_text | default: '#111111' }};
+      --bag-view-border: {{ section.settings.bag_view_border | default: '#cfcfcf' }};
+      --bag-overlay: {{ section.settings.bag_overlay | default: '#000000' }};
+      --bag-overlay-opacity: {{ section.settings.bag_overlay_opacity | default: 55 }};
+    "
+  >
     <button type="button" class="coach-bag-panel__overlay" data-bag-close aria-label="Close"></button>
     <div class="coach-bag-panel__sheet" role="dialog" aria-modal="true" aria-label="My bag">
       <div class="coach-bag-panel__head">
         <p class="coach-bag-panel__title">
-          My bag (<span data-bag-count>0</span>)
+          {{ section.settings.bag_heading | default: 'My bag' | escape }} (<span data-bag-count>0</span>)
           <span data-bag-total></span>
         </p>
         <button type="button" class="coach-bag-panel__close" data-bag-close aria-label="Close">&times;</button>
@@ -566,9 +605,9 @@
       <div class="coach-bag-panel__items" data-bag-items></div>
       <div class="coach-bag-panel__actions">
         <form action="{{ routes.cart_url }}" method="post">
-          <button type="submit" name="checkout" class="coach-bag-panel__checkout">Checkout</button>
+          <button type="submit" name="checkout" class="coach-bag-panel__checkout">{{ section.settings.bag_checkout_label | default: 'Checkout' | escape }}</button>
         </form>
-        <a class="coach-bag-panel__view" href="{{ routes.cart_url }}">View shopping bag</a>
+        <a class="coach-bag-panel__view" href="{{ routes.cart_url }}">{{ section.settings.bag_view_label | default: 'View shopping bag' | escape }}</a>
       </div>
     </div>
   </div>
@@ -888,6 +927,211 @@
       "id": "cart_color_scheme",
       "label": "Cart popup color scheme",
       "default": "scheme-1"
+    },
+    {
+      "type": "header",
+      "content": "Bag popup"
+    },
+    {
+      "type": "text",
+      "id": "bag_heading",
+      "label": "Heading",
+      "default": "My bag"
+    },
+    {
+      "type": "text",
+      "id": "bag_checkout_label",
+      "label": "Checkout button",
+      "default": "Checkout"
+    },
+    {
+      "type": "text",
+      "id": "bag_view_label",
+      "label": "View bag button",
+      "default": "View shopping bag"
+    },
+    {
+      "type": "range",
+      "id": "bag_width",
+      "min": 280,
+      "max": 560,
+      "step": 4,
+      "unit": "px",
+      "label": "Width",
+      "default": 400
+    },
+    {
+      "type": "range",
+      "id": "bag_list_height",
+      "min": 160,
+      "max": 560,
+      "step": 4,
+      "unit": "px",
+      "label": "Item list height",
+      "default": 292
+    },
+    {
+      "type": "range",
+      "id": "bag_image_size",
+      "min": 60,
+      "max": 140,
+      "step": 2,
+      "unit": "px",
+      "label": "Product image width",
+      "default": 92
+    },
+    {
+      "type": "select",
+      "id": "bag_font",
+      "label": "Font",
+      "options": [
+        { "value": "system_sans", "label": "Helvetica" },
+        { "value": "body", "label": "Theme body font" },
+        { "value": "heading", "label": "Theme heading font" }
+      ],
+      "default": "system_sans"
+    },
+    {
+      "type": "range",
+      "id": "bag_title_size",
+      "min": 12,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "label": "Heading size",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "bag_item_size",
+      "min": 12,
+      "max": 22,
+      "step": 1,
+      "unit": "px",
+      "label": "Product title size",
+      "default": 15
+    },
+    {
+      "type": "range",
+      "id": "bag_detail_size",
+      "min": 10,
+      "max": 16,
+      "step": 1,
+      "unit": "px",
+      "label": "Color and quantity size",
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "bag_price_size",
+      "min": 12,
+      "max": 22,
+      "step": 1,
+      "unit": "px",
+      "label": "Price size",
+      "default": 15
+    },
+    {
+      "type": "range",
+      "id": "bag_button_size",
+      "min": 12,
+      "max": 18,
+      "step": 1,
+      "unit": "px",
+      "label": "Button size",
+      "default": 14
+    },
+    {
+      "type": "range",
+      "id": "bag_count_size",
+      "min": 9,
+      "max": 14,
+      "step": 1,
+      "unit": "px",
+      "label": "Icon count size",
+      "default": 11
+    },
+    {
+      "type": "color",
+      "id": "bag_bg",
+      "label": "Background",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "bag_text",
+      "label": "Text",
+      "default": "#111111"
+    },
+    {
+      "type": "color",
+      "id": "bag_muted",
+      "label": "Color and quantity text",
+      "default": "#444444"
+    },
+    {
+      "type": "color",
+      "id": "bag_line",
+      "label": "Divider",
+      "default": "#d5d5d5"
+    },
+    {
+      "type": "color",
+      "id": "bag_checkout_bg",
+      "label": "Checkout background",
+      "default": "#111111"
+    },
+    {
+      "type": "color",
+      "id": "bag_checkout_text",
+      "label": "Checkout text",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "bag_view_bg",
+      "label": "View bag background",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "bag_view_text",
+      "label": "View bag text",
+      "default": "#111111"
+    },
+    {
+      "type": "color",
+      "id": "bag_view_border",
+      "label": "View bag border",
+      "default": "#cfcfcf"
+    },
+    {
+      "type": "color",
+      "id": "bag_count_bg",
+      "label": "Icon count background",
+      "default": "#111111"
+    },
+    {
+      "type": "color",
+      "id": "bag_count_text",
+      "label": "Icon count text",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "bag_overlay",
+      "label": "Page overlay",
+      "default": "#000000"
+    },
+    {
+      "type": "range",
+      "id": "bag_overlay_opacity",
+      "min": 0,
+      "max": 80,
+      "step": 5,
+      "unit": "%",
+      "label": "Overlay strength",
+      "default": 55
     }
   ],
   "blocks": [

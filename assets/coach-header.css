@@ -296,10 +296,10 @@ coach-header {
   height: 18px;
   padding: 0 4px;
   border-radius: 999px;
-  background: #111111;
-  color: #ffffff;
+  background: var(--bag-count-bg, #111111);
+  color: var(--bag-count-text, #ffffff);
   font-family: var(--ch-nav-font);
-  font-size: 11px;
+  font-size: var(--bag-count-size, 11px);
   font-weight: 700;
   line-height: 1;
   letter-spacing: 0;
@@ -1312,7 +1312,7 @@ coach-header {
   left: 0;
   border: 0;
   padding: 0;
-  background: rgba(0, 0, 0, 0.55);
+  background: color-mix(in srgb, var(--bag-overlay, #000000) calc(var(--bag-overlay-opacity, 55) * 1%), transparent);
   cursor: pointer;
   opacity: 0;
   pointer-events: auto;
@@ -1325,9 +1325,10 @@ coach-header {
 
 .coach-bag-panel__sheet {
   position: absolute;
-  width: 400px;
-  background: #ffffff;
-  color: #111111;
+  width: var(--bag-width, 400px);
+  background: var(--bag-bg, #ffffff);
+  color: var(--bag-text, #111111);
+  font-family: var(--bag-font, Helvetica);
   padding: 18px 14px 16px 18px;
   max-height: min(620px, calc(100vh - 96px));
   display: flex;
@@ -1353,7 +1354,7 @@ coach-header {
   right: var(--bag-caret, 28px);
   border-right: 8px solid transparent;
   border-left: 8px solid transparent;
-  border-bottom: 8px solid #ffffff;
+  border-bottom: 8px solid var(--bag-bg, #ffffff);
 }
 
 .coach-bag-panel__head {
@@ -1366,9 +1367,10 @@ coach-header {
 
 .coach-bag-panel__title {
   margin: 0;
-  font-size: 16px;
+  font-size: var(--bag-title-size, 16px);
   font-weight: 700;
   line-height: 1.2;
+  color: var(--bag-text, #111111);
 }
 
 .coach-bag-panel__title [data-bag-total] {
@@ -1391,13 +1393,13 @@ coach-header {
   line-height: 1;
   padding: 0 2px;
   cursor: pointer;
-  color: #111111;
+  color: var(--bag-text, #111111);
 }
 
 .coach-bag-panel__items {
   overflow-y: auto;
-  max-height: 292px;
-  border-top: 1px solid #ececec;
+  max-height: var(--bag-list-height, 292px);
+  border-top: 1px solid var(--bag-line, #ececec);
   padding-right: 8px;
   scrollbar-width: thin;
   scrollbar-color: #bdbdbd #efefef;
@@ -1422,10 +1424,10 @@ coach-header {
 
 .coach-bag-item {
   display: grid;
-  grid-template-columns: 92px 1fr;
+  grid-template-columns: var(--bag-image, 92px) 1fr;
   gap: 14px;
   padding: 16px 4px 16px 0;
-  border-bottom: 1px dashed #d5d5d5;
+  border-bottom: 1px dashed var(--bag-line, #d5d5d5);
 }
 
 .coach-bag-item__media {
@@ -1441,15 +1443,16 @@ coach-header {
 
 .coach-bag-item__title {
   margin: 0 0 8px;
-  font-size: 15px;
+  font-size: var(--bag-item-size, 15px);
   font-weight: 600;
+  color: var(--bag-text, #111111);
 }
 
 .coach-bag-item__copy p {
   margin: 0 0 3px;
-  font-size: 12px;
+  font-size: var(--bag-detail-size, 12px);
   letter-spacing: 0.03em;
-  color: #444444;
+  color: var(--bag-muted, #444444);
   text-transform: uppercase;
 }
 
@@ -1461,8 +1464,9 @@ coach-header {
 
 .coach-bag-item__price {
   margin-top: 8px;
-  font-size: 15px;
+  font-size: var(--bag-price-size, 15px);
   font-weight: 600;
+  color: var(--bag-text, #111111);
 }
 
 .coach-bag-panel__actions {
@@ -1482,7 +1486,8 @@ coach-header {
   justify-content: center;
   width: 100%;
   min-height: 48px;
-  font-size: 14px;
+  font-family: var(--bag-font, Helvetica);
+  font-size: var(--bag-button-size, 14px);
   letter-spacing: 0.08em;
   text-transform: uppercase;
   text-decoration: none;
@@ -1492,12 +1497,12 @@ coach-header {
 
 .coach-bag-panel__checkout {
   border: 0;
-  background: #111111;
-  color: #ffffff;
+  background: var(--bag-checkout-bg, #111111);
+  color: var(--bag-checkout-text, #ffffff);
 }
 
 .coach-bag-panel__view {
-  border: 1px solid #cfcfcf;
-  background: #ffffff;
-  color: #111111;
+  border: 1px solid var(--bag-view-border, #cfcfcf);
+  background: var(--bag-view-bg, #ffffff);
+  color: var(--bag-view-text, #111111);
 }
