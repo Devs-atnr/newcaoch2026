@@ -1337,6 +1337,13 @@ body.coach-bag-open {
   font-weight: 500;
 }
 
+.coach-bag-panel__title svg,
+.coach-bag-item__price svg {
+  width: 18px;
+  height: 18px;
+  vertical-align: -3px;
+}
+
 .coach-bag-panel__close {
   border: 0;
   background: transparent;

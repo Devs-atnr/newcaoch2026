@@ -706,7 +706,7 @@
       const render = (cart) => {
         panel.classList.toggle('is-empty', !cart.items.length);
         if (count) count.textContent = cart.item_count;
-        if (total) total.textContent = formatMoney(cart.total_price);
+        if (total) total.innerHTML = formatMoney(cart.total_price);
         document.querySelectorAll('.coach-bag__count').forEach((node) => {
           node.textContent = cart.item_count < 100 ? String(cart.item_count) : '99+';
         });

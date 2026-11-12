@@ -839,8 +839,10 @@ class CoachCollection {
           }
           if (button.disabled || button.classList.contains('coach-card__quick-add-btn--sold-out')) return;
           if (card.classList.contains('has-sizes')) {
+            this.wrapper.querySelectorAll('.coach-card.is-choosing-size').forEach((openCard) => {
+              if (openCard !== card) openCard.classList.remove('is-choosing-size');
+            });
             card.classList.add('is-choosing-size');
-            card.querySelector('.coach-size-picker')?.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
             return;
           }
           const variantId = button.dataset.variantId;
