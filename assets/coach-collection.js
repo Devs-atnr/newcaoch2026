@@ -465,6 +465,8 @@ class CoachCollection {
         event.preventDefault();
         this.closeMobileDrawer();
       }
+      const drawer = this.wrapper.querySelector('.coach-facets-bar.is-drawer-open');
+      if (drawer && event.target === drawer) this.closeMobileDrawer();
       const more = event.target.closest('.js-collection-more');
       if (more) {
         const copy = more.parentElement.querySelector('.coach-collection-more__copy');
@@ -481,7 +483,8 @@ class CoachCollection {
     if (!bar) return;
     bar.classList.add('is-drawer-open');
     document.body.classList.add('coach-filters-open');
-    bar.querySelectorAll('.js-coach-filter-item').forEach((item) => item.classList.add('is-open'));
+    this.closeSort();
+    bar.querySelectorAll('.js-coach-filter-item').forEach((item) => item.classList.remove('is-open'));
   }
 
   closeMobileDrawer() {
@@ -586,6 +589,22 @@ class CoachCollection {
             const nextIdx = (activeIdx + 1) % images.length;
             updateImage(nextIdx);
           });
+        }
+
+        const mediaWrap = card.querySelector('.coach-card__media-wrap');
+        if (mediaWrap) {
+          let startX = 0;
+          mediaWrap.addEventListener('touchstart', (event) => {
+            startX = event.changedTouches[0].clientX;
+          }, { passive: true });
+          mediaWrap.addEventListener('touchend', (event) => {
+            const delta = event.changedTouches[0].clientX - startX;
+            if (Math.abs(delta) < 36) return;
+            const nextIdx = delta < 0
+              ? (activeIdx + 1) % images.length
+              : (activeIdx - 1 + images.length) % images.length;
+            updateImage(nextIdx);
+          }, { passive: true });
         }
       }
 

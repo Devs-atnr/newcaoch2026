@@ -1538,11 +1538,10 @@ button.coach-sort-btn {
     position: fixed;
     inset: 0;
     z-index: 80;
-    display: flex;
-    flex-direction: column;
+    display: block;
     margin: 0;
     padding: 0;
-    background: #ffffff;
+    background: rgba(0, 0, 0, 0.45);
     overflow: hidden;
   }
 
@@ -1554,10 +1553,12 @@ button.coach-sort-btn {
   .coach-facets-bar.is-drawer-open .coach-facets-form {
     display: flex;
     flex-direction: column;
-    flex: 1 1 auto;
+    width: 85%;
+    height: 100%;
     gap: 0;
     margin: 0;
-    padding: 18px 20px 96px;
+    padding: calc(16px + env(safe-area-inset-top)) 20px 96px;
+    background: #ffffff;
     overflow: auto;
   }
 
@@ -1569,7 +1570,13 @@ button.coach-sort-btn {
   }
 
   .coach-facets-bar.is-drawer-open .coach-mobile-drawer-top {
+    position: sticky;
+    top: 0;
+    z-index: 2;
     justify-content: flex-end;
+    margin: 0 -20px 4px;
+    padding: 0 8px;
+    background: #ffffff;
   }
 
   .coach-mobile-filter-close {
@@ -1601,16 +1608,30 @@ button.coach-sort-btn {
   }
 
   .coach-facets-bar.is-drawer-open .coach-sort-dropdown {
-    position: static;
-    display: block;
-    opacity: 1;
-    visibility: visible;
-    width: auto;
-    margin: 0 0 18px;
+    position: static !important;
+    display: block !important;
+    top: auto !important;
+    left: auto !important;
+    right: auto !important;
+    width: 100% !important;
+    margin: 0 0 8px !important;
+    padding: 0 !important;
+    border: 0 !important;
+    box-shadow: none !important;
+    background: transparent !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+    transform: none !important;
+    z-index: auto !important;
+  }
+
+  .coach-facets-bar.is-drawer-open .coach-sort-list {
+    margin: 0;
     padding: 0;
-    border: 0;
-    box-shadow: none;
     background: transparent;
+    border-radius: 0;
+    box-shadow: none;
   }
 
   .coach-facets-bar.is-drawer-open .coach-sort-item {
@@ -1705,7 +1726,7 @@ button.coach-sort-btn {
   }
 
   .coach-facets-bar.is-drawer-open .coach-filter-item.is-open .coach-filter-popover {
-    display: block;
+    display: block !important;
   }
 
   .coach-facets-bar.is-drawer-open .coach-filter-popover__close {
@@ -1715,10 +1736,11 @@ button.coach-sort-btn {
   .coach-mobile-view-bar {
     position: absolute;
     left: 0;
-    right: 0;
     bottom: 0;
+    width: 85%;
     padding: 12px 16px calc(12px + env(safe-area-inset-bottom));
     background: #ffffff;
+    border-top: 1px solid #ececec;
   }
 
   .coach-mobile-view {
@@ -1733,6 +1755,29 @@ button.coach-sort-btn {
     letter-spacing: 0.08em;
     text-transform: uppercase;
     cursor: pointer;
+  }
+
+  .coach-card__images-container {
+    display: flex;
+    height: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+  }
+
+  .coach-card__images-container::-webkit-scrollbar {
+    display: none;
+  }
+
+  .coach-card__img {
+    position: relative;
+    inset: auto;
+    flex: 0 0 100%;
+    width: 100%;
+    height: 100%;
+    scroll-snap-align: start;
+    opacity: 1;
   }
 
   .coach-card__quick-add-wrap {
