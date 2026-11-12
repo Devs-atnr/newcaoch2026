@@ -95,6 +95,12 @@ class CoachCollection {
     const dropdown = sortWrap.querySelector('.coach-sort-dropdown');
     if (!valueEl || !dropdown) return;
 
+    if (this.wrapper.querySelector('.coach-facets-bar.is-drawer-open')) {
+      dropdown.style.left = '';
+      dropdown.style.right = '';
+      return;
+    }
+
     if (window.innerWidth < 750) {
       dropdown.style.left = 'auto';
       dropdown.style.right = '0px';
