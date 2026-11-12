@@ -286,14 +286,28 @@ coach-header {
 
 .coach-bag__count {
   position: absolute;
-  inset: 36% 0 0 0;
+  top: -4px;
+  right: -8px;
+  inset: auto;
   display: flex;
   align-items: center;
   justify-content: center;
+  min-width: 16px;
+  height: 16px;
+  padding: 0 4px;
+  border-radius: 999px;
+  background: #1f9d55;
+  color: #ffffff;
   font-family: var(--ch-nav-font);
-  font-size: 1rem;
+  font-size: 10px;
+  font-weight: 700;
   line-height: 1;
-  letter-spacing: 0.1rem;
+  letter-spacing: 0;
+  box-sizing: border-box;
+}
+
+.coach-bag__count[hidden] {
+  display: none;
 }
 
 /* ---------- Language switcher ---------- */
@@ -1298,13 +1312,15 @@ body.coach-bag-open {
 
 .coach-bag-panel__sheet {
   position: absolute;
+  width: 360px;
   background: #ffffff;
   color: #111111;
-  padding: 18px 18px 16px;
-  max-height: calc(100vh - 96px);
+  padding: 16px 16px 14px;
+  max-height: min(560px, calc(100vh - 96px));
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
 }
 
 .coach-bag-panel__sheet::before {
@@ -1327,7 +1343,7 @@ body.coach-bag-open {
 
 .coach-bag-panel__title {
   margin: 0;
-  font-size: 22px;
+  font-size: 16px;
   font-weight: 700;
   line-height: 1.2;
 }
@@ -1347,7 +1363,7 @@ body.coach-bag-open {
 .coach-bag-panel__close {
   border: 0;
   background: transparent;
-  font-size: 28px;
+  font-size: 22px;
   line-height: 1;
   padding: 0 2px;
   cursor: pointer;
@@ -1366,9 +1382,9 @@ body.coach-bag-open {
 
 .coach-bag-item {
   display: grid;
-  grid-template-columns: 92px 1fr;
-  gap: 14px;
-  padding: 16px 0;
+  grid-template-columns: 74px 1fr;
+  gap: 12px;
+  padding: 14px 0;
   border-bottom: 1px dashed #d5d5d5;
 }
 

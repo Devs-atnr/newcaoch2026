@@ -1177,9 +1177,9 @@ button.coach-sort-btn {
   position: absolute;
   inset: 0;
   z-index: 16;
-  align-items: center;
-  justify-content: center;
-  padding: 12px 10px 44px;
+  align-items: stretch;
+  justify-content: stretch;
+  padding: 0;
   pointer-events: none;
 }
 
@@ -1202,10 +1202,13 @@ button.coach-sort-btn {
 }
 
 .coach-size-picker__panel {
-  width: min(100%, 360px);
+  width: 100%;
+  height: 100%;
   max-width: none;
-  background: rgba(255, 255, 255, 0.96);
-  padding: 16px 14px 14px;
+  display: flex;
+  flex-direction: column;
+  background: rgba(255, 255, 255, 0.94);
+  padding: 20px 14px 16px;
   box-sizing: border-box;
 }
 
@@ -1222,8 +1225,10 @@ button.coach-sort-btn {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 8px;
-  max-height: none;
-  overflow: visible;
+  align-content: start;
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: auto;
 }
 
 .coach-size-picker__grid::-webkit-scrollbar {

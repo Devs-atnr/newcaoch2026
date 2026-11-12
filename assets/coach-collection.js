@@ -928,6 +928,7 @@ class CoachCollection {
       document.querySelectorAll('.cart-count-bubble, .coach-header__cart-count, .coach-bag__count').forEach((bubble) => {
         bubble.textContent = count;
         bubble.classList.remove('hidden');
+        if (bubble.classList.contains('coach-bag__count')) bubble.hidden = cart.item_count === 0;
       });
     } catch (e) {
       console.warn('Could not update cart count bubble', e);

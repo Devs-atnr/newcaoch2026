@@ -709,6 +709,7 @@
         if (total) total.innerHTML = formatMoney(cart.total_price);
         document.querySelectorAll('.coach-bag__count').forEach((node) => {
           node.textContent = cart.item_count < 100 ? String(cart.item_count) : '99+';
+          node.hidden = cart.item_count === 0;
         });
         if (!items) return;
         if (!cart.items.length) {
@@ -739,7 +740,7 @@
         const icon = document.getElementById('cart-icon-bubble') || document.querySelector('.coach-header__cart');
         if (!icon || !sheet) return;
         const rect = icon.getBoundingClientRect();
-        const width = Math.min(460, window.innerWidth - 24);
+        const width = Math.min(360, window.innerWidth - 24);
         let right = Math.max(12, window.innerWidth - rect.right - 4);
         if (right + width > window.innerWidth - 12) right = 12;
         sheet.style.top = `${rect.bottom + 12}px`;
