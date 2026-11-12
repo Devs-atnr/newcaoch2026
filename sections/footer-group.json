@@ -1,1 +1,69 @@
-{"name":"t:sections.footer.name","type":"footer","sections":{"footer":{"type":"footer","settings":{"color_scheme":"scheme-1","newsletter_enable":true,"newsletter_heading":"Subscribe to our emails","enable_follow_on_shop":true,"show_social":true,"enable_country_selector":true,"enable_language_selector":true,"payment_enable":true,"show_policy":true,"margin_top":0,"padding_top":36,"padding_bottom":36}}},"order":["footer"]}
+{
+  "name": "Footer",
+  "type": "footer",
+  "sections": {
+    "coach-footer": {
+      "type": "coach-footer",
+      "blocks": {
+        "care": {
+          "type": "column",
+          "settings": {
+            "heading": "Customer Care"
+          }
+        },
+        "services": {
+          "type": "column",
+          "settings": {
+            "heading": "Services"
+          }
+        },
+        "sustainability": {
+          "type": "column",
+          "settings": {
+            "heading": "Sustainability"
+          }
+        },
+        "about": {
+          "type": "column",
+          "settings": {
+            "heading": "About Us"
+          }
+        }
+      },
+      "block_order": ["care", "services", "sustainability", "about"],
+      "settings": {
+        "show_search": true,
+        "search_placeholder": "Search",
+        "search_focus_placeholder": "What can we help you find?",
+        "search_products_heading": "Top Products",
+        "search_products_limit": 4,
+        "search_size": 16,
+        "show_newsletter": true,
+        "email_placeholder": "Enter Email",
+        "signup_label": "SIGN UP",
+        "success_message": "Thanks for subscribing.",
+        "show_social": true,
+        "copyright_text": "© [year] COACH. ALL RIGHTS RESERVED.",
+        "show_back_to_top": true,
+        "back_to_top_label": "Back to top",
+        "font_family": "HelveticaLTPro-Roman, 'Helvetica Neue', Helvetica, Arial, sans-serif",
+        "heading_size": 12,
+        "link_size": 13,
+        "legal_size": 11,
+        "search_background": "#ffffff",
+        "background": "#f3f3f3",
+        "text_color": "#111111",
+        "heading_color": "#111111",
+        "link_color": "#333333",
+        "muted_color": "#666666",
+        "line_color": "#d5d5d5",
+        "input_border": "#111111",
+        "button_background": "#111111",
+        "button_text": "#ffffff",
+        "content_width": 1240,
+        "side_padding": 40
+      }
+    }
+  },
+  "order": ["coach-footer"]
+}

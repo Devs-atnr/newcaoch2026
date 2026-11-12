@@ -25,6 +25,7 @@ class CoachCollection {
     this.bindFilterInputs();
     this.bindPriceFilter();
     this.bindProductCards();
+    this.bindInfiniteScroll();
     if (cleanUrl) this.fetchFilteredSection(cleanUrl);
 
     window.addEventListener('popstate', () => {
@@ -437,6 +438,7 @@ class CoachCollection {
       this.bindFilterInputs();
       this.bindPriceFilter();
       this.bindProductCards();
+      this.bindInfiniteScroll();
 
     } catch (err) {
       console.error('Error filtering collection:', err);
@@ -447,12 +449,69 @@ class CoachCollection {
   }
 
   /* -------------------------------------------------------------------------
+     Infinite product loading
+     ------------------------------------------------------------------------- */
+  bindInfiniteScroll() {
+    if (this.infiniteObserver) {
+      this.infiniteObserver.disconnect();
+      this.infiniteObserver = null;
+    }
+
+    const sentinel = this.wrapper.querySelector('[data-infinite-sentinel]');
+    if (!sentinel || !sentinel.dataset.nextUrl) return;
+
+    this.infiniteObserver = new IntersectionObserver((entries) => {
+      if (entries.some((entry) => entry.isIntersecting)) this.loadMoreProducts();
+    }, { rootMargin: '700px 0px' });
+    this.infiniteObserver.observe(sentinel);
+  }
+
+  async loadMoreProducts() {
+    const sentinel = this.wrapper.querySelector('[data-infinite-sentinel]');
+    const nextUrl = sentinel && sentinel.dataset.nextUrl;
+    if (!sentinel || !nextUrl || this.loadingMore) return;
+
+    this.loadingMore = true;
+    sentinel.classList.add('is-loading');
+    try {
+      const next = new URL(nextUrl, window.location.origin);
+      next.searchParams.set('section_id', this.sectionId);
+      const res = await fetch(next.toString());
+      if (!res.ok) throw new Error('Network error');
+      const htmlText = await res.text();
+      const doc = new DOMParser().parseFromString(htmlText, 'text/html');
+      const grid = this.wrapper.querySelector('#CoachProductGrid');
+      const items = doc.querySelectorAll('#CoachProductGrid .coach-product-grid__item');
+      items.forEach((item) => grid.appendChild(item));
+
+      const nextSentinel = doc.querySelector('[data-infinite-sentinel]');
+      if (nextSentinel && nextSentinel.dataset.nextUrl) {
+        sentinel.dataset.nextUrl = nextSentinel.dataset.nextUrl;
+      } else {
+        sentinel.removeAttribute('data-next-url');
+        sentinel.hidden = true;
+        if (this.infiniteObserver) this.infiniteObserver.disconnect();
+      }
+
+      this.bindProductCards();
+    } catch (err) {
+      console.error('Error loading more products:', err);
+    } finally {
+      this.loadingMore = false;
+      if (sentinel.isConnected) sentinel.classList.remove('is-loading');
+    }
+  }
+
+  /* -------------------------------------------------------------------------
      Product Card Interactions
      ------------------------------------------------------------------------- */
   bindProductCards() {
     const cards = this.wrapper.querySelectorAll('.coach-card');
 
     cards.forEach((card) => {
+      if (card.dataset.cardBound === 'true') return;
+      card.dataset.cardBound = 'true';
+
       // 1. Image Slider (< >)
       const prevBtn = card.querySelector('.coach-card__arrow--prev');
       const nextBtn = card.querySelector('.coach-card__arrow--next');

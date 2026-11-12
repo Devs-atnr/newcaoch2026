@@ -56,6 +56,8 @@
       --coach-bag-hover-bg: {{ section.settings.bag_hover_bg | default: '#000000' }};
       --coach-bag-hover-text: {{ section.settings.bag_hover_text | default: '#ffffff' }};
       --coach-swatch-size: {{ section.settings.swatch_size | default: 28 }}px;
+      --coach-breadcrumb-size: {{ section.settings.breadcrumb_size | default: 12 }}px;
+      --coach-breadcrumb-color: {{ section.settings.breadcrumb_color | default: '#8a8a8a' }};
     "
   >
   {%- paginate collection.products by section.settings.products_per_page -%}
@@ -125,7 +127,17 @@
           {%- endfor -%}
         </ul>
 
-        {%- if paginate.pages > 1 -%}
+        {%- if section.settings.enable_infinite_scroll -%}
+          <div
+            class="coach-infinite"
+            data-infinite-sentinel
+            {% if paginate.next %}
+              data-next-url="{{ paginate.next.url }}"
+            {% else %}
+              hidden
+            {% endif %}
+          ></div>
+        {%- elsif paginate.pages > 1 -%}
           <div class="coach-pagination">
             {%- if paginate.previous -%}
               <a href="{{ paginate.previous.url }}" class="coach-pagination__item coach-pagination__item--prev" aria-label="Previous page">
@@ -156,6 +168,64 @@
         {%- endif -%}
       {%- endif -%}
     </div>
+
+    {%- if section.settings.show_breadcrumb -%}
+      <nav class="coach-breadcrumb" aria-label="Breadcrumb">
+        <a href="{{ routes.root_url }}">{{ section.settings.breadcrumb_home | default: 'Coach' | escape }}</a>
+        {%- if section.settings.breadcrumb_menu != blank -%}
+          {%- for link in section.settings.breadcrumb_menu.links -%}
+            {%- if link.active or link.child_active -%}
+              <span class="coach-breadcrumb__sep" aria-hidden="true">/</span>
+              <a href="{{ link.url }}">{{ link.title | escape }}</a>
+              {%- for child in link.links -%}
+                {%- if child.active or child.child_active -%}
+                  <span class="coach-breadcrumb__sep" aria-hidden="true">/</span>
+                  {%- if child.url == collection.url -%}
+                    <span aria-current="page">{{ child.title | escape }}</span>
+                  {%- else -%}
+                    <a href="{{ child.url }}">{{ child.title | escape }}</a>
+                  {%- endif -%}
+                  {%- for grandchild in child.links -%}
+                    {%- if grandchild.active or grandchild.child_active -%}
+                      <span class="coach-breadcrumb__sep" aria-hidden="true">/</span>
+                      {%- if grandchild.url == collection.url -%}
+                        <span aria-current="page">{{ grandchild.title | escape }}</span>
+                      {%- else -%}
+                        <a href="{{ grandchild.url }}">{{ grandchild.title | escape }}</a>
+                      {%- endif -%}
+                    {%- endif -%}
+                  {%- endfor -%}
+                {%- endif -%}
+              {%- endfor -%}
+            {%- endif -%}
+          {%- endfor -%}
+        {%- endif -%}
+        {%- assign breadcrumb_has_current = false -%}
+        {%- if section.settings.breadcrumb_menu != blank -%}
+          {%- for link in section.settings.breadcrumb_menu.links -%}
+            {%- if link.url == collection.url or link.child_active -%}
+              {%- for child in link.links -%}
+                {%- if child.url == collection.url -%}
+                  {%- assign breadcrumb_has_current = true -%}
+                {%- endif -%}
+                {%- for grandchild in child.links -%}
+                  {%- if grandchild.url == collection.url -%}
+                    {%- assign breadcrumb_has_current = true -%}
+                  {%- endif -%}
+                {%- endfor -%}
+              {%- endfor -%}
+              {%- if link.url == collection.url -%}
+                {%- assign breadcrumb_has_current = true -%}
+              {%- endif -%}
+            {%- endif -%}
+          {%- endfor -%}
+        {%- endif -%}
+        {%- unless breadcrumb_has_current -%}
+          <span class="coach-breadcrumb__sep" aria-hidden="true">/</span>
+          <span aria-current="page">{{ collection.title | escape }}</span>
+        {%- endunless -%}
+      </nav>
+    {%- endif -%}
   {%- endpaginate -%}
   </div>
 </div>
@@ -556,6 +626,54 @@
       "id": "bag_hover_text",
       "default": "#ffffff",
       "label": "Add To Bag hover text"
+    },
+    {
+      "type": "header",
+      "content": "Breadcrumb"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_breadcrumb",
+      "default": true,
+      "label": "Show breadcrumb"
+    },
+    {
+      "type": "text",
+      "id": "breadcrumb_home",
+      "label": "Home label",
+      "default": "Coach"
+    },
+    {
+      "type": "link_list",
+      "id": "breadcrumb_menu",
+      "label": "Breadcrumb menu",
+      "info": "Uses the active menu path, such as Men / Wallets / View All."
+    },
+    {
+      "type": "range",
+      "id": "breadcrumb_size",
+      "min": 10,
+      "max": 18,
+      "step": 1,
+      "unit": "px",
+      "default": 12,
+      "label": "Breadcrumb font size"
+    },
+    {
+      "type": "color",
+      "id": "breadcrumb_color",
+      "default": "#8a8a8a",
+      "label": "Breadcrumb color"
+    },
+    {
+      "type": "header",
+      "content": "Product loading"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_infinite_scroll",
+      "default": true,
+      "label": "Load more products on scroll"
     },
     {
       "type": "range",

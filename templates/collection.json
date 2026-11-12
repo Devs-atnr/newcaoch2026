@@ -44,6 +44,11 @@
         "popover_bg": "#ffffff",
         "popover_radius": 16,
         "body_bg_color": "#f0f0f0",
+        "show_breadcrumb": true,
+        "breadcrumb_home": "Coach",
+        "breadcrumb_size": 12,
+        "breadcrumb_color": "#8a8a8a",
+        "enable_infinite_scroll": true,
         "padding_top": 32,
         "padding_bottom": 48
       }

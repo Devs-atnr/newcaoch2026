@@ -1,0 +1,519 @@
+{{ 'coach-footer.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign search_limit = section.settings.search_products_limit
+  assign bestsellers_url = routes.all_products_collection_url | append: '?sort_by=best-selling&section_id=coach-search-bestsellers'
+  assign year = 'now' | date: '%Y'
+  assign copyright_text = section.settings.copyright_text | replace: '[year]', year
+-%}
+
+<footer
+  class="coach-footer"
+  style="
+    --cf-font: {{ section.settings.font_family }};
+    --cf-bg: {{ section.settings.background }};
+    --cf-search-bg: {{ section.settings.search_background }};
+    --cf-text: {{ section.settings.text_color }};
+    --cf-heading: {{ section.settings.heading_color }};
+    --cf-link: {{ section.settings.link_color }};
+    --cf-muted: {{ section.settings.muted_color }};
+    --cf-line: {{ section.settings.line_color }};
+    --cf-button-bg: {{ section.settings.button_background }};
+    --cf-button-text: {{ section.settings.button_text }};
+    --cf-input-border: {{ section.settings.input_border }};
+    --cf-width: {{ section.settings.content_width }}px;
+    --cf-side: {{ section.settings.side_padding }}px;
+    --cf-heading-size: {{ section.settings.heading_size }}px;
+    --cf-link-size: {{ section.settings.link_size }}px;
+    --cf-legal-size: {{ section.settings.legal_size }}px;
+    --cf-search-size: {{ section.settings.search_size }}px;
+  "
+>
+  {%- if section.settings.show_search -%}
+    <div class="coach-footer__search">
+      <div class="coach-footer__search-inner">
+        <coach-search
+          class="coach-search coach-search--footer"
+          data-section="coach-predictive-search"
+          data-limit="{{ search_limit }}"
+        >
+          <form action="{{ routes.search_url }}" method="get" role="search" class="coach-search__form">
+            <label class="visually-hidden" for="CoachFooterSearch-{{ section.id }}">
+              {{ section.settings.search_placeholder | escape }}
+            </label>
+            <input
+              type="search"
+              id="CoachFooterSearch-{{ section.id }}"
+              class="coach-search__input"
+              name="q"
+              placeholder="{{ section.settings.search_placeholder | escape }}"
+              data-placeholder-focus="{{ section.settings.search_focus_placeholder | escape }}"
+              autocomplete="off"
+              autocorrect="off"
+              spellcheck="false"
+              data-search-input
+            >
+            <input type="hidden" name="options[prefix]" value="last">
+            <button type="button" class="coach-search__btn coach-search__clear" hidden data-search-clear>
+              {%- render 'coach-icon', icon: 'close' -%}
+              <span class="visually-hidden">{{ 'general.search.reset' | t }}</span>
+            </button>
+            <button type="submit" class="coach-search__btn coach-search__submit">
+              {%- render 'coach-icon', icon: 'search' -%}
+              <span class="visually-hidden">{{ 'general.search.search' | t }}</span>
+            </button>
+          </form>
+          <div class="coach-search__panel" hidden data-search-panel>
+            {%- render 'coach-search-default',
+              collection: section.settings.search_collection,
+              limit: search_limit,
+              heading: section.settings.search_products_heading,
+              url: bestsellers_url
+            -%}
+            <div class="coach-search__results" aria-live="polite" data-search-results></div>
+          </div>
+        </coach-search>
+      </div>
+    </div>
+  {%- endif -%}
+
+  <div class="coach-footer__main">
+    <div class="coach-footer__layout">
+      <div class="coach-footer__columns">
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'column' -%}
+            <div class="coach-footer__column" {{ block.shopify_attributes }}>
+              {%- if block.settings.heading != blank -%}
+                <h2 class="coach-footer__heading">{{ block.settings.heading | escape }}</h2>
+              {%- endif -%}
+              {%- if block.settings.menu != blank -%}
+                <ul class="coach-footer__links">
+                  {%- for link in block.settings.menu.links -%}
+                    <li><a href="{{ link.url }}">{{ link.title | escape }}</a></li>
+                  {%- endfor -%}
+                </ul>
+              {%- endif -%}
+            </div>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+
+      {%- if section.settings.show_newsletter or section.settings.show_social -%}
+        <div class="coach-footer__newsletter">
+          {%- if section.settings.show_newsletter -%}
+            {%- form 'customer' -%}
+              <input type="hidden" name="contact[tags]" value="newsletter">
+              <div class="coach-footer__newsletter-form">
+                <label class="visually-hidden" for="CoachFooterEmail-{{ section.id }}">
+                  {{ section.settings.email_placeholder | escape }}
+                </label>
+                <input
+                  id="CoachFooterEmail-{{ section.id }}"
+                  class="coach-footer__email"
+                  type="email"
+                  name="contact[email]"
+                  value="{{ form.email }}"
+                  placeholder="{{ section.settings.email_placeholder | escape }}"
+                  required
+                  autocomplete="email"
+                >
+                <button class="coach-footer__signup" type="submit">
+                  {{ section.settings.signup_label | escape }}
+                </button>
+              </div>
+              {%- if form.posted_successfully? -%}
+                <p class="coach-footer__message" role="status">{{ section.settings.success_message | escape }}</p>
+              {%- endif -%}
+              {%- if section.settings.consent_text != blank -%}
+                <label class="coach-footer__consent">
+                  <input type="checkbox" name="contact[consent]" required>
+                  <span>{{ section.settings.consent_text }}</span>
+                </label>
+              {%- endif -%}
+            {%- endform -%}
+          {%- endif -%}
+
+          {%- if section.settings.show_social -%}
+            {%- liquid
+              assign instagram_url = section.settings.instagram_url | default: settings.social_instagram_link
+              assign facebook_url = section.settings.facebook_url | default: settings.social_facebook_link
+              assign x_url = section.settings.x_url | default: settings.social_twitter_link
+              assign tiktok_url = section.settings.tiktok_url | default: settings.social_tiktok_link
+              assign youtube_url = section.settings.youtube_url | default: settings.social_youtube_link
+            -%}
+            <div class="coach-footer__social">
+              {%- if instagram_url != blank -%}
+                <a href="{{ instagram_url }}" aria-label="Instagram">{% render 'coach-footer-icon', icon: 'instagram' %}</a>
+              {%- endif -%}
+              {%- if facebook_url != blank -%}
+                <a href="{{ facebook_url }}" aria-label="Facebook">{% render 'coach-footer-icon', icon: 'facebook' %}</a>
+              {%- endif -%}
+              {%- if x_url != blank -%}
+                <a href="{{ x_url }}" aria-label="X">{% render 'coach-footer-icon', icon: 'x' %}</a>
+              {%- endif -%}
+              {%- if tiktok_url != blank -%}
+                <a href="{{ tiktok_url }}" aria-label="TikTok">{% render 'coach-footer-icon', icon: 'tiktok' %}</a>
+              {%- endif -%}
+              {%- if youtube_url != blank -%}
+                <a href="{{ youtube_url }}" aria-label="YouTube">{% render 'coach-footer-icon', icon: 'youtube' %}</a>
+              {%- endif -%}
+            </div>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+    </div>
+
+    {%- if section.settings.legal_menu != blank -%}
+      <nav class="coach-footer__legal" aria-label="Legal">
+        {%- for link in section.settings.legal_menu.links -%}
+          <a href="{{ link.url }}">{{ link.title | escape }}</a>
+        {%- endfor -%}
+      </nav>
+    {%- endif -%}
+
+    {%- if copyright_text != blank -%}
+      <p class="coach-footer__copyright">{{ copyright_text | escape }}</p>
+    {%- endif -%}
+  </div>
+
+  {%- if section.settings.show_back_to_top -%}
+    <button type="button" class="coach-footer__top" data-footer-top hidden aria-label="{{ section.settings.back_to_top_label | escape }}">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+        <path d="M2 9L7 4L12 9" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </button>
+  {%- endif -%}
+</footer>
+
+<script>
+  (function () {
+    var button = document.querySelector('[data-footer-top]');
+    if (!button) return;
+    var toggle = function () {
+      button.hidden = window.scrollY < 400;
+    };
+    toggle();
+    window.addEventListener('scroll', toggle, { passive: true });
+    button.addEventListener('click', function () {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Coach Footer",
+  "tag": "section",
+  "class": "coach-footer-section",
+  "enabled_on": {
+    "groups": ["footer"]
+  },
+  "settings": [
+    {
+      "type": "header",
+      "content": "Search"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_search",
+      "label": "Show search",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "search_placeholder",
+      "label": "Search placeholder",
+      "default": "Search"
+    },
+    {
+      "type": "text",
+      "id": "search_focus_placeholder",
+      "label": "Search placeholder on focus",
+      "default": "What can we help you find?"
+    },
+    {
+      "type": "text",
+      "id": "search_products_heading",
+      "label": "Product heading",
+      "default": "Top Products"
+    },
+    {
+      "type": "collection",
+      "id": "search_collection",
+      "label": "Products to show before typing"
+    },
+    {
+      "type": "range",
+      "id": "search_products_limit",
+      "min": 2,
+      "max": 8,
+      "step": 1,
+      "label": "Products to show",
+      "default": 4
+    },
+    {
+      "type": "range",
+      "id": "search_size",
+      "min": 12,
+      "max": 22,
+      "step": 1,
+      "unit": "px",
+      "label": "Search font size",
+      "default": 16
+    },
+    {
+      "type": "header",
+      "content": "Newsletter"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_newsletter",
+      "label": "Show email signup",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "email_placeholder",
+      "label": "Email placeholder",
+      "default": "Enter Email"
+    },
+    {
+      "type": "text",
+      "id": "signup_label",
+      "label": "Button label",
+      "default": "SIGN UP"
+    },
+    {
+      "type": "text",
+      "id": "success_message",
+      "label": "Success message",
+      "default": "Thanks for subscribing."
+    },
+    {
+      "type": "richtext",
+      "id": "consent_text",
+      "label": "Consent text",
+      "default": "<p>By signing up, you consent to receive emails about the latest collections, offers, and news. See our Privacy Policy for more information.</p>"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_social",
+      "label": "Show social icons",
+      "info": "Uses these links, or the social links from Theme settings when a field is empty.",
+      "default": true
+    },
+    {
+      "type": "url",
+      "id": "instagram_url",
+      "label": "Instagram"
+    },
+    {
+      "type": "url",
+      "id": "facebook_url",
+      "label": "Facebook"
+    },
+    {
+      "type": "url",
+      "id": "x_url",
+      "label": "X"
+    },
+    {
+      "type": "url",
+      "id": "tiktok_url",
+      "label": "TikTok"
+    },
+    {
+      "type": "url",
+      "id": "youtube_url",
+      "label": "YouTube"
+    },
+    {
+      "type": "header",
+      "content": "Legal"
+    },
+    {
+      "type": "link_list",
+      "id": "legal_menu",
+      "label": "Legal menu"
+    },
+    {
+      "type": "text",
+      "id": "copyright_text",
+      "label": "Copyright",
+      "info": "Use [year] to insert the current year.",
+      "default": "© [year] COACH. ALL RIGHTS RESERVED."
+    },
+    {
+      "type": "checkbox",
+      "id": "show_back_to_top",
+      "label": "Show back to top",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "back_to_top_label",
+      "label": "Back to top label",
+      "default": "Back to top"
+    },
+    {
+      "type": "header",
+      "content": "Typography"
+    },
+    {
+      "type": "text",
+      "id": "font_family",
+      "label": "Font family",
+      "default": "HelveticaLTPro-Roman, 'Helvetica Neue', Helvetica, Arial, sans-serif"
+    },
+    {
+      "type": "range",
+      "id": "heading_size",
+      "min": 10,
+      "max": 18,
+      "step": 1,
+      "unit": "px",
+      "label": "Heading size",
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "link_size",
+      "min": 11,
+      "max": 18,
+      "step": 1,
+      "unit": "px",
+      "label": "Link size",
+      "default": 13
+    },
+    {
+      "type": "range",
+      "id": "legal_size",
+      "min": 10,
+      "max": 16,
+      "step": 1,
+      "unit": "px",
+      "label": "Legal and copyright size",
+      "default": 11
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "search_background",
+      "label": "Search background",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "background",
+      "label": "Footer background",
+      "default": "#f3f3f3"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text",
+      "default": "#111111"
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Headings",
+      "default": "#111111"
+    },
+    {
+      "type": "color",
+      "id": "link_color",
+      "label": "Links",
+      "default": "#333333"
+    },
+    {
+      "type": "color",
+      "id": "muted_color",
+      "label": "Muted text",
+      "default": "#666666"
+    },
+    {
+      "type": "color",
+      "id": "line_color",
+      "label": "Lines",
+      "default": "#d5d5d5"
+    },
+    {
+      "type": "color",
+      "id": "input_border",
+      "label": "Email field border",
+      "default": "#111111"
+    },
+    {
+      "type": "color",
+      "id": "button_background",
+      "label": "Button background",
+      "default": "#111111"
+    },
+    {
+      "type": "color",
+      "id": "button_text",
+      "label": "Button text",
+      "default": "#ffffff"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "range",
+      "id": "content_width",
+      "min": 1000,
+      "max": 1600,
+      "step": 20,
+      "unit": "px",
+      "label": "Content width",
+      "default": 1240
+    },
+    {
+      "type": "range",
+      "id": "side_padding",
+      "min": 16,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "label": "Side padding",
+      "default": 40
+    }
+  ],
+  "blocks": [
+    {
+      "type": "column",
+      "name": "Link column",
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading",
+          "default": "Customer Care"
+        },
+        {
+          "type": "link_list",
+          "id": "menu",
+          "label": "Menu"
+        }
+      ]
+    }
+  ],
+  "max_blocks": 6,
+  "presets": [
+    {
+      "name": "Coach Footer",
+      "blocks": [
+        { "type": "column", "settings": { "heading": "Customer Care" } },
+        { "type": "column", "settings": { "heading": "Services" } },
+        { "type": "column", "settings": { "heading": "Sustainability" } },
+        { "type": "column", "settings": { "heading": "About Us" } }
+      ]
+    }
+  ]
+}
+{% endschema %}
