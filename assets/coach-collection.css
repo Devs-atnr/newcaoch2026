@@ -1031,10 +1031,10 @@ button.coach-sort-btn {
   text-transform: none;
 }
 
-.coach-badge--sale {
-  background: #d91b24;
-  color: #ffffff;
-  border-color: #d91b24;
+.coach-badge--sale,
+.coach-badge--sale::after {
+  background: #ffffff;
+  color: #111111;
 }
 
 
