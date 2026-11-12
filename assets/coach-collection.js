@@ -576,12 +576,28 @@ class CoachCollection {
             }
           }
 
-          // Update Price
+          // Update Price and keep the currency icon
+          const setMoney = (node, html) => {
+            if (!node || html == null || html === '') return;
+            const iconSelector = 'svg, img, [class*="currency"], [class*="riyal"], [class*="money"]';
+            const firstIsIcon = node.firstElementChild && node.firstElementChild.matches(iconSelector);
+            const icons = [...node.querySelectorAll(iconSelector)].map((icon) => icon.cloneNode(true));
+            node.innerHTML = html;
+            if (icons.length && !node.querySelector(iconSelector)) {
+              icons.forEach((icon) => {
+                if (firstIsIcon) node.prepend(icon);
+                else node.appendChild(icon);
+              });
+            }
+          };
+
           if (comparePrice && priceSale && priceCompare) {
-            priceSale.textContent = price;
-            priceCompare.textContent = comparePrice;
+            setMoney(priceSale, price);
+            setMoney(priceCompare, comparePrice);
           } else if (priceRegular) {
-            priceRegular.textContent = price;
+            setMoney(priceRegular, price);
+          } else {
+            setMoney(card.querySelector('.coach-card__price'), price);
           }
 
           const badgeWrap = card.querySelector('.coach-card__badges');
@@ -611,6 +627,7 @@ class CoachCollection {
         quickAddBtn.addEventListener('click', (e) => {
           e.preventDefault();
           e.stopPropagation();
+          if (quickAddBtn.disabled || quickAddBtn.classList.contains('coach-card__quick-add-btn--sold-out')) return;
           const variantId = quickAddBtn.dataset.variantId;
           if (!variantId) return;
 

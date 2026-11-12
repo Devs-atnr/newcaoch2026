@@ -1131,8 +1131,15 @@ button.coach-sort-btn {
   color: var(--coach-bag-hover-text, #ffffff) !important;
 }
 
-.coach-card__quick-add-btn--sold-out {
-  display: none !important;
+.coach-card__quick-add-btn--sold-out,
+.coach-card__quick-add-btn--sold-out:hover,
+.coach-card__quick-add-btn--sold-out:focus {
+  display: flex !important;
+  background: #e5e5e5 !important;
+  color: #9a9a9a !important;
+  border: none !important;
+  cursor: not-allowed;
+  opacity: 1;
 }
 
 .coach-card__quick-add-icon {
@@ -1150,9 +1157,13 @@ button.coach-sort-btn {
   fill: currentColor;
 }
 
-.coach-card__quick-add-btn--sold-out {
-  cursor: not-allowed;
-  opacity: 0.72;
+.coach-card__swatch-dot--active,
+.coach-card__swatch-dot--active:hover,
+.coach-card__swatch-dot--active:focus,
+.coach-card__swatch-dot--active:focus-visible,
+.coach-card__swatch-dot--active:active {
+  outline: 1.5px solid #111111 !important;
+  outline-offset: 1px;
 }
 
 .coach-card__quick-add-btn.is-loading .coach-card__quick-add-text,
@@ -1351,7 +1362,7 @@ button.coach-sort-btn {
   width: 100%;
   height: 100%;
   background-color: transparent;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12' fill='none'%3E%3Cpath d='M1 11L11 1' stroke='%23222222' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12' fill='none'%3E%3Cpath d='M1 11L11 1' stroke='%23ffffff' stroke-width='1.25' stroke-linecap='round'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: center;
   background-size: 100% 100%;

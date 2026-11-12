@@ -155,12 +155,13 @@
       </button>
     {%- endif -%}
 
-    {%- if show_quick_add and card_product.available -%}
+    {%- if show_quick_add -%}
       <div class="coach-card__quick-add-wrap">
         <button
           type="button"
-          class="coach-card__quick-add-btn coach-card__quick-add-btn--available"
+          class="coach-card__quick-add-btn {% if card_product.available %}coach-card__quick-add-btn--available{% else %}coach-card__quick-add-btn--sold-out{% endif %}"
           data-variant-id="{{ current_variant.id }}"
+          {% unless card_product.available %}disabled{% endunless %}
           aria-label="Add to Bag - {{ card_product.title | escape }}"
         >
           <span class="coach-card__quick-add-icon">
@@ -205,14 +206,14 @@
             {%- unless rendered_colors contains color_slug -%}
               {%- assign rendered_colors = rendered_colors | append: ',' | append: color_slug -%}
               {%- assign is_active_swatch = false -%}
-              {%- if variant.id == current_variant.id -%}
+              {%- if color_val == current_variant.options[color_option_index] -%}
                 {%- assign is_active_swatch = true -%}
               {%- endif -%}
 
-              {%- assign var_price = variant.price | money | strip_html | escape -%}
+              {%- assign var_price = variant.price | money | escape -%}
               {%- assign var_compare_price = '' -%}
               {%- if variant.compare_at_price > variant.price -%}
-                {%- assign var_compare_price = variant.compare_at_price | money | strip_html | escape -%}
+                {%- assign var_compare_price = variant.compare_at_price | money | escape -%}
               {%- endif -%}
               {%- assign var_img_src = '' -%}
               {%- assign swatch_img = '' -%}
