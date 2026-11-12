@@ -181,8 +181,9 @@
       const base = (window.routes && window.routes.predictive_search_url) || '/search/suggest';
       const params = new URLSearchParams({
         q: term,
-        'resources[type]': 'product',
+        'resources[type]': 'product,collection',
         'resources[limit]': '10',
+        'resources[limit_scope]': 'each',
         'resources[options][unavailable_products]': 'last',
         section_id: this.sectionId,
       });
@@ -210,11 +211,12 @@
         .slice(this.limit)
         .forEach((item) => item.remove());
 
-      if (!this.classList.contains('coach-search--footer')) return;
+      const suggestions = this.results.querySelector('.coach-search-suggestions');
+      const suggestionLinks = suggestions ? [...suggestions.querySelectorAll('a')] : [];
+      suggestions?.remove();
 
-      const count = this.results.querySelector('[data-results-count]')?.dataset.resultsCount;
-      if (this.query) this.rememberSearch(this.query, count);
-      this.mountRecentSearches();
+      if (!this.classList.contains('coach-search--footer')) return;
+      this.mountRecentSearches(suggestionLinks);
     }
 
     renderRecentlyViewed() {
@@ -314,9 +316,9 @@
       localStorage.setItem('coach-recent-searches', JSON.stringify(searches.slice(0, 6)));
     }
 
-    mountRecentSearches() {
-      const searches = this.recentSearches();
-      if (!searches.length) return;
+    mountRecentSearches(suggestionLinks) {
+      const links = (suggestionLinks || []).filter((link) => link.textContent.trim());
+      if (!links.length) return;
       const layout = document.createElement('div');
       layout.className = 'coach-footer-search__layout';
       const aside = document.createElement('div');
@@ -326,13 +328,7 @@
       heading.textContent = this.dataset.recentLabel || 'Recent searches';
       const list = document.createElement('div');
       list.className = 'coach-footer-search__recent-list';
-      searches.forEach((item) => {
-        const link = document.createElement('a');
-        const params = new URLSearchParams({ q: item.term, 'options[prefix]': 'last' });
-        link.href = `${this.dataset.searchUrl || '/search'}?${params.toString()}`;
-        link.textContent = item.count ? `${item.term} (${item.count})` : item.term;
-        list.appendChild(link);
-      });
+      links.forEach((link) => list.appendChild(link));
       aside.append(heading, list);
       const products = document.createElement('div');
       products.className = 'coach-footer-search__products';

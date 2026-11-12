@@ -79,13 +79,20 @@
   aspect-ratio: 1 / 1;
 }
 
-.coach-footer .coach-search--footer .coach-search-card__title {
+.coach-footer .coach-search--footer .coach-search-card,
+.coach-footer .coach-search--footer .coach-search-card:hover {
+  text-decoration: none;
+}
+
+.coach-footer .coach-search--footer .coach-search-card__title,
+.coach-footer .coach-search--footer .coach-search-card:hover .coach-search-card__title {
   margin-top: 16px;
   font-family: inherit;
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 700;
   line-height: 1.35;
   letter-spacing: 0;
+  text-decoration: none;
 }
 
 .coach-footer .coach-search--footer .coach-search-card__price {
@@ -100,7 +107,7 @@
 
 .coach-footer-search__layout {
   display: grid;
-  grid-template-columns: 180px minmax(0, 1fr);
+  grid-template-columns: 220px minmax(0, 1fr);
   gap: 28px 48px;
   align-items: start;
 }
@@ -111,14 +118,11 @@
   gap: 10px;
 }
 
-.coach-footer-search__recent-list a {
-  font-size: 14px;
+.coach-footer-search__recent-list a,
+.coach-footer-search__recent-list a:hover {
+  font-size: 16px;
   color: #111111;
   text-decoration: none;
-}
-
-.coach-footer-search__recent-list a:hover {
-  text-decoration: underline;
 }
 
 .coach-footer .coach-search--footer .coach-search__panel[hidden] {

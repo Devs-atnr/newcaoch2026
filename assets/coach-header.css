@@ -628,9 +628,15 @@ coach-header {
   opacity: 0.6;
 }
 
+.coach-search-card,
+.coach-search-card:hover,
+.coach-search-card__title,
 .coach-search-card:hover .coach-search-card__title {
-  text-decoration: underline;
-  text-underline-offset: 0.3rem;
+  text-decoration: none;
+}
+
+.coach-search-suggestions {
+  display: none;
 }
 
 .coach-search-results__all {

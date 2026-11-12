@@ -11,6 +11,36 @@
     assign words = predictive_search.terms | downcase | strip | split: ' '
 
     assign matched = 0
+    capture suggestions
+      for collection in predictive_search.resources.collections limit: 4
+        echo '<a href="'
+        echo collection.url
+        echo '">'
+        echo collection.title | escape
+        echo '</a>'
+      endfor
+      assign title_count = 0
+      for product in predictive_search.resources.products
+        assign haystack = product.title | append: ' ' | append: product.type | append: ' ' | append: product.vendor
+        assign tag_text = product.tags | join: ' '
+        assign haystack = haystack | append: ' ' | append: tag_text | downcase
+        assign is_match = false
+        for word in words
+          if word.size > 1 and haystack contains word
+            assign is_match = true
+            break
+          endif
+        endfor
+        if is_match and title_count < 4
+          assign title_count = title_count | plus: 1
+          echo '<a href="'
+          echo product.url
+          echo '">'
+          echo product.title | escape
+          echo '</a>'
+        endif
+      endfor
+    endcapture
     capture items
       for product in predictive_search.resources.products
         assign haystack = product.title | append: ' ' | append: product.type | append: ' ' | append: product.vendor
@@ -35,6 +65,7 @@
     endcapture
   -%}
   <div class="coach-search-results" data-results-count="{{ matched }}">
+    <div class="coach-search-suggestions">{{ suggestions }}</div>
     {%- if matched > 0 -%}
       <p class="coach-search-results__heading">{{ 'sections.coach_header.top_products' | t }}</p>
       <ul class="coach-search-results__grid" role="list">
