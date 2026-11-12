@@ -1172,6 +1172,125 @@ button.coach-sort-btn {
   animation: coach-spin 0.6s linear infinite;
 }
 
+.coach-size-picker {
+  display: none;
+  position: absolute;
+  inset: 0;
+  z-index: 16;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 28px 6px 36px;
+  pointer-events: none;
+}
+
+.coach-card.is-choosing-size .coach-size-picker,
+.coach-card.is-adding .coach-size-picker {
+  display: flex;
+  pointer-events: auto;
+}
+
+.coach-size-picker__nav {
+  flex: 0 0 22px;
+  width: 22px;
+  height: 36px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #9a9a9a;
+  cursor: pointer;
+}
+
+.coach-size-picker__panel {
+  flex: 1 1 auto;
+  max-width: 280px;
+  background: rgba(255, 255, 255, 0.94);
+  padding: 14px 12px 12px;
+}
+
+.coach-size-picker__title {
+  margin: 0 0 12px;
+  text-align: center;
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.2;
+  color: #111111;
+}
+
+.coach-size-picker__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  max-height: 220px;
+  overflow: auto;
+  scrollbar-width: none;
+}
+
+.coach-size-picker__grid::-webkit-scrollbar {
+  display: none;
+}
+
+.coach-size-picker__size {
+  position: relative;
+  min-height: 40px;
+  padding: 6px 8px;
+  border: 1px solid #d5d5d5;
+  background: #ffffff;
+  color: #111111;
+  font-size: 13px;
+  line-height: 1.2;
+  text-align: center;
+  cursor: pointer;
+  overflow: hidden;
+}
+
+.coach-size-picker__size.is-sold-out {
+  color: #bdbdbd;
+  cursor: default;
+}
+
+.coach-size-picker__size.is-sold-out::after {
+  content: "";
+  position: absolute;
+  left: -20%;
+  right: -20%;
+  top: 50%;
+  height: 1px;
+  background: #d0d0d0;
+  transform: rotate(-16deg);
+}
+
+.coach-size-picker__spinner {
+  display: none;
+  position: absolute;
+  left: 10%;
+  top: 38%;
+  width: 58px;
+  height: 58px;
+  border: 3px solid #ececec;
+  border-top-color: #222222;
+  border-radius: 50%;
+  animation: coach-spin 0.7s linear infinite;
+}
+
+.coach-card.is-adding .coach-size-picker__spinner {
+  display: block;
+}
+
+@media (hover: hover) and (min-width: 990px) {
+  .coach-card.has-sizes:hover .coach-size-picker,
+  .coach-card.has-sizes:focus-within .coach-size-picker {
+    display: flex;
+    pointer-events: auto;
+  }
+
+  .coach-card.has-sizes:hover .coach-card__quick-add-wrap,
+  .coach-card.has-sizes:focus-within .coach-card__quick-add-wrap {
+    opacity: 0;
+    pointer-events: none;
+  }
+}
+
 @keyframes coach-spin {
   to { transform: rotate(360deg); }
 }
@@ -1452,7 +1571,7 @@ button.coach-sort-btn {
 }
 
 .coach-pagination {
-  display: flex;
+  display: none !important;
   align-items: center;
   justify-content: center;
   gap: 8px;

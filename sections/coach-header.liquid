@@ -552,6 +552,26 @@
       {%- endif -%}
     </div>
   </div>
+
+  <div class="coach-bag-panel" data-bag-panel hidden data-money-format="{{ shop.money_format | escape }}">
+    <button type="button" class="coach-bag-panel__overlay" data-bag-close aria-label="Close"></button>
+    <div class="coach-bag-panel__sheet" role="dialog" aria-modal="true" aria-label="My bag">
+      <div class="coach-bag-panel__head">
+        <p class="coach-bag-panel__title">
+          My bag (<span data-bag-count>0</span>)
+          <span data-bag-total></span>
+        </p>
+        <button type="button" class="coach-bag-panel__close" data-bag-close aria-label="Close">&times;</button>
+      </div>
+      <div class="coach-bag-panel__items" data-bag-items></div>
+      <div class="coach-bag-panel__actions">
+        <form action="{{ routes.cart_url }}" method="post">
+          <button type="submit" name="checkout" class="coach-bag-panel__checkout">Checkout</button>
+        </form>
+        <a class="coach-bag-panel__view" href="{{ routes.cart_url }}">View shopping bag</a>
+      </div>
+    </div>
+  </div>
 </coach-header>
 
 {%- if settings.cart_type == 'notification' -%}

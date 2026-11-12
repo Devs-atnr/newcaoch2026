@@ -552,6 +552,15 @@ class CoachCollection {
      Product Card Interactions
      ------------------------------------------------------------------------- */
   bindProductCards() {
+    if (!this.sizePickerBound) {
+      this.sizePickerBound = true;
+      document.addEventListener('click', (event) => {
+        this.wrapper.querySelectorAll('.coach-card.is-choosing-size').forEach((openCard) => {
+          if (!openCard.contains(event.target)) openCard.classList.remove('is-choosing-size');
+        });
+      });
+    }
+
     const cards = this.wrapper.querySelectorAll('.coach-card');
 
     cards.forEach((card) => {
@@ -747,8 +756,68 @@ class CoachCollection {
               img.classList.toggle('coach-card__img--active', idx === 0);
             });
           }
+
+          if (typeof renderSizes === 'function') renderSizes();
         });
       });
+
+      const dataEl = card.querySelector('.js-coach-card-data');
+      let cardData = null;
+      if (dataEl) {
+        try {
+          cardData = JSON.parse(dataEl.textContent);
+        } catch (error) {
+          cardData = null;
+        }
+      }
+
+      const sizeGrid = card.querySelector('.coach-size-picker__grid');
+      const renderSizes = () => {
+        if (!sizeGrid || !cardData || cardData.sizeIndex < 0) return;
+        const activeSwatch = card.querySelector('.coach-card__swatch-dot--active');
+        const colorName = activeSwatch ? activeSwatch.getAttribute('title') : '';
+        const seen = new Map();
+        cardData.variants.forEach((variant) => {
+          if (cardData.colorIndex >= 0 && colorName && variant.options[cardData.colorIndex] !== colorName) return;
+          const label = variant.options[cardData.sizeIndex];
+          const existing = seen.get(label);
+          if (!existing || (!existing.available && variant.available)) seen.set(label, variant);
+        });
+        sizeGrid.innerHTML = '';
+        seen.forEach((variant, label) => {
+          const sizeButton = document.createElement('button');
+          sizeButton.type = 'button';
+          sizeButton.className = 'coach-size-picker__size' + (variant.available ? '' : ' is-sold-out');
+          sizeButton.textContent = label;
+          if (!variant.available) sizeButton.setAttribute('aria-disabled', 'true');
+          sizeButton.addEventListener('click', (event) => {
+            event.preventDefault();
+            event.stopPropagation();
+            if (!variant.available || card.classList.contains('is-adding')) return;
+            this.handleQuickAdd(sizeButton, variant.id, card);
+          });
+          sizeGrid.appendChild(sizeButton);
+        });
+      };
+      renderSizes();
+
+      const sizePicker = card.querySelector('.coach-size-picker');
+      if (sizePicker) {
+        const scrollSizes = (direction) => {
+          if (!sizeGrid) return;
+          sizeGrid.scrollBy({ top: direction * 96, behavior: 'smooth' });
+        };
+        sizePicker.querySelector('.coach-size-picker__nav--prev')?.addEventListener('click', (event) => {
+          event.preventDefault();
+          event.stopPropagation();
+          scrollSizes(-1);
+        });
+        sizePicker.querySelector('.coach-size-picker__nav--next')?.addEventListener('click', (event) => {
+          event.preventDefault();
+          event.stopPropagation();
+          scrollSizes(1);
+        });
+      }
 
       // 3. Quick Add to Bag
       quickAddBtns.forEach((button) => {
@@ -763,9 +832,14 @@ class CoachCollection {
             return;
           }
           if (button.disabled || button.classList.contains('coach-card__quick-add-btn--sold-out')) return;
+          if (card.classList.contains('has-sizes')) {
+            card.classList.add('is-choosing-size');
+            card.querySelector('.coach-size-picker')?.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+            return;
+          }
           const variantId = button.dataset.variantId;
           if (!variantId) return;
-          this.handleQuickAdd(button, variantId);
+          this.handleQuickAdd(button, variantId, card);
         });
       });
     });
@@ -774,8 +848,9 @@ class CoachCollection {
   /* -------------------------------------------------------------------------
      AJAX Add To Bag
      ------------------------------------------------------------------------- */
-  async handleQuickAdd(button, variantId) {
+  async handleQuickAdd(button, variantId, card) {
     button.classList.add('is-loading');
+    if (card) card.classList.add('is-adding');
 
     try {
       const routes = window.routes || { cart_add_url: '/cart/add.js', cart_url: '/cart' };
@@ -787,10 +862,6 @@ class CoachCollection {
           },
         ],
       };
-
-      // Include cart drawer sections if cart-drawer exists
-      const cartDrawer = document.querySelector('cart-drawer');
-      const cartNotification = document.querySelector('cart-notification');
 
       const response = await fetch(routes.cart_add_url, {
         method: 'POST',
@@ -807,26 +878,13 @@ class CoachCollection {
         throw new Error(resData.description || 'Could not add to bag');
       }
 
-      // Success feedback
-      const textSpan = button.querySelector('.coach-card__quick-add-text');
-      const originalText = textSpan ? textSpan.textContent : 'Add To Bag';
-      if (textSpan) textSpan.textContent = 'Added ✓';
-
-      setTimeout(() => {
-        if (textSpan) textSpan.textContent = originalText;
-      }, 1800);
-
-      // Trigger Cart Drawer / Cart Notification
-      if (cartDrawer && typeof cartDrawer.renderContents === 'function') {
-        cartDrawer.renderContents(resData);
-      } else if (cartNotification && typeof cartNotification.renderContents === 'function') {
-        cartNotification.renderContents(resData);
+      if (card) card.classList.remove('is-choosing-size');
+      if (window.CoachMiniBag && typeof window.CoachMiniBag.open === 'function') {
+        window.CoachMiniBag.open();
       } else {
-        // Fallback: update bubble & open drawer
         this.updateHeaderCartCount();
       }
 
-      // Publish Dawn PubSub event if active
       if (typeof window.publish === 'function' && window.PUB_SUB_EVENTS) {
         window.publish(window.PUB_SUB_EVENTS.cartUpdate, {
           source: 'coach-collection',
@@ -839,6 +897,7 @@ class CoachCollection {
       alert(err.message || 'Error adding product to bag.');
     } finally {
       button.classList.remove('is-loading');
+      if (card) card.classList.remove('is-adding');
     }
   }
 

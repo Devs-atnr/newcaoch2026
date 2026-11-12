@@ -1272,3 +1272,169 @@ coach-header {
 .coach-store-tabs__tab {
   padding-block: 0.8rem;
 }
+
+body.coach-bag-open {
+  overflow: hidden;
+}
+
+.coach-bag-panel {
+  position: fixed;
+  inset: 0;
+  z-index: 400;
+}
+
+.coach-bag-panel[hidden] {
+  display: none !important;
+}
+
+.coach-bag-panel__overlay {
+  position: absolute;
+  inset: 0;
+  border: 0;
+  padding: 0;
+  background: rgba(0, 0, 0, 0.55);
+  cursor: pointer;
+}
+
+.coach-bag-panel__sheet {
+  position: absolute;
+  background: #ffffff;
+  color: #111111;
+  padding: 18px 18px 16px;
+  max-height: calc(100vh - 96px);
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+
+.coach-bag-panel__sheet::before {
+  content: "";
+  position: absolute;
+  top: -8px;
+  right: var(--bag-caret, 28px);
+  border-right: 8px solid transparent;
+  border-left: 8px solid transparent;
+  border-bottom: 8px solid #ffffff;
+}
+
+.coach-bag-panel__head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.coach-bag-panel__title {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.coach-bag-panel__title [data-bag-total] {
+  margin-left: 10px;
+  font-weight: 500;
+}
+
+.coach-bag-panel__close {
+  border: 0;
+  background: transparent;
+  font-size: 28px;
+  line-height: 1;
+  padding: 0 2px;
+  cursor: pointer;
+  color: #111111;
+}
+
+.coach-bag-panel__items {
+  overflow: auto;
+  border-top: 1px solid #ececec;
+}
+
+.coach-bag-panel__empty {
+  margin: 28px 0;
+  text-align: center;
+}
+
+.coach-bag-item {
+  display: grid;
+  grid-template-columns: 92px 1fr;
+  gap: 14px;
+  padding: 16px 0;
+  border-bottom: 1px dashed #d5d5d5;
+}
+
+.coach-bag-item__media {
+  display: block;
+  background: #f3f3f3;
+}
+
+.coach-bag-item__media img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.coach-bag-item__title {
+  margin: 0 0 8px;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.coach-bag-item__copy p {
+  margin: 0 0 3px;
+  font-size: 12px;
+  letter-spacing: 0.03em;
+  color: #444444;
+  text-transform: uppercase;
+}
+
+.coach-bag-item__copy .coach-bag-item__title,
+.coach-bag-item__copy .coach-bag-item__price {
+  text-transform: none;
+  color: #111111;
+}
+
+.coach-bag-item__price {
+  margin-top: 8px;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.coach-bag-panel__actions {
+  display: grid;
+  gap: 10px;
+  padding-top: 14px;
+}
+
+.coach-bag-panel.is-empty .coach-bag-panel__actions {
+  display: none;
+}
+
+.coach-bag-panel__checkout,
+.coach-bag-panel__view {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 48px;
+  font-size: 14px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-decoration: none;
+  cursor: pointer;
+  box-sizing: border-box;
+}
+
+.coach-bag-panel__checkout {
+  border: 0;
+  background: #111111;
+  color: #ffffff;
+}
+
+.coach-bag-panel__view {
+  border: 1px solid #cfcfcf;
+  background: #ffffff;
+  color: #111111;
+}

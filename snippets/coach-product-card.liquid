@@ -75,17 +75,24 @@
 
   # Find color option index
   assign color_option_index = -1
+  assign size_option_index = -1
   for option in card_product.options_with_values
     assign opt_name = option.name | downcase
-    if opt_name == 'color' or opt_name == 'colour' or opt_name == 'couleur' or opt_name == 'farbe'
-      assign color_option_index = forloop.index0
-      break
+    if color_option_index < 0
+      if opt_name == 'color' or opt_name == 'colour' or opt_name == 'couleur' or opt_name == 'farbe'
+        assign color_option_index = forloop.index0
+      endif
+    endif
+    if size_option_index < 0
+      if opt_name contains 'size' or opt_name == 'taille' or opt_name == 'pointure' or opt_name == 'größe' or opt_name == 'grosse'
+        assign size_option_index = forloop.index0
+      endif
     endif
   endfor
 -%}
 
 <div
-  class="coach-card{% unless card_product.available %} coach-card--sold-out{% endunless %}"
+  class="coach-card{% unless card_product.available %} coach-card--sold-out{% endunless %}{% if size_option_index >= 0 %} has-sizes{% endif %}"
   data-product-id="{{ card_product.id }}"
   data-current-variant-id="{{ current_variant.id }}"
   data-is-new="{% if is_new %}true{% else %}false{% endif %}"
@@ -174,6 +181,37 @@
           <span class="coach-card__quick-add-spinner" style="display:none;"></span>
         </button>
       </div>
+    {%- endif -%}
+
+    {%- if size_option_index >= 0 -%}
+      <div class="coach-size-picker">
+        <button type="button" class="coach-size-picker__nav coach-size-picker__nav--prev" aria-label="Previous sizes">
+          <svg width="8" height="14" viewBox="0 0 8 14" fill="none" aria-hidden="true">
+            <path d="M6.5 1L1.5 7L6.5 13" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+        <div class="coach-size-picker__panel">
+          <p class="coach-size-picker__title">Choose size</p>
+          <div class="coach-size-picker__grid"></div>
+        </div>
+        <button type="button" class="coach-size-picker__nav coach-size-picker__nav--next" aria-label="Next sizes">
+          <svg width="8" height="14" viewBox="0 0 8 14" fill="none" aria-hidden="true">
+            <path d="M1.5 1L6.5 7L1.5 13" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+        <span class="coach-size-picker__spinner" aria-hidden="true"></span>
+      </div>
+      <script type="application/json" class="js-coach-card-data">
+        {
+          "colorIndex": {{ color_option_index }},
+          "sizeIndex": {{ size_option_index }},
+          "variants": [
+            {%- for variant in card_product.variants -%}
+              {"id":{{ variant.id }},"available":{{ variant.available | json }},"options":{{ variant.options | json }}}{% unless forloop.last %},{% endunless %}
+            {%- endfor -%}
+          ]
+        }
+      </script>
     {%- endif -%}
   </div>
 

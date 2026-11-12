@@ -384,6 +384,7 @@
       this.initMegaMenu();
       this.initDrawer();
       this.initCartMirror();
+      this.initMiniBag();
       this.initLanguage();
       this.initHeightTracking();
       this.initSticky();
@@ -667,15 +668,121 @@
       const sync = () => mirrors.forEach((mirror) => (mirror.innerHTML = source.innerHTML));
       this.cartObserver = new MutationObserver(sync);
       this.cartObserver.observe(source, { childList: true, subtree: true, characterData: true });
-      mirrors.forEach((mirror) =>
-        mirror.addEventListener('click', (event) => {
-          const cartDrawer = document.querySelector('cart-drawer');
-          if (cartDrawer && typeof cartDrawer.open === 'function') {
-            event.preventDefault();
-            cartDrawer.open(mirror);
-          }
-        })
-      );
+    }
+
+    initMiniBag() {
+      const panel = this.querySelector('[data-bag-panel]');
+      if (!panel) return;
+      document.body.appendChild(panel);
+      const sheet = panel.querySelector('.coach-bag-panel__sheet');
+      const items = panel.querySelector('[data-bag-items]');
+      const count = panel.querySelector('[data-bag-count]');
+      const total = panel.querySelector('[data-bag-total]');
+      const moneyFormat = panel.dataset.moneyFormat || '${{amount}}';
+
+      const formatMoney = (cents) => {
+        const placeholder = /\{\{\s*(\w+)\s*\}\}/;
+        const withDelimiters = (number, precision, thousands, decimal) => {
+          const fixed = (number / 100).toFixed(precision);
+          const parts = fixed.split('.');
+          const whole = parts[0].replace(/(\d)(?=(\d{3})+(?!\d))/g, `$1${thousands}`);
+          return parts[1] ? whole + decimal + parts[1] : whole;
+        };
+        const token = (moneyFormat.match(placeholder) || [])[1];
+        let value = withDelimiters(cents, 2, ',', '.');
+        if (token === 'amount_no_decimals') value = withDelimiters(cents, 0, ',', '.');
+        if (token === 'amount_with_comma_separator') value = withDelimiters(cents, 2, '.', ',');
+        if (token === 'amount_no_decimals_with_comma_separator') value = withDelimiters(cents, 0, '.', ',');
+        if (token === 'amount_with_apostrophe_separator') value = withDelimiters(cents, 2, "'", '.');
+        return moneyFormat.replace(placeholder, value);
+      };
+
+      const escapeHtml = (value) => String(value ?? '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+
+      const render = (cart) => {
+        panel.classList.toggle('is-empty', !cart.items.length);
+        if (count) count.textContent = cart.item_count;
+        if (total) total.textContent = formatMoney(cart.total_price);
+        document.querySelectorAll('.coach-bag__count').forEach((node) => {
+          node.textContent = cart.item_count < 100 ? String(cart.item_count) : '99+';
+        });
+        if (!items) return;
+        if (!cart.items.length) {
+          items.innerHTML = '<p class="coach-bag-panel__empty">Your bag is empty</p>';
+          return;
+        }
+        items.innerHTML = cart.items.map((item) => {
+          const options = (item.options_with_values || [])
+            .filter((option) => option.value && option.value !== 'Default Title')
+            .map((option) => `<p>${escapeHtml(option.name)}: ${escapeHtml(option.value)}</p>`)
+            .join('');
+          const image = item.image
+            ? `<img src="${escapeHtml(item.image)}" alt="" width="88" height="110">`
+            : '';
+          return `<article class="coach-bag-item">
+            <a href="${escapeHtml(item.url)}" class="coach-bag-item__media">${image}</a>
+            <div class="coach-bag-item__copy">
+              <p class="coach-bag-item__title">${escapeHtml(item.product_title)}</p>
+              ${options}
+              <p>QTY: ${item.quantity}</p>
+              <p class="coach-bag-item__price">${formatMoney(item.final_line_price)}</p>
+            </div>
+          </article>`;
+        }).join('');
+      };
+
+      const place = () => {
+        const icon = document.getElementById('cart-icon-bubble') || document.querySelector('.coach-header__cart');
+        if (!icon || !sheet) return;
+        const rect = icon.getBoundingClientRect();
+        const width = Math.min(460, window.innerWidth - 24);
+        let right = Math.max(12, window.innerWidth - rect.right - 4);
+        if (right + width > window.innerWidth - 12) right = 12;
+        sheet.style.top = `${rect.bottom + 12}px`;
+        sheet.style.right = `${right}px`;
+        sheet.style.width = `${width}px`;
+        const iconCenter = rect.left + rect.width / 2;
+        const sheetLeft = window.innerWidth - right - width;
+        sheet.style.setProperty('--bag-caret', `${Math.max(18, sheetLeft + width - iconCenter - 8)}px`);
+      };
+
+      const open = async () => {
+        panel.hidden = false;
+        document.body.classList.add('coach-bag-open');
+        place();
+        try {
+          const res = await fetch('/cart.js', { headers: { Accept: 'application/json' } });
+          if (res.ok) render(await res.json());
+        } catch (error) {
+          console.error('Could not load bag', error);
+        }
+      };
+
+      const close = () => {
+        panel.hidden = true;
+        document.body.classList.remove('coach-bag-open');
+      };
+
+      panel.querySelectorAll('[data-bag-close]').forEach((button) => {
+        button.addEventListener('click', close);
+      });
+
+      const openFromIcon = (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        if (panel.hidden) open();
+        else close();
+      };
+      document.querySelectorAll('#cart-icon-bubble, [data-cart-mirror]').forEach((link) => {
+        link.addEventListener('click', openFromIcon, true);
+      });
+
+      this.closeMiniBag = close;
+      window.CoachMiniBag = { open, close };
     }
 
     /* ---------- Language dropdown ---------- */
@@ -714,6 +821,11 @@
     /* ---------- Global handlers ---------- */
     onKeydown(event) {
       if (event.key !== 'Escape') return;
+      const bag = this.querySelector('[data-bag-panel]');
+      if (bag && !bag.hidden) {
+        this.closeMiniBag?.();
+        return;
+      }
       if (this.drawer?.classList.contains('is-open')) {
         this.closeDrawer();
         return;

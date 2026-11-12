@@ -127,45 +127,15 @@
           {%- endfor -%}
         </ul>
 
-        {%- if section.settings.enable_infinite_scroll -%}
-          <div
-            class="coach-infinite"
-            data-infinite-sentinel
-            {% if paginate.next %}
-              data-next-url="{{ paginate.next.url }}"
-            {% else %}
-              hidden
-            {% endif %}
-          ></div>
-        {%- elsif paginate.pages > 1 and section.settings.hide_page_numbers == false -%}
-          <div class="coach-pagination">
-            {%- if paginate.previous -%}
-              <a href="{{ paginate.previous.url }}" class="coach-pagination__item coach-pagination__item--prev" aria-label="Previous page">
-                <svg width="8" height="12" viewBox="0 0 8 12" fill="none">
-                  <path d="M7 1L2 6L7 11" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-              </a>
-            {%- endif -%}
-
-            {%- for part in paginate.parts -%}
-              {%- if part.is_link -%}
-                <a href="{{ part.url }}" class="coach-pagination__item">{{ part.title }}</a>
-              {%- elsif part.title == paginate.current_page -%}
-                <span class="coach-pagination__item coach-pagination__item--current" aria-current="page">{{ part.title }}</span>
-              {%- else -%}
-                <span class="coach-pagination__item coach-pagination__item--dots">{{ part.title }}</span>
-              {%- endif -%}
-            {%- endfor -%}
-
-            {%- if paginate.next -%}
-              <a href="{{ paginate.next.url }}" class="coach-pagination__item coach-pagination__item--next" aria-label="Next page">
-                <svg width="8" height="12" viewBox="0 0 8 12" fill="none">
-                  <path d="M1 1L6 6L1 11" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-              </a>
-            {%- endif -%}
-          </div>
-        {%- endif -%}
+        <div
+          class="coach-infinite"
+          data-infinite-sentinel
+          {% if paginate.next %}
+            data-next-url="{{ paginate.next.url }}"
+          {% else %}
+            hidden
+          {% endif %}
+        ></div>
       {%- endif -%}
     </div>
 
