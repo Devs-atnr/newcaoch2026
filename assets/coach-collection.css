@@ -1719,16 +1719,23 @@ button.coach-sort-btn {
     box-sizing: border-box;
   }
 
-  .coach-mobile-filter-close {
+  .coach-facets-bar.is-drawer-open .coach-mobile-filter-close {
     display: inline-flex;
     align-items: center;
     justify-content: center;
     width: 44px;
     height: 44px;
+    margin-right: 6px;
     border: 0;
     background: transparent;
     color: #111111;
     cursor: pointer;
+  }
+
+  .coach-facets-bar.is-drawer-open .coach-mobile-filter-close svg {
+    width: 16px;
+    height: 16px;
+    display: block;
   }
 
   .coach-facets-bar.is-drawer-open .coach-sort-container {
@@ -1821,9 +1828,9 @@ button.coach-sort-btn {
     justify-content: space-between !important;
     gap: 12px;
     width: 100% !important;
-    margin: 18px 0 0;
-    padding: 16px 0 12px;
-    border-top: 1px solid #e6e6e6;
+    margin: 8px 0 0;
+    padding: 8px 0 12px;
+    border-top: 0;
     font-size: 12px;
     font-weight: 600;
     letter-spacing: 0.08em;
@@ -1875,13 +1882,89 @@ button.coach-sort-btn {
   .coach-facets-bar.is-drawer-open button.coach-filter-pill {
     width: 100%;
     height: 52px !important;
-    justify-content: space-between;
+    justify-content: flex-start;
+    gap: 6px;
     padding: 0 !important;
     border: 0 !important;
     border-radius: 0 !important;
     background: transparent !important;
     text-transform: uppercase;
     letter-spacing: 0.04em;
+  }
+
+  .coach-facets-bar.is-drawer-open .coach-filter-pill__arrow {
+    margin-left: auto;
+  }
+
+  .coach-facets-bar.is-drawer-open .coach-filter-pill__badge {
+    width: auto;
+    height: auto;
+    margin: 0;
+    padding: 0;
+    border-radius: 0;
+    background: transparent;
+    color: inherit;
+    font-size: inherit;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+  }
+
+  .coach-facets-bar.is-drawer-open .coach-filter-pill__badge::before {
+    content: "(";
+  }
+
+  .coach-facets-bar.is-drawer-open .coach-filter-pill__badge::after {
+    content: ")";
+  }
+
+  .coach-facets-bar.is-drawer-open .coach-price-slider__track,
+  .coach-facets-bar.is-drawer-open .coach-price-slider__range {
+    height: 2px;
+    background: #000000;
+    border-radius: 0;
+  }
+
+  .coach-facets-bar.is-drawer-open .coach-price-range::-webkit-slider-runnable-track {
+    height: 2px;
+    background: transparent;
+    border: 0;
+  }
+
+  .coach-facets-bar.is-drawer-open .coach-price-range::-moz-range-track {
+    height: 2px;
+    background: transparent;
+    border: 0;
+  }
+
+  .coach-facets-bar.is-drawer-open .coach-price-range::-webkit-slider-thumb {
+    width: 28px;
+    height: 28px;
+    border: 1.5px solid #000000;
+    background-color: #ffffff;
+    background-image:
+      linear-gradient(#000000, #000000),
+      linear-gradient(#000000, #000000),
+      linear-gradient(#000000, #000000);
+    background-size: 1.5px 10px, 1.5px 10px, 1.5px 10px;
+    background-position: calc(50% - 4px) 50%, 50% 50%, calc(50% + 4px) 50%;
+    background-repeat: no-repeat;
+    box-shadow: none;
+  }
+
+  .coach-facets-bar.is-drawer-open .coach-price-range::-moz-range-thumb {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border: 1.5px solid #000000;
+    background-color: #ffffff;
+    background-image:
+      linear-gradient(#000000, #000000),
+      linear-gradient(#000000, #000000),
+      linear-gradient(#000000, #000000);
+    background-size: 1.5px 10px, 1.5px 10px, 1.5px 10px;
+    background-position: calc(50% - 4px) 50%, 50% 50%, calc(50% + 4px) 50%;
+    background-repeat: no-repeat;
+    box-shadow: none;
   }
 
   .coach-facets-bar.is-drawer-open .coach-filter-popover,
