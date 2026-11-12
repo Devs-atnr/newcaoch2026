@@ -931,6 +931,7 @@ class CoachCollection {
       }
 
       card.classList.remove('is-choosing-size');
+      document.body.classList.remove('coach-size-open');
       if (window.CoachMiniBag && typeof window.CoachMiniBag.open === 'function') {
         await window.CoachMiniBag.open();
       } else {
