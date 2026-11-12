@@ -810,6 +810,11 @@ class CoachCollection {
               sizeGrid.querySelectorAll('.is-selected').forEach((item) => item.classList.remove('is-selected'));
               sizeButton.classList.add('is-selected');
               card.dataset.selectedSize = String(variant.id);
+              const hint = card.querySelector('.coach-size-picker__hint');
+              if (hint) {
+                hint.textContent = `Size: ${label}`;
+                hint.classList.add('is-chosen');
+              }
               const confirmButton = card.querySelector('.coach-size-picker__confirm');
               if (confirmButton) confirmButton.disabled = false;
               return;
@@ -819,6 +824,11 @@ class CoachCollection {
           sizeGrid.appendChild(sizeButton);
         });
         card.dataset.selectedSize = '';
+        const hint = card.querySelector('.coach-size-picker__hint');
+        if (hint) {
+          hint.textContent = 'Please select a size';
+          hint.classList.remove('is-chosen');
+        }
         const confirmButton = card.querySelector('.coach-size-picker__confirm');
         if (confirmButton) confirmButton.disabled = true;
       };
