@@ -531,8 +531,8 @@ coach-header {
   overflow-y: auto;
   padding-block: 5rem 4.4rem;
   background: var(--ch-bg);
-  border-block-end: 2px solid var(--ch-text);
-  box-shadow: inset 0 7px 7px -7px rgba(0, 0, 0, 0.18);
+  border-block-end: 0;
+  box-shadow: none;
 }
 
 .coach-search__panel[hidden] {

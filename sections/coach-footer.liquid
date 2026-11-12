@@ -145,21 +145,11 @@
               assign youtube_url = section.settings.youtube_url | default: settings.social_youtube_link
             -%}
             <div class="coach-footer__social">
-              {%- if instagram_url != blank -%}
-                <a href="{{ instagram_url }}" aria-label="Instagram">{% render 'coach-footer-icon', icon: 'instagram' %}</a>
-              {%- endif -%}
-              {%- if facebook_url != blank -%}
-                <a href="{{ facebook_url }}" aria-label="Facebook">{% render 'coach-footer-icon', icon: 'facebook' %}</a>
-              {%- endif -%}
-              {%- if x_url != blank -%}
-                <a href="{{ x_url }}" aria-label="X">{% render 'coach-footer-icon', icon: 'x' %}</a>
-              {%- endif -%}
-              {%- if tiktok_url != blank -%}
-                <a href="{{ tiktok_url }}" aria-label="TikTok">{% render 'coach-footer-icon', icon: 'tiktok' %}</a>
-              {%- endif -%}
-              {%- if youtube_url != blank -%}
-                <a href="{{ youtube_url }}" aria-label="YouTube">{% render 'coach-footer-icon', icon: 'youtube' %}</a>
-              {%- endif -%}
+              <a href="{{ instagram_url | default: '#' }}" aria-label="Instagram">{% render 'coach-footer-icon', icon: 'instagram' %}</a>
+              <a href="{{ facebook_url | default: '#' }}" aria-label="Facebook">{% render 'coach-footer-icon', icon: 'facebook' %}</a>
+              <a href="{{ x_url | default: '#' }}" aria-label="X">{% render 'coach-footer-icon', icon: 'x' %}</a>
+              <a href="{{ tiktok_url | default: '#' }}" aria-label="TikTok">{% render 'coach-footer-icon', icon: 'tiktok' %}</a>
+              <a href="{{ youtube_url | default: '#' }}" aria-label="YouTube">{% render 'coach-footer-icon', icon: 'youtube' %}</a>
             </div>
           {%- endif -%}
         </div>
