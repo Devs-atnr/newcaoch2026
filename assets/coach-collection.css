@@ -1454,7 +1454,7 @@ button.coach-sort-btn {
   display: none;
   align-items: center;
   justify-content: center;
-  background: transparent;
+  background: rgba(244, 244, 244, 0.62);
   pointer-events: auto;
 }
 
@@ -1463,14 +1463,14 @@ button.coach-sort-btn {
 }
 
 .coach-page-loader__spin {
-  width: 48px;
-  height: 48px;
-  border: 3px solid #e6e6e6;
-  border-top-color: #111111;
+  width: 42px;
+  height: 42px;
+  border: 2px solid #dedede;
+  border-right-color: #111111;
   border-radius: 50%;
-  background: #ffffff;
-  box-shadow: 0 0 0 10px #ffffff;
-  animation: coach-spin 0.7s linear infinite;
+  background: transparent;
+  box-shadow: none;
+  animation: coach-spin 0.75s linear infinite;
 }
 
 .coach-card.is-adding .coach-size-picker__size {
