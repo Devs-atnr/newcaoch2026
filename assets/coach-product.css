@@ -1,11 +1,16 @@
+coach-product-page.coach-product {
+  display: block;
+}
+
 .coach-product {
   background: #fff;
   color: #111;
   font-family: HelveticaLTPro-Roman, Helvetica, Arial, sans-serif;
   box-sizing: border-box;
+  display: block;
   width: min(1320px, calc(100% - 48px));
   max-width: 1320px;
-  padding: 16px 0 64px;
+  padding: 16px 0 72px;
   margin: 0 auto;
 }
 
@@ -27,19 +32,22 @@
 
 .coach-product__layout {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 430px;
+  grid-template-columns: minmax(0, 863px) 430px;
   column-gap: 27px;
+  justify-content: center;
   align-items: start;
   width: 100%;
 }
 
 .coach-product__gallery {
   display: grid;
-  grid-template-columns: 86px minmax(0, 1fr);
+  grid-template-columns: 86px minmax(0, 750px);
   gap: 18px;
+  justify-content: start;
   position: sticky;
   top: 96px;
   width: 100%;
+  max-width: 863px;
 }
 
 .coach-product__thumbs {
@@ -89,16 +97,19 @@
 
 .coach-product__stage {
   position: relative;
+  width: 100%;
+  max-width: 750px;
+  height: 495px;
   background: #f0f0f0;
-  min-height: 495px;
   display: flex;
   align-items: center;
   justify-content: center;
+  overflow: hidden;
 }
 
 .coach-product__image {
   width: 100%;
-  height: 495px;
+  height: 100%;
   object-fit: contain;
 }
 
@@ -337,20 +348,27 @@
   line-height: 1.5;
 }
 
-.coach-product__specs { margin: 0; }
+.coach-product__specs { margin: 4px 0 0; }
 .coach-product__specs div {
   display: grid;
-  grid-template-columns: 140px 1fr;
-  gap: 12px;
-  margin-bottom: 12px;
+  grid-template-columns: 148px minmax(0, 1fr);
+  gap: 20px;
+  margin-bottom: 18px;
+  align-items: start;
 }
 .coach-product__specs dt {
   margin: 0;
   font-size: 12px;
-  letter-spacing: 0.04em;
+  font-weight: 700;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
 }
-.coach-product__specs dd { margin: 0; }
+.coach-product__specs dd {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.45;
+  color: #222;
+}
 
 .coach-product__share {
   display: flex;
@@ -369,18 +387,19 @@
 .coach-product__rail,
 .coach-product__faq,
 .coach-product__reviews {
-  margin-top: 48px;
-  padding-top: 28px;
+  margin-top: 64px;
+  padding-top: 36px;
   border-top: 1px solid #ececec;
 }
 
 .coach-product__rail h2,
 .coach-product__faq h2,
 .coach-product__reviews h2 {
-  margin: 0 0 22px;
+  margin: 0 0 28px;
   text-align: center;
-  font-size: 22px;
+  font-size: 20px;
   font-weight: 700;
+  letter-spacing: 0;
 }
 
 .coach-product__faq h2,
@@ -391,9 +410,11 @@
 .coach-product__rail-track {
   display: grid;
   grid-auto-flow: column;
-  grid-auto-columns: calc(25% - 12px);
-  gap: 16px;
+  grid-auto-columns: 240px;
+  justify-content: center;
+  gap: 18px;
   overflow-x: auto;
+  scroll-snap-type: x mandatory;
   scroll-behavior: smooth;
   scrollbar-width: none;
 }
@@ -401,40 +422,52 @@
 
 .coach-product__rail-next {
   position: absolute;
-  right: -6px;
-  top: 28%;
-  width: 36px;
-  height: 36px;
+  right: 0;
+  top: 102px;
+  width: 34px;
+  height: 34px;
   border: 0;
   border-radius: 50%;
   background: #fff;
-  box-shadow: 0 2px 8px rgba(0,0,0,.15);
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.16);
   cursor: pointer;
 }
 
-.coach-rail-card { color: #111; text-decoration: none; text-align: center; }
+.coach-rail-card {
+  color: #222;
+  text-decoration: none;
+  text-align: center;
+  scroll-snap-align: start;
+}
 .coach-rail-card__media {
   position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #f3f3f3;
-  aspect-ratio: 1;
+  width: 240px;
+  height: 240px;
+  background: #f2f2f2;
 }
-.coach-rail-card__media img { width: 78%; height: 78%; object-fit: contain; }
+.coach-rail-card__media img {
+  width: 78%;
+  height: 78%;
+  object-fit: contain;
+}
 .coach-rail-card__heart {
   position: absolute;
-  top: 10px;
-  right: 10px;
-  border: 0;
-  background: transparent;
-  cursor: pointer;
+  top: 12px;
+  right: 12px;
+  color: #111;
+  font-size: 18px;
+  line-height: 1;
 }
 .coach-rail-card__title {
   display: block;
-  margin-top: 10px;
+  max-width: 240px;
+  margin-top: 12px;
   font-size: 13px;
   line-height: 1.35;
+  color: #222;
 }
 
 .coach-product__reviews { text-align: center; }
@@ -474,6 +507,14 @@
 }
 @keyframes coach-product-spin { to { transform: rotate(360deg); } }
 
+@media screen and (max-width: 1100px) and (min-width: 990px) {
+  .coach-product__layout {
+    grid-template-columns: minmax(0, 1fr) minmax(300px, 380px);
+  }
+  .coach-product__info { width: 100%; }
+  .coach-product__gallery { max-width: none; }
+}
+
 @media screen and (max-width: 989px) {
   .coach-product {
     width: auto;
@@ -482,7 +523,7 @@
   }
   .coach-product__layout { grid-template-columns: 1fr; gap: 24px; }
   .coach-product__info { width: 100%; }
-  .coach-product__gallery { display: block; position: static; }
+  .coach-product__gallery { display: block; position: static; max-width: none; }
   .coach-product__thumbs { flex-direction: row; margin-bottom: 10px; }
   .coach-product__thumb-list { flex-direction: row; max-height: none; max-width: calc(100% - 72px); }
   .coach-product__thumb-nav svg { transform: rotate(-90deg); }
@@ -491,6 +532,11 @@
   .coach-product__image { height: 360px; }
   .coach-product__stage { min-height: 0; }
   .coach-product__title { margin-top: 18px; font-size: 24px; }
-  .coach-product__rail-track { grid-auto-columns: 46%; }
+  .coach-product__rail-track {
+    grid-auto-columns: 46%;
+    justify-content: start;
+  }
+  .coach-rail-card__media { width: 100%; height: auto; aspect-ratio: 1; }
+  .coach-rail-card__title { max-width: none; }
   .coach-product__specs div { grid-template-columns: 1fr; gap: 4px; }
 }
