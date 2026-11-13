@@ -1338,7 +1338,7 @@ coach-header {
 
 .coach-bag-panel__sheet {
   position: absolute;
-  width: var(--bag-width, 400px);
+  width: var(--bag-width, 460px);
   background: var(--bag-bg, #ffffff);
   color: var(--bag-text, #111111);
   font-family: var(--bag-font, Helvetica);
@@ -1438,13 +1438,16 @@ coach-header {
 .coach-bag-item {
   display: grid;
   grid-template-columns: var(--bag-image, 92px) 1fr;
+  align-items: center;
   gap: 14px;
   padding: 16px 4px 16px 0;
   border-bottom: 1px dashed var(--bag-line, #d5d5d5);
 }
 
 .coach-bag-item__media {
-  display: block;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   background: #f3f3f3;
 }
 
@@ -1452,6 +1455,7 @@ coach-header {
   display: block;
   width: 100%;
   height: auto;
+  object-fit: contain;
 }
 
 .coach-bag-item__title {
