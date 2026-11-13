@@ -174,9 +174,11 @@
 
         <div class="coach-product__buy">
           <div class="coach-product__qty">
-            <button type="button" class="js-qty" data-step="-1" aria-label="Decrease quantity">−</button>
-            <input class="js-qty-input" type="number" name="quantity" value="1" min="1" aria-label="Quantity">
-            <button type="button" class="js-qty" data-step="1" aria-label="Increase quantity">+</button>
+            <select class="js-qty-input" name="quantity" aria-label="Quantity">
+              {%- for i in (1..5) -%}
+                <option value="{{ i }}">{{ i }}</option>
+              {%- endfor -%}
+            </select>
           </div>
           <button type="submit" class="coach-product__add js-add"{% unless current.available %} disabled{% endunless %}>
             {{ section.settings.add_label | default: 'Add to bag' | escape }}
