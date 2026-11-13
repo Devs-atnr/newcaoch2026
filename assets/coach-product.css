@@ -1,0 +1,465 @@
+.coach-product {
+  background: #fff;
+  color: #111;
+  font-family: HelveticaLTPro-Roman, "Helvetica Neue", Helvetica, Arial, sans-serif;
+  padding: 18px 28px 64px;
+  max-width: 1440px;
+  margin: 0 auto;
+}
+
+.coach-product__crumb {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 0 0 18px;
+  color: #9a9a9a;
+  font-size: 12px;
+}
+
+.coach-product__crumb a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.coach-product__layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(280px, 0.7fr);
+  gap: 36px;
+  align-items: start;
+}
+
+.coach-product__gallery {
+  display: grid;
+  grid-template-columns: 72px minmax(0, 1fr);
+  gap: 12px;
+  position: sticky;
+  top: 96px;
+}
+
+.coach-product__thumbs {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  min-height: 0;
+}
+
+.coach-product__thumb-nav {
+  width: 36px;
+  height: 28px;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  color: #222;
+}
+
+.coach-product__thumb-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-height: 520px;
+  overflow: auto;
+  scrollbar-width: none;
+}
+
+.coach-product__thumb-list::-webkit-scrollbar { display: none; }
+
+.coach-product__thumb {
+  width: 64px;
+  height: 64px;
+  padding: 0;
+  border: 1px solid transparent;
+  background: #f3f3f3;
+  cursor: pointer;
+}
+
+.coach-product__thumb.is-active { border-color: #111; }
+
+.coach-product__thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.coach-product__stage {
+  position: relative;
+  background: #f3f3f3;
+  min-height: 520px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.coach-product__image {
+  width: 100%;
+  height: 640px;
+  object-fit: contain;
+}
+
+.coach-product__flag {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  background: #f3d36b;
+  color: #111;
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 4px 8px;
+}
+
+.coach-product__size-btn,
+.coach-product__heart {
+  position: absolute;
+  right: 14px;
+  border: 1px solid #d7d7d7;
+  background: #fff;
+  cursor: pointer;
+}
+
+.coach-product__size-btn {
+  top: 14px;
+  height: 32px;
+  padding: 0 10px;
+  font-size: 11px;
+  letter-spacing: 0.04em;
+}
+
+.coach-product__heart {
+  top: 56px;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.coach-product__heart.is-on svg { fill: #111; }
+
+.coach-product__color-label {
+  position: absolute;
+  left: 50%;
+  top: 46%;
+  transform: translate(-50%, -50%);
+  background: #fff;
+  border: 1px solid #e5e5e5;
+  padding: 4px 8px;
+  font-size: 12px;
+  pointer-events: none;
+}
+
+.coach-product__title {
+  margin: 0 0 12px;
+  font-size: 28px;
+  font-weight: 500;
+  line-height: 1.2;
+}
+
+.coach-product__meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 22px;
+  margin-bottom: 12px;
+}
+
+.coach-product__pill {
+  background: #ececec;
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 3px 7px;
+}
+
+.coach-product__stars { color: #d0d0d0; letter-spacing: 1px; font-size: 14px; }
+.coach-product__stars .is-on { color: #111; }
+.coach-product__stars--lg { font-size: 22px; letter-spacing: 2px; }
+.coach-product__review-count { color: #666; font-size: 13px; }
+
+.coach-product__price {
+  margin: 0 0 18px;
+  font-size: 22px;
+}
+
+.coach-product__price svg { width: 18px; height: 18px; vertical-align: -3px; }
+
+.coach-product__option-label {
+  margin: 0 0 8px;
+  font-size: 13px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.coach-product__swatches,
+.coach-product__choices {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.coach-product__swatch {
+  width: 64px;
+  height: 72px;
+  padding: 0;
+  border: 1px solid #ddd;
+  background: #f6f6f6;
+  cursor: pointer;
+}
+
+.coach-product__swatch.is-active { border-color: #111; box-shadow: inset 0 0 0 1px #111; }
+.coach-product__swatch img { width: 100%; height: 100%; object-fit: contain; }
+
+.coach-product__choice {
+  min-width: 44px;
+  height: 36px;
+  padding: 0 12px;
+  border: 1px solid #ddd;
+  background: #fff;
+  cursor: pointer;
+}
+
+.coach-product__choice.is-active { background: #111; color: #fff; border-color: #111; }
+
+.coach-product__buy {
+  display: grid;
+  grid-template-columns: 118px minmax(0, 1fr);
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.coach-product__qty {
+  display: grid;
+  grid-template-columns: 32px 1fr 32px;
+  border: 1px solid #ddd;
+  height: 48px;
+}
+
+.coach-product__qty button,
+.coach-product__qty input {
+  border: 0;
+  background: #fff;
+  text-align: center;
+  font-size: 16px;
+}
+
+.coach-product__qty input { width: 100%; }
+
+.coach-product__add,
+.coach-product__now {
+  height: 48px;
+  border: 0;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.coach-product__add { background: #111; color: #fff; }
+.coach-product__add:disabled,
+.coach-product__now:disabled { opacity: 0.45; cursor: default; }
+.coach-product__now {
+  width: 100%;
+  margin-bottom: 8px;
+  background: #3daf5c;
+  color: #fff;
+}
+
+.coach-product__error {
+  min-height: 18px;
+  margin: 0 0 8px;
+  color: #9b1c1c;
+  font-size: 13px;
+}
+
+.coach-product__acc,
+.coach-product__faq-item {
+  border-top: 1px solid #e6e6e6;
+}
+
+.coach-product__acc summary,
+.coach-product__faq-item summary {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  min-height: 52px;
+  cursor: pointer;
+  list-style: none;
+  font-size: 15px;
+}
+
+.coach-product__acc summary::-webkit-details-marker,
+.coach-product__faq-item summary::-webkit-details-marker { display: none; }
+
+.coach-product__acc summary::after,
+.coach-product__faq-item summary::after {
+  content: "";
+  width: 8px;
+  height: 8px;
+  border-right: 1.4px solid #111;
+  border-bottom: 1.4px solid #111;
+  transform: rotate(45deg);
+  margin-right: 4px;
+}
+
+.coach-product__acc[open] summary::after,
+.coach-product__faq-item[open] summary::after { transform: rotate(225deg); }
+
+.coach-product__acc-body,
+.coach-product__faq-item .rte {
+  padding: 0 0 16px;
+  color: #333;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.coach-product__specs { margin: 0; }
+.coach-product__specs div {
+  display: grid;
+  grid-template-columns: 140px 1fr;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+.coach-product__specs dt {
+  margin: 0;
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.coach-product__specs dd { margin: 0; }
+
+.coach-product__share {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-top: 18px;
+  font-size: 14px;
+}
+
+.coach-product__share a {
+  color: #111;
+  text-decoration: none;
+  font-size: 16px;
+}
+
+.coach-product__rail,
+.coach-product__faq,
+.coach-product__reviews {
+  margin-top: 48px;
+  padding-top: 28px;
+  border-top: 1px solid #ececec;
+}
+
+.coach-product__rail h2,
+.coach-product__faq h2,
+.coach-product__reviews h2 {
+  margin: 0 0 22px;
+  text-align: center;
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.coach-product__faq h2,
+.coach-product__reviews h2 { text-align: center; }
+.coach-product__faq h2 { text-align: left; }
+
+.coach-product__rail-row { position: relative; }
+.coach-product__rail-track {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: calc(25% - 12px);
+  gap: 16px;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+}
+.coach-product__rail-track::-webkit-scrollbar { display: none; }
+
+.coach-product__rail-next {
+  position: absolute;
+  right: -6px;
+  top: 28%;
+  width: 36px;
+  height: 36px;
+  border: 0;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 2px 8px rgba(0,0,0,.15);
+  cursor: pointer;
+}
+
+.coach-rail-card { color: #111; text-decoration: none; text-align: center; }
+.coach-rail-card__media {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f3f3f3;
+  aspect-ratio: 1;
+}
+.coach-rail-card__media img { width: 78%; height: 78%; object-fit: contain; }
+.coach-rail-card__heart {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+}
+.coach-rail-card__title {
+  display: block;
+  margin-top: 10px;
+  font-size: 13px;
+  line-height: 1.35;
+}
+
+.coach-product__reviews { text-align: center; }
+.coach-product__review-line { margin: 8px 0; font-size: 13px; }
+.coach-product__review-note { color: #888; font-size: 12px; }
+
+.coach-product__modal[hidden] { display: none; }
+.coach-product__modal { position: fixed; inset: 0; z-index: 600; }
+.coach-product__modal-bg { position: absolute; inset: 0; border: 0; background: rgba(0,0,0,.45); }
+.coach-product__modal-card {
+  position: relative;
+  z-index: 1;
+  width: min(640px, calc(100% - 32px));
+  margin: 10vh auto;
+  background: #fff;
+  padding: 28px;
+}
+.coach-product__modal-card img { width: 100%; height: auto; }
+
+.coach-page-loader {
+  position: fixed;
+  inset: 0;
+  z-index: 700;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  background: rgba(244, 244, 244, 0.62);
+}
+.coach-page-loader.is-active { display: flex; }
+.coach-page-loader__spin {
+  width: 42px;
+  height: 42px;
+  border: 2px solid #dedede;
+  border-right-color: #111;
+  border-radius: 50%;
+  animation: coach-product-spin 0.75s linear infinite;
+}
+@keyframes coach-product-spin { to { transform: rotate(360deg); } }
+
+@media screen and (max-width: 989px) {
+  .coach-product { padding: 12px 14px 48px; }
+  .coach-product__layout,
+  .coach-product__gallery { display: block; position: static; }
+  .coach-product__thumbs { flex-direction: row; margin-bottom: 10px; }
+  .coach-product__thumb-list { flex-direction: row; max-height: none; max-width: calc(100% - 72px); }
+  .coach-product__thumb-nav svg { transform: rotate(-90deg); }
+  .coach-product__image { height: 360px; }
+  .coach-product__stage { min-height: 0; }
+  .coach-product__title { margin-top: 18px; font-size: 24px; }
+  .coach-product__rail-track { grid-auto-columns: 46%; }
+  .coach-product__specs div { grid-template-columns: 1fr; gap: 4px; }
+}

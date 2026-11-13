@@ -1,1 +1,50 @@
-{"sections":{"main":{"type":"main-product","blocks":{"vendor":{"type":"text","settings":{"text":"{{ product.vendor }}","text_style":"uppercase"}},"title":{"type":"title","settings":{}},"price":{"type":"price","settings":{}},"variant_picker":{"type":"variant_picker","settings":{"picker_type":"button","swatch_shape":"circle"}},"quantity_selector":{"type":"quantity_selector","settings":{}},"buy_buttons":{"type":"buy_buttons","settings":{"show_dynamic_checkout":true,"show_gift_card_recipient":true}},"description":{"type":"description","settings":{}},"share":{"type":"share","settings":{"share_label":"Share"}}},"block_order":["vendor","title","price","variant_picker","quantity_selector","buy_buttons","description","share"],"settings":{"enable_sticky_info":true,"color_scheme":"scheme-1","media_size":"large","constrain_to_viewport":true,"media_fit":"contain","gallery_layout":"stacked","mobile_thumbnails":"hide","media_position":"left","image_zoom":"lightbox","hide_variants":true,"enable_video_looping":false,"padding_top":36,"padding_bottom":12}},"disclosures":{"type":"disclosures","settings":{"padding_top":36,"padding_bottom":0}},"related-products":{"type":"related-products","settings":{"heading":"You may also like","heading_size":"h2","products_to_show":4,"columns_desktop":4,"columns_mobile":"2","color_scheme":"scheme-1","image_ratio":"square","image_shape":"default","show_secondary_image":true,"show_vendor":false,"show_rating":false,"padding_top":36,"padding_bottom":28}}},"order":["main","disclosures","related-products"]}
+{
+  "sections": {
+    "main": {
+      "type": "coach-product",
+      "blocks": {
+        "faq-1": {
+          "type": "faq",
+          "settings": {
+            "question": "Is this a slouchy bag?",
+            "answer": "<p>The silhouette is soft and relaxed, with a structured base that keeps its shape while you wear it.</p>"
+          }
+        },
+        "faq-2": {
+          "type": "faq",
+          "settings": {
+            "question": "How can I style this bag?",
+            "answer": "<p>Wear it on the shoulder for everyday looks, or shorten the strap to carry it closer to the body.</p>"
+          }
+        },
+        "faq-3": {
+          "type": "faq",
+          "settings": {
+            "question": "What can I fit in this bag?",
+            "answer": "<p>It holds daily essentials such as a phone, card case, keys, and a small pouch.</p>"
+          }
+        }
+      },
+      "block_order": ["faq-1", "faq-2", "faq-3"],
+      "settings": {
+        "show_breadcrumb": true,
+        "breadcrumb_home": "Coach",
+        "bestseller_tag": "bestseller",
+        "bestseller_label": "Bestseller",
+        "add_label": "Add to bag",
+        "show_buy_now": true,
+        "buy_now_label": "Buy now",
+        "bag_size_label": "See bag size",
+        "shipping_heading": "Shipping And Returns",
+        "details_heading": "Product Details",
+        "notes_heading": "Editor's Notes",
+        "share_label": "Share This Product",
+        "also_heading": "You May Also Like",
+        "recent_heading": "Recently Viewed",
+        "faq_heading": "Frequently Asked Questions",
+        "reviews_heading": "Reviews"
+      }
+    }
+  },
+  "order": ["main"]
+}

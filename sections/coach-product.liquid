@@ -1,0 +1,354 @@
+{{ 'coach-product.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'coach-product.js' | asset_url }}" defer="defer"></script>
+
+{%- liquid
+  assign current = product.selected_or_first_available_variant
+  assign color_index = -1
+  assign bestseller_tag = section.settings.bestseller_tag | default: 'bestseller'
+  assign is_bestseller = false
+  for tag in product.tags
+    assign tag_down = tag | downcase
+    if tag_down == bestseller_tag or tag_down contains 'bestseller' or tag_down contains 'best seller'
+      assign is_bestseller = true
+    endif
+  endfor
+  for option in product.options_with_values
+    assign option_name = option.name | downcase
+    if option_name contains 'color' or option_name contains 'colour' or option_name contains 'couleur'
+      assign color_index = forloop.index0
+    endif
+  endfor
+  assign rating = product.metafields.reviews.rating.value
+  assign rating_count = product.metafields.reviews.rating_count
+  assign style_number = product.metafields.custom.style_number | default: current.sku
+  assign measurements = product.metafields.custom.measurements
+  assign materials = product.metafields.custom.materials
+  assign strap = product.metafields.custom.strap
+  assign features = product.metafields.custom.features
+  assign editors_note = product.metafields.custom.editors_note | default: product.description
+-%}
+
+<coach-product-page
+  class="coach-product"
+  data-section-id="{{ section.id }}"
+  data-product-id="{{ product.id }}"
+  data-product-handle="{{ product.handle }}"
+  data-money-format="{{ shop.money_format | escape }}"
+>
+  {%- if section.settings.show_breadcrumb -%}
+    <nav class="coach-product__crumb" aria-label="Breadcrumb">
+      <a href="{{ routes.root_url }}">{{ section.settings.breadcrumb_home | default: 'Coach' | escape }}</a>
+      {%- if collection -%}
+        <span aria-hidden="true">/</span>
+        <a href="{{ collection.url }}">{{ collection.title | escape }}</a>
+      {%- elsif product.collections.first -%}
+        <span aria-hidden="true">/</span>
+        <a href="{{ product.collections.first.url }}">{{ product.collections.first.title | escape }}</a>
+      {%- endif -%}
+      <span aria-hidden="true">/</span>
+      <span aria-current="page">{{ product.title | escape }}</span>
+    </nav>
+  {%- endif -%}
+
+  <div class="coach-product__layout">
+    <div class="coach-product__gallery">
+      <div class="coach-product__thumbs">
+        <button type="button" class="coach-product__thumb-nav js-thumb-prev" aria-label="Previous images">
+          <svg width="14" height="8" viewBox="0 0 14 8" fill="none" aria-hidden="true"><path d="M1 7L7 1L13 7" stroke="currentColor" stroke-width="1.2"/></svg>
+        </button>
+        <div class="coach-product__thumb-list js-thumbs">
+          {%- for media in product.media -%}
+            {%- if media.media_type == 'image' -%}
+              <button
+                type="button"
+                class="coach-product__thumb{% if forloop.first %} is-active{% endif %}"
+                data-src="{{ media | image_url: width: 1400 }}"
+                data-alt="{{ media.alt | default: product.title | escape }}"
+                aria-label="{{ product.title | escape }} image {{ forloop.index }}"
+              >
+                {{ media | image_url: width: 160 | image_tag: alt: media.alt, loading: 'lazy' }}
+              </button>
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
+        <button type="button" class="coach-product__thumb-nav js-thumb-next" aria-label="Next images">
+          <svg width="14" height="8" viewBox="0 0 14 8" fill="none" aria-hidden="true"><path d="M1 1L7 7L13 1" stroke="currentColor" stroke-width="1.2"/></svg>
+        </button>
+      </div>
+
+      <div class="coach-product__stage">
+        {%- if is_bestseller -%}
+          <span class="coach-product__flag">{{ section.settings.bestseller_label | default: 'Bestseller' | escape }}</span>
+        {%- endif -%}
+        {%- if section.settings.bag_size_image != blank -%}
+          <button type="button" class="coach-product__size-btn js-bag-size">{{ section.settings.bag_size_label | default: 'See bag size' | escape }}</button>
+        {%- endif -%}
+        <button type="button" class="coach-product__heart" aria-label="Wishlist" data-wishlist>
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M12 20.4s-7.6-4.5-9.3-9.4C1.6 7.7 3.6 4.4 7 4.4c2.1 0 3.6 1.2 5 3.1 1.4-1.9 2.9-3.1 5-3.1 3.4 0 5.4 3.3 4.3 6.6-1.7 4.9-9.3 9.4-9.3 9.4z"/></svg>
+        </button>
+        {%- if color_index >= 0 -%}
+          <span class="coach-product__color-label js-color-label">{{ current.options[color_index] }}</span>
+        {%- endif -%}
+        {%- if product.featured_media -%}
+          <img
+            class="coach-product__image js-main-image"
+            src="{{ product.featured_media | image_url: width: 1400 }}"
+            alt="{{ product.featured_media.alt | default: product.title | escape }}"
+            width="1400"
+            height="1400"
+          >
+        {%- else -%}
+          {{ 'product-1' | placeholder_svg_tag: 'coach-product__image' }}
+        {%- endif -%}
+      </div>
+    </div>
+
+    <div class="coach-product__info">
+      <h1 class="coach-product__title">{{ product.title | escape }}</h1>
+
+      <div class="coach-product__meta">
+        {%- if is_bestseller -%}
+          <span class="coach-product__pill">{{ section.settings.bestseller_label | default: 'Bestseller' | escape }}</span>
+        {%- endif -%}
+        {%- if rating != blank -%}
+          <span class="coach-product__stars" aria-label="{{ rating.rating }} out of 5">
+            {%- assign filled = rating.rating | round -%}
+            {%- for i in (1..5) -%}
+              <span{% if i <= filled %} class="is-on"{% endif %}>★</span>
+            {%- endfor -%}
+          </span>
+          {%- if rating_count != blank -%}
+            <span class="coach-product__review-count">({{ rating_count }})</span>
+          {%- endif -%}
+        {%- endif -%}
+      </div>
+
+      <p class="coach-product__price js-price">{{ current.price | money }}</p>
+
+      <form class="coach-product__form js-product-form" action="{{ routes.cart_add_url }}" method="post">
+        <input type="hidden" name="id" class="js-variant-id" value="{{ current.id }}">
+
+        {%- for option in product.options_with_values -%}
+          {%- assign option_name = option.name | downcase -%}
+          {%- if color_index == forloop.index0 -%}
+            <p class="coach-product__option-label">{{ option.name | escape }}: <span class="js-option-label">{{ option.selected_value | escape }}</span></p>
+            <div class="coach-product__swatches" role="list">
+              {%- for value in option.values -%}
+                {%- assign swatch_variant = nil -%}
+                {%- for variant in product.variants -%}
+                  {%- if variant.options[color_index] == value and swatch_variant == nil -%}
+                    {%- assign swatch_variant = variant -%}
+                  {%- endif -%}
+                {%- endfor -%}
+                <button
+                  type="button"
+                  class="coach-product__swatch{% if option.selected_value == value %} is-active{% endif %}"
+                  data-option-index="{{ color_index }}"
+                  data-value="{{ value | escape }}"
+                  aria-label="{{ value | escape }}"
+                >
+                  {%- if swatch_variant.featured_media -%}
+                    {{ swatch_variant.featured_media | image_url: width: 120 | image_tag: alt: value }}
+                  {%- elsif swatch_variant.image -%}
+                    {{ swatch_variant.image | image_url: width: 120 | image_tag: alt: value }}
+                  {%- else -%}
+                    <span>{{ value | escape }}</span>
+                  {%- endif -%}
+                </button>
+              {%- endfor -%}
+            </div>
+          {%- else -%}
+            <p class="coach-product__option-label">{{ option.name | escape }}</p>
+            <div class="coach-product__choices">
+              {%- for value in option.values -%}
+                <button
+                  type="button"
+                  class="coach-product__choice{% if option.selected_value == value %} is-active{% endif %}"
+                  data-option-index="{{ forloop.parentloop.index0 }}"
+                  data-value="{{ value | escape }}"
+                >{{ value | escape }}</button>
+              {%- endfor -%}
+            </div>
+          {%- endif -%}
+        {%- endfor -%}
+
+        <div class="coach-product__buy">
+          <div class="coach-product__qty">
+            <button type="button" class="js-qty" data-step="-1" aria-label="Decrease quantity">−</button>
+            <input class="js-qty-input" type="number" name="quantity" value="1" min="1" aria-label="Quantity">
+            <button type="button" class="js-qty" data-step="1" aria-label="Increase quantity">+</button>
+          </div>
+          <button type="submit" class="coach-product__add js-add"{% unless current.available %} disabled{% endunless %}>
+            {{ section.settings.add_label | default: 'Add to bag' | escape }}
+          </button>
+        </div>
+        {%- if section.settings.show_buy_now -%}
+          <button type="button" class="coach-product__now js-buy-now"{% unless current.available %} disabled{% endunless %}>
+            {{ section.settings.buy_now_label | default: 'Buy now' | escape }}
+          </button>
+        {%- endif -%}
+        <p class="coach-product__error js-error" role="alert"></p>
+      </form>
+
+      {%- if section.settings.shipping_text != blank -%}
+        <details class="coach-product__acc">
+          <summary>{{ section.settings.shipping_heading | default: 'Shipping And Returns' | escape }}</summary>
+          <div class="coach-product__acc-body rte">{{ section.settings.shipping_text }}</div>
+        </details>
+      {%- endif -%}
+
+      <details class="coach-product__acc" open>
+        <summary>{{ section.settings.details_heading | default: 'Product Details' | escape }}</summary>
+        <div class="coach-product__acc-body">
+          <dl class="coach-product__specs">
+            {%- if style_number != blank -%}
+              <div><dt>Style number</dt><dd class="js-sku">{{ style_number | escape }}</dd></div>
+            {%- endif -%}
+            {%- if measurements != blank -%}
+              <div><dt>Measurements</dt><dd>{{ measurements | newline_to_br }}</dd></div>
+            {%- endif -%}
+            {%- if materials != blank -%}
+              <div><dt>Materials</dt><dd>{{ materials | newline_to_br }}</dd></div>
+            {%- endif -%}
+            {%- if strap != blank -%}
+              <div><dt>Strap</dt><dd>{{ strap | escape }}</dd></div>
+            {%- endif -%}
+            {%- if features != blank -%}
+              <div><dt>Features</dt><dd>{{ features | newline_to_br }}</dd></div>
+            {%- endif -%}
+          </dl>
+        </div>
+      </details>
+
+      {%- if editors_note != blank -%}
+        <details class="coach-product__acc">
+          <summary>{{ section.settings.notes_heading | default: "Editor's Notes" | escape }}</summary>
+          <div class="coach-product__acc-body rte">{{ editors_note }}</div>
+        </details>
+      {%- endif -%}
+
+      <div class="coach-product__share">
+        <span>{{ section.settings.share_label | default: 'Share This Product' | escape }}</span>
+        <a href="https://www.facebook.com/sharer.php?u={{ shop.url | append: product.url | url_encode }}" target="_blank" rel="noopener" aria-label="Facebook">f</a>
+        <a href="https://pinterest.com/pin/create/button/?url={{ shop.url | append: product.url | url_encode }}&description={{ product.title | url_encode }}" target="_blank" rel="noopener" aria-label="Pinterest">p</a>
+        <a href="https://twitter.com/intent/tweet?url={{ shop.url | append: product.url | url_encode }}&text={{ product.title | url_encode }}" target="_blank" rel="noopener" aria-label="X">𝕏</a>
+        <a href="mailto:?subject={{ product.title | url_encode }}&body={{ shop.url | append: product.url | url_encode }}" aria-label="Email">✉</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="coach-product__rail" data-rail="also">
+    <h2>{{ section.settings.also_heading | default: 'You May Also Like' | escape }}</h2>
+    <div class="coach-product__rail-row">
+      <div class="coach-product__rail-track js-also"></div>
+      <button type="button" class="coach-product__rail-next js-also-next" aria-label="Next products">
+        <svg width="10" height="16" viewBox="0 0 10 16" fill="none" aria-hidden="true"><path d="M2 2L8 8L2 14" stroke="currentColor" stroke-width="1.3"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <div class="coach-product__rail" data-rail="recent" hidden>
+    <h2>{{ section.settings.recent_heading | default: 'Recently Viewed' | escape }}</h2>
+    <div class="coach-product__rail-track js-recent"></div>
+  </div>
+
+  {%- if section.blocks.size > 0 -%}
+    <div class="coach-product__faq">
+      <h2>{{ section.settings.faq_heading | default: 'Frequently Asked Questions' | escape }}</h2>
+      {%- for block in section.blocks -%}
+        {%- if block.type == 'faq' and block.settings.question != blank -%}
+          <details class="coach-product__faq-item" {{ block.shopify_attributes }}>
+            <summary>{{ block.settings.question | escape }}</summary>
+            <div class="rte">{{ block.settings.answer }}</div>
+          </details>
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+  {%- endif -%}
+
+  <div class="coach-product__reviews">
+    <h2>{{ section.settings.reviews_heading | default: 'Reviews' | escape }}</h2>
+    {%- if rating != blank -%}
+      <p class="coach-product__stars coach-product__stars--lg" aria-hidden="true">
+        {%- assign filled = rating.rating | round -%}
+        {%- for i in (1..5) -%}
+          <span{% if i <= filled %} class="is-on"{% endif %}>★</span>
+        {%- endfor -%}
+      </p>
+      <p class="coach-product__review-line">{{ rating.rating }} Stars{% if rating_count != blank %} &nbsp; {{ rating_count }} Reviews{% endif %}</p>
+    {%- else -%}
+      <p class="coach-product__stars coach-product__stars--lg" aria-hidden="true"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></p>
+      <p class="coach-product__review-line">No reviews yet</p>
+    {%- endif -%}
+    {%- if section.settings.reviews_note != blank -%}
+      <p class="coach-product__review-note">{{ section.settings.reviews_note | escape }}</p>
+    {%- endif -%}
+  </div>
+
+  {%- if section.settings.bag_size_image != blank -%}
+    <div class="coach-product__modal" hidden>
+      <button type="button" class="coach-product__modal-bg js-bag-size-close" aria-label="Close"></button>
+      <div class="coach-product__modal-card">
+        <button type="button" class="js-bag-size-close" aria-label="Close">×</button>
+        {{ section.settings.bag_size_image | image_url: width: 900 | image_tag: alt: section.settings.bag_size_label }}
+      </div>
+    </div>
+  {%- endif -%}
+
+  <script type="application/json" class="js-coach-product-data">
+    {
+      "colorIndex": {{ color_index }},
+      "options": {{ product.options | json }},
+      "variants": [
+        {%- for variant in product.variants -%}
+          {
+            "id": {{ variant.id }},
+            "available": {{ variant.available }},
+            "options": {{ variant.options | json }},
+            "price": {{ variant.price | money | json }},
+            "sku": {{ variant.sku | json }},
+            "image": {% if variant.featured_media %}{{ variant.featured_media | image_url: width: 1400 | json }}{% else %}null{% endif %}
+          }{% unless forloop.last %},{% endunless %}
+        {%- endfor -%}
+      ]
+    }
+  </script>
+</coach-product-page>
+
+{% schema %}
+{
+  "name": "Coach product",
+  "settings": [
+    { "type": "checkbox", "id": "show_breadcrumb", "label": "Show breadcrumb", "default": true },
+    { "type": "text", "id": "breadcrumb_home", "label": "Home label", "default": "Coach" },
+    { "type": "text", "id": "bestseller_tag", "label": "Bestseller tag", "default": "bestseller" },
+    { "type": "text", "id": "bestseller_label", "label": "Bestseller label", "default": "Bestseller" },
+    { "type": "text", "id": "add_label", "label": "Add to bag label", "default": "Add to bag" },
+    { "type": "checkbox", "id": "show_buy_now", "label": "Show Buy now", "default": true },
+    { "type": "text", "id": "buy_now_label", "label": "Buy now label", "default": "Buy now" },
+    { "type": "text", "id": "bag_size_label", "label": "Bag size button", "default": "See bag size" },
+    { "type": "image_picker", "id": "bag_size_image", "label": "Bag size image" },
+    { "type": "text", "id": "shipping_heading", "label": "Shipping heading", "default": "Shipping And Returns" },
+    { "type": "richtext", "id": "shipping_text", "label": "Shipping and returns", "default": "<p>Complimentary shipping and easy returns. See our shipping and returns pages for full details.</p>" },
+    { "type": "text", "id": "details_heading", "label": "Details heading", "default": "Product Details" },
+    { "type": "text", "id": "notes_heading", "label": "Notes heading", "default": "Editor's Notes" },
+    { "type": "text", "id": "share_label", "label": "Share label", "default": "Share This Product" },
+    { "type": "text", "id": "also_heading", "label": "Recommendations heading", "default": "You May Also Like" },
+    { "type": "text", "id": "recent_heading", "label": "Recently viewed heading", "default": "Recently Viewed" },
+    { "type": "text", "id": "faq_heading", "label": "FAQ heading", "default": "Frequently Asked Questions" },
+    { "type": "text", "id": "reviews_heading", "label": "Reviews heading", "default": "Reviews" },
+    { "type": "text", "id": "reviews_note", "label": "Reviews note", "default": "Ratings and reviews are submitted by customers after purchase." }
+  ],
+  "blocks": [
+    {
+      "type": "faq",
+      "name": "Question",
+      "settings": [
+        { "type": "text", "id": "question", "label": "Question", "default": "How should I care for this product?" },
+        { "type": "richtext", "id": "answer", "label": "Answer", "default": "<p>Wipe with a soft cloth and store in the dust bag. Avoid prolonged contact with water.</p>" }
+      ]
+    }
+  ],
+  "presets": [{ "name": "Coach product" }]
+}
+{% endschema %}
