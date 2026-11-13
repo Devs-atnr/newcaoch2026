@@ -286,20 +286,20 @@ coach-header {
 
 .coach-bag__count {
   position: absolute;
-  top: -5px;
-  right: -8px;
+  top: -6px;
+  right: -7px;
   inset: auto;
   display: flex;
   align-items: center;
   justify-content: center;
-  min-width: 18px;
-  height: 18px;
-  padding: 0 4px;
+  min-width: 16px;
+  height: 16px;
+  padding: 0 3px;
   border-radius: 999px;
-  background: var(--bag-count-bg, #111111);
+  background: var(--bag-count-bg, #1f9d55);
   color: var(--bag-count-text, #ffffff);
   font-family: var(--ch-nav-font);
-  font-size: var(--bag-count-size, 11px);
+  font-size: 10px;
   font-weight: 700;
   line-height: 1;
   letter-spacing: 0;
@@ -307,16 +307,17 @@ coach-header {
 }
 
 .coach-bag__count.is-empty {
-  top: 0;
-  right: -1px;
+  top: 34%;
+  right: 18%;
   min-width: 0;
+  width: auto;
   height: auto;
   padding: 0;
   border-radius: 0;
   background: transparent;
   color: currentColor;
-  font-size: 12px;
-  font-weight: 500;
+  font-size: 11px;
+  font-weight: 400;
 }
 
 .coach-bag__count[hidden] {
@@ -1411,7 +1412,9 @@ coach-header {
 
 .coach-bag-panel__items {
   overflow-y: auto;
-  max-height: var(--bag-list-height, 292px);
+  flex: 1 1 auto;
+  min-height: 0;
+  max-height: min(var(--bag-list-height, 292px), calc(100vh - 280px));
   border-top: 1px solid var(--bag-line, #ececec);
   padding-right: 8px;
   scrollbar-width: thin;

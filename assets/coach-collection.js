@@ -937,12 +937,9 @@ class CoachCollection {
     card.dataset.adding = 'true';
     card.classList.add('is-adding');
     card.classList.remove('is-add-error');
-    if (button) {
-      button.classList.add('is-loading');
-      button.setAttribute('aria-busy', 'true');
-    }
+    if (button) button.setAttribute('aria-busy', 'true');
 
-    const started = Date.now();
+    this.showPageLoader(true);
     try {
       const routes = window.routes || { cart_add_url: '/cart/add.js', cart_url: '/cart' };
       const response = await fetch(routes.cart_add_url, {
@@ -957,10 +954,6 @@ class CoachCollection {
       });
 
       const resData = await response.json().catch(() => ({}));
-      const elapsed = Date.now() - started;
-      if (elapsed < 1000) {
-        await new Promise((resolve) => setTimeout(resolve, 1000 - elapsed));
-      }
 
       if (!response.ok) {
         throw new Error(resData.description || resData.message || 'Could not add this product to your bag.');
@@ -968,10 +961,10 @@ class CoachCollection {
 
       card.classList.remove('is-choosing-size');
       document.body.classList.remove('coach-size-open');
+      await this.updateHeaderCartCount();
+      this.showPageLoader(false);
       if (window.CoachMiniBag && typeof window.CoachMiniBag.open === 'function') {
         await window.CoachMiniBag.open();
-      } else {
-        await this.updateHeaderCartCount();
       }
 
       if (typeof window.publish === 'function' && window.PUB_SUB_EVENTS) {
@@ -986,6 +979,7 @@ class CoachCollection {
       card.classList.add('is-add-error');
       window.setTimeout(() => card.classList.remove('is-add-error'), 2800);
     } finally {
+      this.showPageLoader(false);
       card.dataset.adding = 'false';
       card.classList.remove('is-adding');
       if (button) {
@@ -993,6 +987,18 @@ class CoachCollection {
         button.removeAttribute('aria-busy');
       }
     }
+  }
+
+  showPageLoader(active) {
+    let loader = document.querySelector('.coach-page-loader');
+    if (!loader) {
+      loader = document.createElement('div');
+      loader.className = 'coach-page-loader';
+      loader.setAttribute('role', 'status');
+      loader.innerHTML = '<span class="coach-page-loader__spin" aria-hidden="true"></span>';
+      document.body.appendChild(loader);
+    }
+    loader.classList.toggle('is-active', active);
   }
 
   async updateHeaderCartCount() {

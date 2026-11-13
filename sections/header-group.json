@@ -60,7 +60,7 @@
         "bag_view_bg": "#ffffff",
         "bag_view_text": "#111111",
         "bag_view_border": "#cfcfcf",
-        "bag_count_bg": "#111111",
+        "bag_count_bg": "#1f9d55",
         "bag_count_text": "#ffffff",
         "bag_overlay": "#000000",
         "bag_overlay_opacity": 55,

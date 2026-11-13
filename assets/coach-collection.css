@@ -1441,8 +1441,36 @@ button.coach-sort-btn {
 }
 
 .coach-card.is-adding .coach-card__add-spinner,
-.coach-card.is-adding .coach-size-picker__spinner {
-  display: block;
+.coach-card.is-adding .coach-size-picker__spinner,
+.coach-card__quick-add-btn.is-loading .coach-card__quick-add-spinner,
+.coach-size-picker__confirm.is-loading::after {
+  display: none !important;
+}
+
+.coach-page-loader {
+  position: fixed;
+  inset: 0;
+  z-index: 700;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  pointer-events: auto;
+}
+
+.coach-page-loader.is-active {
+  display: flex;
+}
+
+.coach-page-loader__spin {
+  width: 48px;
+  height: 48px;
+  border: 3px solid #e6e6e6;
+  border-top-color: #111111;
+  border-radius: 50%;
+  background: #ffffff;
+  box-shadow: 0 0 0 10px #ffffff;
+  animation: coach-spin 0.7s linear infinite;
 }
 
 .coach-card.is-adding .coach-size-picker__size {

@@ -737,16 +737,21 @@
         const icon = document.getElementById('cart-icon-bubble') || document.querySelector('.coach-header__cart');
         if (!icon || !sheet) return;
         const rect = icon.getBoundingClientRect();
+        const margin = 12;
         const configured = parseFloat(getComputedStyle(sheet).getPropertyValue('--bag-width')) || 460;
-        const width = Math.min(configured, window.innerWidth - 24);
-        let right = Math.max(12, window.innerWidth - rect.right - 8);
-        if (right + width > window.innerWidth - 12) right = 12;
-        sheet.style.top = `${rect.bottom + 14}px`;
-        sheet.style.right = `${right}px`;
-        sheet.style.width = `${width}px`;
+        const width = Math.min(configured, window.innerWidth - margin * 2);
         const iconCenter = rect.left + rect.width / 2;
-        const sheetLeft = window.innerWidth - right - width;
-        sheet.style.setProperty('--bag-caret', `${Math.max(18, sheetLeft + width - iconCenter - 8)}px`);
+        let left = iconCenter + 22 - width;
+        left = Math.max(margin, Math.min(left, window.innerWidth - margin - width));
+        const top = Math.max(8, rect.bottom);
+        const maxHeight = Math.max(240, window.innerHeight - top - margin);
+        sheet.style.top = `${Math.round(top)}px`;
+        sheet.style.left = `${Math.round(left)}px`;
+        sheet.style.right = 'auto';
+        sheet.style.width = `${Math.round(width)}px`;
+        sheet.style.maxHeight = `${Math.round(maxHeight)}px`;
+        const caret = left + width - iconCenter - 8;
+        sheet.style.setProperty('--bag-caret', `${Math.round(Math.max(16, Math.min(width - 28, caret)))}px`);
       };
 
       const desktopBag = () => window.matchMedia('(min-width: 990px)').matches;
@@ -823,6 +828,15 @@
         if (!desktopBag()) return;
         scheduleClose();
       });
+
+      if (!this.bagPlaceBound) {
+        this.bagPlaceBound = true;
+        const reposition = () => {
+          if (!panel.hidden) place();
+        };
+        window.addEventListener('resize', reposition);
+        window.addEventListener('scroll', reposition, { passive: true });
+      }
 
       this.closeMiniBag = close;
       window.CoachMiniBag = { open, close };
