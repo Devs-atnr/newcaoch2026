@@ -55,14 +55,15 @@ class CoachProductPage extends HTMLElement {
         this.querySelectorAll(`[data-option-index="${index}"]`).forEach((item) => {
           item.classList.toggle('is-active', item === button);
         });
-        const label = button.closest('.coach-product__info')?.querySelectorAll('.js-option-label')[this.data.colorIndex === index ? 0 : -1];
         if (index === this.data.colorIndex) {
-          this.querySelectorAll('.js-option-label').forEach((node, nodeIndex) => {
-            if (nodeIndex === 0) node.textContent = button.dataset.value;
-          });
+          const colorLabel = this.querySelector('.js-option-label');
+          if (colorLabel) colorLabel.textContent = button.dataset.value;
           const overlay = this.querySelector('.js-color-label');
           if (overlay) overlay.textContent = button.dataset.value;
         }
+        this.querySelectorAll('.js-option-value').forEach((node) => {
+          if (Number(node.dataset.forOption) === index) node.textContent = button.dataset.value;
+        });
         this.applyVariant();
       });
     });
@@ -80,6 +81,18 @@ class CoachProductPage extends HTMLElement {
     this.querySelectorAll('.js-add, .js-buy-now').forEach((button) => {
       button.disabled = !variant.available;
     });
+    const stock = this.querySelector('.js-stock');
+    if (stock) {
+      const left = Number(variant.inventory);
+      if (variant.tracked && left > 0 && left <= 10) {
+        stock.hidden = false;
+        stock.textContent = `ONLY ${left} ITEM(S) LEFT!`;
+      } else {
+        stock.hidden = true;
+        stock.textContent = '';
+      }
+    }
+    this.syncWishlist();
     if (variant.image) {
       const thumb = [...this.querySelectorAll('.coach-product__thumb')].find((button) => button.dataset.src === variant.image);
       this.showImage(variant.image, this.querySelector('.coach-product__title')?.textContent || '', thumb);
@@ -168,9 +181,48 @@ class CoachProductPage extends HTMLElement {
   }
 
   bindWishlist() {
-    this.querySelector('[data-wishlist]')?.addEventListener('click', (event) => {
-      event.currentTarget.classList.toggle('is-on');
+    const button = this.querySelector('[data-wishlist]');
+    this.syncWishlist();
+    button?.addEventListener('click', () => {
+      if (!window.CoachWishlist) return;
+      const variantId = this.querySelector('.js-variant-id')?.value;
+      const image = this.querySelector('.js-main-image')?.src || '';
+      const price = this.querySelector('.js-price')?.textContent?.trim() || '';
+      const saved = window.CoachWishlist.toggle({
+        handle: this.dataset.productHandle,
+        id: this.dataset.productId,
+        variantId,
+        title: this.dataset.productTitle,
+        url: this.dataset.productUrl,
+        image,
+        price,
+      });
+      button.classList.toggle('is-on', saved);
+      button.setAttribute('aria-pressed', saved ? 'true' : 'false');
     });
+    this.addEventListener('click', (event) => {
+      const heart = event.target.closest('[data-wish-handle]');
+      if (!heart || !window.CoachWishlist) return;
+      event.preventDefault();
+      event.stopPropagation();
+      const saved = window.CoachWishlist.toggle({
+        handle: heart.dataset.wishHandle,
+        title: heart.dataset.wishTitle,
+        url: heart.dataset.wishUrl,
+        image: heart.dataset.wishImage,
+        price: heart.dataset.wishPrice,
+      });
+      heart.classList.toggle('is-on', saved);
+      heart.setAttribute('aria-pressed', saved ? 'true' : 'false');
+    });
+  }
+
+  syncWishlist() {
+    const button = this.querySelector('[data-wishlist]');
+    if (!button || !window.CoachWishlist) return;
+    const saved = window.CoachWishlist.has(this.dataset.productHandle);
+    button.classList.toggle('is-on', saved);
+    button.setAttribute('aria-pressed', saved ? 'true' : 'false');
   }
 
   rememberView() {
@@ -200,6 +252,7 @@ class CoachProductPage extends HTMLElement {
         return;
       }
       track.innerHTML = products.map((product) => this.card(product)).join('');
+      this.markSavedHearts(track);
       this.querySelector('.js-also-next')?.addEventListener('click', () => {
         track.scrollBy({ left: track.clientWidth * 0.8, behavior: 'smooth' });
       });
@@ -233,10 +286,22 @@ class CoachProductPage extends HTMLElement {
     track.innerHTML = products.map((product) => this.card({
       title: product.title,
       url: product.url,
+      handle: product.handle,
       images: product.images || [],
       image: product.featured_image,
+      price: product.price,
     })).join('');
+    this.markSavedHearts(track);
     rail.hidden = false;
+  }
+
+  markSavedHearts(root) {
+    if (!window.CoachWishlist) return;
+    root.querySelectorAll('[data-wish-handle]').forEach((heart) => {
+      const saved = window.CoachWishlist.has(heart.dataset.wishHandle);
+      heart.classList.toggle('is-on', saved);
+      heart.setAttribute('aria-pressed', saved ? 'true' : 'false');
+    });
   }
 
   card(product) {
@@ -244,13 +309,19 @@ class CoachProductPage extends HTMLElement {
     const src = typeof image === 'string' ? image : (image.src || '');
     const title = product.title || '';
     const url = product.url || '#';
-    return `<a class="coach-rail-card" href="${this.escape(url)}">
-      <span class="coach-rail-card__media">
-        ${src ? `<img src="${this.escape(src)}" alt="">` : ''}
-        <span class="coach-rail-card__heart" aria-hidden="true">♡</span>
-      </span>
-      <span class="coach-rail-card__title">${this.escape(title)}</span>
-    </a>`;
+    const handle = product.handle || '';
+    const price = typeof product.price === 'number' ? '' : (product.price || '');
+    return `<article class="coach-rail-card">
+      <a class="coach-rail-card__link" href="${this.escape(url)}">
+        <span class="coach-rail-card__media">
+          ${src ? `<img src="${this.escape(src)}" alt="">` : ''}
+        </span>
+        <span class="coach-rail-card__title">${this.escape(title)}</span>
+      </a>
+      <button type="button" class="coach-rail-card__heart" aria-label="Wishlist" data-wish-handle="${this.escape(handle)}" data-wish-title="${this.escape(title)}" data-wish-url="${this.escape(url)}" data-wish-image="${this.escape(src)}" data-wish-price="${this.escape(price)}">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" aria-hidden="true"><path d="M12 20.4s-7.6-4.5-9.3-9.4C1.6 7.7 3.6 4.4 7 4.4c2.1 0 3.6 1.2 5 3.1 1.4-1.9 2.9-3.1 5-3.1 3.4 0 5.4 3.3 4.3 6.6-1.7 4.9-9.3 9.4-9.3 9.4z"/></svg>
+      </button>
+    </article>`;
   }
 
   escape(value) {

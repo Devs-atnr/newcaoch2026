@@ -273,6 +273,21 @@ coach-header {
   height: 2.1rem;
 }
 
+.coach-header__wish .coach-wish__count {
+  position: absolute;
+  top: 0.2rem;
+  right: 0.1rem;
+  min-width: 1.4rem;
+  height: 1.4rem;
+  padding: 0 0.2rem;
+  border-radius: 50%;
+  background: #111;
+  color: #fff;
+  font-size: 0.9rem;
+  line-height: 1.4rem;
+  text-align: center;
+}
+
 /* Bag with count inside */
 .coach-bag {
   position: relative;

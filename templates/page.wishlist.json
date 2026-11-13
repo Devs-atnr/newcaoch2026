@@ -1,0 +1,9 @@
+{
+  "sections": {
+    "main": {
+      "type": "coach-wishlist",
+      "settings": {}
+    }
+  },
+  "order": ["main"]
+}

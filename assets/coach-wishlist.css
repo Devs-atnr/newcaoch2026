@@ -1,0 +1,103 @@
+.coach-wishlist {
+  width: min(1100px, calc(100% - 48px));
+  margin: 0 auto;
+  padding: 36px 0 72px;
+  color: #111;
+  font-family: HelveticaLTPro-Roman, Helvetica, Arial, sans-serif;
+}
+
+.coach-wishlist h1 {
+  margin: 0 0 28px;
+  text-align: center;
+  font-family: GaramondMTProRegular, "Times New Roman", Times, serif;
+  font-size: 32px;
+  font-weight: 400;
+}
+
+.coach-wishlist__empty {
+  margin: 40px 0;
+  text-align: center;
+  font-size: 15px;
+}
+
+.coach-wishlist__empty a {
+  color: #111;
+}
+
+.coach-wishlist__grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.coach-wish-card {
+  position: relative;
+  text-align: center;
+}
+
+.coach-wish-card__media {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f2f2f2;
+  aspect-ratio: 1;
+}
+
+.coach-wish-card__media img {
+  width: 78%;
+  height: 78%;
+  object-fit: contain;
+}
+
+.coach-wish-card__heart {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #111;
+  cursor: pointer;
+}
+
+.coach-wish-card__heart svg { fill: #111; stroke: #111; }
+
+.coach-wish-card__title {
+  display: block;
+  margin-top: 12px;
+  color: #222;
+  font-size: 13px;
+  line-height: 1.35;
+  text-decoration: none;
+}
+
+.coach-wish-card__price {
+  margin: 6px 0 10px;
+  font-family: GaramondMTProRegular, "Times New Roman", Times, serif;
+  font-size: 18px;
+}
+
+.coach-wish-card__add {
+  width: 100%;
+  height: 44px;
+  border: 0;
+  background: #000;
+  color: #fff;
+  font-family: HelveticaLTPro-Roman, Helvetica, Arial, sans-serif;
+  font-size: 13px;
+  letter-spacing: 1.1px;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.coach-wish-card__add:disabled { opacity: 0.45; cursor: default; }
+
+@media screen and (max-width: 989px) {
+  .coach-wishlist { width: auto; padding: 24px 14px 48px; }
+  .coach-wishlist__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+}
