@@ -705,7 +705,8 @@
         if (total) total.innerHTML = formatMoney(cart.total_price);
         document.querySelectorAll('.coach-bag__count').forEach((node) => {
           node.textContent = cart.item_count < 100 ? String(cart.item_count) : '99+';
-          node.hidden = cart.item_count === 0;
+          node.hidden = false;
+          node.classList.toggle('is-empty', cart.item_count === 0);
         });
         if (!items) return;
         if (!cart.items.length) {

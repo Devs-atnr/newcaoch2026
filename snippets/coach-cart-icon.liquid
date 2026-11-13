@@ -8,7 +8,7 @@
 {%- enddoc -%}
 <span class="coach-bag" aria-hidden="true">
   {%- render 'coach-icon', icon: 'bag' -%}
-  <span class="coach-bag__count"{% if cart.item_count == 0 %} hidden{% endif %}>
+  <span class="coach-bag__count{% if cart.item_count == 0 %} is-empty{% endif %}">
     {%- if cart.item_count < 100 -%}{{ cart.item_count }}{%- else -%}99+{%- endif -%}
   </span>
 </span>

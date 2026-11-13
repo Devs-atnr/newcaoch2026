@@ -306,6 +306,19 @@ coach-header {
   box-sizing: border-box;
 }
 
+.coach-bag__count.is-empty {
+  top: 0;
+  right: -1px;
+  min-width: 0;
+  height: auto;
+  padding: 0;
+  border-radius: 0;
+  background: transparent;
+  color: currentColor;
+  font-size: 12px;
+  font-weight: 500;
+}
+
 .coach-bag__count[hidden] {
   display: none;
 }
