@@ -47,7 +47,7 @@ coach-product-page.coach-product {
   gap: 18px;
   justify-content: start;
   position: sticky;
-  top: 96px;
+  top: 2px;
   width: 100%;
   max-width: 863px;
 }
