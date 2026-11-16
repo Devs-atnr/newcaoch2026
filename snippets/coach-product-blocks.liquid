@@ -1,0 +1,186 @@
+<div class="coach-product__info">
+  <form class="coach-product__form js-product-form" action="{{ routes.cart_add_url }}" method="post">
+    <input type="hidden" name="id" class="js-variant-id" value="{% unless has_size %}{{ current.id }}{% endunless %}">
+    {%- assign faq_open = false -%}
+    {%- for block in blocks -%}
+      {%- case block.type -%}
+        {%- when 'title' -%}
+          <h1 class="coach-product__title" {{ block.shopify_attributes }}>{{ product.title | escape }}</h1>
+        {%- when 'badge' -%}
+          <div class="coach-product__meta" {{ block.shopify_attributes }}{% unless is_bestseller or rating != blank or product.metafields.judgeme.badge != blank %} hidden{% endunless %}>
+            {%- if is_bestseller -%}
+              <span class="coach-product__pill">{{ block.settings.bestseller_label | default: 'Bestseller' | escape }}</span>
+            {%- endif -%}
+            {%- if product.metafields.judgeme.badge != blank -%}
+              <div class="jdgm-widget jdgm-preview-badge" data-id="{{ product.id }}">{{ product.metafields.judgeme.badge }}</div>
+            {%- elsif rating != blank -%}
+              <span class="coach-product__stars" aria-label="{{ rating.rating }} out of 5">
+                {%- assign filled = rating.rating | round -%}
+                {%- for i in (1..5) -%}
+                  <span{% if i <= filled %} class="is-on"{% endif %}>★</span>
+                {%- endfor -%}
+              </span>
+              {%- if rating_count != blank -%}<span class="coach-product__review-count">({{ rating_count }})</span>{%- endif -%}
+            {%- endif -%}
+          </div>
+        {%- when 'price' -%}
+          <p class="coach-product__price" {{ block.shopify_attributes }}>
+            <span class="js-price-now">{{ current.price | money }}</span>
+            {%- if block.settings.show_compare -%}
+              <s class="js-price-compare"{% unless current.compare_at_price > current.price %} hidden{% endunless %}>{% if current.compare_at_price > current.price %}{{ current.compare_at_price | money }}{% endif %}</s>
+            {%- endif -%}
+          </p>
+        {%- when 'size' -%}
+          {%- if has_size and block.settings.note != blank -%}
+            <p class="coach-product__size-note" {{ block.shopify_attributes }}>{{ block.settings.note | escape }}</p>
+          {%- endif -%}
+          {%- for option in product.options_with_values -%}
+            {%- assign option_name = option.name | downcase -%}
+            {%- if option_name contains 'size' -%}
+              <p class="coach-product__option-label">
+                {{ option.name | escape }}: <span class="js-option-value" data-for-option="{{ forloop.index0 }}">Select a size</span>
+                <span class="coach-product__fit">{{ block.settings.fit | default: 'Runs true to size' | escape }}</span>
+              </p>
+              <div class="coach-product__choices coach-product__choices--size">
+                {%- for value in option.values -%}
+                  <button type="button" class="coach-product__choice" data-option-index="{{ forloop.parentloop.index0 }}" data-value="{{ value | escape }}">{{ value | escape }}</button>
+                {%- endfor -%}
+              </div>
+            {%- endif -%}
+          {%- endfor -%}
+        {%- when 'color' -%}
+          {%- if color_index >= 0 -%}
+            {%- for option in product.options_with_values -%}
+              {%- if forloop.index0 == color_index -%}
+                <div {{ block.shopify_attributes }}>
+                  {%- if block.settings.show_label -%}
+                    <p class="coach-product__option-label">{{ option.name | escape }}: <span class="js-option-label">{{ option.selected_value | escape }}</span></p>
+                  {%- endif -%}
+                  <div class="coach-product__swatches" role="list">
+                    {%- for value in option.values -%}
+                      {%- assign swatch_variant = nil -%}
+                      {%- assign color_available = false -%}
+                      {%- for variant in product.variants -%}
+                        {%- if variant.options[color_index] == value -%}
+                          {%- if swatch_variant == nil -%}{%- assign swatch_variant = variant -%}{%- endif -%}
+                          {%- if variant.available -%}{%- assign color_available = true -%}{%- endif -%}
+                        {%- endif -%}
+                      {%- endfor -%}
+                      <button type="button" class="coach-product__swatch{% if option.selected_value == value %} is-active{% endif %}{% unless color_available %} is-unavailable{% endunless %}" data-option-index="{{ color_index }}" data-value="{{ value | escape }}" aria-label="{{ value | escape }}"{% unless color_available %} disabled{% endunless %}>
+                        {%- if swatch_variant.featured_media -%}
+                          {{ swatch_variant.featured_media | image_url: width: 160 | image_tag: alt: value }}
+                        {%- elsif swatch_variant.image -%}
+                          {{ swatch_variant.image | image_url: width: 160 | image_tag: alt: value }}
+                        {%- else -%}
+                          <span>{{ value | escape }}</span>
+                        {%- endif -%}
+                      </button>
+                    {%- endfor -%}
+                  </div>
+                </div>
+              {%- endif -%}
+            {%- endfor -%}
+          {%- endif -%}
+        {%- when 'size_guide' -%}
+          {%- if has_size and block.settings.enable -%}
+            <button type="button" class="coach-product__size-guide js-size-guide" {{ block.shopify_attributes }}>{{ block.settings.label | default: 'Size Guide' | escape }}</button>
+          {%- endif -%}
+        {%- when 'stock' -%}
+          <p class="coach-product__stock js-stock" {{ block.shopify_attributes }} hidden></p>
+        {%- when 'quantity' -%}
+          <div class="coach-product__qty js-qty" {{ block.shopify_attributes }}>
+            <input type="hidden" class="js-qty-input" name="quantity" value="1">
+            <button type="button" class="coach-product__qty-box js-qty-toggle" aria-expanded="false" aria-label="Quantity">
+              <span class="js-qty-label">1</span>
+              <svg width="10" height="6" viewBox="0 0 10 6" aria-hidden="true"><path d="M1 1L5 5L9 1" fill="none" stroke="currentColor" stroke-width="1.2"/></svg>
+            </button>
+            <ul class="coach-product__qty-list" hidden></ul>
+          </div>
+        {%- when 'add' -%}
+          <button type="submit" class="coach-product__add js-add" {{ block.shopify_attributes }} style="background: {{ block.settings.background }}; color: {{ block.settings.text }};">{{ block.settings.label | default: 'Add to bag' | escape }}</button>
+        {%- when 'buy' -%}
+          {%- if block.settings.enable -%}
+            <button type="button" class="coach-product__now js-buy-now" {{ block.shopify_attributes }} style="background: {{ block.settings.background }}; color: {{ block.settings.text }};">{{ block.settings.label | default: 'Buy now' | escape }}</button>
+          {%- endif -%}
+        {%- when 'description' -%}
+          {%- if product.description != blank -%}
+            <div class="coach-product__acc-body rte" {{ block.shopify_attributes }}>{{ product.description }}</div>
+          {%- endif -%}
+        {%- when 'shipping' -%}
+          {%- if block.settings.text != blank -%}
+            <details class="coach-product__acc" {{ block.shopify_attributes }}>
+              <summary>{{ block.settings.heading | escape }}</summary>
+              <div class="coach-product__acc-body rte">{{ block.settings.text }}</div>
+            </details>
+          {%- endif -%}
+        {%- when 'details' -%}
+          <details class="coach-product__acc" {{ block.shopify_attributes }} open>
+            <summary>{{ block.settings.heading | escape }}</summary>
+            <div class="coach-product__acc-body">
+              <dl class="coach-product__specs">
+                {%- if measurements != blank -%}<div><dt>Measurements</dt><dd>{{ measurements | newline_to_br }}</dd></div>{%- endif -%}
+                {%- if materials != blank -%}<div><dt>Materials</dt><dd>{{ materials | newline_to_br }}</dd></div>{%- endif -%}
+                {%- if strap != blank -%}<div><dt>Strap</dt><dd>{{ strap | escape }}</dd></div>{%- endif -%}
+                {%- if features != blank -%}<div><dt>Features</dt><dd>{{ features | newline_to_br }}</dd></div>{%- endif -%}
+              </dl>
+            </div>
+          </details>
+        {%- when 'notes' -%}
+          {%- if editors_note != blank -%}
+            <details class="coach-product__acc" {{ block.shopify_attributes }}>
+              <summary>{{ block.settings.heading | escape }}</summary>
+              <div class="coach-product__acc-body rte">{{ editors_note }}</div>
+            </details>
+          {%- endif -%}
+        {%- when 'share' -%}
+          <div class="coach-product__share" {{ block.shopify_attributes }}>
+            <span>{{ block.settings.label | escape }}</span>
+            <a href="https://www.facebook.com/sharer.php?u={{ shop.url | append: product.url | url_encode }}" target="_blank" rel="noopener" aria-label="Facebook">f</a>
+            <a href="https://pinterest.com/pin/create/button/?url={{ shop.url | append: product.url | url_encode }}&description={{ product.title | url_encode }}" target="_blank" rel="noopener" aria-label="Pinterest">p</a>
+            <a href="https://twitter.com/intent/tweet?url={{ shop.url | append: product.url | url_encode }}&text={{ product.title | url_encode }}" target="_blank" rel="noopener" aria-label="X">𝕏</a>
+            <a href="mailto:?subject={{ product.title | url_encode }}&body={{ shop.url | append: product.url | url_encode }}" aria-label="Email">✉</a>
+          </div>
+      {%- endcase -%}
+    {%- endfor -%}
+    <p class="coach-product__error js-error" role="alert"></p>
+  </form>
+</div>
+</div>
+{%- assign faq_open = false -%}
+
+{%- for block in blocks -%}
+  {%- case block.type -%}
+    {%- when 'also' -%}
+      <div class="coach-product__rail" data-rail="also" {{ block.shopify_attributes }}>
+        <h2>{{ block.settings.heading | escape }}</h2>
+        <div class="coach-product__rail-row">
+          <div class="coach-product__rail-track js-also"></div>
+          <button type="button" class="coach-product__rail-next js-also-next" aria-label="Next products"><svg width="10" height="16" viewBox="0 0 10 16" fill="none" aria-hidden="true"><path d="M2 2L8 8L2 14" stroke="currentColor" stroke-width="1.3"/></svg></button>
+        </div>
+      </div>
+    {%- when 'recent' -%}
+      <div class="coach-product__rail" data-rail="recent" {{ block.shopify_attributes }} hidden>
+        <h2>{{ block.settings.heading | escape }}</h2>
+        <div class="coach-product__rail-track js-recent"></div>
+      </div>
+    {%- when 'faq' -%}
+      {%- unless faq_open -%}
+        {%- assign faq_open = true -%}
+        <div class="coach-product__faq" {{ block.shopify_attributes }}>
+          <h2>{{ block.settings.heading | default: 'Frequently Asked Questions' | escape }}</h2>
+          {%- for question in blocks -%}
+            {%- if question.type == 'faq' and question.settings.question != blank -%}
+              <details class="coach-product__faq-item" {{ question.shopify_attributes }}>
+                <summary>{{ question.settings.question | escape }}</summary>
+                <div class="rte">{{ question.settings.answer }}</div>
+              </details>
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
+      {%- endunless -%}
+    {%- when 'reviews' -%}
+      <div class="coach-product__reviews" id="judgeme_product_reviews" {{ block.shopify_attributes }}>
+        <div class="jdgm-widget jdgm-review-widget" data-id="{{ product.id }}" data-product-title="{{ product.title | escape }}">{{ product.metafields.judgeme.widget }}</div>
+      </div>
+  {%- endcase -%}
+{%- endfor -%}

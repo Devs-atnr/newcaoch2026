@@ -3,9 +3,33 @@
     "main": {
       "type": "coach-product",
       "blocks": {
+        "gallery": { "type": "gallery", "settings": {} },
+        "title": { "type": "title", "settings": {} },
+        "badge": { "type": "badge", "settings": {} },
+        "price": { "type": "price", "settings": {} },
+        "color": { "type": "color", "settings": {} },
+        "size": { "type": "size", "settings": {} },
+        "guide": { "type": "size_guide", "settings": {} },
+        "stock": { "type": "stock", "settings": {} },
+        "qty": { "type": "quantity", "settings": {} },
+        "add": { "type": "add", "settings": {} },
+        "buy": { "type": "buy", "settings": {} },
+        "shipping": {
+          "type": "shipping",
+          "settings": {
+            "heading": "Shipping And Returns",
+            "text": "<p>Complimentary shipping and easy returns. See our shipping and returns pages for full details.</p>"
+          }
+        },
+        "details": { "type": "details", "settings": { "heading": "Product Details" } },
+        "notes": { "type": "notes", "settings": { "heading": "Editor's Notes" } },
+        "share": { "type": "share", "settings": {} },
+        "also": { "type": "also", "settings": {} },
+        "recent": { "type": "recent", "settings": {} },
         "faq-1": {
           "type": "faq",
           "settings": {
+            "heading": "Frequently Asked Questions",
             "question": "Is this a slouchy bag?",
             "answer": "<p>The silhouette is soft and relaxed, with a structured base that keeps its shape while you wear it.</p>"
           }
@@ -23,26 +47,36 @@
             "question": "What can I fit in this bag?",
             "answer": "<p>It holds daily essentials such as a phone, card case, keys, and a small pouch.</p>"
           }
-        }
+        },
+        "reviews": { "type": "reviews", "settings": {} }
       },
-      "block_order": ["faq-1", "faq-2", "faq-3"],
+      "block_order": [
+        "gallery",
+        "title",
+        "badge",
+        "price",
+        "color",
+        "size",
+        "guide",
+        "stock",
+        "qty",
+        "add",
+        "buy",
+        "shipping",
+        "details",
+        "notes",
+        "share",
+        "also",
+        "recent",
+        "faq-1",
+        "faq-2",
+        "faq-3",
+        "reviews"
+      ],
       "settings": {
         "show_breadcrumb": true,
         "breadcrumb_home": "Coach",
-        "bestseller_tag": "bestseller",
-        "bestseller_label": "Bestseller",
-        "add_label": "Add to bag",
-        "show_buy_now": true,
-        "buy_now_label": "Buy now",
-        "bag_size_label": "See bag size",
-        "shipping_heading": "Shipping And Returns",
-        "details_heading": "Product Details",
-        "notes_heading": "Editor's Notes",
-        "share_label": "Share This Product",
-        "also_heading": "You May Also Like",
-        "recent_heading": "Recently Viewed",
-        "faq_heading": "Frequently Asked Questions",
-        "reviews_heading": "Reviews"
+        "bestseller_tag": "bestseller"
       }
     }
   },
