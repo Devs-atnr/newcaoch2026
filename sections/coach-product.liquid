@@ -186,13 +186,14 @@
                 </button>
               {%- endfor -%}
             </div>
+          {%- elsif option_name contains 'style' -%}
           {%- else -%}
             {%- assign is_size = false -%}
             {%- if option_name contains 'size' -%}
               {%- assign is_size = true -%}
             {%- endif -%}
             <p class="coach-product__option-label">
-              {{ option.name | escape }}{% if is_size %}: <span class="js-option-value" data-for-option="{{ forloop.index0 }}">Select a size</span>{% endif %}
+              {{ option.name | escape }}{% if is_size %}: <span class="js-option-value" data-for-option="{{ forloop.index0 }}">Select a size</span> <span class="coach-product__fit">{{ section.settings.size_fit | default: 'Runs true to size' | escape }}</span>{% endif %}
             </p>
             <div class="coach-product__choices{% if is_size %} coach-product__choices--size{% endif %}">
               {%- for value in option.values -%}
@@ -212,10 +213,13 @@
 
         <p class="coach-product__stock js-stock" hidden></p>
         <div class="coach-product__buy">
-          <div class="coach-product__qty">
-            <select class="js-qty-input" name="quantity" aria-label="Quantity">
-              <option value="1">1</option>
-            </select>
+          <div class="coach-product__qty js-qty">
+            <input type="hidden" class="js-qty-input" name="quantity" value="1">
+            <button type="button" class="coach-product__qty-box js-qty-toggle" aria-expanded="false" aria-label="Quantity">
+              <span class="js-qty-label">1</span>
+              <svg width="10" height="6" viewBox="0 0 10 6" aria-hidden="true"><path d="M1 1L5 5L9 1" fill="none" stroke="currentColor" stroke-width="1.2"/></svg>
+            </button>
+            <ul class="coach-product__qty-list" hidden></ul>
           </div>
           <button type="submit" class="coach-product__add js-add"{% if has_size or current.available == false %} disabled{% endif %}>
             {{ section.settings.add_label | default: 'Add to bag' | escape }}
@@ -387,6 +391,7 @@
     { "type": "checkbox", "id": "show_buy_now", "label": "Show Buy now", "default": true },
     { "type": "text", "id": "buy_now_label", "label": "Buy now label", "default": "Buy now" },
     { "type": "text", "id": "size_note", "label": "Size note", "default": "Please check our size guide before ordering" },
+    { "type": "text", "id": "size_fit", "label": "Size fit text", "default": "Runs true to size" },
     { "type": "text", "id": "size_guide_label", "label": "Size guide label", "default": "Size Guide" },
     { "type": "url", "id": "size_guide_url", "label": "Size guide link" },
     { "type": "text", "id": "bag_size_label", "label": "Bag size button", "default": "See bag size" },

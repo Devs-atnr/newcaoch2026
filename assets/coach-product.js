@@ -59,16 +59,20 @@ class CoachProductPage extends HTMLElement {
     const buttons = [...this.querySelectorAll('.coach-product__thumb')];
     buttons.forEach((button) => button.classList.toggle('is-active', thumb ? button === thumb : button.dataset.src === src));
     const active = thumb || buttons.find((button) => button.classList.contains('is-active'));
-    if (list && active) {
-      const styles = getComputedStyle(list);
-      const horizontal = styles.flexDirection === 'row';
-      const start = horizontal ? active.offsetLeft - list.offsetLeft : active.offsetTop - list.offsetTop;
-      list.scrollTo({
-        left: horizontal ? start : 0,
-        top: horizontal ? 0 : start,
-        behavior: 'smooth',
-      });
+    if (list && active) this.placeThumb(list, active);
+  }
+
+  placeThumb(list, active) {
+    const horizontal = getComputedStyle(list).flexDirection === 'row';
+    const listRect = list.getBoundingClientRect();
+    const thumbRect = active.getBoundingClientRect();
+    if (horizontal) {
+      const delta = thumbRect.left - listRect.left - (list.clientWidth - thumbRect.width) / 2;
+      list.scrollTo({ left: list.scrollLeft + delta, behavior: 'smooth' });
+      return;
     }
+    const delta = thumbRect.top - listRect.top - (list.clientHeight - thumbRect.height) / 2;
+    list.scrollTo({ top: list.scrollTop + delta, behavior: 'smooth' });
   }
 
   maxQuantity(variant) {
@@ -79,23 +83,30 @@ class CoachProductPage extends HTMLElement {
   }
 
   updateQuantity(variant) {
-    const select = this.querySelector('.js-qty-input');
-    if (!select) return;
+    const input = this.querySelector('.js-qty-input');
+    const list = this.querySelector('.coach-product__qty-list');
+    const label = this.querySelector('.js-qty-label');
+    const toggle = this.querySelector('.js-qty-toggle');
+    if (!input || !list) return;
     const max = this.maxQuantity(variant);
-    const previous = Number(select.value) || 1;
-    select.innerHTML = '';
-    if (max < 1) {
-      select.disabled = true;
-      return;
+    const previous = Number(input.value) || 1;
+    const next = max > 0 ? Math.min(previous, max) : 1;
+    input.value = String(next);
+    if (label) label.textContent = String(next);
+    list.innerHTML = '';
+    for (let count = 1; count <= Math.max(max, 0); count += 1) {
+      const item = document.createElement('li');
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'coach-product__qty-option';
+      button.dataset.qty = String(count);
+      button.textContent = String(count);
+      if (count === next) button.classList.add('is-active');
+      item.appendChild(button);
+      list.appendChild(item);
     }
-    select.disabled = false;
-    for (let count = 1; count <= max; count += 1) {
-      const option = document.createElement('option');
-      option.value = String(count);
-      option.textContent = String(count);
-      select.appendChild(option);
-    }
-    select.value = String(Math.min(previous, max));
+    if (toggle) toggle.disabled = max < 1;
+    if (max < 1) list.hidden = true;
   }
 
   bindOptions() {
@@ -237,12 +248,32 @@ class CoachProductPage extends HTMLElement {
   }
 
   bindQty() {
+    const root = this.querySelector('.js-qty');
     const input = this.querySelector('.js-qty-input');
-    this.querySelectorAll('.js-qty').forEach((button) => {
-      button.addEventListener('click', () => {
-        const next = Math.max(1, Number(input.value || 1) + Number(button.dataset.step));
-        input.value = String(next);
-      });
+    const list = this.querySelector('.coach-product__qty-list');
+    const toggle = this.querySelector('.js-qty-toggle');
+    if (!root || !input || !list || !toggle) return;
+    const close = () => {
+      list.hidden = true;
+      toggle.setAttribute('aria-expanded', 'false');
+    };
+    toggle.addEventListener('click', () => {
+      if (toggle.disabled) return;
+      const open = list.hidden;
+      list.hidden = !open;
+      toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+    });
+    list.addEventListener('click', (event) => {
+      const button = event.target.closest('[data-qty]');
+      if (!button) return;
+      input.value = button.dataset.qty;
+      const label = this.querySelector('.js-qty-label');
+      if (label) label.textContent = button.dataset.qty;
+      list.querySelectorAll('.coach-product__qty-option').forEach((item) => item.classList.toggle('is-active', item === button));
+      close();
+    });
+    document.addEventListener('click', (event) => {
+      if (!root.contains(event.target)) close();
     });
   }
 
