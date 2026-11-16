@@ -25,12 +25,18 @@
             "thumb_height": 114,
             "thumb_gap": 24,
             "thumb_border": "#111111",
+            "arrow_size": 25,
+            "arrow_color": "#222222",
             "bag_size_label": "See bag size"
           }
         },
         "title": {
           "type": "title",
-          "settings": {}
+          "settings": {
+            "font_size": 24,
+            "color": "#111111",
+            "spacing": 10
+          }
         },
         "badge": {
           "type": "badge",
@@ -41,7 +47,11 @@
         "price": {
           "type": "price",
           "settings": {
-            "show_compare": true
+            "show_compare": true,
+            "font_size": 28,
+            "color": "#000000",
+            "space_top": 6,
+            "space_bottom": 6
           }
         },
         "color": {
@@ -52,14 +62,24 @@
             "height": 86,
             "gap": 8,
             "border_color": "#d5d5d5",
-            "active_color": "#000000"
+            "active_color": "#000000",
+            "label_size": 14,
+            "label_color": "#000000",
+            "label_space": 8
           }
         },
         "size": {
           "type": "size",
           "settings": {
             "note": "Please check our size guide before ordering",
+            "shoes_only": true,
+            "note_size": 14,
+            "note_color": "#1c9a4a",
+            "note_space": 14,
             "fit": "Runs true to size",
+            "label_size": 14,
+            "label_color": "#000000",
+            "label_space": 8,
             "height": 48,
             "font_size": 14,
             "columns": 3,
@@ -73,6 +93,9 @@
           "settings": {
             "enable": true,
             "label": "Size Guide",
+            "font_size": 14,
+            "link_color": "#111111",
+            "spacing": 16,
             "width": 550,
             "height": 400,
             "background": "#ffffff",
@@ -81,7 +104,11 @@
         },
         "stock": {
           "type": "stock",
-          "settings": {}
+          "settings": {
+            "font_size": 11,
+            "color": "#111111",
+            "spacing": 10
+          }
         },
         "qty": {
           "type": "quantity",
@@ -97,6 +124,9 @@
           "type": "add",
           "settings": {
             "label": "Add to bag",
+            "font_size": 14,
+            "height": 48,
+            "letter_spacing": 1.2,
             "background": "#000000",
             "text": "#ffffff"
           }
@@ -106,6 +136,10 @@
           "settings": {
             "enable": true,
             "label": "Buy now",
+            "font_size": 14,
+            "height": 48,
+            "letter_spacing": 1.2,
+            "space_above": 12,
             "background": "#81ce74",
             "text": "#000000"
           }
@@ -205,6 +239,7 @@
         "breadcrumb_font": "helvetica",
         "breadcrumb_size": 12,
         "breadcrumb_color": "#8a8a8a",
+        "bestseller_products": [],
         "title_size": 24,
         "title_line": 30,
         "title_weight": "400",
