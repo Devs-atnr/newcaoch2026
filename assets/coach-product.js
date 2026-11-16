@@ -138,7 +138,7 @@ class CoachProductPage extends HTMLElement {
       this.selected[this.data.sizeIndex] = null;
       const idInput = this.querySelector('.js-variant-id');
       if (idInput) idInput.value = '';
-      this.querySelectorAll('.js-add, .js-buy-now').forEach((button) => { button.disabled = true; });
+      this.querySelectorAll('.js-add, .js-buy-now').forEach((button) => { button.disabled = false; });
     }
     this.refreshAvailability();
     const initial = this.findVariant();
@@ -190,7 +190,7 @@ class CoachProductPage extends HTMLElement {
     const compare = this.querySelector('.js-price-compare');
     if (!variant) {
       if (idInput) idInput.value = '';
-      this.querySelectorAll('.js-add, .js-buy-now').forEach((button) => { button.disabled = true; });
+      this.querySelectorAll('.js-add, .js-buy-now').forEach((button) => { button.disabled = false; });
       this.updateQuantity(null);
       this.showColorImage();
       return;

@@ -406,17 +406,19 @@ coach-product-page.coach-product {
 
 .coach-product__qty-list {
   position: absolute;
-  z-index: 5;
-  top: 47px;
+  z-index: 30;
+  top: calc(100% + 1px);
   left: 0;
   width: 74px;
   margin: 0;
   padding: 0;
   list-style: none;
-  border: 1px solid #d5d5d5;
-  border-top: 0;
+  border: 1px solid #c8c8c8;
   background: #fff;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
 }
+
+.coach-product__qty-list[hidden] { display: none; }
 
 .coach-product__qty-option {
   display: block;
@@ -432,8 +434,12 @@ coach-product-page.coach-product {
   cursor: pointer;
 }
 
+.coach-product__qty-option:hover { background: #f3f3f3; }
 .coach-product__qty-option.is-active,
-.coach-product__qty-option:hover { background: #f2f2f2; }
+.coach-product__qty-option.is-active:hover {
+  background: #0b6bcb;
+  color: #fff;
+}
 
 .coach-product__add,
 .coach-product__now {

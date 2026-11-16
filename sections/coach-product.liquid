@@ -221,12 +221,12 @@
             </button>
             <ul class="coach-product__qty-list" hidden></ul>
           </div>
-          <button type="submit" class="coach-product__add js-add"{% if has_size or current.available == false %} disabled{% endif %}>
+          <button type="submit" class="coach-product__add js-add"{% if has_size == false and current.available == false %} disabled{% endif %}>
             {{ section.settings.add_label | default: 'Add to bag' | escape }}
           </button>
         </div>
         {%- if section.settings.show_buy_now -%}
-          <button type="button" class="coach-product__now js-buy-now"{% if has_size or current.available == false %} disabled{% endif %}>
+          <button type="button" class="coach-product__now js-buy-now"{% if has_size == false and current.available == false %} disabled{% endif %}>
             {{ section.settings.buy_now_label | default: 'Buy now' | escape }}
           </button>
         {%- endif -%}
