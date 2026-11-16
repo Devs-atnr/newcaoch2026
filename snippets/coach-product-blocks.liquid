@@ -147,7 +147,7 @@
               <strong>{{ block.settings.promo_title | default: 'Free shipping' | escape }}</strong>
               <small>{{ block.settings.promo_note | default: 'On orders $75 +' | escape }}</small>
             </span>
-            <span class="coach-product__ship-more">{{ block.settings.learn_more | default: 'Learn more' | escape }} →</span>
+            <span class="coach-product__ship-more">{{ block.settings.learn_more | default: 'Learn more' | escape }}&nbsp;→</span>
           </button>
           <details class="coach-product__acc coach-product__acc--ship"{% if block.settings.open %} open{% endif %}>
             <summary>{{ block.settings.heading | escape }}</summary>
@@ -171,21 +171,26 @@
         {%- when 'details' -%}
           {%- assign details_content = product.metafields.custom.product_details | default: product.metafields.custom.details -%}
           {%- assign style_number = product.metafields.custom.style_number | default: current.sku -%}
-          {%- if details_content != blank or measurements != blank or materials != blank or strap != blank or features != blank or style_number != blank -%}
+          {%- assign note_inline = editors_note | default: product.metafields.custom.editors_note | default: product.description -%}
+          {%- if details_content != blank or measurements != blank or materials != blank or strap != blank or features != blank or style_number != blank or note_inline != blank -%}
             <details class="coach-product__acc" {{ block.shopify_attributes }}{% if block.settings.open %} open{% endif %}>
               <summary>{{ block.settings.heading | escape }}</summary>
               <div class="coach-product__acc-body">
                 <dl class="coach-product__specs">
-                  {%- if style_number != blank -%}<div><dt>{{ block.settings.style_label | default: 'Style Number' | escape }}</dt><dd>{{ style_number | escape }}</dd></div>{%- endif -%}
-                  {%- if measurements != blank -%}<div><dt>{{ block.settings.measurements_label | default: 'Measurements' | escape }}</dt><dd>{{ measurements | newline_to_br }}</dd></div>{%- endif -%}
-                  {%- if materials != blank -%}<div><dt>{{ block.settings.materials_label | default: 'Materials' | escape }}</dt><dd>{{ materials | newline_to_br }}</dd></div>{%- endif -%}
-                  {%- if strap != blank -%}<div><dt>{{ block.settings.strap_label | default: 'Strap' | escape }}</dt><dd>{{ strap | escape }}</dd></div>{%- endif -%}
-                  {%- if features != blank -%}<div><dt>{{ block.settings.features_label | default: 'Features' | escape }}</dt><dd>{{ features | newline_to_br }}</dd></div>{%- endif -%}
-                  {%- assign note_inline = product.metafields.custom.editors_note -%}
-                  {%- if note_inline != blank -%}<div><dt>{{ block.settings.notes_label | default: "Editor's Notes" | escape }}</dt><dd class="rte">{{ note_inline }}</dd></div>{%- endif -%}
+                  {%- if style_number != blank -%}<div><dt>{{ block.settings.style_label | default: 'Style Number' | escape }}</dt><dd>{%- if style_number.type != blank -%}{{ style_number | metafield_tag }}{%- else -%}{{ style_number | escape }}{%- endif -%}</dd></div>{%- endif -%}
+                  {%- if measurements != blank -%}<div><dt>{{ block.settings.measurements_label | default: 'Measurements' | escape }}</dt><dd>{{ measurements | metafield_tag }}</dd></div>{%- endif -%}
+                  {%- if materials != blank -%}<div><dt>{{ block.settings.materials_label | default: 'Materials' | escape }}</dt><dd>{{ materials | metafield_tag }}</dd></div>{%- endif -%}
+                  {%- if strap != blank -%}<div><dt>{{ block.settings.strap_label | default: 'Strap' | escape }}</dt><dd>{{ strap | metafield_tag }}</dd></div>{%- endif -%}
+                  {%- if features != blank -%}<div><dt>{{ block.settings.features_label | default: 'Features' | escape }}</dt><dd>{{ features | metafield_tag }}</dd></div>{%- endif -%}
+                  {%- if note_inline != blank -%}
+                    <div>
+                      <dt>{{ block.settings.notes_label | default: "Editor's Notes" | escape }}</dt>
+                      <dd class="rte">{%- if note_inline.type != blank -%}{{ note_inline | metafield_tag }}{%- else -%}{{ note_inline }}{%- endif -%}</dd>
+                    </div>
+                  {%- endif -%}
                 </dl>
                 {%- if details_content != blank -%}
-                  <div class="rte">{{ details_content }}</div>
+                  <div class="coach-product__specs-extra rte">{{ details_content | metafield_tag }}</div>
                 {%- endif -%}
               </div>
             </details>
