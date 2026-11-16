@@ -5,7 +5,7 @@
     {%- for block in blocks -%}
       {%- case block.type -%}
         {%- when 'title' -%}
-          <h1 class="coach-product__title" {{ block.shopify_attributes }}>{{ product.title | escape }}</h1>
+          <h1 class="coach-product__title" {{ block.shopify_attributes }} style="font-size: {{ block.settings.font_size | default: 24 }}px; color: {{ block.settings.color | default: '#111111' }}; margin-bottom: {{ block.settings.spacing | default: 10 }}px;">{{ product.title | escape }}</h1>
         {%- when 'badge' -%}
           <div class="coach-product__meta" {{ block.shopify_attributes }}{% unless is_bestseller or rating != blank or product.metafields.judgeme.badge != blank %} hidden{% endunless %}>
             {%- if is_bestseller -%}
@@ -24,21 +24,47 @@
             {%- endif -%}
           </div>
         {%- when 'price' -%}
-          <p class="coach-product__price" {{ block.shopify_attributes }}>
+          <p class="coach-product__price" {{ block.shopify_attributes }} style="font-size: {{ block.settings.font_size | default: 28 }}px; color: {{ block.settings.color | default: '#000000' }}; margin-top: {{ block.settings.space_top | default: 6 }}px; margin-bottom: {{ block.settings.space_bottom | default: 6 }}px;">
             <span class="js-price-now">{{ current.price | money }}</span>
             {%- if block.settings.show_compare -%}
               <s class="js-price-compare"{% unless current.compare_at_price > current.price %} hidden{% endunless %}>{% if current.compare_at_price > current.price %}{{ current.compare_at_price | money }}{% endif %}</s>
             {%- endif -%}
           </p>
-        {%- when 'size' -%}
-          {%- if has_size and block.settings.note != blank -%}
-            <p class="coach-product__size-note" {{ block.shopify_attributes }}>{{ block.settings.note | escape }}</p>
+          {%- assign size_note = blocks | where: 'type', 'size' | first -%}
+          {%- if has_size and size_note.settings.note != blank -%}
+            {%- liquid
+              assign shoe_text = product.type | append: ' ' | append: product.title | downcase
+              assign is_shoe = false
+              if shoe_text contains 'shoe' or shoe_text contains 'sandal' or shoe_text contains 'heel' or shoe_text contains 'sneaker' or shoe_text contains 'trainer' or shoe_text contains 'boot' or shoe_text contains 'footwear' or shoe_text contains 'mule' or shoe_text contains 'loafer'
+                assign is_shoe = true
+              endif
+              unless is_shoe
+                for tag in product.tags
+                  assign tag_down = tag | downcase
+                  if tag_down contains 'shoe' or tag_down contains 'sandal' or tag_down contains 'heel' or tag_down contains 'sneaker' or tag_down contains 'trainer' or tag_down contains 'boot'
+                    assign is_shoe = true
+                  endif
+                endfor
+              endunless
+              unless is_shoe
+                for shoe_collection in product.collections
+                  assign collection_title = shoe_collection.title | downcase
+                  if collection_title contains 'shoe' or collection_title contains 'heel' or collection_title contains 'trainer' or collection_title contains 'sandal' or collection_title contains 'sneaker' or collection_title contains 'boot'
+                    assign is_shoe = true
+                  endif
+                endfor
+              endunless
+            -%}
+            {%- if is_shoe or size_note.settings.shoes_only == false -%}
+              <p class="coach-product__size-note" style="color: {{ size_note.settings.note_color | default: '#1c9a4a' }}; font-size: {{ size_note.settings.note_size | default: 14 }}px; margin-bottom: {{ size_note.settings.note_space | default: 14 }}px;">{{ size_note.settings.note | escape }}</p>
+            {%- endif -%}
           {%- endif -%}
+        {%- when 'size' -%}
           {%- for option in product.options_with_values -%}
             {%- assign option_name = option.name | downcase -%}
             {%- if option_name contains 'size' -%}
-              <p class="coach-product__option-label">
-                {{ option.name | escape }}: <span class="js-option-value" data-for-option="{{ forloop.index0 }}">Select a size</span>
+              <p class="coach-product__option-label" {{ block.shopify_attributes }} style="font-size: {{ block.settings.label_size | default: 14 }}px; color: {{ block.settings.label_color | default: '#000000' }}; margin-bottom: {{ block.settings.label_space | default: 8 }}px;">
+                {{ option.name | escape }}: <span class="js-option-value" data-for-option="{{ forloop.index0 }}">Please select a size</span>
                 <span class="coach-product__fit">{{ block.settings.fit | default: 'Runs true to size' | escape }}</span>
               </p>
               <div class="coach-product__choices coach-product__choices--size">
@@ -54,7 +80,7 @@
               {%- if forloop.index0 == color_index -%}
                 <div {{ block.shopify_attributes }}>
                   {%- if block.settings.show_label -%}
-                    <p class="coach-product__option-label">{{ option.name | escape }}: <span class="js-option-label">{{ option.selected_value | escape }}</span></p>
+                    <p class="coach-product__option-label" style="font-size: {{ block.settings.label_size | default: 14 }}px; color: {{ block.settings.label_color | default: '#000000' }}; margin-bottom: {{ block.settings.label_space | default: 8 }}px;">{{ option.name | escape }}: <span class="js-option-label">{{ option.selected_value | escape }}</span></p>
                   {%- endif -%}
                   <div class="coach-product__swatches" role="list">
                     {%- for value in option.values -%}
@@ -83,10 +109,10 @@
           {%- endif -%}
         {%- when 'size_guide' -%}
           {%- if has_size and block.settings.enable -%}
-            <button type="button" class="coach-product__size-guide js-size-guide" {{ block.shopify_attributes }}>{{ block.settings.label | default: 'Size Guide' | escape }}</button>
+            <button type="button" class="coach-product__size-guide js-size-guide" {{ block.shopify_attributes }} style="font-size: {{ block.settings.font_size | default: 14 }}px; color: {{ block.settings.link_color | default: '#111111' }}; margin-bottom: {{ block.settings.spacing | default: 16 }}px;">{{ block.settings.label | default: 'Size Guide' | escape }}</button>
           {%- endif -%}
         {%- when 'stock' -%}
-          <p class="coach-product__stock js-stock" {{ block.shopify_attributes }} hidden></p>
+          <p class="coach-product__stock js-stock" {{ block.shopify_attributes }} hidden style="font-size: {{ block.settings.font_size | default: 11 }}px; color: {{ block.settings.color | default: '#111111' }}; margin-bottom: {{ block.settings.spacing | default: 10 }}px;"></p>
         {%- when 'quantity' -%}
           <div class="coach-product__qty js-qty" {{ block.shopify_attributes }}>
             <input type="hidden" class="js-qty-input" name="quantity" value="1">
@@ -97,10 +123,10 @@
             <ul class="coach-product__qty-list" hidden></ul>
           </div>
         {%- when 'add' -%}
-          <button type="submit" class="coach-product__add js-add" {{ block.shopify_attributes }} style="background: {{ block.settings.background }}; color: {{ block.settings.text }};">{{ block.settings.label | default: 'Add to bag' | escape }}</button>
+          <button type="submit" class="coach-product__add js-add" {{ block.shopify_attributes }} style="background: {{ block.settings.background }}; color: {{ block.settings.text }}; font-size: {{ block.settings.font_size | default: 14 }}px; height: {{ block.settings.height | default: 48 }}px; letter-spacing: {{ block.settings.letter_spacing | default: 1.25 }}px;">{{ block.settings.label | default: 'Add to bag' | escape }}</button>
         {%- when 'buy' -%}
           {%- if block.settings.enable -%}
-            <button type="button" class="coach-product__now js-buy-now" {{ block.shopify_attributes }} style="background: {{ block.settings.background }}; color: {{ block.settings.text }};">{{ block.settings.label | default: 'Buy now' | escape }}</button>
+            <button type="button" class="coach-product__now js-buy-now" {{ block.shopify_attributes }} style="background: {{ block.settings.background }}; color: {{ block.settings.text }}; font-size: {{ block.settings.font_size | default: 14 }}px; height: {{ block.settings.height | default: 48 }}px; letter-spacing: {{ block.settings.letter_spacing | default: 1.25 }}px; margin-top: {{ block.settings.space_above | default: 12 }}px;">{{ block.settings.label | default: 'Buy now' | escape }}</button>
           {%- endif -%}
         {%- when 'description' -%}
           {%- if product.description != blank -%}

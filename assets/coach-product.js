@@ -172,7 +172,7 @@ class CoachProductPage extends HTMLElement {
         button.classList.remove('is-active');
         this.selected[index] = null;
         const label = this.querySelector(`.js-option-value[data-for-option="${index}"]`);
-        if (label) label.textContent = 'Select a size';
+        if (label) label.textContent = 'Please select a size';
       }
     });
   }

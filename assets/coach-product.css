@@ -256,9 +256,11 @@ coach-product-page.coach-product {
 }
 
 .coach-product__size-note {
-  margin: -6px 0 16px;
+  margin: 0 0 14px;
   color: #1c9a4a;
+  font-family: HelveticaLTPro-Roman, Helvetica, Arial, sans-serif;
   font-size: 14px;
+  font-weight: 400;
   line-height: 1.4;
 }
 
@@ -347,7 +349,7 @@ coach-product-page.coach-product {
   background: #fff;
   color: #111;
   font-family: HelveticaLTPro-Roman, Helvetica, Arial, sans-serif;
-  font-size: 14px;
+  font-size: var(--pdp-size-font, 14px);
   line-height: 1.2;
   text-align: center;
   cursor: pointer;
@@ -487,6 +489,7 @@ coach-product-page.coach-product {
 .coach-product__now:disabled { opacity: 0.45; cursor: default; }
 .coach-product__now {
   width: 100%;
+  margin-top: 12px;
   margin-bottom: 8px;
   background: #81ce74;
   color: #000;
