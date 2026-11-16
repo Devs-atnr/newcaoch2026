@@ -25,40 +25,50 @@ class CoachProductPage extends HTMLElement {
 
   bindGallery() {
     const list = this.querySelector('.js-thumbs');
-    const main = this.querySelector('.js-main-image');
-    if (!list || !main) return;
+    if (!list) return;
     list.addEventListener('click', (event) => {
       const button = event.target.closest('.coach-product__thumb');
       if (!button) return;
       this.showImage(button.dataset.src, button.dataset.alt, button);
     });
-    const step = (direction) => {
-      const thumb = list.querySelector('.coach-product__thumb');
-      if (!thumb) return;
-      const styles = getComputedStyle(list);
-      const gap = parseFloat(styles.rowGap || styles.gap) || 8;
-      const horizontal = styles.flexDirection === 'row';
-      const amount = (horizontal ? thumb.offsetWidth : thumb.offsetHeight) + gap;
-      list.scrollBy({
-        top: horizontal ? 0 : amount * direction,
-        left: horizontal ? amount * direction : 0,
-        behavior: 'smooth',
-      });
+    const move = (direction) => {
+      const buttons = [...list.querySelectorAll('.coach-product__thumb')];
+      if (!buttons.length) return;
+      const current = buttons.findIndex((button) => button.classList.contains('is-active'));
+      const next = buttons[Math.min(buttons.length - 1, Math.max(0, current + direction))];
+      if (!next) return;
+      this.showImage(next.dataset.src, next.dataset.alt, next);
     };
-    this.querySelector('.js-thumb-prev')?.addEventListener('click', () => step(-1));
-    this.querySelector('.js-thumb-next')?.addEventListener('click', () => step(1));
+    this.querySelector('.js-thumb-prev')?.addEventListener('click', () => move(-1));
+    this.querySelector('.js-thumb-next')?.addEventListener('click', () => move(1));
   }
 
   showImage(src, alt, thumb) {
-    const slides = this.querySelector('.js-slides');
-    const slide = [...this.querySelectorAll('.js-slide')].find((image) => image.dataset.src === src);
-    if (slides && slide) {
-      if (alt) slide.alt = alt;
-      slides.scrollTo({ top: slide.offsetTop, behavior: 'smooth' });
+    const main = this.querySelector('.js-main-image');
+    if (main && src) {
+      if (main.getAttribute('src') !== src) {
+        main.style.opacity = '0.35';
+        const reveal = () => { main.style.opacity = '1'; };
+        main.addEventListener('load', reveal, { once: true });
+        main.src = src;
+        if (main.complete) reveal();
+      }
+      if (alt) main.alt = alt;
     }
-    this.querySelectorAll('.coach-product__thumb').forEach((button) => {
-      button.classList.toggle('is-active', thumb ? button === thumb : button.dataset.src === src);
-    });
+    const list = this.querySelector('.js-thumbs');
+    const buttons = [...this.querySelectorAll('.coach-product__thumb')];
+    buttons.forEach((button) => button.classList.toggle('is-active', thumb ? button === thumb : button.dataset.src === src));
+    const active = thumb || buttons.find((button) => button.classList.contains('is-active'));
+    if (list && active) {
+      const styles = getComputedStyle(list);
+      const horizontal = styles.flexDirection === 'row';
+      const start = horizontal ? active.offsetLeft - list.offsetLeft : active.offsetTop - list.offsetTop;
+      list.scrollTo({
+        left: horizontal ? start : 0,
+        top: horizontal ? 0 : start,
+        behavior: 'smooth',
+      });
+    }
   }
 
   maxQuantity(variant) {
@@ -220,7 +230,7 @@ class CoachProductPage extends HTMLElement {
     if (!list || !media.length || !color) return;
     const matched = media.filter((item) => (item.alt || '').toLowerCase().includes(String(color).toLowerCase()));
     const visible = matched.length ? matched : media;
-    const current = [...this.querySelectorAll('.js-slide')].find((image) => image.dataset.src && Math.abs((this.querySelector('.js-slides')?.scrollTop || 0) - image.offsetTop) < 8)?.dataset.src || this.querySelector('.js-slide')?.dataset.src;
+    const current = this.querySelector('.js-main-image')?.getAttribute('src');
     const activeSrc = visible.some((item) => item.src === current) ? current : visible[0]?.src;
     list.innerHTML = visible.map((item) => `<button type="button" class="coach-product__thumb${item.src === activeSrc ? ' is-active' : ''}" data-src="${this.escape(item.src)}" data-alt="${this.escape(item.alt || '')}" aria-label="${this.escape(item.alt || 'Product image')}"><img src="${this.escape(item.thumb || item.src)}" alt="${this.escape(item.alt || '')}"></button>`).join('');
     list.scrollTo({ top: 0, left: 0 });
@@ -464,7 +474,7 @@ class CoachProductPage extends HTMLElement {
     button?.addEventListener('click', () => {
       if (!window.CoachWishlist) return;
       const variantId = this.querySelector('.js-variant-id')?.value;
-      const image = this.querySelector('.js-slide')?.src || '';
+      const image = this.querySelector('.js-main-image')?.src || '';
       const price = this.querySelector('.js-price-now')?.textContent?.trim() || '';
       const saved = window.CoachWishlist.toggle({
         handle: this.dataset.productHandle,

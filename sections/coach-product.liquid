@@ -46,7 +46,7 @@
   data-product-title="{{ product.title | escape }}"
   data-money-format="{{ shop.money_format | escape }}"
   data-qty-max="{{ section.settings.qty_max | default: 10 }}"
-  style="--pdp-font: {{ section.settings.body_font | default: 'HelveticaLTPro-Roman, Helvetica, Arial, sans-serif' | escape }}; --pdp-title-font: {{ section.settings.title_font | default: 'GaramondMTProRegular, Times New Roman, Times, serif' | escape }}; --pdp-title-size: {{ section.settings.title_size | default: 24 }}px; --pdp-title-line: {{ section.settings.title_line | default: 30 }}px; --pdp-title-weight: {{ section.settings.title_weight | default: 400 }}; --pdp-title-spacing: {{ section.settings.title_spacing | default: '0.4px' | escape }}; --pdp-price-size: {{ section.settings.price_size | default: 28 }}px; --pdp-text: {{ section.settings.text_color | default: '#111111' }}; --pdp-bg: {{ section.settings.background | default: '#ffffff' }}; --pdp-border: {{ section.settings.border_width | default: 1 }}px; --pdp-border-color: {{ section.settings.border_color | default: '#d5d5d5' }}; --pdp-thumb-w: {{ section.settings.thumb_width | default: 86 }}px; --pdp-thumb-h: {{ section.settings.thumb_height | default: 108 }}px; --pdp-thumb-gap: {{ section.settings.thumb_gap | default: 8 }}px; --pdp-image-h: {{ section.settings.image_height | default: 495 }}px; --pdp-image-fit: {{ section.settings.image_fit | default: 'cover' }}; --pdp-swatch-w: {{ section.settings.swatch_width | default: 72 }}px; --pdp-swatch-h: {{ section.settings.swatch_height | default: 86 }}px; --pdp-size-h: {{ section.settings.size_height | default: 48 }}px; --pdp-size-gap: {{ section.settings.size_gap | default: 8 }}px; --pdp-guide-w: {{ section.settings.guide_width | default: 550 }}px; --pdp-guide-h: {{ section.settings.guide_height | default: 400 }}px; --pdp-gap: {{ section.settings.info_gap | default: 27 }}px;"
+  style="--pdp-font: {{ section.settings.body_font | default: 'HelveticaLTPro-Roman, Helvetica, Arial, sans-serif' | escape }}; --pdp-title-font: {{ section.settings.title_font | default: 'GaramondMTProRegular, Times New Roman, Times, serif' | escape }}; --pdp-title-size: {{ section.settings.title_size | default: 24 }}px; --pdp-title-line: {{ section.settings.title_line | default: 30 }}px; --pdp-title-weight: {{ section.settings.title_weight | default: 400 }}; --pdp-title-spacing: {{ section.settings.title_spacing | default: '0.4px' | escape }}; --pdp-price-size: {{ section.settings.price_size | default: 28 }}px; --pdp-text: {{ section.settings.text_color | default: '#111111' }}; --pdp-bg: {{ section.settings.background | default: '#ffffff' }}; --pdp-border: {{ section.settings.border_width | default: 1 }}px; --pdp-border-color: {{ section.settings.border_color | default: '#d5d5d5' }}; --pdp-thumb-w: {{ section.settings.thumb_width | default: 86 }}px; --pdp-thumb-h: {{ section.settings.thumb_height | default: 108 }}px; --pdp-thumb-gap: {{ section.settings.thumb_gap | default: 8 }}px; --pdp-image-h: {{ section.settings.image_height | default: 495 }}px; --pdp-image-fit: {{ section.settings.image_fit | default: 'contain' }}; --pdp-swatch-w: {{ section.settings.swatch_width | default: 72 }}px; --pdp-swatch-h: {{ section.settings.swatch_height | default: 86 }}px; --pdp-size-h: {{ section.settings.size_height | default: 48 }}px; --pdp-size-gap: {{ section.settings.size_gap | default: 8 }}px; --pdp-guide-w: {{ section.settings.guide_width | default: 550 }}px; --pdp-guide-h: {{ section.settings.guide_height | default: 400 }}px; --pdp-gap: {{ section.settings.info_gap | default: 27 }}px;"
 >
   {%- if section.settings.show_breadcrumb -%}
     <nav class="coach-product__crumb" aria-label="Breadcrumb">
@@ -102,25 +102,18 @@
         {%- if color_index >= 0 -%}
           <span class="coach-product__color-label js-color-label">{{ current.options[color_index] }}</span>
         {%- endif -%}
-        <div class="coach-product__slides js-slides">
-          {%- assign slide_count = 0 -%}
-          {%- for media in product.media -%}
-            {%- if media.media_type == 'image' -%}
-              {%- assign slide_count = slide_count | plus: 1 -%}
-              <img
-                class="coach-product__image js-slide"
-                src="{{ media | image_url: width: 1400 }}"
-                data-src="{{ media | image_url: width: 1400 }}"
-                alt="{{ media.alt | default: product.title | escape }}"
-                width="1400"
-                height="1400"
-              >
-            {%- endif -%}
-          {%- endfor -%}
-          {%- if slide_count == 0 -%}
-            {{ 'product-1' | placeholder_svg_tag: 'coach-product__image' }}
-          {%- endif -%}
-        </div>
+        {%- assign main_media = product.selected_or_first_available_variant.featured_media | default: product.featured_media -%}
+        {%- if main_media -%}
+          <img
+            class="coach-product__image js-main-image"
+            src="{{ main_media | image_url: width: 1400 }}"
+            alt="{{ main_media.alt | default: product.title | escape }}"
+            width="1400"
+            height="1400"
+          >
+        {%- else -%}
+          {{ 'product-1' | placeholder_svg_tag: 'coach-product__image' }}
+        {%- endif -%}
       </div>
     </div>
 
@@ -150,6 +143,9 @@
         <span class="js-price-now">{{ current.price | money }}</span>
         <s class="js-price-compare"{% unless current.compare_at_price > current.price %} hidden{% endunless %}>{% if current.compare_at_price > current.price %}{{ current.compare_at_price | money }}{% endif %}</s>
       </p>
+      {%- if has_size and section.settings.size_note != blank -%}
+        <p class="coach-product__size-note">{{ section.settings.size_note | escape }}</p>
+      {%- endif -%}
 
       <form class="coach-product__form js-product-form" action="{{ routes.cart_add_url }}" method="post">
         <input type="hidden" name="id" class="js-variant-id" value="{% unless has_size %}{{ current.id }}{% endunless %}">
@@ -421,7 +417,7 @@
     { "type": "range", "id": "thumb_height", "min": 60, "max": 140, "step": 2, "unit": "px", "label": "Thumbnail height", "default": 108 },
     { "type": "range", "id": "thumb_gap", "min": 4, "max": 20, "step": 1, "unit": "px", "label": "Thumbnail spacing", "default": 8 },
     { "type": "range", "id": "image_height", "min": 320, "max": 700, "step": 5, "unit": "px", "label": "Main image height", "default": 495 },
-    { "type": "select", "id": "image_fit", "label": "Main image fit", "default": "cover", "options": [{ "value": "cover", "label": "Cover" }, { "value": "contain", "label": "Contain" }] },
+    { "type": "select", "id": "image_fit", "label": "Main image fit", "default": "contain", "options": [{ "value": "contain", "label": "Contain" }, { "value": "cover", "label": "Cover" }] },
     { "type": "range", "id": "swatch_width", "min": 48, "max": 120, "step": 2, "unit": "px", "label": "Color image width", "default": 72 },
     { "type": "range", "id": "swatch_height", "min": 48, "max": 140, "step": 2, "unit": "px", "label": "Color image height", "default": 86 },
     { "type": "range", "id": "size_height", "min": 36, "max": 64, "step": 2, "unit": "px", "label": "Size button height", "default": 48 },
