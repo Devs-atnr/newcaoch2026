@@ -1,19 +1,115 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "main": {
       "type": "coach-product",
       "blocks": {
-        "gallery": { "type": "gallery", "settings": {} },
-        "title": { "type": "title", "settings": {} },
-        "badge": { "type": "badge", "settings": {} },
-        "price": { "type": "price", "settings": {} },
-        "color": { "type": "color", "settings": {} },
-        "size": { "type": "size", "settings": {} },
-        "guide": { "type": "size_guide", "settings": {} },
-        "stock": { "type": "stock", "settings": {} },
-        "qty": { "type": "quantity", "settings": {} },
-        "add": { "type": "add", "settings": {} },
-        "buy": { "type": "buy", "settings": {} },
+        "gallery": {
+          "type": "gallery",
+          "settings": {
+            "show": true,
+            "image_height": 495,
+            "mobile_image_height": 360,
+            "image_fit": "contain",
+            "thumb_position": "left",
+            "thumb_count": 3,
+            "thumb_width": 86,
+            "thumb_height": 114,
+            "thumb_gap": 24,
+            "thumb_border": "#111111",
+            "bag_size_label": "See bag size"
+          }
+        },
+        "title": {
+          "type": "title",
+          "settings": {}
+        },
+        "badge": {
+          "type": "badge",
+          "settings": {
+            "bestseller_label": "Bestseller"
+          }
+        },
+        "price": {
+          "type": "price",
+          "settings": {
+            "show_compare": true
+          }
+        },
+        "color": {
+          "type": "color",
+          "settings": {
+            "show_label": true,
+            "width": 72,
+            "height": 86,
+            "gap": 8,
+            "border_color": "#d5d5d5",
+            "active_color": "#000000"
+          }
+        },
+        "size": {
+          "type": "size",
+          "settings": {
+            "note": "Please check our size guide before ordering",
+            "fit": "Runs true to size",
+            "height": 48,
+            "font_size": 14,
+            "columns": 3,
+            "gap": 8,
+            "selected_bg": "#7a7a7a",
+            "selected_text": "#ffffff"
+          }
+        },
+        "guide": {
+          "type": "size_guide",
+          "settings": {
+            "enable": true,
+            "label": "Size Guide",
+            "width": 550,
+            "height": 400,
+            "background": "#ffffff",
+            "text_color": "#111111"
+          }
+        },
+        "stock": {
+          "type": "stock",
+          "settings": {}
+        },
+        "qty": {
+          "type": "quantity",
+          "settings": {
+            "width": 74,
+            "height": 48,
+            "background": "#ffffff",
+            "border_color": "#d5d5d5",
+            "qty_max": 10
+          }
+        },
+        "add": {
+          "type": "add",
+          "settings": {
+            "label": "Add to bag",
+            "background": "#000000",
+            "text": "#ffffff"
+          }
+        },
+        "buy": {
+          "type": "buy",
+          "settings": {
+            "enable": true,
+            "label": "Buy now",
+            "background": "#81ce74",
+            "text": "#000000"
+          }
+        },
         "shipping": {
           "type": "shipping",
           "settings": {
@@ -21,11 +117,36 @@
             "text": "<p>Complimentary shipping and easy returns. See our shipping and returns pages for full details.</p>"
           }
         },
-        "details": { "type": "details", "settings": { "heading": "Product Details" } },
-        "notes": { "type": "notes", "settings": { "heading": "Editor's Notes" } },
-        "share": { "type": "share", "settings": {} },
-        "also": { "type": "also", "settings": {} },
-        "recent": { "type": "recent", "settings": {} },
+        "details": {
+          "type": "details",
+          "settings": {
+            "heading": "Product Details"
+          }
+        },
+        "notes": {
+          "type": "notes",
+          "settings": {
+            "heading": "Editor's Notes"
+          }
+        },
+        "share": {
+          "type": "share",
+          "settings": {
+            "label": "Share This Product"
+          }
+        },
+        "also": {
+          "type": "also",
+          "settings": {
+            "heading": "You May Also Like"
+          }
+        },
+        "recent": {
+          "type": "recent",
+          "settings": {
+            "heading": "Recently Viewed"
+          }
+        },
         "faq-1": {
           "type": "faq",
           "settings": {
@@ -37,6 +158,7 @@
         "faq-2": {
           "type": "faq",
           "settings": {
+            "heading": "Frequently Asked Questions",
             "question": "How can I style this bag?",
             "answer": "<p>Wear it on the shoulder for everyday looks, or shorten the strap to carry it closer to the body.</p>"
           }
@@ -44,11 +166,15 @@
         "faq-3": {
           "type": "faq",
           "settings": {
+            "heading": "Frequently Asked Questions",
             "question": "What can I fit in this bag?",
             "answer": "<p>It holds daily essentials such as a phone, card case, keys, and a small pouch.</p>"
           }
         },
-        "reviews": { "type": "reviews", "settings": {} }
+        "reviews": {
+          "type": "reviews",
+          "settings": {}
+        }
       },
       "block_order": [
         "gallery",
@@ -76,9 +202,22 @@
       "settings": {
         "show_breadcrumb": true,
         "breadcrumb_home": "Coach",
-        "bestseller_tag": "bestseller"
+        "bestseller_tag": "bestseller",
+        "body_font": "HelveticaLTPro-Roman, Helvetica, Arial, sans-serif",
+        "title_font": "GaramondMTProRegular, Times New Roman, Times, serif",
+        "title_size": 24,
+        "title_line": 30,
+        "title_weight": "400",
+        "title_spacing": "0.4px",
+        "price_size": 28,
+        "text_color": "#111111",
+        "background": "#ffffff",
+        "page_width": 1320,
+        "info_gap": 27
       }
     }
   },
-  "order": ["main"]
+  "order": [
+    "main"
+  ]
 }
