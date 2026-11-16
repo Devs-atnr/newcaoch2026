@@ -1106,7 +1106,7 @@ body.coach-sheet-open { overflow: hidden; }
   .coach-product__qty-box svg { transform: rotate(180deg); }
   .coach-product__add,
   .coach-product__now {
-    height: 48px !important;
+    height: 58px !important;
     border-radius: 8px;
     font-size: 15px !important;
     font-weight: 600;
