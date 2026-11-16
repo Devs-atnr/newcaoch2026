@@ -27,10 +27,12 @@
   assign features = product.metafields.custom.features
   assign editors_note = product.metafields.custom.editors_note | default: product.description
   assign has_size = false
+  assign size_index = -1
   for option in product.options_with_values
     assign size_name = option.name | downcase
     if size_name contains 'size'
       assign has_size = true
+      assign size_index = forloop.index0
     endif
   endfor
 -%}
@@ -132,13 +134,16 @@
         {%- endif -%}
       </div>
 
-      <p class="coach-product__price js-price">{{ current.price | money }}</p>
+      <p class="coach-product__price">
+        <span class="js-price-now">{{ current.price | money }}</span>
+        <s class="js-price-compare"{% unless current.compare_at_price > current.price %} hidden{% endunless %}>{% if current.compare_at_price > current.price %}{{ current.compare_at_price | money }}{% endif %}</s>
+      </p>
       {%- if has_size and section.settings.size_note != blank -%}
         <p class="coach-product__size-note">{{ section.settings.size_note | escape }}</p>
       {%- endif -%}
 
       <form class="coach-product__form js-product-form" action="{{ routes.cart_add_url }}" method="post">
-        <input type="hidden" name="id" class="js-variant-id" value="{{ current.id }}">
+        <input type="hidden" name="id" class="js-variant-id" value="{% unless has_size %}{{ current.id }}{% endunless %}">
 
         {%- for option in product.options_with_values -%}
           {%- assign option_name = option.name | downcase -%}
@@ -147,17 +152,24 @@
             <div class="coach-product__swatches" role="list">
               {%- for value in option.values -%}
                 {%- assign swatch_variant = nil -%}
+                {%- assign color_available = false -%}
                 {%- for variant in product.variants -%}
-                  {%- if variant.options[color_index] == value and swatch_variant == nil -%}
-                    {%- assign swatch_variant = variant -%}
+                  {%- if variant.options[color_index] == value -%}
+                    {%- if swatch_variant == nil -%}
+                      {%- assign swatch_variant = variant -%}
+                    {%- endif -%}
+                    {%- if variant.available -%}
+                      {%- assign color_available = true -%}
+                    {%- endif -%}
                   {%- endif -%}
                 {%- endfor -%}
                 <button
                   type="button"
-                  class="coach-product__swatch{% if option.selected_value == value %} is-active{% endif %}"
+                  class="coach-product__swatch{% if option.selected_value == value %} is-active{% endif %}{% unless color_available %} is-unavailable{% endunless %}"
                   data-option-index="{{ color_index }}"
                   data-value="{{ value | escape }}"
                   aria-label="{{ value | escape }}"
+                  {% unless color_available %}disabled{% endunless %}
                 >
                   {%- if swatch_variant.featured_media -%}
                     {{ swatch_variant.featured_media | image_url: width: 120 | image_tag: alt: value }}
@@ -175,20 +187,20 @@
               {%- assign is_size = true -%}
             {%- endif -%}
             <p class="coach-product__option-label">
-              {{ option.name | escape }}{% if is_size %}: <span class="js-option-value" data-for-option="{{ forloop.index0 }}">{{ option.selected_value | escape }}</span>{% endif %}
+              {{ option.name | escape }}{% if is_size %}: <span class="js-option-value" data-for-option="{{ forloop.index0 }}">Select a size</span>{% endif %}
             </p>
             <div class="coach-product__choices{% if is_size %} coach-product__choices--size{% endif %}">
               {%- for value in option.values -%}
                 <button
                   type="button"
-                  class="coach-product__choice{% if option.selected_value == value %} is-active{% endif %}"
+                  class="coach-product__choice"
                   data-option-index="{{ forloop.parentloop.index0 }}"
                   data-value="{{ value | escape }}"
                 >{{ value | escape }}</button>
               {%- endfor -%}
             </div>
             {%- if is_size -%}
-              <a class="coach-product__size-guide" href="{{ section.settings.size_guide_url | default: '/pages/size-guide' }}">{{ section.settings.size_guide_label | default: 'Size Guide' | escape }}</a>
+              <button type="button" class="coach-product__size-guide js-size-guide">{{ section.settings.size_guide_label | default: 'Size Guide' | escape }}</button>
             {%- endif -%}
           {%- endif -%}
         {%- endfor -%}
@@ -202,12 +214,12 @@
               {%- endfor -%}
             </select>
           </div>
-          <button type="submit" class="coach-product__add js-add"{% unless current.available %} disabled{% endunless %}>
+          <button type="submit" class="coach-product__add js-add"{% if has_size or current.available == false %} disabled{% endif %}>
             {{ section.settings.add_label | default: 'Add to bag' | escape }}
           </button>
         </div>
         {%- if section.settings.show_buy_now -%}
-          <button type="button" class="coach-product__now js-buy-now"{% unless current.available %} disabled{% endunless %}>
+          <button type="button" class="coach-product__now js-buy-now"{% if has_size or current.available == false %} disabled{% endif %}>
             {{ section.settings.buy_now_label | default: 'Buy now' | escape }}
           </button>
         {%- endif -%}
@@ -319,10 +331,42 @@
     </div>
   {%- endif -%}
 
+  {%- if has_size -%}
+    <div class="coach-size-guide" hidden>
+      <button type="button" class="coach-size-guide__bg js-guide-close" aria-label="Close size guide"></button>
+      <div class="coach-size-guide__card" role="dialog" aria-modal="true" aria-labelledby="CoachSizeGuideTitle-{{ section.id }}">
+        <button type="button" class="coach-size-guide__close js-guide-close" aria-label="Close">×</button>
+        <h2 id="CoachSizeGuideTitle-{{ section.id }}" class="js-guide-title"></h2>
+        <div class="coach-size-guide__scroll">
+          <table class="js-guide-table"></table>
+        </div>
+        <div class="coach-size-guide__note js-guide-note"></div>
+      </div>
+    </div>
+  {%- endif -%}
+
   <script type="application/json" class="js-coach-product-data">
     {
       "colorIndex": {{ color_index }},
+      "sizeIndex": {{ size_index }},
+      "productType": {{ product.type | json }},
+      "tags": {{ product.tags | json }},
       "options": {{ product.options | json }},
+      "sizeGuide": {% if product.metafields.custom.size_guide != blank %}{{ product.metafields.custom.size_guide.value | json }}{% elsif product.metafields.custom.size_chart != blank %}{{ product.metafields.custom.size_chart.value | json }}{% else %}null{% endif %},
+      "media": [
+        {%- assign media_first = true -%}
+        {%- for media in product.media -%}
+          {%- if media.media_type == 'image' -%}
+            {%- unless media_first -%},{%- endunless -%}
+            {%- assign media_first = false -%}
+            {
+              "src": {{ media | image_url: width: 1400 | json }},
+              "thumb": {{ media | image_url: width: 200 | json }},
+              "alt": {{ media.alt | default: product.title | json }}
+            }
+          {%- endif -%}
+        {%- endfor -%}
+      ],
       "variants": [
         {%- for variant in product.variants -%}
           {
@@ -330,6 +374,7 @@
             "available": {{ variant.available }},
             "options": {{ variant.options | json }},
             "price": {{ variant.price | money | json }},
+            "compare": {% if variant.compare_at_price > variant.price %}{{ variant.compare_at_price | money | json }}{% else %}null{% endif %},
             "sku": {{ variant.sku | json }},
             "inventory": {{ variant.inventory_quantity | default: 0 }},
             "tracked": {% if variant.inventory_management %}true{% else %}false{% endif %},

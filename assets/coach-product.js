@@ -4,6 +4,8 @@ class CoachProductPage extends HTMLElement {
     this.selected = (this.data.variants.find((variant) => String(variant.id) === this.querySelector('.js-variant-id')?.value) || this.data.variants[0] || {}).options?.slice() || [];
     this.bindGallery();
     this.bindOptions();
+    this.prepareSelection();
+    this.bindSizeGuide();
     this.bindQty();
     this.bindForm();
     this.bindBagSize();
@@ -30,12 +32,21 @@ class CoachProductPage extends HTMLElement {
       if (!button) return;
       this.showImage(button.dataset.src, button.dataset.alt, button);
     });
-    this.querySelector('.js-thumb-prev')?.addEventListener('click', () => {
-      list.scrollBy({ top: -80, left: -80, behavior: 'smooth' });
-    });
-    this.querySelector('.js-thumb-next')?.addEventListener('click', () => {
-      list.scrollBy({ top: 80, left: 80, behavior: 'smooth' });
-    });
+    const step = (direction) => {
+      const thumb = list.querySelector('.coach-product__thumb');
+      if (!thumb) return;
+      const styles = getComputedStyle(list);
+      const gap = parseFloat(styles.rowGap || styles.gap) || 8;
+      const horizontal = styles.flexDirection === 'row';
+      const amount = (horizontal ? thumb.offsetWidth : thumb.offsetHeight) + gap;
+      list.scrollBy({
+        top: horizontal ? 0 : amount * direction,
+        left: horizontal ? amount * direction : 0,
+        behavior: 'smooth',
+      });
+    };
+    this.querySelector('.js-thumb-prev')?.addEventListener('click', () => step(-1));
+    this.querySelector('.js-thumb-next')?.addEventListener('click', () => step(1));
   }
 
   showImage(src, alt, thumb) {
@@ -50,6 +61,7 @@ class CoachProductPage extends HTMLElement {
   bindOptions() {
     this.querySelectorAll('[data-option-index]').forEach((button) => {
       button.addEventListener('click', () => {
+        if (button.disabled || button.classList.contains('is-disabled') || button.classList.contains('is-unavailable')) return;
         const index = Number(button.dataset.optionIndex);
         this.selected[index] = button.dataset.value;
         this.querySelectorAll(`[data-option-index="${index}"]`).forEach((item) => {
@@ -60,6 +72,7 @@ class CoachProductPage extends HTMLElement {
           if (colorLabel) colorLabel.textContent = button.dataset.value;
           const overlay = this.querySelector('.js-color-label');
           if (overlay) overlay.textContent = button.dataset.value;
+          this.renderThumbs(button.dataset.value);
         }
         this.querySelectorAll('.js-option-value').forEach((node) => {
           if (Number(node.dataset.forOption) === index) node.textContent = button.dataset.value;
@@ -69,13 +82,71 @@ class CoachProductPage extends HTMLElement {
     });
   }
 
+  prepareSelection() {
+    if (this.data.sizeIndex >= 0) {
+      this.selected[this.data.sizeIndex] = null;
+      const idInput = this.querySelector('.js-variant-id');
+      if (idInput) idInput.value = '';
+      this.querySelectorAll('.js-add, .js-buy-now').forEach((button) => { button.disabled = true; });
+    }
+    this.refreshAvailability();
+  }
+
+  optionAvailable(index, value) {
+    return this.data.variants.some((variant) => {
+      if (variant.options[index] !== value || !variant.available) return false;
+      return variant.options.every((option, optionIndex) => {
+        if (optionIndex === index) return true;
+        if (optionIndex === this.data.sizeIndex) return true;
+        return this.selected[optionIndex] == null || option === this.selected[optionIndex];
+      });
+    });
+  }
+
+  refreshAvailability() {
+    this.querySelectorAll('[data-option-index]').forEach((button) => {
+      const index = Number(button.dataset.optionIndex);
+      if (index === this.data.colorIndex) {
+        const available = this.data.variants.some((variant) => variant.options[index] === button.dataset.value && variant.available);
+        button.classList.toggle('is-unavailable', !available);
+        button.disabled = !available;
+        return;
+      }
+      const available = this.optionAvailable(index, button.dataset.value);
+      button.classList.toggle('is-disabled', !available);
+      button.disabled = !available;
+      if (!available && button.classList.contains('is-active')) {
+        button.classList.remove('is-active');
+        this.selected[index] = null;
+        const label = this.querySelector(`.js-option-value[data-for-option="${index}"]`);
+        if (label) label.textContent = 'Select a size';
+      }
+    });
+  }
+
+  findVariant() {
+    if (this.selected.some((value) => value == null || value === '')) return null;
+    return this.data.variants.find((item) => item.options.every((value, index) => value === this.selected[index])) || null;
+  }
+
   applyVariant() {
-    const variant = this.data.variants.find((item) => item.options.every((value, index) => value === this.selected[index]));
-    if (!variant) return;
+    this.refreshAvailability();
+    const variant = this.findVariant();
     const idInput = this.querySelector('.js-variant-id');
-    if (idInput) idInput.value = variant.id;
-    const price = this.querySelector('.js-price');
+    const price = this.querySelector('.js-price-now');
+    const compare = this.querySelector('.js-price-compare');
+    if (!variant) {
+      if (idInput) idInput.value = '';
+      this.querySelectorAll('.js-add, .js-buy-now').forEach((button) => { button.disabled = true; });
+      this.showColorImage();
+      return;
+    }
+    if (idInput) idInput.value = variant.available ? variant.id : '';
     if (price) price.innerHTML = variant.price;
+    if (compare) {
+      compare.hidden = !variant.compare;
+      compare.innerHTML = variant.compare || '';
+    }
     const sku = this.querySelector('.js-sku');
     if (sku && variant.sku) sku.textContent = variant.sku;
     this.querySelectorAll('.js-add, .js-buy-now').forEach((button) => {
@@ -97,6 +168,28 @@ class CoachProductPage extends HTMLElement {
       const thumb = [...this.querySelectorAll('.coach-product__thumb')].find((button) => button.dataset.src === variant.image);
       this.showImage(variant.image, this.querySelector('.coach-product__title')?.textContent || '', thumb);
     }
+  }
+
+  showColorImage() {
+    const colorIndex = this.data.colorIndex;
+    const color = colorIndex >= 0 ? this.selected[colorIndex] : null;
+    const variant = this.data.variants.find((item) => item.image && (!color || item.options[colorIndex] === color) && item.available)
+      || this.data.variants.find((item) => item.image && (!color || item.options[colorIndex] === color));
+    if (!variant?.image) return;
+    const thumb = [...this.querySelectorAll('.coach-product__thumb')].find((button) => button.dataset.src === variant.image);
+    this.showImage(variant.image, color || '', thumb);
+  }
+
+  renderThumbs(color) {
+    const list = this.querySelector('.js-thumbs');
+    const media = this.data.media || [];
+    if (!list || !media.length || !color) return;
+    const matched = media.filter((item) => (item.alt || '').toLowerCase().includes(String(color).toLowerCase()));
+    const visible = matched.length ? matched : media;
+    const current = this.querySelector('.js-main-image')?.src;
+    const activeSrc = visible.some((item) => item.src === current) ? current : visible[0]?.src;
+    list.innerHTML = visible.map((item) => `<button type="button" class="coach-product__thumb${item.src === activeSrc ? ' is-active' : ''}" data-src="${this.escape(item.src)}" data-alt="${this.escape(item.alt || '')}" aria-label="${this.escape(item.alt || 'Product image')}"><img src="${this.escape(item.thumb || item.src)}" alt="${this.escape(item.alt || '')}"></button>`).join('');
+    list.scrollTo({ top: 0, left: 0 });
   }
 
   bindQty() {
@@ -121,10 +214,14 @@ class CoachProductPage extends HTMLElement {
   async addToCart(checkout) {
     const id = this.querySelector('.js-variant-id')?.value;
     const quantity = Number(this.querySelector('.js-qty-input')?.value || 1);
-    if (!id || this.dataset.adding === 'true') return;
+    const error = this.querySelector('.js-error');
+    if (!id) {
+      if (error) error.textContent = this.data.sizeIndex >= 0 ? 'Please select a size.' : 'Please select an available option.';
+      return;
+    }
+    if (this.dataset.adding === 'true') return;
     this.dataset.adding = 'true';
     this.showLoader(true);
-    const error = this.querySelector('.js-error');
     if (error) error.textContent = '';
     try {
       const response = await fetch((window.routes && window.routes.cart_add_url) || '/cart/add.js', {
@@ -180,6 +277,147 @@ class CoachProductPage extends HTMLElement {
     });
   }
 
+  bindSizeGuide() {
+    const modal = this.querySelector('.coach-size-guide');
+    if (!modal) return;
+    this.querySelector('.js-size-guide')?.addEventListener('click', () => this.openSizeGuide());
+    modal.querySelectorAll('.js-guide-close').forEach((button) => {
+      button.addEventListener('click', () => this.closeSizeGuide());
+    });
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && !modal.hidden) this.closeSizeGuide();
+    });
+  }
+
+  openSizeGuide() {
+    const modal = this.querySelector('.coach-size-guide');
+    if (!modal) return;
+    const guide = this.buildSizeGuide();
+    const title = modal.querySelector('.js-guide-title');
+    const table = modal.querySelector('.js-guide-table');
+    const note = modal.querySelector('.js-guide-note');
+    if (title) title.textContent = guide.title;
+    if (table) table.innerHTML = this.guideTable(guide);
+    if (note) note.innerHTML = guide.note ? `<p>${this.escape(guide.note)}</p>` : '';
+    modal.hidden = false;
+    document.body.classList.add('coach-guide-open');
+  }
+
+  closeSizeGuide() {
+    const modal = this.querySelector('.coach-size-guide');
+    if (modal) modal.hidden = true;
+    document.body.classList.remove('coach-guide-open');
+  }
+
+  buildSizeGuide() {
+    const raw = this.normalizeGuide(this.data.sizeGuide);
+    if (raw?.rows?.length) return raw;
+    const category = this.sizeCategory();
+    const sizes = this.sizeValues();
+    const shoe = category.includes('shoe');
+    const rows = shoe ? this.shoeRows(sizes, category) : [{ label: 'Size', values: sizes }];
+    return {
+      title: raw?.title || this.guideTitle(category),
+      rows,
+      note: raw?.note || (shoe
+        ? 'Measurements can vary by style. Foot length is the length of the foot in millimetres.'
+        : 'Size details for this product come from its options. Add the custom.size_guide metafield for a full chart.'),
+    };
+  }
+
+  normalizeGuide(raw) {
+    let guide = raw;
+    if (typeof guide === 'string') {
+      const trimmed = guide.trim();
+      if (!trimmed) return null;
+      if (trimmed.startsWith('{') || trimmed.startsWith('[')) {
+        try { guide = JSON.parse(trimmed); } catch (error) { return { note: trimmed }; }
+      } else {
+        return { note: trimmed };
+      }
+    }
+    if (!guide || typeof guide !== 'object') return null;
+    if (Array.isArray(guide.sizes) && !guide.rows) {
+      guide.rows = [
+        { label: 'US', values: guide.sizes.map((size) => size.us || size.US || '') },
+        { label: 'UK', values: guide.sizes.map((size) => size.uk || size.UK || '') },
+        { label: 'EU', values: guide.sizes.map((size) => size.eu || size.EU || '') },
+        { label: 'Foot Length (mm)', values: guide.sizes.map((size) => size.mm || size.foot || size.footLength || '') },
+      ];
+    }
+    return {
+      title: guide.title || '',
+      rows: Array.isArray(guide.rows) ? guide.rows : [],
+      note: guide.note || guide.info || '',
+    };
+  }
+
+  sizeValues() {
+    if (this.data.sizeIndex < 0) return [];
+    const values = new Set();
+    this.data.variants.forEach((variant) => {
+      const value = variant.options[this.data.sizeIndex];
+      if (value) values.add(value);
+    });
+    return [...values];
+  }
+
+  sizeCategory() {
+    const text = `${this.data.productType || ''} ${(this.data.tags || []).join(' ')} ${this.dataset.productTitle || ''}`.toLowerCase();
+    const women = /women|woman|ladies|female/.test(text);
+    const men = /\bmen\b|\bman\b|male/.test(text) && !women;
+    const shoe = /shoe|sneaker|trainer|boot|loafer|sandal|footwear/.test(text);
+    if (shoe && women) return 'women-shoes';
+    if (shoe && men) return 'men-shoes';
+    if (shoe) return 'shoes';
+    if (women) return 'women';
+    if (men) return 'men';
+    return this.data.productType || 'general';
+  }
+
+  guideTitle(category) {
+    const type = this.data.productType || '';
+    if (category === 'women-shoes') return type ? `Women's ${type}` : "Women's Shoes";
+    if (category === 'men-shoes') return type ? `Men's ${type}` : "Men's Shoes";
+    if (category === 'shoes') return type || 'Shoes';
+    if (category === 'women') return type ? `Women's ${type}` : "Women's Size Guide";
+    if (category === 'men') return type ? `Men's ${type}` : "Men's Size Guide";
+    return type || 'Size Guide';
+  }
+
+  shoeRows(sizes, category) {
+    const women = category === 'women-shoes';
+    const parsed = sizes.map((label) => {
+      const usMatch = String(label).match(/[\d.]+/);
+      const ukMatch = String(label).match(/UK\s*([\d.]+)/i);
+      const us = usMatch ? Number(usMatch[0]) : NaN;
+      if (!Number.isFinite(us)) return { label, us: label, uk: ukMatch ? ukMatch[1] : '', eu: '', mm: '' };
+      const uk = ukMatch ? ukMatch[1] : this.formatSize(women ? us - 2 : us - 0.5);
+      const eu = this.formatSize(women ? 35 + (us - 5) : 40 + (us - 7));
+      const mm = String(Math.round((women ? 220 : 250) + ((women ? us - 5 : us - 7) * 8)));
+      return { label, us: usMatch[0], uk, eu, mm };
+    });
+    return [
+      { label: 'US', values: parsed.map((size) => size.us) },
+      { label: 'UK', values: parsed.map((size) => size.uk) },
+      { label: 'EU', values: parsed.map((size) => size.eu) },
+      { label: 'Foot Length (mm)', values: parsed.map((size) => size.mm) },
+    ];
+  }
+
+  formatSize(value) {
+    const rounded = Math.round(value * 10) / 10;
+    return Number.isInteger(rounded) ? String(rounded) : String(rounded);
+  }
+
+  guideTable(guide) {
+    const rows = guide.rows || [];
+    return rows.map((row) => {
+      const values = row.values || [];
+      return `<tr><td>${this.escape(row.label || '')}</td>${values.map((value) => `<td>${this.escape(value)}</td>`).join('')}</tr>`;
+    }).join('');
+  }
+
   bindWishlist() {
     const button = this.querySelector('[data-wishlist]');
     this.syncWishlist();
@@ -187,7 +425,7 @@ class CoachProductPage extends HTMLElement {
       if (!window.CoachWishlist) return;
       const variantId = this.querySelector('.js-variant-id')?.value;
       const image = this.querySelector('.js-main-image')?.src || '';
-      const price = this.querySelector('.js-price')?.textContent?.trim() || '';
+      const price = this.querySelector('.js-price-now')?.textContent?.trim() || '';
       const saved = window.CoachWishlist.toggle({
         handle: this.dataset.productHandle,
         id: this.dataset.productId,
