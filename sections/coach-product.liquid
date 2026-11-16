@@ -78,7 +78,8 @@
     <div class="coach-product__gallery is-{{ gallery_block.settings.thumb_position | default: 'left' }}"{% if gallery_block.settings.show == false %} hidden{% endif %} {{ gallery_block.shopify_attributes }}>
       <div class="coach-product__thumbs">
         <button type="button" class="coach-product__thumb-nav js-thumb-prev" aria-label="Previous images">
-          <svg width="14" height="8" viewBox="0 0 14 8" fill="none" aria-hidden="true"><path d="M1 7L7 1L13 7" stroke="currentColor" stroke-width="1.2"/></svg>
+          <svg class="coach-product__arrow-up" width="14" height="8" viewBox="0 0 14 8" fill="none" aria-hidden="true"><path d="M1 7L7 1L13 7" stroke="currentColor" stroke-width="1.2"/></svg>
+          <svg class="coach-product__arrow-side" width="8" height="14" viewBox="0 0 8 14" fill="none" aria-hidden="true"><path d="M7 1L1 7L7 13" stroke="currentColor" stroke-width="1.3"/></svg>
         </button>
         <div class="coach-product__thumb-list js-thumbs">
           {%- for media in product.media -%}
@@ -96,7 +97,8 @@
           {%- endfor -%}
         </div>
         <button type="button" class="coach-product__thumb-nav js-thumb-next" aria-label="Next images">
-          <svg width="14" height="8" viewBox="0 0 14 8" fill="none" aria-hidden="true"><path d="M1 1L7 7L13 1" stroke="currentColor" stroke-width="1.2"/></svg>
+          <svg class="coach-product__arrow-up" width="14" height="8" viewBox="0 0 14 8" fill="none" aria-hidden="true"><path d="M1 1L7 7L13 1" stroke="currentColor" stroke-width="1.2"/></svg>
+          <svg class="coach-product__arrow-side" width="8" height="14" viewBox="0 0 8 14" fill="none" aria-hidden="true"><path d="M1 1L7 7L1 13" stroke="currentColor" stroke-width="1.3"/></svg>
         </button>
       </div>
 
@@ -403,6 +405,9 @@
       "limit": 1,
       "settings": [
         { "type": "text", "id": "heading", "label": "Heading", "default": "Shipping And Returns" },
+        { "type": "text", "id": "promo_title", "label": "Mobile label", "default": "Free shipping" },
+        { "type": "text", "id": "promo_note", "label": "Mobile note", "default": "On orders $75 +" },
+        { "type": "text", "id": "learn_more", "label": "Learn more label", "default": "Learn more" },
         { "type": "checkbox", "id": "open", "label": "Open by default", "default": false },
         { "type": "richtext", "id": "text", "label": "Fallback content", "default": "<p>Complimentary shipping and easy returns.</p>", "info": "Product metafield custom.shipping_and_returns replaces this text." }
       ]

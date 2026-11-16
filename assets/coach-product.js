@@ -9,6 +9,7 @@ class CoachProductPage extends HTMLElement {
     this.bindQty();
     this.bindForm();
     this.bindAccordions();
+    this.bindShippingSheet();
     this.bindBagSize();
     this.bindWishlist();
     this.rememberView();
@@ -38,23 +39,51 @@ class CoachProductPage extends HTMLElement {
       const current = buttons.findIndex((button) => button.classList.contains('is-active'));
       const next = buttons[Math.min(buttons.length - 1, Math.max(0, current + direction))];
       if (!next) return;
-      this.showImage(next.dataset.src, next.dataset.alt, next);
+      this.showImage(next.dataset.src, next.dataset.alt, next, direction);
     };
     this.querySelector('.js-thumb-prev')?.addEventListener('click', () => move(-1));
     this.querySelector('.js-thumb-next')?.addEventListener('click', () => move(1));
   }
 
-  showImage(src, alt, thumb) {
+  showImage(src, alt, thumb, direction = 0) {
     const main = this.querySelector('.js-main-image');
-    if (main && src) {
-      if (main.getAttribute('src') !== src) {
-        main.style.opacity = '0.35';
-        const reveal = () => { main.style.opacity = '1'; };
-        main.addEventListener('load', reveal, { once: true });
+    const stage = this.querySelector('.coach-product__stage');
+    if (main && src && main.getAttribute('src') !== src) {
+      const canSlide = direction && stage && window.matchMedia('(max-width: 1100px)').matches && !this.sliding;
+      if (canSlide) {
+        this.sliding = true;
+        const incoming = document.createElement('img');
+        incoming.className = 'coach-product__image is-incoming';
+        incoming.alt = alt || main.alt || '';
+        incoming.src = src;
+        stage.appendChild(incoming);
+        incoming.style.transform = `translate3d(${direction > 0 ? '100%' : '-100%'},0,0)`;
+        requestAnimationFrame(() => {
+          main.style.transition = 'transform .38s ease';
+          incoming.style.transition = 'transform .38s ease';
+          main.style.transform = `translate3d(${direction > 0 ? '-100%' : '100%'},0,0)`;
+          incoming.style.transform = 'translate3d(0,0,0)';
+        });
+        let settled = false;
+        const finish = () => {
+          if (settled) return;
+          settled = true;
+          main.src = src;
+          if (alt) main.alt = alt;
+          main.style.transition = 'none';
+          main.style.transform = '';
+          incoming.remove();
+          this.sliding = false;
+        };
+        incoming.addEventListener('transitionend', finish, { once: true });
+        setTimeout(finish, 460);
+      } else {
+        main.style.opacity = '';
         main.src = src;
-        if (main.complete) reveal();
+        if (alt) main.alt = alt;
       }
-      if (alt) main.alt = alt;
+    } else if (main && alt) {
+      main.alt = alt;
     }
     const list = this.querySelector('.js-thumbs');
     const buttons = [...this.querySelectorAll('.coach-product__thumb')];
@@ -270,6 +299,24 @@ class CoachProductPage extends HTMLElement {
     });
     document.addEventListener('click', (event) => {
       if (!root.contains(event.target)) close();
+    });
+  }
+
+  bindShippingSheet() {
+    const sheet = this.querySelector('.js-ship-sheet');
+    if (!sheet) return;
+    const open = () => {
+      sheet.hidden = false;
+      document.body.classList.add('coach-sheet-open');
+    };
+    const close = () => {
+      sheet.hidden = true;
+      document.body.classList.remove('coach-sheet-open');
+    };
+    this.querySelectorAll('.js-ship-open').forEach((button) => button.addEventListener('click', open));
+    sheet.querySelectorAll('.js-ship-close').forEach((button) => button.addEventListener('click', close));
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && !sheet.hidden) close();
     });
   }
 

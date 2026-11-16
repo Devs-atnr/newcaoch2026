@@ -140,10 +140,28 @@
         {%- when 'shipping' -%}
           {%- assign shipping_content = product.metafields.custom.shipping_and_returns | default: product.metafields.custom.shipping | default: block.settings.text -%}
           {%- if shipping_content != blank -%}
-            <details class="coach-product__acc" {{ block.shopify_attributes }}{% if block.settings.open %} open{% endif %}>
+            <button type="button" class="coach-product__ship-row js-ship-open" {{ block.shopify_attributes }}>
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 7h9l3 4v6h-2.2a2 2 0 0 1-3.6 0H10.8a2 2 0 0 1-3.6 0H6V7z" stroke="currentColor" stroke-width="1.4"/><circle cx="9" cy="17" r="1.2" fill="currentColor"/><circle cx="16" cy="17" r="1.2" fill="currentColor"/></svg>
+              <span>
+                <strong>{{ block.settings.promo_title | default: 'Free shipping' | escape }}</strong>
+                <small>{{ block.settings.promo_note | default: 'On orders $75 +' | escape }}</small>
+              </span>
+              <span class="coach-product__ship-more">{{ block.settings.learn_more | default: 'Learn more' | escape }}</span>
+            </button>
+            <details class="coach-product__acc coach-product__acc--ship"{% if block.settings.open %} open{% endif %}>
               <summary>{{ block.settings.heading | escape }}</summary>
               <div class="coach-product__acc-body rte">{{ shipping_content }}</div>
             </details>
+            <div class="coach-ship-sheet js-ship-sheet" hidden>
+              <button type="button" class="coach-ship-sheet__bg js-ship-close" aria-label="Close"></button>
+              <div class="coach-ship-sheet__card" role="dialog" aria-modal="true" aria-label="{{ block.settings.heading | escape }}">
+                <div class="coach-ship-sheet__head">
+                  <h2>{{ block.settings.heading | escape }}</h2>
+                  <button type="button" class="coach-ship-sheet__close js-ship-close" aria-label="Close">×</button>
+                </div>
+                <div class="coach-ship-sheet__body rte">{{ shipping_content }}</div>
+              </div>
+            </div>
           {%- endif -%}
         {%- when 'details' -%}
           {%- assign details_content = product.metafields.custom.product_details | default: product.metafields.custom.details -%}
@@ -163,13 +181,20 @@
                     {%- if features != blank -%}<div><dt>Features</dt><dd>{{ features | newline_to_br }}</dd></div>{%- endif -%}
                   </dl>
                 {%- endif -%}
+                {%- assign note_inline = product.metafields.custom.editors_note -%}
+                {%- if note_inline != blank -%}
+                  <div class="coach-product__notes-inline">
+                    <h3>Editor's Notes</h3>
+                    <div class="rte">{{ note_inline }}</div>
+                  </div>
+                {%- endif -%}
               </div>
             </details>
           {%- endif -%}
         {%- when 'notes' -%}
           {%- assign note_content = product.metafields.custom.editors_note -%}
           {%- if note_content != blank -%}
-            <details class="coach-product__acc" {{ block.shopify_attributes }}{% if block.settings.open %} open{% endif %}>
+            <details class="coach-product__acc coach-product__acc--notes" {{ block.shopify_attributes }}{% if block.settings.open %} open{% endif %}>
               <summary>{{ block.settings.heading | escape }}</summary>
               <div class="coach-product__acc-body rte">{{ note_content }}</div>
             </details>
