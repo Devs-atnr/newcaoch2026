@@ -21,10 +21,10 @@ coach-product-page.coach-product {
   flex-wrap: wrap;
   gap: 6px;
   margin: 0 0 14px;
-  color: #8a8a8a;
-  font-family: HelveticaLTPro-Roman, Helvetica, Arial, sans-serif;
-  font-size: 12px;
-  line-height: 18px;
+  color: var(--pdp-crumb-color, #8a8a8a);
+  font-family: var(--pdp-crumb-font, HelveticaLTPro-Roman, Helvetica, Arial, sans-serif);
+  font-size: var(--pdp-crumb-size, 12px);
+  line-height: 1.4;
 }
 
 .coach-product__crumb a {
@@ -61,12 +61,17 @@ coach-product-page.coach-product {
 }
 
 .coach-product__thumb-nav {
-  width: 36px;
-  height: 28px;
+  width: calc(var(--pdp-arrow-size, 14px) + 22px);
+  height: calc(var(--pdp-arrow-size, 14px) + 14px);
   border: 0;
   background: transparent;
   cursor: pointer;
-  color: #222;
+  color: var(--pdp-arrow-color, #222);
+}
+.coach-product__thumb-nav svg {
+  width: var(--pdp-arrow-size, 14px);
+  height: auto;
+  display: block;
 }
 
 .coach-product__thumb-list {
@@ -136,16 +141,32 @@ coach-product-page.coach-product {
   transition: opacity 0.2s ease;
 }
 
+.coach-product__flag,
+.coach-product__pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: transparent;
+  color: #111;
+  font-family: HelveticaLTPro-Roman, Helvetica, Arial, sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  line-height: 1;
+  text-transform: uppercase;
+  padding: 0;
+}
 .coach-product__flag {
   position: absolute;
-  top: 16px;
-  left: 16px;
-  background: #f3d36b;
-  color: #111;
-  font-size: 11px;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  padding: 4px 8px;
+  top: 18px;
+  left: 18px;
+  z-index: 2;
+}
+.coach-product__badge-star {
+  color: #c6a15b;
+  font-size: 13px;
+  letter-spacing: 0;
+  line-height: 1;
 }
 
 .coach-product__size-btn,
@@ -220,15 +241,7 @@ coach-product-page.coach-product {
 
 .coach-product__meta:empty { display: none; }
 
-.coach-product__pill {
-  background: #ececec;
-  font-size: 11px;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  padding: 3px 7px;
-}
-
-.coach-product__stars { color: #d0d0d0; letter-spacing: 1px; font-size: 14px; }
+.coach-product__stars { color: #d0d0d0; letter-spacing: 2px; font-size: 15px; line-height: 1; }
 .coach-product__stars .is-on { color: #111; }
 .coach-product__stars--lg { font-size: 22px; letter-spacing: 2px; }
 .coach-product__review-count { color: #666; font-size: 13px; }

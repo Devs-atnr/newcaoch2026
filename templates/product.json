@@ -202,9 +202,9 @@
       "settings": {
         "show_breadcrumb": true,
         "breadcrumb_home": "Coach",
-        "bestseller_tag": "bestseller",
-        "body_font": "HelveticaLTPro-Roman, Helvetica, Arial, sans-serif",
-        "title_font": "GaramondMTProRegular, Times New Roman, Times, serif",
+        "breadcrumb_font": "helvetica",
+        "breadcrumb_size": 12,
+        "breadcrumb_color": "#8a8a8a",
         "title_size": 24,
         "title_line": 30,
         "title_weight": "400",

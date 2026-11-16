@@ -4,22 +4,28 @@
 {%- liquid
   assign current = product.selected_or_first_available_variant
   assign color_index = -1
-  assign bestseller_tag = section.settings.bestseller_tag | default: 'bestseller'
   assign is_bestseller = false
-  for tag in product.tags
-    assign tag_down = tag | downcase
-    if tag_down == bestseller_tag or tag_down contains 'bestseller' or tag_down contains 'best seller'
-      assign is_bestseller = true
-    endif
-  endfor
+  if section.settings.bestseller_products != blank
+    for bestseller_product in section.settings.bestseller_products
+      if bestseller_product.id == product.id
+        assign is_bestseller = true
+      endif
+    endfor
+  endif
+  assign badge_block = section.blocks | where: 'type', 'badge' | first
+  assign bestseller_label = badge_block.settings.bestseller_label | default: 'Bestseller'
+  assign crumb_font = 'HelveticaLTPro-Roman, Helvetica, Arial, sans-serif'
+  if section.settings.breadcrumb_font == 'garamond'
+    assign crumb_font = 'GaramondMTProRegular, Times New Roman, Times, serif'
+  endif
+  assign rating_value = product.metafields.reviews.rating.value.rating | default: product.metafields.reviews.rating.value | default: product.metafields.reviews.rating
+  assign rating_count = product.metafields.reviews.rating_count.value | default: product.metafields.reviews.rating_count
   for option in product.options_with_values
     assign option_name = option.name | downcase
     if option_name contains 'color' or option_name contains 'colour' or option_name contains 'couleur'
       assign color_index = forloop.index0
     endif
   endfor
-  assign rating = product.metafields.reviews.rating.value
-  assign rating_count = product.metafields.reviews.rating_count
   assign style_number = product.metafields.custom.style_number | default: current.sku
   assign measurements = product.metafields.custom.measurements
   assign materials = product.metafields.custom.materials
@@ -51,7 +57,7 @@
   data-product-title="{{ product.title | escape }}"
   data-money-format="{{ shop.money_format | escape }}"
   data-qty-max="{{ qty_block.settings.qty_max | default: 10 }}"
-  style="--pdp-page: {{ section.settings.page_width | default: 1320 }}px; --pdp-font: {{ section.settings.body_font | default: 'HelveticaLTPro-Roman, Helvetica, Arial, sans-serif' | escape }}; --pdp-title-font: {{ section.settings.title_font | default: 'GaramondMTProRegular, Times New Roman, Times, serif' | escape }}; --pdp-title-size: {{ section.settings.title_size | default: 24 }}px; --pdp-title-line: {{ section.settings.title_line | default: 30 }}px; --pdp-title-weight: {{ section.settings.title_weight | default: 400 }}; --pdp-title-spacing: {{ section.settings.title_spacing | default: '0.4px' | escape }}; --pdp-price-size: {{ section.settings.price_size | default: 28 }}px; --pdp-text: {{ section.settings.text_color | default: '#111111' }}; --pdp-bg: {{ section.settings.background | default: '#ffffff' }}; --pdp-gap: {{ section.settings.info_gap | default: 27 }}px; --pdp-image-h: {{ gallery_block.settings.image_height | default: 495 }}px; --pdp-image-h-mobile: {{ gallery_block.settings.mobile_image_height | default: 360 }}px; --pdp-image-fit: {{ gallery_block.settings.image_fit | default: 'contain' }}; --pdp-thumb-w: {{ gallery_block.settings.thumb_width | default: 86 }}px; --pdp-thumb-h: {{ gallery_block.settings.thumb_height | default: 108 }}px; --pdp-thumb-gap: {{ gallery_block.settings.thumb_gap | default: 8 }}px; --pdp-thumb-count: {{ gallery_block.settings.thumb_count | default: 3 }}; --pdp-thumb-border: {{ gallery_block.settings.thumb_border | default: '#111111' }}; --pdp-swatch-w: {{ color_block.settings.width | default: 72 }}px; --pdp-swatch-h: {{ color_block.settings.height | default: 86 }}px; --pdp-swatch-gap: {{ color_block.settings.gap | default: 8 }}px; --pdp-swatch-border: {{ color_block.settings.border_color | default: '#d5d5d5' }}; --pdp-swatch-active: {{ color_block.settings.active_color | default: '#000000' }}; --pdp-size-h: {{ size_block.settings.height | default: 48 }}px; --pdp-size-gap: {{ size_block.settings.gap | default: 8 }}px; --pdp-size-cols: {{ size_block.settings.columns | default: 3 }}; --pdp-size-bg: {{ size_block.settings.selected_bg | default: '#7a7a7a' }}; --pdp-size-text: {{ size_block.settings.selected_text | default: '#ffffff' }}; --pdp-size-font: {{ size_block.settings.font_size | default: 14 }}px; --pdp-guide-w: {{ guide_block.settings.width | default: 550 }}px; --pdp-guide-h: {{ guide_block.settings.height | default: 400 }}px; --pdp-guide-bg: {{ guide_block.settings.background | default: '#ffffff' }}; --pdp-guide-text: {{ guide_block.settings.text_color | default: '#111111' }}; --pdp-qty-w: {{ qty_block.settings.width | default: 74 }}px; --pdp-qty-h: {{ qty_block.settings.height | default: 48 }}px; --pdp-qty-bg: {{ qty_block.settings.background | default: '#ffffff' }}; --pdp-qty-border: {{ qty_block.settings.border_color | default: '#d5d5d5' }};"
+  style="--pdp-page: {{ section.settings.page_width | default: 1320 }}px; --pdp-crumb-font: {{ crumb_font }}; --pdp-crumb-size: {{ section.settings.breadcrumb_size | default: 12 }}px; --pdp-crumb-color: {{ section.settings.breadcrumb_color | default: '#8a8a8a' }}; --pdp-arrow-size: {{ gallery_block.settings.arrow_size | default: 14 }}px; --pdp-arrow-color: {{ gallery_block.settings.arrow_color | default: '#222222' }}; --pdp-title-size: {{ section.settings.title_size | default: 24 }}px; --pdp-title-line: {{ section.settings.title_line | default: 30 }}px; --pdp-title-weight: {{ section.settings.title_weight | default: 400 }}; --pdp-title-spacing: {{ section.settings.title_spacing | default: '0.4px' | escape }}; --pdp-price-size: {{ section.settings.price_size | default: 28 }}px; --pdp-text: {{ section.settings.text_color | default: '#111111' }}; --pdp-bg: {{ section.settings.background | default: '#ffffff' }}; --pdp-gap: {{ section.settings.info_gap | default: 27 }}px; --pdp-image-h: {{ gallery_block.settings.image_height | default: 495 }}px; --pdp-image-h-mobile: {{ gallery_block.settings.mobile_image_height | default: 360 }}px; --pdp-image-fit: {{ gallery_block.settings.image_fit | default: 'contain' }}; --pdp-thumb-w: {{ gallery_block.settings.thumb_width | default: 86 }}px; --pdp-thumb-h: {{ gallery_block.settings.thumb_height | default: 108 }}px; --pdp-thumb-gap: {{ gallery_block.settings.thumb_gap | default: 8 }}px; --pdp-thumb-count: {{ gallery_block.settings.thumb_count | default: 3 }}; --pdp-thumb-border: {{ gallery_block.settings.thumb_border | default: '#111111' }}; --pdp-swatch-w: {{ color_block.settings.width | default: 72 }}px; --pdp-swatch-h: {{ color_block.settings.height | default: 86 }}px; --pdp-swatch-gap: {{ color_block.settings.gap | default: 8 }}px; --pdp-swatch-border: {{ color_block.settings.border_color | default: '#d5d5d5' }}; --pdp-swatch-active: {{ color_block.settings.active_color | default: '#000000' }}; --pdp-size-h: {{ size_block.settings.height | default: 48 }}px; --pdp-size-gap: {{ size_block.settings.gap | default: 8 }}px; --pdp-size-cols: {{ size_block.settings.columns | default: 3 }}; --pdp-size-bg: {{ size_block.settings.selected_bg | default: '#7a7a7a' }}; --pdp-size-text: {{ size_block.settings.selected_text | default: '#ffffff' }}; --pdp-size-font: {{ size_block.settings.font_size | default: 14 }}px; --pdp-guide-w: {{ guide_block.settings.width | default: 550 }}px; --pdp-guide-h: {{ guide_block.settings.height | default: 400 }}px; --pdp-guide-bg: {{ guide_block.settings.background | default: '#ffffff' }}; --pdp-guide-text: {{ guide_block.settings.text_color | default: '#111111' }}; --pdp-qty-w: {{ qty_block.settings.width | default: 74 }}px; --pdp-qty-h: {{ qty_block.settings.height | default: 48 }}px; --pdp-qty-bg: {{ qty_block.settings.background | default: '#ffffff' }}; --pdp-qty-border: {{ qty_block.settings.border_color | default: '#d5d5d5' }};"
 >
   {%- if section.settings.show_breadcrumb -%}
     <nav class="coach-product__crumb" aria-label="Breadcrumb">
@@ -96,7 +102,7 @@
 
       <div class="coach-product__stage">
         {%- if is_bestseller -%}
-          <span class="coach-product__flag">Bestseller</span>
+          <span class="coach-product__flag">{{ bestseller_label | escape }}<span class="coach-product__badge-star" aria-hidden="true">★</span></span>
         {%- endif -%}
         {%- if gallery_block.settings.bag_size_image != blank -%}
           <button type="button" class="coach-product__size-btn js-bag-size">{{ gallery_block.settings.bag_size_label | default: 'See bag size' | escape }}</button>
@@ -129,7 +135,7 @@
       color_index: color_index,
       has_size: has_size,
       is_bestseller: is_bestseller,
-      rating: rating,
+      rating: rating_value,
       rating_count: rating_count,
       measurements: measurements,
       materials: materials,
@@ -207,12 +213,15 @@
 {
   "name": "Coach product",
   "settings": [
-    { "type": "header", "content": "Global design" },
+    { "type": "header", "content": "Breadcrumb" },
     { "type": "checkbox", "id": "show_breadcrumb", "label": "Show breadcrumb", "default": true },
     { "type": "text", "id": "breadcrumb_home", "label": "Home label", "default": "Coach" },
-    { "type": "text", "id": "bestseller_tag", "label": "Bestseller tag", "default": "bestseller" },
-    { "type": "text", "id": "body_font", "label": "Body font", "default": "HelveticaLTPro-Roman, Helvetica, Arial, sans-serif" },
-    { "type": "text", "id": "title_font", "label": "Heading font", "default": "GaramondMTProRegular, Times New Roman, Times, serif" },
+    { "type": "select", "id": "breadcrumb_font", "label": "Font", "default": "helvetica", "options": [{ "value": "helvetica", "label": "Helvetica" }, { "value": "garamond", "label": "Garamond" }] },
+    { "type": "range", "id": "breadcrumb_size", "min": 10, "max": 18, "step": 1, "unit": "px", "label": "Font size", "default": 12 },
+    { "type": "color", "id": "breadcrumb_color", "label": "Color", "default": "#8a8a8a" },
+    { "type": "header", "content": "Best seller" },
+    { "type": "product_list", "id": "bestseller_products", "label": "Best seller products", "limit": 50, "info": "Only these products show the Best Seller label. Leave this empty to hide it." },
+    { "type": "header", "content": "Global design" },
     { "type": "range", "id": "title_size", "min": 16, "max": 40, "step": 1, "unit": "px", "label": "Title size", "default": 24 },
     { "type": "range", "id": "title_line", "min": 20, "max": 48, "step": 1, "unit": "px", "label": "Title line height", "default": 30 },
     { "type": "text", "id": "title_weight", "label": "Title weight", "default": "400" },
@@ -240,6 +249,8 @@
         { "type": "range", "id": "thumb_height", "min": 48, "max": 160, "step": 2, "unit": "px", "label": "Thumbnail height", "default": 108 },
         { "type": "range", "id": "thumb_gap", "min": 4, "max": 24, "step": 1, "unit": "px", "label": "Thumbnail spacing", "default": 8 },
         { "type": "color", "id": "thumb_border", "label": "Active thumbnail border", "default": "#111111" },
+        { "type": "range", "id": "arrow_size", "min": 8, "max": 28, "step": 1, "unit": "px", "label": "Arrow size", "default": 14 },
+        { "type": "color", "id": "arrow_color", "label": "Arrow color", "default": "#222222" },
         { "type": "text", "id": "bag_size_label", "label": "Bag size button", "default": "See bag size" },
         { "type": "image_picker", "id": "bag_size_image", "label": "Bag size image" }
       ]
