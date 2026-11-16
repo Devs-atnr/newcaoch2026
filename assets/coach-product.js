@@ -208,17 +208,12 @@ class CoachProductPage extends HTMLElement {
       button.disabled = !variant.available || this.maxQuantity(variant) < 1;
     });
     this.updateQuantity(variant);
-    const stock = this.querySelector('.js-stock');
-    if (stock) {
-      const left = Number(variant.inventory);
-      if (variant.tracked && left > 0 && left <= 10) {
-        stock.hidden = false;
-        stock.textContent = `ONLY ${left} ITEM(S) LEFT!`;
-      } else {
-        stock.hidden = true;
-        stock.textContent = '';
-      }
-    }
+    const left = Number(variant.inventory);
+    const showStock = variant.tracked && left > 0 && left <= 10;
+    this.querySelectorAll('.js-stock').forEach((stock) => {
+      stock.hidden = !showStock;
+      stock.textContent = showStock ? `Only ${left} item(s) left!` : '';
+    });
     this.syncWishlist();
     if (variant.image) {
       const thumb = [...this.querySelectorAll('.coach-product__thumb')].find((button) => button.dataset.src === variant.image);

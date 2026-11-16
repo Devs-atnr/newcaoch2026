@@ -847,15 +847,9 @@ body.coach-guide-open { overflow: hidden; }
 }
 @keyframes coach-product-spin { to { transform: rotate(360deg); } }
 
-@media screen and (max-width: 1100px) and (min-width: 990px) {
-  .coach-product__layout {
-    grid-template-columns: minmax(0, 1fr) minmax(300px, 380px);
-  }
-  .coach-product__info { width: 100%; }
-  .coach-product__gallery { max-width: none; }
-}
+.coach-product__stock--under { display: none; }
 
-@media screen and (max-width: 989px) {
+@media screen and (max-width: 1100px) {
   .coach-product {
     width: auto;
     max-width: none;
@@ -880,34 +874,47 @@ body.coach-guide-open { overflow: hidden; }
   .coach-product__thumb-list { display: none; }
   .coach-product__thumb-nav {
     position: absolute;
-    top: 46%;
+    top: 50%;
     z-index: 3;
-    width: 36px;
-    height: 36px;
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
     background: #fff;
-    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.16);
+    box-shadow: 0 1px 6px rgba(0, 0, 0, 0.16);
+    transform: translateY(-50%);
   }
-  .coach-product__thumb-nav.js-thumb-prev { left: 10px; }
-  .coach-product__thumb-nav.js-thumb-next { right: 10px; }
-  .coach-product__thumb-nav svg { transform: rotate(-90deg); }
+  .coach-product__thumb-nav.js-thumb-prev { left: 12px; }
+  .coach-product__thumb-nav.js-thumb-next { right: 12px; }
+  .coach-product__thumb-nav svg { width: 10px; height: auto; transform: rotate(-90deg); }
   .coach-product__stage {
     width: 100%;
     max-width: none;
     height: auto;
-    aspect-ratio: 1 / 0.96;
-    background: #f2f2f2;
+    aspect-ratio: auto;
+    background: #f3f3f3;
   }
+  .coach-product__image { height: auto; }
+  .coach-product__stock--under {
+    display: block;
+    margin: 10px 0 4px;
+    font-family: HelveticaLTPro-Roman, Helvetica, Arial, sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 0;
+    text-transform: none;
+  }
+  .coach-product__stock--under[hidden] { display: none; }
+  .coach-product__form .js-stock { display: none; }
   .coach-product__heart,
   .coach-product__color-label,
   .coach-product__size-btn { display: none; }
   .coach-product__form {
-    grid-template-columns: 54px minmax(0, 1.15fr) minmax(0, 1fr);
+    grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
     column-gap: 8px;
     row-gap: 0;
   }
   .coach-product__title {
-    grid-column: 1 / 3;
+    grid-column: 1;
     margin: 12px 0 2px !important;
     font-family: HelveticaLTPro-Roman, Helvetica, Arial, sans-serif !important;
     font-size: 18px !important;
@@ -915,22 +922,16 @@ body.coach-guide-open { overflow: hidden; }
     line-height: 1.25 !important;
   }
   .coach-product__meta {
-    grid-column: 3;
+    grid-column: 2;
     justify-self: end;
     align-self: center;
     margin: 12px 0 0;
   }
   .coach-product__stars,
   .coach-product__review-count,
-  .coach-product__meta .jdgm-widget,
+  .coach-product__rating-compact,
   .coach-product__pill { display: none; }
-  .coach-product__rating-compact {
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    font-size: 14px;
-    font-weight: 600;
-  }
+  .coach-product__meta .jdgm-widget { display: block; }
   .coach-product__price {
     font-family: HelveticaLTPro-Roman, Helvetica, Arial, sans-serif !important;
     font-size: 16px !important;
@@ -938,7 +939,15 @@ body.coach-guide-open { overflow: hidden; }
   }
   .coach-product__size-note { margin-bottom: 12px; }
   .coach-product__color { display: flex; flex-direction: column; margin-bottom: 14px; }
-  .coach-product__now { grid-column: 3; }
+  .coach-product__qty {
+    grid-column: 1;
+    width: 52px;
+    margin-bottom: -46px;
+    z-index: 2;
+    justify-self: start;
+  }
+  .coach-product__add { grid-column: 1; padding-left: 46px; }
+  .coach-product__now { grid-column: 2; align-self: end; }
   .coach-product__swatch { width: 64px !important; height: 72px !important; }
   .coach-product__color .coach-product__option-label {
     order: 2;
@@ -984,17 +993,22 @@ body.coach-guide-open { overflow: hidden; }
     color: #222;
     font-size: 14px;
   }
-  .coach-product__qty { width: 54px; }
   .coach-product__qty-box {
-    width: 54px;
-    height: 44px;
-    border-radius: 6px;
+    width: 52px;
+    height: 46px;
+    padding: 0 6px;
+    border: 0;
+    border-radius: 10px 0 0 10px;
+    background: transparent;
+    color: #fff;
   }
+  .coach-product__qty-box svg { transform: rotate(180deg); }
   .coach-product__add,
   .coach-product__now {
-    height: 44px !important;
-    border-radius: 8px;
-    font-size: 14px !important;
+    height: 46px !important;
+    border-radius: 10px;
+    font-size: 15px !important;
+    font-weight: 600;
     letter-spacing: 0 !important;
     text-transform: none;
   }

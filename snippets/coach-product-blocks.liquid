@@ -11,7 +11,9 @@
             {%- if is_bestseller -%}
               <span class="coach-product__pill">{{ block.settings.bestseller_label | default: 'Bestseller' | escape }}<span class="coach-product__badge-star" aria-hidden="true">★</span></span>
             {%- endif -%}
-            {%- if rating != blank -%}
+            {%- if product.metafields.judgeme.badge != blank -%}
+              <div class="jdgm-widget jdgm-preview-badge" data-id="{{ product.id }}">{{ product.metafields.judgeme.badge }}</div>
+            {%- elsif rating != blank -%}
               <span class="coach-product__rating-compact" aria-hidden="true">★ {{ rating }}</span>
               <span class="coach-product__stars" aria-label="{{ rating }} out of 5">
                 {%- assign filled = rating | round -%}
@@ -20,8 +22,6 @@
                 {%- endfor -%}
               </span>
               {%- if rating_count != blank -%}<span class="coach-product__review-count">({{ rating_count }})</span>{%- endif -%}
-            {%- elsif product.metafields.judgeme.badge != blank -%}
-              <div class="jdgm-widget jdgm-preview-badge" data-id="{{ product.id }}">{{ product.metafields.judgeme.badge }}</div>
             {%- endif -%}
           </div>
         {%- when 'price' -%}
