@@ -26,7 +26,6 @@ coach-product-page.coach-product {
   font-size: var(--pdp-crumb-size, 12px);
   line-height: 1.4;
 }
-
 .coach-product__crumb a {
   color: inherit;
   text-decoration: none;
@@ -1078,10 +1077,10 @@ body.coach-sheet-open { overflow: hidden; }
   .coach-product__qty-box svg { transform: rotate(180deg); }
   .coach-product__add,
   .coach-product__now {
-    height: 50px !important;
-    border-radius: 2px;
+    height: 58px !important;
+    border-radius: 4px;
     font-size: 14px !important;
-    font-weight: 400;
+    font-weight: 600;
     letter-spacing: 0 !important;
     text-transform: none;
   }
