@@ -12,7 +12,6 @@
               <span class="coach-product__pill">{{ block.settings.bestseller_label | default: 'Bestseller' | escape }}<span class="coach-product__badge-star" aria-hidden="true">★</span></span>
             {%- endif -%}
             {%- if rating != blank -%}
-              <span class="coach-product__rating-compact" aria-hidden="true">★ {{ rating }}</span>
               <span class="coach-product__stars" aria-label="{{ rating }} out of 5">
                 {%- assign filled = rating | round -%}
                 {%- for i in (1..5) -%}
@@ -65,7 +64,7 @@
             {%- assign option_name = option.name | downcase -%}
             {%- if option_name contains 'size' -%}
               <p class="coach-product__option-label" {{ block.shopify_attributes }} style="font-size: {{ block.settings.label_size | default: 14 }}px; color: {{ block.settings.label_color | default: '#000000' }}; margin-bottom: {{ block.settings.label_space | default: 8 }}px;">
-                {{ option.name | downcase | capitalize | replace: ' size', ' Size' | escape }}: <span class="js-option-value" data-for-option="{{ forloop.index0 }}">Please select a size</span>
+                {{ option.name | escape }}: <span class="js-option-value" data-for-option="{{ forloop.index0 }}">Please select a size</span>
                 <span class="coach-product__fit">{{ block.settings.fit | default: 'Runs true to size' | escape }}</span>
               </p>
               <div class="coach-product__choices coach-product__choices--size">
@@ -79,7 +78,7 @@
           {%- if color_index >= 0 -%}
             {%- for option in product.options_with_values -%}
               {%- if forloop.index0 == color_index -%}
-                <div class="coach-product__color" {{ block.shopify_attributes }}>
+                <div {{ block.shopify_attributes }}>
                   {%- if block.settings.show_label -%}
                     <p class="coach-product__option-label" style="font-size: {{ block.settings.label_size | default: 14 }}px; color: {{ block.settings.label_color | default: '#000000' }}; margin-bottom: {{ block.settings.label_space | default: 8 }}px;">{{ option.name | escape }}: <span class="js-option-label">{{ option.selected_value | escape }}</span></p>
                   {%- endif -%}
@@ -110,10 +109,8 @@
           {%- endif -%}
         {%- when 'size_guide' -%}
           {%- if has_size and block.settings.enable -%}
-            <div class="coach-product__size-guide-wrap" {{ block.shopify_attributes }} style="text-align: {{ block.settings.align | default: 'left' }}; margin-bottom: {{ block.settings.spacing | default: 16 }}px;">
-              <button type="button" class="coach-product__size-guide js-size-guide" style="font-size: {{ block.settings.font_size | default: 14 }}px; color: {{ block.settings.link_color | default: '#111111' }};">{{ block.settings.label | default: 'Size Guide' | escape }}</button>
-              {%- assign size_fit = blocks | where: 'type', 'size' | first -%}
-              <span class="coach-product__fit coach-product__fit--aside">{{ size_fit.settings.fit | default: 'Runs true to size' | escape }}</span>
+            <div class="coach-product__size-guide-wrap" style="text-align: {{ block.settings.align | default: 'left' }};" {{ block.shopify_attributes }}>
+              <button type="button" class="coach-product__size-guide js-size-guide" style="font-size: {{ block.settings.font_size | default: 14 }}px; color: {{ block.settings.link_color | default: '#111111' }}; margin-bottom: {{ block.settings.spacing | default: 16 }}px;">{{ block.settings.label | default: 'Size Guide' | escape }}</button>
             </div>
           {%- endif -%}
         {%- when 'stock' -%}
@@ -138,60 +135,72 @@
             <div class="coach-product__acc-body rte" {{ block.shopify_attributes }}>{{ product.description }}</div>
           {%- endif -%}
         {%- when 'shipping' -%}
-          {%- assign tab_shipping = shipping_info | default: block.settings.text -%}
-          <details class="coach-product__acc" {{ block.shopify_attributes }}>
-            <summary>{{ block.settings.heading | escape }}</summary>
-            {%- if tab_shipping != blank -%}
-              <div class="coach-product__acc-body rte">{{ tab_shipping }}</div>
-            {%- endif -%}
-          </details>
+          {%- assign shipping_content = product.metafields.custom.shipping_and_returns | default: product.metafields.custom.shipping | default: block.settings.text -%}
+          {%- if shipping_content != blank -%}
+            <details class="coach-product__acc" {{ block.shopify_attributes }}{% if block.settings.open %} open{% endif %}>
+              <summary>{{ block.settings.heading | escape }}</summary>
+              <div class="coach-product__acc-body rte">{{ shipping_content }}</div>
+            </details>
+          {%- endif -%}
         {%- when 'details' -%}
-          <details class="coach-product__acc" {{ block.shopify_attributes }}>
-            <summary>{{ block.settings.heading | escape }}</summary>
-            <div class="coach-product__acc-body">
-              {%- if product_details != blank -%}
-                <div class="rte">{{ product_details }}</div>
-              {%- else -%}
-                <dl class="coach-product__specs">
-                  {%- if style_number != blank -%}<div><dt>Style number</dt><dd>{{ style_number | escape }}</dd></div>{%- endif -%}
-                  {%- if measurements != blank -%}<div><dt>Measurements</dt><dd>{{ measurements | newline_to_br }}</dd></div>{%- endif -%}
-                  {%- if materials != blank -%}<div><dt>Materials</dt><dd>{{ materials | newline_to_br }}</dd></div>{%- endif -%}
-                  {%- if strap != blank -%}<div><dt>Strap</dt><dd>{{ strap | escape }}</dd></div>{%- endif -%}
-                  {%- if features != blank -%}<div><dt>Features</dt><dd>{{ features | newline_to_br }}</dd></div>{%- endif -%}
-                </dl>
-              {%- endif -%}
-            </div>
-          </details>
+          {%- assign details_content = product.metafields.custom.product_details | default: product.metafields.custom.details -%}
+          {%- assign style_number = product.metafields.custom.style_number | default: current.sku -%}
+          {%- if details_content != blank or measurements != blank or materials != blank or strap != blank or features != blank or style_number != blank -%}
+            <details class="coach-product__acc" {{ block.shopify_attributes }}{% if block.settings.open %} open{% endif %}>
+              <summary>{{ block.settings.heading | escape }}</summary>
+              <div class="coach-product__acc-body">
+                {%- if details_content != blank -%}
+                  <div class="rte">{{ details_content }}</div>
+                {%- else -%}
+                  <dl class="coach-product__specs">
+                    {%- if style_number != blank -%}<div><dt>Style number</dt><dd>{{ style_number | escape }}</dd></div>{%- endif -%}
+                    {%- if measurements != blank -%}<div><dt>Measurements</dt><dd>{{ measurements | newline_to_br }}</dd></div>{%- endif -%}
+                    {%- if materials != blank -%}<div><dt>Materials</dt><dd>{{ materials | newline_to_br }}</dd></div>{%- endif -%}
+                    {%- if strap != blank -%}<div><dt>Strap</dt><dd>{{ strap | escape }}</dd></div>{%- endif -%}
+                    {%- if features != blank -%}<div><dt>Features</dt><dd>{{ features | newline_to_br }}</dd></div>{%- endif -%}
+                  </dl>
+                {%- endif -%}
+              </div>
+            </details>
+          {%- endif -%}
         {%- when 'notes' -%}
-          <details class="coach-product__acc" {{ block.shopify_attributes }}>
-            <summary>{{ block.settings.heading | escape }}</summary>
-            {%- if editors_note != blank -%}
-              <div class="coach-product__acc-body rte">{{ editors_note }}</div>
-            {%- endif -%}
-          </details>
+          {%- assign note_content = product.metafields.custom.editors_note -%}
+          {%- if note_content != blank -%}
+            <details class="coach-product__acc" {{ block.shopify_attributes }}{% if block.settings.open %} open{% endif %}>
+              <summary>{{ block.settings.heading | escape }}</summary>
+              <div class="coach-product__acc-body rte">{{ note_content }}</div>
+            </details>
+          {%- endif -%}
         {%- when 'share' -%}
-          {%- assign share_url = shop.url | append: product.url -%}
-          <div class="coach-product__share" {{ block.shopify_attributes }}>
-            <span>{{ block.settings.label | escape }}</span>
+          {%- assign share_url = shop.url | append: product.url | url_encode -%}
+          {%- assign share_title = product.title | url_encode -%}
+          <div class="coach-product__share" {{ block.shopify_attributes }} style="--share-size: {{ block.settings.icon_size | default: 22 }}px; --share-gap: {{ block.settings.icon_gap | default: 18 }}px; --share-color: {{ block.settings.icon_color | default: '#111111' }};">
+            <span>{{ block.settings.label | default: 'Share This Product' | escape }}</span>
             <div class="coach-product__share-icons">
               {%- if block.settings.show_facebook != false -%}
-                <a href="https://www.facebook.com/sharer.php?u={{ share_url | url_encode }}" target="_blank" rel="noopener" aria-label="Facebook"><svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9.2" fill="none" stroke="currentColor" stroke-width="1.4"/><path fill="currentColor" d="M13.2 17.5v-4.2h1.5l.2-1.6h-1.7V10.6c0-.5.2-.8.8-.8h.9V8.3c-.2 0-.8-.1-1.4-.1-1.4 0-2.4.9-2.4 2.5v1h-1.6v1.6h1.6v4.2h2.1z"/></svg></a>
+                <a href="https://www.facebook.com/sharer.php?u={{ share_url }}" target="_blank" rel="noopener" aria-label="Facebook"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M13.2 18.5v-5.1h1.7l.3-1.9h-2V10.3c0-.6.2-1 1-1h1.1V7.6c-.2 0-.9-.1-1.7-.1-1.7 0-2.8 1-2.8 2.9v1.1H9.1v1.9h1.7v5.1h2.4z" fill="currentColor"/></svg></a>
               {%- endif -%}
               {%- if block.settings.show_line != false -%}
-                <a href="https://social-plugins.line.me/lineit/share?url={{ share_url | url_encode }}" target="_blank" rel="noopener" aria-label="LINE"><svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 3.2C7.2 3.2 3.3 6.5 3.3 10.6c0 3.6 3.2 6.6 7.5 7.1.3.1.7.2.8.6.1.3 0 .8 0 1.1 0 .3-.1.9.8.5 1.4-.7 7.4-4.4 10-8.1 1.2-1.6 1.9-3.4 1.9-5.2 0-4.1-3.9-7.4-8.7-7.4z"/><text x="12" y="12.6" text-anchor="middle" font-size="4.6" font-family="Arial, sans-serif" font-weight="700" fill="#fff">LINE</text></svg></a>
+                <a href="https://social-plugins.line.me/lineit/share?url={{ share_url }}" target="_blank" rel="noopener" aria-label="LINE"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4.2c-4.6 0-8.3 3.1-8.3 7 0 3.4 3 6.3 7.1 6.9.3.1.6.2.7.5.1.2.1.6 0 .8l-.1.7c0 .2-.1.8.7.4.8-.4 4.3-2.5 5.9-4.3 1.1-1.2 1.6-2.4 1.6-4 0-3.9-3.7-7-8.3-7z" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M8.2 9.4h1.1v4.2H8.2V9.4zm2.2 0h1.1v2.6l1.6-2.6h1.3l-1.8 2.7 1.9 1.5h-1.3l-1.2-1.1-.5.6v.5h-1.1V9.4zm4.4 0h2.5v.9h-1.4v.7h1.3v.9h-1.3v.8h1.5v.9h-2.6V9.4z" fill="currentColor"/></svg></a>
               {%- endif -%}
               {%- if block.settings.show_pinterest != false -%}
-                <a href="https://pinterest.com/pin/create/button/?url={{ share_url | url_encode }}&description={{ product.title | url_encode }}" target="_blank" rel="noopener" aria-label="Pinterest"><svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9.2" fill="none" stroke="currentColor" stroke-width="1.4"/><path fill="currentColor" d="M12.4 6.6c-2.6 0-4 1.8-4 3.9 0 1 .4 1.9 1.3 2.2.1.1.2 0 .2-.1l.2-.7c0-.1 0-.2-.1-.3-.3-.4-.5-.8-.5-1.5 0-1.9 1.5-3.7 4-3.7 2.2 0 3.7 1.4 3.7 3.5 0 2.3-1.2 3.9-2.8 3.9-.9 0-1.6-.7-1.4-1.6.3-1 .7-2.1.7-2.8 0-.6-.3-1.2-1-1.2-.8 0-1.5.8-1.5 1.9 0 .7.2 1.2.2 1.2l-.9 3.8c-.3 1.1-.1 2.5 0 2.6.1 0 .2-.1.3-.2.2-.3.8-1.1 1-2.1.1-.3.4-1.4.4-1.4.2.4.8.7 1.5.7 2.3 0 4-2.3 4-5.1 0-2.6-2.1-4.8-5.1-4.8z"/></svg></a>
+                <a href="https://pinterest.com/pin/create/button/?url={{ share_url }}&description={{ share_title }}" target="_blank" rel="noopener" aria-label="Pinterest"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M12.2 6.6c-2.9 0-4.8 2-4.8 4.6 0 1.3.5 2.4 1.6 2.8.2.1.3 0 .4-.2l.2-.6c0-.1 0-.2-.1-.3-.3-.4-.5-.9-.5-1.6 0-2.1 1.6-4 4.1-4 2.2 0 3.5 1.4 3.5 3.2 0 2.4-1.1 4.4-2.7 4.4-.9 0-1.5-.7-1.3-1.6.2-.9.7-1.9.7-2.5 0-.6-.3-1.1-1-1.1-.8 0-1.4.8-1.4 1.9 0 .7.2 1.2.2 1.2l-.9 3.8c-.3 1.1-.1 2.5 0 2.6.1 0 .2-.1.3-.3.2-.3.7-1.2.9-2.3.1-.4.5-1.6.5-1.6.3.5 1.1.9 1.9.9 2.5 0 4.3-2.3 4.3-5.3 0-2.3-1.9-4.3-4.9-4.3z" fill="currentColor"/></svg></a>
               {%- endif -%}
               {%- if block.settings.show_x != false -%}
-                <a href="https://twitter.com/intent/tweet?url={{ share_url | url_encode }}&text={{ product.title | url_encode }}" target="_blank" rel="noopener" aria-label="X"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M14.7 10.4L21.4 3h-1.6l-5.8 6.4L9.3 3H3.5l7 10.1L3.5 21h1.6l6.2-6.8L14.7 21h5.8l-7.3-10.6zm-2.2 2.4l-.7-1L5.7 4.2h2.4l4.6 6.4.7 1 6 8.2h-2.4l-4.9-6.9z"/></svg></a>
+                <a href="https://twitter.com/intent/tweet?url={{ share_url }}&text={{ share_title }}" target="_blank" rel="noopener" aria-label="X"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5l5.8 7.6L5.3 19h2.1l4.1-4.7L15.2 19H19l-6-7.8L18.5 5h-2.1l-3.7 4.3L8.8 5H5zm2.2 1.2h1.6l8 10.6h-1.6l-8-10.6z" fill="currentColor"/></svg></a>
               {%- endif -%}
               {%- if block.settings.show_email != false -%}
-                <a href="mailto:?subject={{ product.title | url_encode }}&body={{ share_url | url_encode }}" aria-label="Email"><svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><rect x="3.2" y="5.2" width="17.6" height="13.6" rx="1.2" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M4 6.5L12 13l8-6.5" fill="none" stroke="currentColor" stroke-width="1.4"/></svg></a>
+                <a href="mailto:?subject={{ share_title }}&body={{ share_url }}" aria-label="Email"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5.5" width="18" height="13" rx="1.2" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M4 7l8 6 8-6" fill="none" stroke="currentColor" stroke-width="1.4"/></svg></a>
               {%- endif -%}
               {%- for icon in blocks -%}
-                {%- if icon.type == 'share_icon' and icon.settings.icon != blank -%}
-                  <a href="{{ icon.settings.link | default: share_url }}" target="_blank" rel="noopener" aria-label="{{ icon.settings.label | escape }}" {{ icon.shopify_attributes }}>{{ icon.settings.icon | image_url: width: 64 | image_tag: alt: icon.settings.label }}</a>
+                {%- if icon.type == 'share_icon' -%}
+                  <a href="{{ icon.settings.link | default: product.url }}" {% if icon.settings.link != blank %}target="_blank" rel="noopener"{% endif %} aria-label="{{ icon.settings.label | default: 'Share' | escape }}" {{ icon.shopify_attributes }}>
+                    {%- if icon.settings.image != blank -%}
+                      {{ icon.settings.image | image_url: width: 80 | image_tag: alt: icon.settings.label }}
+                    {%- else -%}
+                      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M12 8v8M8 12h8" stroke="currentColor" stroke-width="1.4"/></svg>
+                    {%- endif -%}
+                  </a>
                 {%- endif -%}
               {%- endfor -%}
             </div>

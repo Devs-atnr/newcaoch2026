@@ -91,7 +91,7 @@
 -%}
 
 <coach-header
-  class="coach-header{% if section.settings.show_border %} coach-header--border{% endif %}"
+  class="coach-header{% if section.settings.show_border %} coach-header--border{% endif %}{% if section.settings.show_shadow != false %} coach-header--shadow{% endif %}"
   dir="{{ text_direction }}"
   data-sticky="{{ section.settings.sticky }}"
   style="
@@ -685,6 +685,12 @@
       "id": "show_border",
       "label": "Show bottom border",
       "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "show_shadow",
+      "label": "Bottom drop shadow",
+      "default": true
     },
     {
       "type": "range",

@@ -28,7 +28,6 @@ coach-header {
   background: var(--ch-bg);
   font-family: var(--ch-nav-font);
   -webkit-font-smoothing: antialiased;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
 }
 
 .coach-header *,
@@ -74,6 +73,10 @@ coach-header {
 
 .coach-header--border .coach-header__bar {
   border-block-end: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.coach-header--shadow {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 
 /* Show/hide helpers */

@@ -24,20 +24,6 @@ class CoachProductPage extends HTMLElement {
     }
   }
 
-  bindAccordions() {
-    const items = [...this.querySelectorAll('.coach-product__acc')];
-    items.forEach((item) => {
-      const summary = item.querySelector('summary');
-      if (!summary) return;
-      summary.addEventListener('click', (event) => {
-        event.preventDefault();
-        const willOpen = !item.open;
-        items.forEach((other) => { other.open = false; });
-        item.open = willOpen;
-      });
-    });
-  }
-
   bindGallery() {
     const list = this.querySelector('.js-thumbs');
     if (!list) return;
@@ -289,6 +275,17 @@ class CoachProductPage extends HTMLElement {
     });
     document.addEventListener('click', (event) => {
       if (!root.contains(event.target)) close();
+    });
+  }
+
+  bindAccordions() {
+    this.querySelectorAll('.coach-product__acc > summary').forEach((summary) => {
+      summary.addEventListener('click', () => {
+        const current = summary.parentElement;
+        this.querySelectorAll('.coach-product__acc[open]').forEach((item) => {
+          if (item !== current) item.removeAttribute('open');
+        });
+      });
     });
   }
 

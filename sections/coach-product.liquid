@@ -31,9 +31,7 @@
   assign materials = product.metafields.custom.materials
   assign strap = product.metafields.custom.strap
   assign features = product.metafields.custom.features
-  assign editors_note = product.metafields.custom.editors_note
-  assign shipping_info = product.metafields.custom.shipping_and_returns | default: product.metafields.custom.shipping
-  assign product_details = product.metafields.custom.product_details
+  assign editors_note = product.metafields.custom.editors_note | default: product.description
   assign has_size = false
   assign size_index = -1
   for option in product.options_with_values
@@ -143,10 +141,7 @@
       materials: materials,
       strap: strap,
       features: features,
-      style_number: style_number,
-      editors_note: editors_note,
-      shipping_info: shipping_info,
-      product_details: product_details
+      editors_note: editors_note
     -%}
 
   {%- if gallery_block.settings.bag_size_image != blank -%}
@@ -407,7 +402,8 @@
       "limit": 1,
       "settings": [
         { "type": "text", "id": "heading", "label": "Heading", "default": "Shipping And Returns" },
-        { "type": "richtext", "id": "text", "label": "Fallback content", "info": "Used only when the product metafield custom.shipping_and_returns is empty." }
+        { "type": "checkbox", "id": "open", "label": "Open by default", "default": false },
+        { "type": "richtext", "id": "text", "label": "Fallback content", "default": "<p>Complimentary shipping and easy returns.</p>", "info": "Product metafield custom.shipping_and_returns replaces this text." }
       ]
     },
     {
@@ -416,7 +412,7 @@
       "limit": 1,
       "settings": [
         { "type": "text", "id": "heading", "label": "Heading", "default": "Product Details" },
-        { "type": "paragraph", "content": "Content comes from the product metafield custom.product_details, or from Measurements, Materials, Strap, and Features." }
+        { "type": "checkbox", "id": "open", "label": "Open by default", "default": false, "info": "Uses custom.product_details, or the product style number, measurements, materials, strap, and features." }
       ]
     },
     {
@@ -425,7 +421,7 @@
       "limit": 1,
       "settings": [
         { "type": "text", "id": "heading", "label": "Heading", "default": "Editor's Notes" },
-        { "type": "paragraph", "content": "Content comes from the product metafield custom.editors_note." }
+        { "type": "checkbox", "id": "open", "label": "Open by default", "default": false, "info": "Uses the product metafield custom.editors_note. The tab stays hidden when that metafield is empty." }
       ]
     },
     {
@@ -438,16 +434,19 @@
         { "type": "checkbox", "id": "show_line", "label": "LINE", "default": true },
         { "type": "checkbox", "id": "show_pinterest", "label": "Pinterest", "default": true },
         { "type": "checkbox", "id": "show_x", "label": "X", "default": true },
-        { "type": "checkbox", "id": "show_email", "label": "Email", "default": true }
+        { "type": "checkbox", "id": "show_email", "label": "Email", "default": true },
+        { "type": "range", "id": "icon_size", "min": 16, "max": 36, "step": 1, "unit": "px", "label": "Icon size", "default": 22 },
+        { "type": "range", "id": "icon_gap", "min": 8, "max": 32, "step": 1, "unit": "px", "label": "Icon spacing", "default": 18 },
+        { "type": "color", "id": "icon_color", "label": "Icon color", "default": "#111111" }
       ]
     },
     {
       "type": "share_icon",
       "name": "Share icon",
       "settings": [
-        { "type": "text", "id": "label", "label": "Name", "default": "Custom" },
-        { "type": "image_picker", "id": "icon", "label": "Icon" },
-        { "type": "url", "id": "link", "label": "Link", "info": "Leave empty to share this product page." }
+        { "type": "text", "id": "label", "label": "Label", "default": "Share" },
+        { "type": "image_picker", "id": "image", "label": "Icon" },
+        { "type": "url", "id": "link", "label": "Link", "info": "Leave empty to use this product page." }
       ]
     },
     {
