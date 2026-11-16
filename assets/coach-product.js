@@ -8,6 +8,7 @@ class CoachProductPage extends HTMLElement {
     this.bindSizeGuide();
     this.bindQty();
     this.bindForm();
+    this.bindAccordions();
     this.bindBagSize();
     this.bindWishlist();
     this.rememberView();
@@ -21,6 +22,20 @@ class CoachProductPage extends HTMLElement {
     } catch (error) {
       return { variants: [], options: [], colorIndex: -1 };
     }
+  }
+
+  bindAccordions() {
+    const items = [...this.querySelectorAll('.coach-product__acc')];
+    items.forEach((item) => {
+      const summary = item.querySelector('summary');
+      if (!summary) return;
+      summary.addEventListener('click', (event) => {
+        event.preventDefault();
+        const willOpen = !item.open;
+        items.forEach((other) => { other.open = false; });
+        item.open = willOpen;
+      });
+    });
   }
 
   bindGallery() {

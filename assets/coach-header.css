@@ -28,6 +28,7 @@ coach-header {
   background: var(--ch-bg);
   font-family: var(--ch-nav-font);
   -webkit-font-smoothing: antialiased;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
 }
 
 .coach-header *,
