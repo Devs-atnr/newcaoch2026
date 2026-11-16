@@ -594,9 +594,59 @@ coach-product-page.coach-product {
 }
 .coach-product__specs dd {
   margin: 0;
+  min-width: 0;
   font-size: 14px;
   line-height: 1.45;
   color: #222;
+}
+.coach-product__info,
+.coach-product__form,
+.coach-product__acc,
+.coach-product__acc-body,
+.coach-product__specs,
+.coach-product__specs-extra {
+  min-width: 0;
+  max-width: 100%;
+}
+.coach-product__info table {
+  display: block;
+  width: 100% !important;
+  height: auto !important;
+  margin: 0 0 8px;
+}
+.coach-product__info table thead,
+.coach-product__info table tbody,
+.coach-product__info table tfoot,
+.coach-product__info table tr {
+  display: block;
+  width: 100% !important;
+}
+.coach-product__info table tr { margin: 0 0 16px; }
+.coach-product__info table th,
+.coach-product__info table td {
+  display: block;
+  width: 100% !important;
+  height: auto !important;
+  box-sizing: border-box;
+  padding: 0 0 6px;
+  border: 0 !important;
+  white-space: normal !important;
+  overflow-wrap: break-word;
+  word-break: normal;
+}
+.coach-product__info table td:empty,
+.coach-product__info table th:empty { display: none; }
+.coach-product__info table th,
+.coach-product__info table tr:has(td + td) td:first-child {
+  padding-bottom: 4px;
+  font-weight: 700;
+}
+.coach-product__acc-body img,
+.coach-product__specs-extra img,
+.coach-product__acc-body video,
+.coach-product__specs-extra video {
+  max-width: 100%;
+  height: auto;
 }
 
 .coach-product__share {
@@ -1205,7 +1255,13 @@ body.coach-sheet-open { overflow: hidden; }
     color: #111;
   }
   .coach-product__acc-body { overflow: visible; }
-  .coach-product__specs div { grid-template-columns: 124px minmax(0, 1fr); gap: 16px; margin-bottom: 18px; }
+  .coach-product__specs div {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 18px;
+  }
+  .coach-product__specs dd { width: 100%; }
   .coach-product__specs dt {
     font-size: 14px;
     font-weight: 700;
