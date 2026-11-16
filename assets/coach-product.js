@@ -10,6 +10,7 @@ class CoachProductPage extends HTMLElement {
     this.bindForm();
     this.bindAccordions();
     this.bindShippingSheet();
+    this.syncRating();
     this.bindBagSize();
     this.bindWishlist();
     this.rememberView();
@@ -300,6 +301,20 @@ class CoachProductPage extends HTMLElement {
     document.addEventListener('click', (event) => {
       if (!root.contains(event.target)) close();
     });
+  }
+
+  syncRating() {
+    const write = () => {
+      const badge = this.querySelector('.jdgm-prev-badge');
+      const raw = badge && (badge.dataset.averageRating || badge.getAttribute('data-average-rating'));
+      const value = this.querySelector('.js-rating-value');
+      if (!raw || !value) return;
+      const number = Number(raw);
+      if (!Number.isFinite(number)) return;
+      value.textContent = String(Math.round(number * 10) / 10);
+    };
+    write();
+    window.setTimeout(write, 800);
   }
 
   bindShippingSheet() {

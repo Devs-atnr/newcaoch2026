@@ -928,17 +928,21 @@ body.coach-sheet-open { overflow: hidden; }
     position: absolute;
     top: 50%;
     z-index: 3;
-    width: 32px;
-    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    padding: 0;
     border-radius: 50%;
     background: #fff;
-    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.16);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.18);
     transform: translateY(-50%);
   }
-  .coach-product__thumb-nav.js-thumb-prev { left: 8px; }
-  .coach-product__thumb-nav.js-thumb-next { right: 8px; }
-  .coach-product__arrow-up { display: none; }
-  .coach-product__arrow-side { display: block; width: 8px; height: 14px; }
+  .coach-product__thumb-nav.js-thumb-prev { left: 10px; }
+  .coach-product__thumb-nav.js-thumb-next { right: 10px; }
+  .coach-product__thumb-nav .coach-product__arrow-up { display: none; }
+  .coach-product__thumb-nav .coach-product__arrow-side { display: block; width: 7px; height: 12px; }
   .coach-product__stage {
     width: 100%;
     max-width: none;
@@ -983,27 +987,42 @@ body.coach-sheet-open { overflow: hidden; }
   }
   .coach-product__title {
     grid-column: 1;
-    margin: 16px 0 4px !important;
+    margin: 16px 0 2px !important;
     font-family: HelveticaLTPro-Roman, Helvetica, Arial, sans-serif !important;
     font-size: 16px !important;
-    font-weight: 600 !important;
-    line-height: 24px !important;
+    font-weight: 700 !important;
+    line-height: 20px !important;
+    letter-spacing: 0 !important;
+    color: #000 !important;
   }
   .coach-product__meta {
     grid-column: 2;
     justify-self: end;
-    align-self: center;
-    margin: 12px 0 0;
+    align-self: start;
+    margin: 16px 0 0;
   }
   .coach-product__stars,
   .coach-product__review-count,
-  .coach-product__rating-compact,
-  .coach-product__pill { display: none; }
-  .coach-product__meta .jdgm-widget { display: block; }
+  .coach-product__pill,
+  .coach-product__meta .jdgm-widget { display: none !important; }
+  .coach-product__rating-compact {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    color: #111;
+    font-family: HelveticaLTPro-Roman, Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 20px;
+    letter-spacing: 0;
+  }
   .coach-product__price {
     font-family: HelveticaLTPro-Roman, Helvetica, Arial, sans-serif !important;
     font-size: 16px !important;
-    margin: 0 0 4px !important;
+    font-weight: 700 !important;
+    line-height: 20px !important;
+    margin: 0 0 6px !important;
+    color: #000 !important;
   }
   .coach-product__size-note {
     margin-bottom: 12px !important;
