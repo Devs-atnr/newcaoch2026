@@ -12,6 +12,7 @@
               <span class="coach-product__pill">{{ block.settings.bestseller_label | default: 'Bestseller' | escape }}<span class="coach-product__badge-star" aria-hidden="true">★</span></span>
             {%- endif -%}
             {%- if rating != blank -%}
+              <span class="coach-product__rating-compact" aria-hidden="true">★ {{ rating }}</span>
               <span class="coach-product__stars" aria-label="{{ rating }} out of 5">
                 {%- assign filled = rating | round -%}
                 {%- for i in (1..5) -%}
@@ -64,7 +65,7 @@
             {%- assign option_name = option.name | downcase -%}
             {%- if option_name contains 'size' -%}
               <p class="coach-product__option-label" {{ block.shopify_attributes }} style="font-size: {{ block.settings.label_size | default: 14 }}px; color: {{ block.settings.label_color | default: '#000000' }}; margin-bottom: {{ block.settings.label_space | default: 8 }}px;">
-                {{ option.name | escape }}: <span class="js-option-value" data-for-option="{{ forloop.index0 }}">Please select a size</span>
+                {{ option.name | downcase | capitalize | replace: ' size', ' Size' | escape }}: <span class="js-option-value" data-for-option="{{ forloop.index0 }}">Please select a size</span>
                 <span class="coach-product__fit">{{ block.settings.fit | default: 'Runs true to size' | escape }}</span>
               </p>
               <div class="coach-product__choices coach-product__choices--size">
@@ -78,7 +79,7 @@
           {%- if color_index >= 0 -%}
             {%- for option in product.options_with_values -%}
               {%- if forloop.index0 == color_index -%}
-                <div {{ block.shopify_attributes }}>
+                <div class="coach-product__color" {{ block.shopify_attributes }}>
                   {%- if block.settings.show_label -%}
                     <p class="coach-product__option-label" style="font-size: {{ block.settings.label_size | default: 14 }}px; color: {{ block.settings.label_color | default: '#000000' }}; margin-bottom: {{ block.settings.label_space | default: 8 }}px;">{{ option.name | escape }}: <span class="js-option-label">{{ option.selected_value | escape }}</span></p>
                   {%- endif -%}
@@ -111,6 +112,8 @@
           {%- if has_size and block.settings.enable -%}
             <div class="coach-product__size-guide-wrap" style="text-align: {{ block.settings.align | default: 'left' }};" {{ block.shopify_attributes }}>
               <button type="button" class="coach-product__size-guide js-size-guide" style="font-size: {{ block.settings.font_size | default: 14 }}px; color: {{ block.settings.link_color | default: '#111111' }}; margin-bottom: {{ block.settings.spacing | default: 16 }}px;">{{ block.settings.label | default: 'Size Guide' | escape }}</button>
+              {%- assign size_fit = blocks | where: 'type', 'size' | first -%}
+              <span class="coach-product__fit coach-product__fit--aside">{{ size_fit.settings.fit | default: 'Runs true to size' | escape }}</span>
             </div>
           {%- endif -%}
         {%- when 'stock' -%}
