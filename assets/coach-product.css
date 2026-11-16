@@ -1041,12 +1041,12 @@ body.coach-sheet-open { overflow: hidden; }
   .coach-product__color { display: flex; flex-direction: column; margin-bottom: 14px; }
   .coach-product__qty {
     grid-column: 1;
-    width: 44px;
-    margin-bottom: -50px;
+    width: 54px;
+    margin-bottom: -48px;
     z-index: 2;
     justify-self: start;
   }
-  .coach-product__add { grid-column: 1; padding-left: 40px; }
+  .coach-product__add { grid-column: 1; padding-left: 54px; }
   .coach-product__now { grid-column: 2; align-self: end; }
   .coach-product__swatch { width: 64px !important; height: 72px !important; }
   .coach-product__color .coach-product__option-label {
@@ -1094,20 +1094,21 @@ body.coach-sheet-open { overflow: hidden; }
     font-size: 14px;
   }
   .coach-product__qty-box {
-    width: 44px;
-    height: 50px;
-    padding: 0 6px;
+    width: 54px;
+    height: 48px;
+    padding: 0 8px;
     border: 0;
-    border-radius: 2px 0 0 2px;
-    background: transparent;
+    border-right: 1px solid rgba(255, 255, 255, 0.7);
+    border-radius: 8px 0 0 8px;
+    background: #000;
     color: #fff;
   }
   .coach-product__qty-box svg { transform: rotate(180deg); }
   .coach-product__add,
   .coach-product__now {
-    height: 58px !important;
-    border-radius: 4px;
-    font-size: 14px !important;
+    height: 48px !important;
+    border-radius: 8px;
+    font-size: 15px !important;
     font-weight: 600;
     letter-spacing: 0 !important;
     text-transform: none;
@@ -1128,7 +1129,10 @@ body.coach-sheet-open { overflow: hidden; }
   }
   .coach-rail-card__media { width: 100%; height: auto; aspect-ratio: 1; }
   .coach-rail-card__title { max-width: none; }
-  .coach-product__specs div { grid-template-columns: 1fr; gap: 4px; }
+  .coach-product__specs div { grid-template-columns: 112px minmax(0, 1fr); gap: 12px; margin-bottom: 16px; }
+  .coach-product__specs dt { font-size: 14px; text-decoration: underline; text-underline-offset: 3px; }
+  .coach-product__specs dd { font-size: 14px; line-height: 1.45; }
+  .coach-ship-sheet__body a { color: #111; font-weight: 700; text-decoration: underline; text-underline-offset: 2px; }
   .coach-size-guide { padding: 12px; }
   .coach-size-guide__card {
     width: min(var(--pdp-guide-w, 550px), 100%);
