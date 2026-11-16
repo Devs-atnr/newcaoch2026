@@ -130,10 +130,10 @@
             <ul class="coach-product__qty-list" hidden></ul>
           </div>
         {%- when 'add' -%}
-          <button type="submit" class="coach-product__add js-add" {{ block.shopify_attributes }} style="background: {{ block.settings.background }}; color: {{ block.settings.text }}; font-size: {{ block.settings.font_size | default: 14 }}px; height: {{ block.settings.height | default: 48 }}px; letter-spacing: {{ block.settings.letter_spacing | default: 1.25 }}px;">{{ block.settings.label | default: 'Add to bag' | escape }}</button>
+          <button type="submit" class="coach-product__add js-add" {{ block.shopify_attributes }} style="--add-bg: {{ block.settings.background }}; --add-color: {{ block.settings.text }}; background: {{ block.settings.background }}; color: {{ block.settings.text }}; font-size: {{ block.settings.font_size | default: 14 }}px; height: {{ block.settings.height | default: 48 }}px; letter-spacing: {{ block.settings.letter_spacing | default: 1.25 }}px;">{{ block.settings.label | default: 'Add to bag' | escape }}</button>
         {%- when 'buy' -%}
           {%- if block.settings.enable -%}
-            <button type="button" class="coach-product__now js-buy-now" {{ block.shopify_attributes }} style="background: {{ block.settings.background }}; color: {{ block.settings.text }}; font-size: {{ block.settings.font_size | default: 14 }}px; height: {{ block.settings.height | default: 48 }}px; letter-spacing: {{ block.settings.letter_spacing | default: 1.25 }}px; margin-top: {{ block.settings.space_above | default: 12 }}px;">{{ block.settings.label | default: 'Buy now' | escape }}</button>
+            <button type="button" class="coach-product__now js-buy-now" {{ block.shopify_attributes }} style="--buy-bg: {{ block.settings.background }}; --buy-color: {{ block.settings.text }}; background: {{ block.settings.background }}; color: {{ block.settings.text }}; font-size: {{ block.settings.font_size | default: 14 }}px; height: {{ block.settings.height | default: 48 }}px; letter-spacing: {{ block.settings.letter_spacing | default: 1.25 }}px; margin-top: {{ block.settings.space_above | default: 12 }}px;">{{ block.settings.label | default: 'Buy now' | escape }}</button>
           {%- endif -%}
         {%- when 'description' -%}
           {%- if product.description != blank -%}

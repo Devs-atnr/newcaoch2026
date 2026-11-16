@@ -491,17 +491,38 @@ coach-product-page.coach-product {
   font-size: 14px;
   font-weight: 400;
   cursor: pointer;
+  -webkit-appearance: none;
+  appearance: none;
+  -webkit-tap-highlight-color: transparent;
 }
 
-.coach-product__add { background: #000; color: #fff; }
+.coach-product__add { background: var(--add-bg, #000); color: var(--add-color, #fff); }
+.coach-product__add:hover,
+.coach-product__add:focus,
+.coach-product__add:focus-visible,
+.coach-product__add:active {
+  background: var(--add-bg, #000);
+  color: var(--add-color, #fff);
+  outline: none;
+  box-shadow: none;
+}
 .coach-product__add:disabled,
 .coach-product__now:disabled { opacity: 0.45; cursor: default; }
 .coach-product__now {
   width: 100%;
   margin-top: 12px;
   margin-bottom: 8px;
-  background: #81ce74;
-  color: #000;
+  background: var(--buy-bg, #81ce74);
+  color: var(--buy-color, #000);
+}
+.coach-product__now:hover,
+.coach-product__now:focus,
+.coach-product__now:focus-visible,
+.coach-product__now:active {
+  background: var(--buy-bg, #81ce74);
+  color: var(--buy-color, #000);
+  outline: none;
+  box-shadow: none;
 }
 
 .coach-product__error {
@@ -1113,11 +1134,33 @@ body.coach-sheet-open { overflow: hidden; }
     letter-spacing: 0 !important;
     text-transform: none;
   }
-  .coach-product__now {
+  .coach-product__now,
+  .coach-product__now:hover,
+  .coach-product__now:focus,
+  .coach-product__now:focus-visible,
+  .coach-product__now:active {
     margin-top: 0 !important;
+    --buy-bg: #fff;
+    --buy-color: #111;
     background: #fff !important;
+    background-color: #fff !important;
     color: #111 !important;
     border: 1px solid #ececec !important;
+    outline: none;
+    box-shadow: none;
+  }
+  .coach-product__add:hover,
+  .coach-product__add:focus,
+  .coach-product__add:focus-visible,
+  .coach-product__add:active,
+  .coach-product__qty-box:hover,
+  .coach-product__qty-box:focus,
+  .coach-product__qty-box:active {
+    background: #000 !important;
+    background-color: #000 !important;
+    color: #fff !important;
+    outline: none;
+    box-shadow: none;
   }
   .coach-product__rail,
   .coach-product__faq,
