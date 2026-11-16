@@ -50,12 +50,42 @@ class CoachProductPage extends HTMLElement {
   }
 
   showImage(src, alt, thumb) {
-    const main = this.querySelector('.js-main-image');
-    if (main && src) {
-      main.src = src;
-      if (alt) main.alt = alt;
+    const slides = this.querySelector('.js-slides');
+    const slide = [...this.querySelectorAll('.js-slide')].find((image) => image.dataset.src === src);
+    if (slides && slide) {
+      if (alt) slide.alt = alt;
+      slides.scrollTo({ top: slide.offsetTop, behavior: 'smooth' });
     }
-    this.querySelectorAll('.coach-product__thumb').forEach((button) => button.classList.toggle('is-active', button === thumb));
+    this.querySelectorAll('.coach-product__thumb').forEach((button) => {
+      button.classList.toggle('is-active', thumb ? button === thumb : button.dataset.src === src);
+    });
+  }
+
+  maxQuantity(variant) {
+    const fallback = Math.max(1, Number(this.dataset.qtyMax || 10));
+    if (!variant || !variant.available) return variant && variant.tracked && variant.policy !== 'continue' ? 0 : fallback;
+    if (variant.tracked && variant.policy !== 'continue') return Math.max(0, Number(variant.inventory) || 0);
+    return fallback;
+  }
+
+  updateQuantity(variant) {
+    const select = this.querySelector('.js-qty-input');
+    if (!select) return;
+    const max = this.maxQuantity(variant);
+    const previous = Number(select.value) || 1;
+    select.innerHTML = '';
+    if (max < 1) {
+      select.disabled = true;
+      return;
+    }
+    select.disabled = false;
+    for (let count = 1; count <= max; count += 1) {
+      const option = document.createElement('option');
+      option.value = String(count);
+      option.textContent = String(count);
+      select.appendChild(option);
+    }
+    select.value = String(Math.min(previous, max));
   }
 
   bindOptions() {
@@ -90,6 +120,8 @@ class CoachProductPage extends HTMLElement {
       this.querySelectorAll('.js-add, .js-buy-now').forEach((button) => { button.disabled = true; });
     }
     this.refreshAvailability();
+    const initial = this.findVariant();
+    if (initial) this.updateQuantity(initial);
   }
 
   optionAvailable(index, value) {
@@ -138,6 +170,7 @@ class CoachProductPage extends HTMLElement {
     if (!variant) {
       if (idInput) idInput.value = '';
       this.querySelectorAll('.js-add, .js-buy-now').forEach((button) => { button.disabled = true; });
+      this.updateQuantity(null);
       this.showColorImage();
       return;
     }
@@ -150,8 +183,9 @@ class CoachProductPage extends HTMLElement {
     const sku = this.querySelector('.js-sku');
     if (sku && variant.sku) sku.textContent = variant.sku;
     this.querySelectorAll('.js-add, .js-buy-now').forEach((button) => {
-      button.disabled = !variant.available;
+      button.disabled = !variant.available || this.maxQuantity(variant) < 1;
     });
+    this.updateQuantity(variant);
     const stock = this.querySelector('.js-stock');
     if (stock) {
       const left = Number(variant.inventory);
@@ -186,7 +220,7 @@ class CoachProductPage extends HTMLElement {
     if (!list || !media.length || !color) return;
     const matched = media.filter((item) => (item.alt || '').toLowerCase().includes(String(color).toLowerCase()));
     const visible = matched.length ? matched : media;
-    const current = this.querySelector('.js-main-image')?.src;
+    const current = [...this.querySelectorAll('.js-slide')].find((image) => image.dataset.src && Math.abs((this.querySelector('.js-slides')?.scrollTop || 0) - image.offsetTop) < 8)?.dataset.src || this.querySelector('.js-slide')?.dataset.src;
     const activeSrc = visible.some((item) => item.src === current) ? current : visible[0]?.src;
     list.innerHTML = visible.map((item) => `<button type="button" class="coach-product__thumb${item.src === activeSrc ? ' is-active' : ''}" data-src="${this.escape(item.src)}" data-alt="${this.escape(item.alt || '')}" aria-label="${this.escape(item.alt || 'Product image')}"><img src="${this.escape(item.thumb || item.src)}" alt="${this.escape(item.alt || '')}"></button>`).join('');
     list.scrollTo({ top: 0, left: 0 });
@@ -214,9 +248,15 @@ class CoachProductPage extends HTMLElement {
   async addToCart(checkout) {
     const id = this.querySelector('.js-variant-id')?.value;
     const quantity = Number(this.querySelector('.js-qty-input')?.value || 1);
+    const variant = this.findVariant();
+    const max = this.maxQuantity(variant);
     const error = this.querySelector('.js-error');
     if (!id) {
       if (error) error.textContent = this.data.sizeIndex >= 0 ? 'Please select a size.' : 'Please select an available option.';
+      return;
+    }
+    if (quantity > max) {
+      if (error) error.textContent = max > 0 ? `Only ${max} available.` : 'This size is sold out.';
       return;
     }
     if (this.dataset.adding === 'true') return;
@@ -320,7 +360,7 @@ class CoachProductPage extends HTMLElement {
       title: raw?.title || this.guideTitle(category),
       rows,
       note: raw?.note || (shoe
-        ? 'Measurements can vary by style. Foot length is the length of the foot in millimetres.'
+        ? '*For all sizes followed by a letter D or E; D: Normal fit; E: Wider fit'
         : 'Size details for this product come from its options. Add the custom.size_guide metafield for a full chart.'),
     };
   }
@@ -424,7 +464,7 @@ class CoachProductPage extends HTMLElement {
     button?.addEventListener('click', () => {
       if (!window.CoachWishlist) return;
       const variantId = this.querySelector('.js-variant-id')?.value;
-      const image = this.querySelector('.js-main-image')?.src || '';
+      const image = this.querySelector('.js-slide')?.src || '';
       const price = this.querySelector('.js-price-now')?.textContent?.trim() || '';
       const saved = window.CoachWishlist.toggle({
         handle: this.dataset.productHandle,

@@ -45,6 +45,8 @@
   data-product-url="{{ product.url }}"
   data-product-title="{{ product.title | escape }}"
   data-money-format="{{ shop.money_format | escape }}"
+  data-qty-max="{{ section.settings.qty_max | default: 10 }}"
+  style="--pdp-font: {{ section.settings.body_font | default: 'HelveticaLTPro-Roman, Helvetica, Arial, sans-serif' | escape }}; --pdp-title-font: {{ section.settings.title_font | default: 'GaramondMTProRegular, Times New Roman, Times, serif' | escape }}; --pdp-title-size: {{ section.settings.title_size | default: 24 }}px; --pdp-title-line: {{ section.settings.title_line | default: 30 }}px; --pdp-title-weight: {{ section.settings.title_weight | default: 400 }}; --pdp-title-spacing: {{ section.settings.title_spacing | default: '0.4px' | escape }}; --pdp-price-size: {{ section.settings.price_size | default: 28 }}px; --pdp-text: {{ section.settings.text_color | default: '#111111' }}; --pdp-bg: {{ section.settings.background | default: '#ffffff' }}; --pdp-border: {{ section.settings.border_width | default: 1 }}px; --pdp-border-color: {{ section.settings.border_color | default: '#d5d5d5' }}; --pdp-thumb-w: {{ section.settings.thumb_width | default: 86 }}px; --pdp-thumb-h: {{ section.settings.thumb_height | default: 108 }}px; --pdp-thumb-gap: {{ section.settings.thumb_gap | default: 8 }}px; --pdp-image-h: {{ section.settings.image_height | default: 495 }}px; --pdp-image-fit: {{ section.settings.image_fit | default: 'cover' }}; --pdp-swatch-w: {{ section.settings.swatch_width | default: 72 }}px; --pdp-swatch-h: {{ section.settings.swatch_height | default: 86 }}px; --pdp-size-h: {{ section.settings.size_height | default: 48 }}px; --pdp-size-gap: {{ section.settings.size_gap | default: 8 }}px; --pdp-guide-w: {{ section.settings.guide_width | default: 550 }}px; --pdp-guide-h: {{ section.settings.guide_height | default: 400 }}px; --pdp-gap: {{ section.settings.info_gap | default: 27 }}px;"
 >
   {%- if section.settings.show_breadcrumb -%}
     <nav class="coach-product__crumb" aria-label="Breadcrumb">
@@ -100,28 +102,38 @@
         {%- if color_index >= 0 -%}
           <span class="coach-product__color-label js-color-label">{{ current.options[color_index] }}</span>
         {%- endif -%}
-        {%- if product.featured_media -%}
-          <img
-            class="coach-product__image js-main-image"
-            src="{{ product.featured_media | image_url: width: 1400 }}"
-            alt="{{ product.featured_media.alt | default: product.title | escape }}"
-            width="1400"
-            height="1400"
-          >
-        {%- else -%}
-          {{ 'product-1' | placeholder_svg_tag: 'coach-product__image' }}
-        {%- endif -%}
+        <div class="coach-product__slides js-slides">
+          {%- assign slide_count = 0 -%}
+          {%- for media in product.media -%}
+            {%- if media.media_type == 'image' -%}
+              {%- assign slide_count = slide_count | plus: 1 -%}
+              <img
+                class="coach-product__image js-slide"
+                src="{{ media | image_url: width: 1400 }}"
+                data-src="{{ media | image_url: width: 1400 }}"
+                alt="{{ media.alt | default: product.title | escape }}"
+                width="1400"
+                height="1400"
+              >
+            {%- endif -%}
+          {%- endfor -%}
+          {%- if slide_count == 0 -%}
+            {{ 'product-1' | placeholder_svg_tag: 'coach-product__image' }}
+          {%- endif -%}
+        </div>
       </div>
     </div>
 
     <div class="coach-product__info">
       <h1 class="coach-product__title">{{ product.title | escape }}</h1>
 
-      <div class="coach-product__meta"{% unless is_bestseller or rating != blank %} hidden{% endunless %}>
+      <div class="coach-product__meta"{% unless is_bestseller or rating != blank or product.metafields.judgeme.badge != blank %} hidden{% endunless %}>
         {%- if is_bestseller -%}
           <span class="coach-product__pill">{{ section.settings.bestseller_label | default: 'Bestseller' | escape }}</span>
         {%- endif -%}
-        {%- if rating != blank -%}
+        {%- if product.metafields.judgeme.badge != blank -%}
+          <div class="jdgm-widget jdgm-preview-badge" data-id="{{ product.id }}">{{ product.metafields.judgeme.badge }}</div>
+        {%- elsif rating != blank -%}
           <span class="coach-product__stars" aria-label="{{ rating.rating }} out of 5">
             {%- assign filled = rating.rating | round -%}
             {%- for i in (1..5) -%}
@@ -138,9 +150,6 @@
         <span class="js-price-now">{{ current.price | money }}</span>
         <s class="js-price-compare"{% unless current.compare_at_price > current.price %} hidden{% endunless %}>{% if current.compare_at_price > current.price %}{{ current.compare_at_price | money }}{% endif %}</s>
       </p>
-      {%- if has_size and section.settings.size_note != blank -%}
-        <p class="coach-product__size-note">{{ section.settings.size_note | escape }}</p>
-      {%- endif -%}
 
       <form class="coach-product__form js-product-form" action="{{ routes.cart_add_url }}" method="post">
         <input type="hidden" name="id" class="js-variant-id" value="{% unless has_size %}{{ current.id }}{% endunless %}">
@@ -209,9 +218,7 @@
         <div class="coach-product__buy">
           <div class="coach-product__qty">
             <select class="js-qty-input" name="quantity" aria-label="Quantity">
-              {%- for i in (1..5) -%}
-                <option value="{{ i }}">{{ i }}</option>
-              {%- endfor -%}
+              <option value="1">1</option>
             </select>
           </div>
           <button type="submit" class="coach-product__add js-add"{% if has_size or current.available == false %} disabled{% endif %}>
@@ -237,9 +244,6 @@
         <summary>{{ section.settings.details_heading | default: 'Product Details' | escape }}</summary>
         <div class="coach-product__acc-body">
           <dl class="coach-product__specs">
-            {%- if style_number != blank -%}
-              <div><dt>Style number</dt><dd class="js-sku">{{ style_number | escape }}</dd></div>
-            {%- endif -%}
             {%- if measurements != blank -%}
               <div><dt>Measurements</dt><dd>{{ measurements | newline_to_br }}</dd></div>
             {%- endif -%}
@@ -302,23 +306,10 @@
     </div>
   {%- endif -%}
 
-  <div class="coach-product__reviews">
-    <h2>{{ section.settings.reviews_heading | default: 'Reviews' | escape }}</h2>
-    {%- if rating != blank -%}
-      <p class="coach-product__stars coach-product__stars--lg" aria-hidden="true">
-        {%- assign filled = rating.rating | round -%}
-        {%- for i in (1..5) -%}
-          <span{% if i <= filled %} class="is-on"{% endif %}>★</span>
-        {%- endfor -%}
-      </p>
-      <p class="coach-product__review-line">{{ rating.rating }} Stars{% if rating_count != blank %} &nbsp; {{ rating_count }} Reviews{% endif %}</p>
-    {%- else -%}
-      <p class="coach-product__stars coach-product__stars--lg" aria-hidden="true"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></p>
-      <p class="coach-product__review-line">No reviews yet</p>
-    {%- endif -%}
-    {%- if section.settings.reviews_note != blank -%}
-      <p class="coach-product__review-note">{{ section.settings.reviews_note | escape }}</p>
-    {%- endif -%}
+  <div class="coach-product__reviews" id="judgeme_product_reviews">
+    <div class="jdgm-widget jdgm-review-widget" data-id="{{ product.id }}" data-product-title="{{ product.title | escape }}">
+      {{ product.metafields.judgeme.widget }}
+    </div>
   </div>
 
   {%- if section.settings.bag_size_image != blank -%}
@@ -337,6 +328,7 @@
       <div class="coach-size-guide__card" role="dialog" aria-modal="true" aria-labelledby="CoachSizeGuideTitle-{{ section.id }}">
         <button type="button" class="coach-size-guide__close js-guide-close" aria-label="Close">×</button>
         <h2 id="CoachSizeGuideTitle-{{ section.id }}" class="js-guide-title"></h2>
+        <p class="coach-size-guide__hint">Scroll horizontally to see more sizes.</p>
         <div class="coach-size-guide__scroll">
           <table class="js-guide-table"></table>
         </div>
@@ -378,6 +370,7 @@
             "sku": {{ variant.sku | json }},
             "inventory": {{ variant.inventory_quantity | default: 0 }},
             "tracked": {% if variant.inventory_management %}true{% else %}false{% endif %},
+            "policy": {{ variant.inventory_policy | json }},
             "image": {% if variant.featured_media %}{{ variant.featured_media | image_url: width: 1400 | json }}{% else %}null{% endif %}
           }{% unless forloop.last %},{% endunless %}
         {%- endfor -%}
@@ -411,7 +404,33 @@
     { "type": "text", "id": "recent_heading", "label": "Recently viewed heading", "default": "Recently Viewed" },
     { "type": "text", "id": "faq_heading", "label": "FAQ heading", "default": "Frequently Asked Questions" },
     { "type": "text", "id": "reviews_heading", "label": "Reviews heading", "default": "Reviews" },
-    { "type": "text", "id": "reviews_note", "label": "Reviews note", "default": "Ratings and reviews are submitted by customers after purchase." }
+    { "type": "header", "content": "Typography" },
+    { "type": "text", "id": "body_font", "label": "Body font family", "default": "HelveticaLTPro-Roman, Helvetica, Arial, sans-serif" },
+    { "type": "text", "id": "title_font", "label": "Title and price font", "default": "GaramondMTProRegular, Times New Roman, Times, serif" },
+    { "type": "range", "id": "title_size", "min": 16, "max": 40, "step": 1, "unit": "px", "label": "Title size", "default": 24 },
+    { "type": "range", "id": "title_line", "min": 20, "max": 48, "step": 1, "unit": "px", "label": "Title line height", "default": 30 },
+    { "type": "text", "id": "title_weight", "label": "Title weight", "default": "400" },
+    { "type": "text", "id": "title_spacing", "label": "Title letter spacing", "default": "0.4px" },
+    { "type": "range", "id": "price_size", "min": 16, "max": 40, "step": 1, "unit": "px", "label": "Price size", "default": 28 },
+    { "type": "color", "id": "text_color", "label": "Text color", "default": "#111111" },
+    { "type": "color", "id": "background", "label": "Background", "default": "#ffffff" },
+    { "type": "header", "content": "Borders and gallery" },
+    { "type": "color", "id": "border_color", "label": "Border color", "default": "#d5d5d5" },
+    { "type": "range", "id": "border_width", "min": 1, "max": 3, "step": 1, "unit": "px", "label": "Border thickness", "default": 1 },
+    { "type": "range", "id": "thumb_width", "min": 60, "max": 120, "step": 2, "unit": "px", "label": "Thumbnail width", "default": 86 },
+    { "type": "range", "id": "thumb_height", "min": 60, "max": 140, "step": 2, "unit": "px", "label": "Thumbnail height", "default": 108 },
+    { "type": "range", "id": "thumb_gap", "min": 4, "max": 20, "step": 1, "unit": "px", "label": "Thumbnail spacing", "default": 8 },
+    { "type": "range", "id": "image_height", "min": 320, "max": 700, "step": 5, "unit": "px", "label": "Main image height", "default": 495 },
+    { "type": "select", "id": "image_fit", "label": "Main image fit", "default": "cover", "options": [{ "value": "cover", "label": "Cover" }, { "value": "contain", "label": "Contain" }] },
+    { "type": "range", "id": "swatch_width", "min": 48, "max": 120, "step": 2, "unit": "px", "label": "Color image width", "default": 72 },
+    { "type": "range", "id": "swatch_height", "min": 48, "max": 140, "step": 2, "unit": "px", "label": "Color image height", "default": 86 },
+    { "type": "range", "id": "size_height", "min": 36, "max": 64, "step": 2, "unit": "px", "label": "Size button height", "default": 48 },
+    { "type": "range", "id": "size_gap", "min": 4, "max": 16, "step": 1, "unit": "px", "label": "Size button spacing", "default": 8 },
+    { "type": "range", "id": "info_gap", "min": 12, "max": 48, "step": 1, "unit": "px", "label": "Space between image and details", "default": 27 },
+    { "type": "header", "content": "Size guide and quantity" },
+    { "type": "range", "id": "guide_width", "min": 320, "max": 700, "step": 10, "unit": "px", "label": "Size guide width", "default": 550 },
+    { "type": "range", "id": "guide_height", "min": 280, "max": 700, "step": 10, "unit": "px", "label": "Size guide height", "default": 400 },
+    { "type": "range", "id": "qty_max", "min": 1, "max": 10, "step": 1, "label": "Max quantity when stock is not limited", "default": 10 }
   ],
   "blocks": [
     {
