@@ -327,17 +327,53 @@
     {%- when 'faq' -%}
       {%- unless faq_open -%}
         {%- assign faq_open = true -%}
-        <div class="coach-product__faq" {{ block.shopify_attributes }}>
-          <h2>{{ block.settings.heading | default: 'Frequently Asked Questions' | escape }}</h2>
+        {%- liquid
+          assign faq_heading_font = 'HelveticaLTPro-Roman, Helvetica, Arial, sans-serif'
+          if block.settings.heading_font == 'garamond'
+            assign faq_heading_font = 'GaramondMTProRegular, Times New Roman, Times, serif'
+          endif
+          assign faq_q_font = 'HelveticaLTPro-Roman, Helvetica, Arial, sans-serif'
+          if block.settings.question_font == 'garamond'
+            assign faq_q_font = 'GaramondMTProRegular, Times New Roman, Times, serif'
+          endif
+          assign faq_a_font = 'HelveticaLTPro-Roman, Helvetica, Arial, sans-serif'
+          if block.settings.answer_font == 'garamond'
+            assign faq_a_font = 'GaramondMTProRegular, Times New Roman, Times, serif'
+          endif
+          assign faq_line = '0'
+          if block.settings.show_lines
+            assign faq_line = '1px solid ' | append: block.settings.line_color
+          endif
+        -%}
+        {%- capture faq_items -%}
           {%- for question in blocks -%}
             {%- if question.type == 'faq' and question.settings.question != blank -%}
-              <details class="coach-product__faq-item" {{ question.shopify_attributes }}>
-                <summary>{{ question.settings.question | escape }}</summary>
-                <div class="rte">{{ question.settings.answer }}</div>
-              </details>
+              {%- liquid
+                assign show_q = true
+                if question.settings.collection != blank
+                  assign show_q = false
+                  for col in product.collections
+                    if col.id == question.settings.collection.id
+                      assign show_q = true
+                    endif
+                  endfor
+                endif
+              -%}
+              {%- if show_q -%}
+                <details class="coach-product__faq-item" {{ question.shopify_attributes }}>
+                  <summary>{{ question.settings.question | escape }}</summary>
+                  <div class="rte">{{ question.settings.answer }}</div>
+                </details>
+              {%- endif -%}
             {%- endif -%}
           {%- endfor -%}
-        </div>
+        {%- endcapture -%}
+        {%- if faq_items != blank -%}
+          <div class="coach-product__faq" {{ block.shopify_attributes }} style="--faq-heading-font: {{ faq_heading_font }}; --faq-heading-size: {{ block.settings.heading_size | default: 22 }}px; --faq-heading-weight: {{ block.settings.heading_weight | default: 700 }}; --faq-heading-color: {{ block.settings.heading_color | default: '#111111' }}; --faq-q-font: {{ faq_q_font }}; --faq-q-size: {{ block.settings.question_size | default: 16 }}px; --faq-q-weight: {{ block.settings.question_weight | default: 400 }}; --faq-q-color: {{ block.settings.question_color | default: '#111111' }}; --faq-a-font: {{ faq_a_font }}; --faq-a-size: {{ block.settings.answer_size | default: 14 }}px; --faq-a-weight: {{ block.settings.answer_weight | default: 400 }}; --faq-a-color: {{ block.settings.answer_color | default: '#333333' }}; --faq-line: {{ faq_line }};">
+            <h2>{{ block.settings.heading | default: 'Frequently Asked Questions' | escape }}</h2>
+            {{ faq_items }}
+          </div>
+        {%- endif -%}
       {%- endunless -%}
     {%- when 'reviews' -%}
       <div class="coach-product__reviews" id="judgeme_product_reviews" {{ block.shopify_attributes }}>

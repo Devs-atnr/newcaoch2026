@@ -702,7 +702,11 @@ coach-product-page.coach-product {
   border-top: var(--sep-size, 1px) var(--sep-style, solid) var(--sep-color, #e5e5e5);
 }
 
-.coach-product__faq,
+.coach-product__faq {
+  margin-top: 48px;
+  padding-top: 0;
+  border-top: 0;
+}
 .coach-product__reviews {
   margin-top: 64px;
   padding-top: 36px;
@@ -939,9 +943,34 @@ coach-product-page.coach-product {
   letter-spacing: 0;
 }
 
-.coach-product__faq h2,
-.coach-product__reviews h2 { text-align: center; }
-.coach-product__faq h2 { text-align: left; }
+.coach-product__faq h2 {
+  margin: 0 0 20px;
+  text-align: left;
+  font-family: var(--faq-heading-font, HelveticaLTPro-Roman, Helvetica, Arial, sans-serif);
+  font-size: var(--faq-heading-size, 22px) !important;
+  font-weight: var(--faq-heading-weight, 700);
+  color: var(--faq-heading-color, #111);
+}
+.coach-product__faq .coach-product__faq-item {
+  border-top: var(--faq-line, 0);
+  border-bottom: 0;
+}
+.coach-product__faq .coach-product__faq-item summary {
+  font-family: var(--faq-q-font, HelveticaLTPro-Roman, Helvetica, Arial, sans-serif);
+  font-size: var(--faq-q-size, 16px);
+  font-weight: var(--faq-q-weight, 400);
+  color: var(--faq-q-color, #111);
+}
+.coach-product__faq .coach-product__faq-item summary::after {
+  border-color: var(--faq-q-color, #111);
+}
+.coach-product__faq .coach-product__faq-item .rte,
+.coach-product__faq .coach-product__faq-item .rte p {
+  font-family: var(--faq-a-font, HelveticaLTPro-Roman, Helvetica, Arial, sans-serif);
+  font-size: var(--faq-a-size, 14px);
+  font-weight: var(--faq-a-weight, 400);
+  color: var(--faq-a-color, #333);
+}
 
 .coach-product__rail-row { position: relative; }
 .coach-product__rail-track {
