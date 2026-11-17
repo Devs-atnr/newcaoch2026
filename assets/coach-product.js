@@ -670,9 +670,10 @@ class CoachProductPage extends HTMLElement {
     if (!track || !rail) return;
     let handles = [];
     try {
+      const limit = Math.min(12, Math.max(2, Number(rail.dataset.recentLimit) || 8));
       handles = JSON.parse(localStorage.getItem('coach-recently-viewed') || '[]')
         .filter((handle) => handle && handle !== this.dataset.productHandle)
-        .slice(0, 4);
+        .slice(0, limit);
     } catch (error) {
       handles = [];
     }

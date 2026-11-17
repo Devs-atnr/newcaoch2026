@@ -551,7 +551,26 @@
       "name": "Recently viewed",
       "limit": 1,
       "settings": [
-        { "type": "text", "id": "heading", "label": "Heading", "default": "Recently Viewed" }
+        { "type": "text", "id": "heading", "label": "Heading", "default": "Recently Viewed" },
+        { "type": "color", "id": "heading_color", "label": "Heading color", "default": "#111111" },
+        { "type": "color", "id": "image_background", "label": "Image background", "default": "#f1f1f1" },
+        { "type": "range", "id": "title_size", "min": 10, "max": 20, "step": 1, "unit": "px", "label": "Title size", "default": 14 },
+        { "type": "color", "id": "title_color", "label": "Title color", "default": "#222222" },
+        { "type": "range", "id": "limit", "min": 2, "max": 12, "step": 1, "label": "Products to load", "default": 8 },
+        { "type": "header", "content": "Desktop" },
+        { "type": "range", "id": "quantity_desktop", "min": 1, "max": 6, "step": 1, "label": "Product quantity", "default": 2 },
+        { "type": "range", "id": "width_desktop", "min": 140, "max": 360, "step": 1, "unit": "px", "label": "Product width", "default": 209 },
+        { "type": "range", "id": "height_desktop", "min": 160, "max": 480, "step": 1, "unit": "px", "label": "Product height", "default": 271 },
+        { "type": "range", "id": "gap_desktop", "min": 0, "max": 40, "step": 1, "unit": "px", "label": "Product spacing", "default": 18 },
+        { "type": "range", "id": "heading_size_desktop", "min": 12, "max": 36, "step": 1, "unit": "px", "label": "Heading size", "default": 16 },
+        { "type": "range", "id": "space_above_desktop", "min": 0, "max": 80, "step": 4, "unit": "px", "label": "Space above", "default": 48 },
+        { "type": "header", "content": "Mobile" },
+        { "type": "range", "id": "quantity_mobile", "min": 1, "max": 3, "step": 1, "label": "Product quantity", "default": 2 },
+        { "type": "range", "id": "width_mobile", "min": 120, "max": 240, "step": 2, "unit": "px", "label": "Product width", "default": 160 },
+        { "type": "range", "id": "height_mobile", "min": 140, "max": 320, "step": 2, "unit": "px", "label": "Product height", "default": 200 },
+        { "type": "range", "id": "gap_mobile", "min": 0, "max": 32, "step": 2, "unit": "px", "label": "Product spacing", "default": 12 },
+        { "type": "range", "id": "heading_size_mobile", "min": 12, "max": 28, "step": 1, "unit": "px", "label": "Heading size", "default": 16 },
+        { "type": "range", "id": "space_above_mobile", "min": 0, "max": 80, "step": 4, "unit": "px", "label": "Space above", "default": 32 }
       ]
     },
     {

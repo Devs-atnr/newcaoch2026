@@ -284,7 +284,21 @@
     },
     "you-may-also-like": {
       "type": "you-may-also-like",
-      "settings": {}
+      "settings": {
+        "heading": "You May Also Like",
+        "heading_size": 16,
+        "heading_color": "#111111",
+        "padding_top": 48,
+        "padding_bottom": 8,
+        "visible_desktop": 4,
+        "visible_tablet": 3,
+        "visible_mobile": "2",
+        "card_width": 209,
+        "image_height": 271,
+        "gap": 18,
+        "image_background": "#f1f1f1",
+        "title_size": 14
+      }
     }
   },
   "order": [
