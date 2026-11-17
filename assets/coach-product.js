@@ -631,19 +631,26 @@ class CoachProductPage extends HTMLElement {
     const rail = this.querySelector('[data-rail="also"]');
     if (!track) return;
     try {
-      const response = await fetch(`/recommendations/products.json?product_id=${this.dataset.productId}&limit=8`);
+      const limit = Math.min(10, Math.max(2, Number(rail?.dataset.alsoLimit) || 8));
+      const visible = Math.max(2, Number(rail?.dataset.alsoVisible) || 4);
+      const response = await fetch(`/recommendations/products.json?product_id=${this.dataset.productId}&limit=${limit}`);
       if (!response.ok) throw new Error('recommendations');
       const data = await response.json();
-      const products = (data.products || []).filter((product) => product.handle !== this.dataset.productHandle);
+      const products = (data.products || []).filter((product) => product.handle !== this.dataset.productHandle).slice(0, limit);
       if (!products.length) {
         rail.hidden = true;
         return;
       }
-      track.innerHTML = products.map((product) => this.card(product)).join('');
+      const showHeart = rail?.dataset.alsoHeart !== 'false';
+      track.innerHTML = products.map((product) => this.card(product, { heart: showHeart })).join('');
       this.markSavedHearts(track);
-      this.querySelector('.js-also-next')?.addEventListener('click', () => {
-        track.scrollBy({ left: track.clientWidth * 0.8, behavior: 'smooth' });
-      });
+      const next = this.querySelector('.js-also-next');
+      if (next) {
+        next.hidden = products.length <= visible;
+        next.addEventListener('click', () => {
+          track.scrollBy({ left: track.clientWidth, behavior: 'smooth' });
+        });
+      }
     } catch (error) {
       if (rail) rail.hidden = true;
     }
@@ -692,7 +699,7 @@ class CoachProductPage extends HTMLElement {
     });
   }
 
-  card(product) {
+  card(product, options = {}) {
     const image = product.featured_image || product.image || (product.images && product.images[0]) || '';
     const src = typeof image === 'string' ? image : (image.src || '');
     const title = product.title || '';
@@ -706,9 +713,9 @@ class CoachProductPage extends HTMLElement {
         </span>
         <span class="coach-rail-card__title">${this.escape(title)}</span>
       </a>
-      <button type="button" class="coach-rail-card__heart" aria-label="Wishlist" data-wish-handle="${this.escape(handle)}" data-wish-title="${this.escape(title)}" data-wish-url="${this.escape(url)}" data-wish-image="${this.escape(src)}" data-wish-price="${this.escape(price)}">
+      ${options.heart === false ? '' : `<button type="button" class="coach-rail-card__heart" aria-label="Wishlist" data-wish-handle="${this.escape(handle)}" data-wish-title="${this.escape(title)}" data-wish-url="${this.escape(url)}" data-wish-image="${this.escape(src)}" data-wish-price="${this.escape(price)}">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" aria-hidden="true"><path d="M12 20.4s-7.6-4.5-9.3-9.4C1.6 7.7 3.6 4.4 7 4.4c2.1 0 3.6 1.2 5 3.1 1.4-1.9 2.9-3.1 5-3.1 3.4 0 5.4 3.3 4.3 6.6-1.7 4.9-9.3 9.4-9.3 9.4z"/></svg>
-      </button>
+      </button>`}
     </article>`;
   }
 

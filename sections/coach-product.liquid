@@ -491,7 +491,24 @@
       "name": "You may also like",
       "limit": 1,
       "settings": [
-        { "type": "text", "id": "heading", "label": "Heading", "default": "You May Also Like" }
+        { "type": "text", "id": "heading", "label": "Heading", "default": "You May Also Like" },
+        { "type": "range", "id": "heading_size", "min": 14, "max": 36, "step": 1, "unit": "px", "label": "Heading size", "default": 20 },
+        { "type": "color", "id": "heading_color", "label": "Heading color", "default": "#111111" },
+        { "type": "select", "id": "heading_align", "label": "Heading alignment", "default": "center", "options": [
+          { "value": "left", "label": "Left" },
+          { "value": "center", "label": "Center" },
+          { "value": "right", "label": "Right" }
+        ] },
+        { "type": "range", "id": "visible", "min": 2, "max": 6, "step": 1, "label": "Products per row", "default": 4 },
+        { "type": "range", "id": "limit", "min": 2, "max": 10, "step": 1, "label": "Products to load", "default": 8 },
+        { "type": "range", "id": "gap", "min": 8, "max": 40, "step": 2, "unit": "px", "label": "Gap", "default": 18 },
+        { "type": "range", "id": "image_size", "min": 160, "max": 360, "step": 4, "unit": "px", "label": "Image height", "default": 240 },
+        { "type": "color", "id": "image_background", "label": "Image background", "default": "#f2f2f2" },
+        { "type": "range", "id": "title_size", "min": 11, "max": 18, "step": 1, "unit": "px", "label": "Title size", "default": 13 },
+        { "type": "color", "id": "title_color", "label": "Title color", "default": "#222222" },
+        { "type": "checkbox", "id": "show_wishlist", "label": "Show wishlist heart", "default": true },
+        { "type": "range", "id": "space_above", "min": 0, "max": 80, "step": 4, "unit": "px", "label": "Space above", "default": 36 },
+        { "type": "range", "id": "space_below", "min": 0, "max": 80, "step": 4, "unit": "px", "label": "Space below", "default": 0 }
       ]
     },
     {
