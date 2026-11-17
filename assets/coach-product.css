@@ -1721,7 +1721,7 @@ body.coach-sheet-open { overflow: hidden; }
     width: calc((100% - (var(--also-count-mobile, 2) - 1) * var(--also-gap-mobile, 16px)) / var(--also-count-mobile, 2));
   }
   .coach-product__rail[data-rail="also"] .coach-rail-card__title { font-weight: 400; color: #111; text-align: center; }
-  .coach-product__rail[data-heart-mobile="false"] .coach-rail-card__heart { display: flex; }
+  .coach-product__rail .coach-rail-card__heart { display: none; }
   .coach-product__rail-track {
     grid-auto-columns: calc(50% - 8px);
     justify-content: start;
