@@ -607,11 +607,18 @@ class CoachProductPage extends HTMLElement {
       window.setTimeout(() => {
         const saved = window.CoachWishlist.toggle(item);
         this.paintWishHearts(item.handle, saved);
-        if (saved) heart.classList.add('is-pop');
+        heart.classList.remove('is-pop');
+        void heart.offsetWidth;
+        heart.classList.add('is-pop');
         this.setRailLoader(rail, false);
         heart.dataset.busy = 'false';
         this.showWishToast(item, saved);
       }, 1500);
+    });
+    this.addEventListener('mouseover', (event) => {
+      const heart = event.target.closest('[data-wish-handle]');
+      if (!heart) return;
+      this.placeWishTip(heart);
     });
   }
 
@@ -628,8 +635,25 @@ class CoachProductPage extends HTMLElement {
       if (heart.dataset.wishHandle !== handle) return;
       heart.classList.toggle('is-on', saved);
       heart.setAttribute('aria-pressed', saved ? 'true' : 'false');
-      if (!saved) heart.classList.remove('is-pop');
+      const tip = heart.querySelector('.coach-rail-card__heart-tip');
+      if (tip) tip.textContent = saved ? 'Remove from wish list' : 'Add to wish list';
     });
+  }
+
+  placeWishTip(heart) {
+    const tip = heart.querySelector('.coach-rail-card__heart-tip');
+    if (!tip) return;
+    tip.textContent = heart.classList.contains('is-on') ? 'Remove from wish list' : 'Add to wish list';
+    tip.style.left = '0px';
+    tip.style.top = '0px';
+    const width = tip.offsetWidth;
+    const height = tip.offsetHeight;
+    const heartRect = heart.getBoundingClientRect();
+    const left = Math.max(8, Math.min(heartRect.left + heartRect.width / 2 - width / 2, window.innerWidth - width - 8));
+    const top = Math.max(8, heartRect.top - height - 10);
+    tip.style.left = `${left}px`;
+    tip.style.top = `${top}px`;
+    tip.style.setProperty('--tip-arrow', `${heartRect.left + heartRect.width / 2 - left}px`);
   }
 
   setRailLoader(rail, active) {
