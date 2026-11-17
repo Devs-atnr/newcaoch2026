@@ -466,6 +466,27 @@
       ]
     },
     {
+      "type": "separator",
+      "name": "Separator",
+      "settings": [
+        { "type": "range", "id": "width", "min": 10, "max": 100, "step": 5, "unit": "%", "label": "Width", "default": 100 },
+        { "type": "select", "id": "alignment", "label": "Alignment", "default": "center", "options": [
+          { "value": "left", "label": "Left" },
+          { "value": "center", "label": "Center" },
+          { "value": "right", "label": "Right" }
+        ] },
+        { "type": "color", "id": "color", "label": "Color", "default": "#e5e5e5" },
+        { "type": "range", "id": "thickness", "min": 1, "max": 8, "step": 1, "unit": "px", "label": "Border thickness", "default": 1 },
+        { "type": "select", "id": "style", "label": "Border style", "default": "solid", "options": [
+          { "value": "solid", "label": "Solid" },
+          { "value": "dashed", "label": "Dashed" },
+          { "value": "dotted", "label": "Dotted" }
+        ] },
+        { "type": "range", "id": "space_above", "min": 0, "max": 80, "step": 4, "unit": "px", "label": "Space above", "default": 24 },
+        { "type": "range", "id": "space_below", "min": 0, "max": 80, "step": 4, "unit": "px", "label": "Space below", "default": 24 }
+      ]
+    },
+    {
       "type": "also",
       "name": "You may also like",
       "limit": 1,

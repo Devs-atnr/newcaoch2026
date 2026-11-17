@@ -169,6 +169,18 @@
             "label": "Share This Product"
           }
         },
+        "separator": {
+          "type": "separator",
+          "settings": {
+            "width": 100,
+            "alignment": "center",
+            "color": "#e5e5e5",
+            "thickness": 1,
+            "style": "solid",
+            "space_above": 24,
+            "space_below": 24
+          }
+        },
         "also": {
           "type": "also",
           "settings": {
@@ -226,6 +238,7 @@
         "details",
         "notes",
         "share",
+        "separator",
         "also",
         "recent",
         "faq-1",

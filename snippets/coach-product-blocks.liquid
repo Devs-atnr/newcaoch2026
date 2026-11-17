@@ -251,6 +251,16 @@
 
 {%- for block in blocks -%}
   {%- case block.type -%}
+    {%- when 'separator' -%}
+      {%- liquid
+        assign sep_align = 'center'
+        if block.settings.alignment == 'left'
+          assign sep_align = 'flex-start'
+        elsif block.settings.alignment == 'right'
+          assign sep_align = 'flex-end'
+        endif
+      -%}
+      <div class="coach-product__separator" {{ block.shopify_attributes }} style="--sep-width: {{ block.settings.width | default: 100 }}%; --sep-align: {{ sep_align }}; --sep-color: {{ block.settings.color | default: '#e5e5e5' }}; --sep-size: {{ block.settings.thickness | default: 1 }}px; --sep-style: {{ block.settings.style | default: 'solid' }}; margin-top: {{ block.settings.space_above | default: 24 }}px; margin-bottom: {{ block.settings.space_below | default: 24 }}px;"><span></span></div>
     {%- when 'also' -%}
       <div class="coach-product__rail" data-rail="also" {{ block.shopify_attributes }}>
         <h2>{{ block.settings.heading | escape }}</h2>

@@ -685,6 +685,17 @@ coach-product-page.coach-product {
   object-fit: contain;
 }
 
+.coach-product__separator {
+  display: flex;
+  justify-content: var(--sep-align, center);
+  width: 100%;
+}
+.coach-product__separator span {
+  display: block;
+  width: var(--sep-width, 100%);
+  border-top: var(--sep-size, 1px) var(--sep-style, solid) var(--sep-color, #e5e5e5);
+}
+
 .coach-product__rail,
 .coach-product__faq,
 .coach-product__reviews {
@@ -1238,6 +1249,7 @@ body.coach-sheet-open { overflow: hidden; }
     outline: none;
     box-shadow: none;
   }
+  .coach-product__separator { padding-left: 12px; padding-right: 12px; }
   .coach-product__rail,
   .coach-product__faq,
   .coach-product__reviews { margin-top: 36px; padding-left: 12px; padding-right: 12px; }
