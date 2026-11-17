@@ -998,19 +998,63 @@ coach-product-page.coach-product {
 }
 .coach-rail-card__heart {
   position: absolute;
-  top: 12px;
+  top: 40px;
   right: 12px;
-  z-index: 2;
+  z-index: 3;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 32px;
-  height: 32px;
+  width: 22px;
+  height: 22px;
   padding: 0;
   border: 0;
   background: transparent;
   color: #111;
   cursor: pointer;
+}
+.coach-rail-card__heart svg {
+  display: block;
+  width: 22px;
+  height: 22px;
+}
+.coach-rail-card__heart-tip {
+  position: absolute;
+  left: 50%;
+  bottom: calc(100% + 8px);
+  z-index: 4;
+  padding: 6px 10px;
+  border-radius: 4px;
+  background: #3a4250;
+  color: #fff;
+  font-family: HelveticaLTPro-Roman, Helvetica, Arial, sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.2;
+  letter-spacing: 0;
+  white-space: nowrap;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transform: translateX(-50%);
+}
+.coach-rail-card__heart-tip::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 100%;
+  border: 5px solid transparent;
+  border-top-color: #3a4250;
+  transform: translateX(-50%);
+}
+.coach-rail-card__heart:hover .coach-rail-card__heart-tip,
+.coach-rail-card__heart:focus-visible .coach-rail-card__heart-tip {
+  opacity: 1;
+  visibility: visible;
+}
+.coach-rail-card__heart.is-on .coach-rail-card__heart-tip { font-size: 0; }
+.coach-rail-card__heart.is-on .coach-rail-card__heart-tip::before {
+  content: "Remove from wish list";
+  font-size: 12px;
 }
 .coach-rail-card__heart.is-on svg { fill: #111; stroke: #111; }
 .coach-rail-card__title {

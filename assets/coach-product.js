@@ -757,8 +757,9 @@ class CoachProductPage extends HTMLElement {
         <span class="coach-rail-card__title">${this.escape(title)}</span>
       </a>
       ${add}
-      ${options.heart === false ? '' : `<button type="button" class="coach-rail-card__heart" aria-label="Wishlist" data-wish-handle="${this.escape(handle)}" data-wish-title="${this.escape(title)}" data-wish-url="${this.escape(url)}" data-wish-image="${this.escape(src)}" data-wish-price="${this.escape(price)}">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" aria-hidden="true"><path d="M12 20.4s-7.6-4.5-9.3-9.4C1.6 7.7 3.6 4.4 7 4.4c2.1 0 3.6 1.2 5 3.1 1.4-1.9 2.9-3.1 5-3.1 3.4 0 5.4 3.3 4.3 6.6-1.7 4.9-9.3 9.4-9.3 9.4z"/></svg>
+      ${options.heart === false ? '' : `<button type="button" class="coach-rail-card__heart" aria-label="Add to wish list" data-wish-handle="${this.escape(handle)}" data-wish-title="${this.escape(title)}" data-wish-url="${this.escape(url)}" data-wish-image="${this.escape(src)}" data-wish-price="${this.escape(price)}">
+        <span class="coach-rail-card__heart-tip">Add to wish list</span>
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M12 20.4s-7.6-4.5-9.3-9.4C1.6 7.7 3.6 4.4 7 4.4c2.1 0 3.6 1.2 5 3.1 1.4-1.9 2.9-3.1 5-3.1 3.4 0 5.4 3.3 4.3 6.6-1.7 4.9-9.3 9.4-9.3 9.4z"/></svg>
       </button>`}
     </article>`;
   }
