@@ -219,9 +219,9 @@
             "title_color": "#222222",
             "show_wishlist": true,
             "quantity_desktop": 4,
-            "layout_desktop": "fixed-row",
-            "width_desktop": 216,
-            "height_desktop": 270,
+            "layout_desktop": "equal-row",
+            "width_desktop": 272,
+            "height_desktop": 216,
             "image_scale_desktop": 100,
             "gap_desktop": 18,
             "section_width_desktop": 75,
@@ -240,13 +240,22 @@
             "space_below_mobile": 0
           }
         },
+        "separator_8tUcK3": {
+          "type": "separator",
+          "settings": {
+            "width": 100,
+            "alignment": "center",
+            "color": "#e5e5e5",
+            "thickness": 1,
+            "style": "solid",
+            "space_above": 36,
+            "space_below": 36
+          }
+        },
         "recent": {
           "type": "recent",
           "settings": {
-            "heading": "Recently Viewed",
-            "quantity_desktop": 4,
-            "width_desktop": 216,
-            "height_desktop": 270
+            "heading": "Recently Viewed"
           }
         },
         "faq-1": {
@@ -296,6 +305,7 @@
         "share",
         "separator",
         "also",
+        "separator_8tUcK3",
         "recent",
         "faq-1",
         "faq-2",
