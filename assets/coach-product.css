@@ -777,6 +777,36 @@ coach-product-page.coach-product {
 .coach-product__rail[data-rail="also"] .coach-product__rail-next {
   top: calc(var(--also-height-desktop, 270px) / 2 - 17px);
 }
+@media screen and (min-width: 1101px) {
+  .coach-product__rail[data-rail="also"] .coach-product__rail-row {
+    width: max-content;
+    max-width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .coach-product__rail[data-rail="also"][data-layout-desktop="fixed-row"] .coach-product__rail-track {
+    display: flex;
+    justify-content: flex-start;
+    width: calc(var(--also-count-desktop, 4) * var(--also-width-desktop, 210px) + (var(--also-count-desktop, 4) - 1) * var(--also-gap-desktop, 16px));
+    max-width: calc(100% - 48px);
+    overflow-x: auto;
+  }
+  .coach-product__rail[data-rail="also"][data-layout-desktop="fixed-row"] .coach-rail-card {
+    flex: 0 0 var(--also-width-desktop, 210px);
+    width: var(--also-width-desktop, 210px);
+  }
+  .coach-product__rail[data-rail="also"][data-layout-desktop="fixed-row"] .coach-rail-card__media {
+    width: var(--also-width-desktop, 210px);
+    height: var(--also-height-desktop, 270px);
+  }
+  .coach-product__rail[data-rail="also"] .coach-product__rail-next {
+    right: -36px;
+    width: 28px;
+    height: 28px;
+    background: transparent;
+    box-shadow: none;
+  }
+}
 
 .coach-product__rail h2,
 .coach-product__faq h2,
