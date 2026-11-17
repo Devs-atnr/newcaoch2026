@@ -243,7 +243,11 @@
   }
   #shopify-section-{{ section.id }} .ymal__arrow--prev { left: -36px; }
   #shopify-section-{{ section.id }} .ymal__arrow--next { right: -36px; }
-  #shopify-section-{{ section.id }} .ymal__arrow:disabled { visibility: hidden; }
+  #shopify-section-{{ section.id }} .ymal__arrow:disabled {
+    visibility: visible;
+    opacity: 0.35;
+    cursor: default;
+  }
   #shopify-section-{{ section.id }} .ymal__empty {
     margin: 12px 0 0;
     text-align: center;
