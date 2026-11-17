@@ -591,18 +591,27 @@ class CoachProductPage extends HTMLElement {
     });
     this.addEventListener('click', (event) => {
       const heart = event.target.closest('[data-wish-handle]');
-      if (!heart || !window.CoachWishlist) return;
+      if (!heart || !window.CoachWishlist || heart.dataset.busy === 'true') return;
       event.preventDefault();
       event.stopPropagation();
-      const saved = window.CoachWishlist.toggle({
+      const item = {
         handle: heart.dataset.wishHandle,
         title: heart.dataset.wishTitle,
         url: heart.dataset.wishUrl,
         image: heart.dataset.wishImage,
         price: heart.dataset.wishPrice,
-      });
-      heart.classList.toggle('is-on', saved);
-      heart.setAttribute('aria-pressed', saved ? 'true' : 'false');
+      };
+      const rail = heart.closest('.coach-product__rail');
+      heart.dataset.busy = 'true';
+      this.setRailLoader(rail, true);
+      window.setTimeout(() => {
+        const saved = window.CoachWishlist.toggle(item);
+        this.paintWishHearts(item.handle, saved);
+        if (saved) heart.classList.add('is-pop');
+        this.setRailLoader(rail, false);
+        heart.dataset.busy = 'false';
+        this.showWishToast(item, saved);
+      }, 1500);
     });
   }
 
@@ -612,6 +621,52 @@ class CoachProductPage extends HTMLElement {
     const saved = window.CoachWishlist.has(this.dataset.productHandle);
     button.classList.toggle('is-on', saved);
     button.setAttribute('aria-pressed', saved ? 'true' : 'false');
+  }
+
+  paintWishHearts(handle, saved) {
+    this.querySelectorAll('[data-wish-handle]').forEach((heart) => {
+      if (heart.dataset.wishHandle !== handle) return;
+      heart.classList.toggle('is-on', saved);
+      heart.setAttribute('aria-pressed', saved ? 'true' : 'false');
+      if (!saved) heart.classList.remove('is-pop');
+    });
+  }
+
+  setRailLoader(rail, active) {
+    if (!rail) return;
+    rail.classList.toggle('is-loading', active);
+  }
+
+  showWishToast(item, saved) {
+    let toast = document.querySelector('.coach-wish-toast');
+    if (!toast) {
+      toast = document.createElement('div');
+      toast.className = 'coach-wish-toast';
+      toast.innerHTML = '<span class="coach-wish-toast__icon" aria-hidden="true"></span><p class="coach-wish-toast__text"></p><button type="button" class="coach-wish-toast__undo">UNDO</button><button type="button" class="coach-wish-toast__close" aria-label="Close">×</button>';
+      document.body.appendChild(toast);
+      toast.querySelector('.coach-wish-toast__close').addEventListener('click', () => {
+        toast.hidden = true;
+      });
+      toast.querySelector('.coach-wish-toast__undo').addEventListener('click', () => {
+        const pending = toast._wishItem;
+        if (!pending || !window.CoachWishlist) return;
+        const rail = this.querySelector('[data-rail="also"]') || this.querySelector('.coach-product__rail');
+        toast.hidden = true;
+        this.setRailLoader(rail, true);
+        window.setTimeout(() => {
+          const restored = window.CoachWishlist.toggle(pending);
+          this.paintWishHearts(pending.handle, restored);
+          this.setRailLoader(rail, false);
+          this.showWishToast(pending, restored);
+        }, 1200);
+      });
+    }
+    const name = this.escape(item.title || 'This product').toUpperCase();
+    const action = saved ? 'added to' : 'removed from';
+    toast.querySelector('.coach-wish-toast__text').innerHTML = `The ${name} has been ${action} your <a href="/pages/wishlist">Wishlist</a>.`;
+    toast.querySelector('.coach-wish-toast__undo').hidden = saved;
+    toast._wishItem = item;
+    toast.hidden = false;
   }
 
   rememberView() {
