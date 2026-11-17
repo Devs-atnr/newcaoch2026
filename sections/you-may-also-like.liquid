@@ -33,7 +33,7 @@
   data-autoplay="{% if section.settings.autoplay %}true{% else %}false{% endif %}"
   data-interval="{{ section.settings.autoplay_interval | default: 5 }}"
   data-swipe="{% if section.settings.enable_swipe %}true{% else %}false{% endif %}"
-  style="--ymal-bg: {{ section.settings.background | default: '#ffffff' }}; --ymal-heading: {{ section.settings.heading_size | default: 28 }}px; --ymal-heading-color: {{ section.settings.heading_color | default: '#000000' }}; --ymal-pad-top: {{ section.settings.padding_top | default: 48 }}px; --ymal-pad-bottom: {{ section.settings.padding_bottom | default: 24 }}px; --ymal-max: {{ section.settings.container_width | default: 1320 }}px; --ymal-card: {{ card_width }}px; --ymal-image: {{ image_height }}px; --ymal-gap: {{ section.settings.gap | default: 18 }}px; --ymal-visible-d: {{ section.settings.visible_desktop | default: 4 }}; --ymal-visible-t: {{ section.settings.visible_tablet | default: 3 }}; --ymal-visible-m: {{ section.settings.visible_mobile | default: 2 }}; --ymal-fit: {{ section.settings.image_fit | default: 'contain' }}; --ymal-image-bg: {{ section.settings.image_background | default: '#f1f1f1' }}; --ymal-title: {{ section.settings.title_size | default: 14 }}px; --ymal-title-color: {{ section.settings.title_color | default: '#222222' }}; --ymal-lines: {{ section.settings.title_lines | default: 1 }}; --ymal-border: {% if section.settings.show_border %}1px solid {{ section.settings.border_color | default: '#e6e6e6' }}{% else %}0{% endif %};"
+  style="--ymal-bg: {{ section.settings.background | default: '#ffffff' }}; --ymal-heading: {{ section.settings.heading_size | default: 28 }}px; --ymal-heading-color: {{ section.settings.heading_color | default: '#000000' }}; --ymal-pad-top: {{ section.settings.padding_top | default: 48 }}px; --ymal-pad-bottom: {{ section.settings.padding_bottom | default: 24 }}px; --ymal-max: {{ section.settings.container_width | default: 1320 }}px; --ymal-card: {{ card_width }}px; --ymal-image: {{ image_height }}px; --ymal-gap: {{ section.settings.gap | default: 18 }}px; --ymal-visible-d: {{ section.settings.visible_desktop | default: 4 }}; --ymal-visible-t: {{ section.settings.visible_tablet | default: 3 }}; --ymal-visible-m: {{ section.settings.visible_mobile | default: 2 }}; --ymal-fit: {{ section.settings.image_fit | default: 'contain' }}; --ymal-image-bg: {{ section.settings.image_background | default: '#f1f1f1' }}; --ymal-title: {{ section.settings.title_size | default: 14 }}px; --ymal-title-color: {{ section.settings.title_color | default: '#222222' }}; --ymal-lines: {{ section.settings.title_lines | default: 1 }}; --ymal-arrow: {{ section.settings.arrow_size | default: 18 }}px; --ymal-arrow-color: {{ section.settings.arrow_color | default: '#111111' }}; --ymal-arrow-offset: {{ section.settings.arrow_offset | default: 48 }}px; --ymal-border: {% if section.settings.show_border %}1px solid {{ section.settings.border_color | default: '#e6e6e6' }}{% else %}0{% endif %};"
 >
   <div class="ymal__inner">
     {%- if section.settings.heading != blank -%}
@@ -43,7 +43,7 @@
     <div class="ymal__stage">
       {%- if section.settings.enable_arrows -%}
         <button type="button" class="ymal__arrow ymal__arrow--prev" aria-label="Previous products" disabled>
-          <svg width="10" height="16" viewBox="0 0 10 16" aria-hidden="true"><path d="M8 2L2 8L8 14" fill="none" stroke="currentColor" stroke-width="1.4"/></svg>
+          <svg viewBox="0 0 12 20" aria-hidden="true"><path d="M10 2L2 10L10 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </button>
       {%- endif -%}
       <div class="ymal__viewport" tabindex="0">
@@ -98,7 +98,7 @@
       </div>
       {%- if section.settings.enable_arrows -%}
         <button type="button" class="ymal__arrow ymal__arrow--next" aria-label="Next products" disabled>
-          <svg width="10" height="16" viewBox="0 0 10 16" aria-hidden="true"><path d="M2 2L8 8L2 14" fill="none" stroke="currentColor" stroke-width="1.4"/></svg>
+          <svg viewBox="0 0 12 20" aria-hidden="true"><path d="M2 2L10 10L2 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </button>
       {%- endif -%}
     </div>
@@ -226,26 +226,32 @@
     cursor: pointer;
   }
   #shopify-section-{{ section.id }} .ymal__heart.is-on svg { fill: #111; }
+  #shopify-section-{{ section.id }} .ymal__stage { overflow: visible; }
   #shopify-section-{{ section.id }} .ymal__arrow {
     position: absolute;
-    z-index: 3;
-    top: calc(var(--ymal-image, 271px) / 2 - 12px);
+    z-index: 5;
+    top: calc(var(--ymal-image, 271px) / 2 - var(--ymal-arrow, 18px));
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 28px;
-    height: 24px;
+    width: calc(var(--ymal-arrow, 18px) + 16px);
+    height: calc(var(--ymal-arrow, 18px) + 16px);
     padding: 0;
     border: 0;
     background: transparent;
-    color: #222;
+    color: var(--ymal-arrow-color, #111);
     cursor: pointer;
   }
-  #shopify-section-{{ section.id }} .ymal__arrow--prev { left: -36px; }
-  #shopify-section-{{ section.id }} .ymal__arrow--next { right: -36px; }
+  #shopify-section-{{ section.id }} .ymal__arrow svg {
+    display: block;
+    width: var(--ymal-arrow, 18px);
+    height: auto;
+  }
+  #shopify-section-{{ section.id }} .ymal__arrow--prev { left: calc(var(--ymal-arrow-offset, 48px) * -1); }
+  #shopify-section-{{ section.id }} .ymal__arrow--next { right: calc(var(--ymal-arrow-offset, 48px) * -1); }
   #shopify-section-{{ section.id }} .ymal__arrow:disabled {
     visibility: visible;
-    opacity: 0.35;
+    opacity: 1;
     cursor: default;
   }
   #shopify-section-{{ section.id }} .ymal__empty {
@@ -270,8 +276,8 @@
       height: auto;
       aspect-ratio: {{ card_width }} / {{ image_height }};
     }
-    #shopify-section-{{ section.id }} .ymal__arrow--prev { left: 0; }
-    #shopify-section-{{ section.id }} .ymal__arrow--next { right: 0; }
+    #shopify-section-{{ section.id }} .ymal__arrow--prev { left: -12px; }
+    #shopify-section-{{ section.id }} .ymal__arrow--next { right: -12px; }
   }
 </style>
 
@@ -496,7 +502,10 @@
     { "type": "checkbox", "id": "show_vendor", "label": "Vendor", "default": false },
     { "type": "checkbox", "id": "show_badge", "label": "Sale badge", "default": false },
     { "type": "header", "content": "Carousel" },
-    { "type": "checkbox", "id": "enable_arrows", "label": "Arrow navigation", "default": true },
+    { "type": "checkbox", "id": "enable_arrows", "label": "Show arrows on both sides", "default": true },
+    { "type": "range", "id": "arrow_size", "min": 12, "max": 36, "step": 1, "unit": "px", "label": "Arrow size", "default": 18 },
+    { "type": "color", "id": "arrow_color", "label": "Arrow color", "default": "#111111" },
+    { "type": "range", "id": "arrow_offset", "min": 20, "max": 80, "step": 2, "unit": "px", "label": "Arrow distance from products", "default": 48 },
     { "type": "checkbox", "id": "enable_wheel", "label": "Horizontal mouse-wheel scrolling", "default": true },
     { "type": "checkbox", "id": "enable_drag", "label": "Mouse drag", "default": true },
     { "type": "checkbox", "id": "enable_swipe", "label": "Touch swipe", "default": true, "info": "Touch swipe uses the native scroller so vertical page scrolling still works." },
