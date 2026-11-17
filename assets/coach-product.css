@@ -3,14 +3,14 @@ coach-product-page.coach-product {
 }
 
 .coach-product-shell {
-  background: var(--pdp-bg, #fff);
+  background: var(--pdp-bg, #F0F0F0);
 }
 .coach-product {
   background: transparent;
   color: #111;
   font-family: var(--pdp-font, HelveticaLTPro-Roman);
   color: var(--pdp-text, #111);
-  background: var(--pdp-bg, #fff);
+  background: var(--pdp-bg, #F0F0F0);
   box-sizing: border-box;
   display: block;
   width: min(var(--pdp-page, 1320px), calc(100% - 48px));
