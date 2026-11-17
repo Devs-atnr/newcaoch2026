@@ -13,6 +13,7 @@ class CoachProductPage extends HTMLElement {
     this.syncRating();
     this.bindBagSize();
     this.bindWishlist();
+    this.bindRailAdd();
     this.rememberView();
     this.loadAlso();
     this.loadRecent();
@@ -643,7 +644,12 @@ class CoachProductPage extends HTMLElement {
         return;
       }
       const showHeart = rail?.dataset.alsoHeart !== 'false';
-      track.innerHTML = products.map((product) => this.card(product, { heart: showHeart })).join('');
+      const cardOptions = {
+        heart: showHeart,
+        add: rail?.dataset.showAdd !== 'false',
+        addLabel: rail?.dataset.addLabel || 'Add To Bag',
+      };
+      track.innerHTML = products.map((product) => this.card(product, cardOptions)).join('');
       this.markSavedHearts(track);
       const prev = this.querySelector('.js-also-prev');
       const next = this.querySelector('.js-also-next');
@@ -700,14 +706,20 @@ class CoachProductPage extends HTMLElement {
       }
     }))).filter(Boolean);
     if (!products.length) return;
+    const cardOptions = {
+      heart: rail.dataset.recentHeart !== 'false',
+      add: rail.dataset.showAdd !== 'false',
+      addLabel: rail.dataset.addLabel || 'Add To Bag',
+    };
     track.innerHTML = products.map((product) => this.card({
       title: product.title,
       url: product.url,
       handle: product.handle,
       images: product.images || [],
       image: product.featured_image,
+      variants: product.variants || [],
       price: product.price,
-    })).join('');
+    }, cardOptions)).join('');
     this.markSavedHearts(track);
     rail.hidden = false;
   }
@@ -728,6 +740,15 @@ class CoachProductPage extends HTMLElement {
     const url = product.url || '#';
     const handle = product.handle || '';
     const price = typeof product.price === 'number' ? '' : (product.price || '');
+    const variants = Array.isArray(product.variants) ? product.variants : [];
+    const available = variants.filter((item) => item && item.available !== false && item.id);
+    const variantId = available.length === 1 ? available[0].id : '';
+    const label = this.escape(options.addLabel || 'Add To Bag');
+    const add = options.add === false
+      ? ''
+      : (variantId
+        ? `<button type="button" class="coach-rail-card__add" data-variant-id="${this.escape(variantId)}">${label}</button>`
+        : `<a class="coach-rail-card__add" href="${this.escape(url)}">${label}</a>`);
     return `<article class="coach-rail-card">
       <a class="coach-rail-card__link" href="${this.escape(url)}">
         <span class="coach-rail-card__media">
@@ -735,10 +756,42 @@ class CoachProductPage extends HTMLElement {
         </span>
         <span class="coach-rail-card__title">${this.escape(title)}</span>
       </a>
+      ${add}
       ${options.heart === false ? '' : `<button type="button" class="coach-rail-card__heart" aria-label="Wishlist" data-wish-handle="${this.escape(handle)}" data-wish-title="${this.escape(title)}" data-wish-url="${this.escape(url)}" data-wish-image="${this.escape(src)}" data-wish-price="${this.escape(price)}">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" aria-hidden="true"><path d="M12 20.4s-7.6-4.5-9.3-9.4C1.6 7.7 3.6 4.4 7 4.4c2.1 0 3.6 1.2 5 3.1 1.4-1.9 2.9-3.1 5-3.1 3.4 0 5.4 3.3 4.3 6.6-1.7 4.9-9.3 9.4-9.3 9.4z"/></svg>
       </button>`}
     </article>`;
+  }
+
+  bindRailAdd() {
+    this.addEventListener('click', async (event) => {
+      const button = event.target.closest('.coach-rail-card__add');
+      if (!button || button.tagName !== 'BUTTON') return;
+      event.preventDefault();
+      const id = button.dataset.variantId;
+      if (!id || this.dataset.adding === 'true') return;
+      this.dataset.adding = 'true';
+      button.setAttribute('aria-busy', 'true');
+      this.showLoader(true);
+      try {
+        const response = await fetch((window.routes && window.routes.cart_add_url) || '/cart/add.js', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+          body: JSON.stringify({ items: [{ id: parseInt(id, 10), quantity: 1 }] }),
+        });
+        const data = await response.json().catch(() => ({}));
+        if (!response.ok) throw new Error(data.description || data.message || 'Could not add this product to your bag.');
+        await this.updateCount();
+        this.showLoader(false);
+        if (window.CoachMiniBag?.open) await window.CoachMiniBag.open();
+      } catch (error) {
+        this.showLoader(false);
+      } finally {
+        this.dataset.adding = 'false';
+        button.removeAttribute('aria-busy');
+        this.showLoader(false);
+      }
+    });
   }
 
   escape(value) {
