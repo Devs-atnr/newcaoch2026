@@ -340,9 +340,9 @@
           if block.settings.answer_font == 'garamond'
             assign faq_a_font = 'GaramondMTProRegular, Times New Roman, Times, serif'
           endif
-          assign faq_line = '0'
-          if block.settings.show_lines
-            assign faq_line = '1px solid ' | append: block.settings.line_color
+          assign faq_line = '1px solid ' | append: block.settings.line_color | default: '#e5e5e5'
+          if block.settings.show_lines == false
+            assign faq_line = '0'
           endif
         -%}
         {%- capture faq_items -%}

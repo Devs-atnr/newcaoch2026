@@ -706,6 +706,7 @@ coach-product-page.coach-product {
   margin-top: 48px;
   padding-top: 0;
   border-top: 0;
+  border-bottom: 0;
 }
 .coach-product__reviews {
   margin-top: 64px;
@@ -952,7 +953,10 @@ coach-product-page.coach-product {
   color: var(--faq-heading-color, #111);
 }
 .coach-product__faq .coach-product__faq-item {
-  border-top: var(--faq-line, 0);
+  border-top: var(--faq-line, 1px solid #e5e5e5);
+  border-bottom: 0;
+}
+.coach-product__faq .coach-product__faq-item:last-child {
   border-bottom: 0;
 }
 .coach-product__faq .coach-product__faq-item summary {
