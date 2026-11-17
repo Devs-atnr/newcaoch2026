@@ -1079,9 +1079,9 @@ coach-product-page.coach-product {
 @keyframes coach-rail-spin { to { transform: rotate(360deg); } }
 .coach-wish-toast {
   position: fixed;
-  top: 92px;
+  top: 0;
   left: 50%;
-  z-index: 80;
+  z-index: 600;
   display: flex;
   align-items: center;
   gap: 10px;
@@ -1095,8 +1095,10 @@ coach-product-page.coach-product {
   font-family: HelveticaLTPro-Roman, Helvetica, Arial, sans-serif;
   font-size: 14px;
   line-height: 1.35;
-  transform: translateX(-50%);
+  transform: translate(-50%, -120%);
+  transition: transform 0.45s ease;
 }
+.coach-wish-toast.is-open { transform: translate(-50%, 12px); }
 .coach-wish-toast[hidden] { display: none; }
 .coach-wish-toast__icon {
   flex: 0 0 18px;

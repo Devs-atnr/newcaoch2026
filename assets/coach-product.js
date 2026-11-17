@@ -645,7 +645,7 @@ class CoachProductPage extends HTMLElement {
       toast.innerHTML = '<span class="coach-wish-toast__icon" aria-hidden="true"></span><p class="coach-wish-toast__text"></p><button type="button" class="coach-wish-toast__undo">UNDO</button><button type="button" class="coach-wish-toast__close" aria-label="Close">×</button>';
       document.body.appendChild(toast);
       toast.querySelector('.coach-wish-toast__close').addEventListener('click', () => {
-        toast.hidden = true;
+        this.hideWishToast(toast);
       });
       toast.querySelector('.coach-wish-toast__undo').addEventListener('click', () => {
         const pending = toast._wishItem;
@@ -667,6 +667,21 @@ class CoachProductPage extends HTMLElement {
     toast.querySelector('.coach-wish-toast__undo').hidden = saved;
     toast._wishItem = item;
     toast.hidden = false;
+    toast.classList.remove('is-open');
+    window.requestAnimationFrame(() => {
+      window.requestAnimationFrame(() => toast.classList.add('is-open'));
+    });
+    window.clearTimeout(toast._hideTimer);
+    toast._hideTimer = window.setTimeout(() => this.hideWishToast(toast), 2000);
+  }
+
+  hideWishToast(toast) {
+    if (!toast) return;
+    window.clearTimeout(toast._hideTimer);
+    toast.classList.remove('is-open');
+    window.setTimeout(() => {
+      if (!toast.classList.contains('is-open')) toast.hidden = true;
+    }, 450);
   }
 
   rememberView() {
