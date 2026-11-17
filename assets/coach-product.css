@@ -79,9 +79,7 @@ coach-product-page.coach-product {
   display: block;
 }
 .coach-product__thumb-nav .coach-product__arrow-side { display: none; }
-@media screen and (min-width: 1101px) {
-  .coach-product__thumb-nav { display: none; }
-}
+.coach-product__thumb-nav .coach-product__arrow-up { display: block; }
 
 .coach-product__thumb-list {
   display: flex;
