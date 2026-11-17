@@ -222,7 +222,7 @@
             "layout_desktop": "equal-row",
             "width_desktop": 208,
             "height_desktop": 272,
-            "image_scale_desktop": 52,
+            "image_scale_desktop": 100,
             "gap_desktop": 18,
             "section_width_desktop": 75,
             "section_align_desktop": "center",
@@ -312,7 +312,7 @@
         "title_spacing": "0.4px",
         "price_size": 28,
         "text_color": "#111111",
-        "background": "#F0F0F0",
+        "background": "#f0f0f0",
         "page_width": 1320,
         "info_gap": 27
       }
