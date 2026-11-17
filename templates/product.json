@@ -233,7 +233,7 @@
             "width_mobile": 160,
             "height_mobile": 220,
             "image_scale_mobile": 86,
-            "gap_mobile": 16,
+            "gap_mobile": 14,
             "section_width_mobile": 100,
             "section_align_mobile": "center",
             "space_above_mobile": 24,
