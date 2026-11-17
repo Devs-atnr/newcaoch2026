@@ -210,7 +210,7 @@
           "type": "also",
           "settings": {
             "heading": "You May Also Like",
-            "heading_size": 34,
+            "heading_size": 26,
             "heading_color": "#111111",
             "heading_align": "center",
             "limit": 8,
