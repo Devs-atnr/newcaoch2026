@@ -206,6 +206,40 @@
             "space_below": 24
           }
         },
+        "also": {
+          "type": "also",
+          "settings": {
+            "heading": "You May Also Like",
+            "heading_size": 34,
+            "heading_color": "#111111",
+            "heading_align": "center",
+            "limit": 8,
+            "image_background": "#f2f2f2",
+            "title_size": 13,
+            "title_color": "#222222",
+            "show_wishlist": true,
+            "quantity_desktop": 4,
+            "layout_desktop": "equal-row",
+            "width_desktop": 120,
+            "height_desktop": 292,
+            "image_scale_desktop": 52,
+            "gap_desktop": 18,
+            "section_width_desktop": 80,
+            "section_align_desktop": "center",
+            "space_above_desktop": 36,
+            "space_below_desktop": 0,
+            "quantity_mobile": 2,
+            "layout_mobile": "equal-row",
+            "width_mobile": 160,
+            "height_mobile": 180,
+            "image_scale_mobile": 78,
+            "gap_mobile": 12,
+            "section_width_mobile": 100,
+            "section_align_mobile": "center",
+            "space_above_mobile": 24,
+            "space_below_mobile": 0
+          }
+        },
         "recent": {
           "type": "recent",
           "settings": {
@@ -258,6 +292,7 @@
         "notes",
         "share",
         "separator",
+        "also",
         "recent",
         "faq-1",
         "faq-2",
@@ -281,28 +316,9 @@
         "page_width": 1320,
         "info_gap": 27
       }
-    },
-    "you-may-also-like": {
-      "type": "you-may-also-like",
-      "settings": {
-        "heading": "You May Also Like",
-        "heading_size": 16,
-        "heading_color": "#111111",
-        "padding_top": 48,
-        "padding_bottom": 8,
-        "visible_desktop": 4,
-        "visible_tablet": 3,
-        "visible_mobile": "2",
-        "card_width": 209,
-        "image_height": 271,
-        "gap": 18,
-        "image_background": "#f1f1f1",
-        "title_size": 14
-      }
     }
   },
   "order": [
-    "main",
-    "you-may-also-like"
+    "main"
   ]
 }
