@@ -1,0 +1,506 @@
+{%- liquid
+  assign current_id = product.id
+  assign max_products = section.settings.max_products | default: 12
+  assign card_width = section.settings.card_width | default: 209
+  assign image_height = section.settings.image_height | default: 271
+  if section.settings.use_aspect_ratio
+    assign image_height = card_width | times: 100 | divided_by: section.settings.aspect_ratio
+  endif
+  assign feed = blank
+  if section.settings.source == 'collection' and section.settings.collection != blank
+    assign feed = section.settings.collection.products
+  elsif recommendations.performed
+    assign feed = recommendations.products
+  endif
+  assign rec_limit = max_products
+  if rec_limit > 10
+    assign rec_limit = 10
+  endif
+-%}
+
+<section
+  id="ymal-{{ section.id }}"
+  class="ymal"
+  data-section-id="{{ section.id }}"
+  data-source="{{ section.settings.source }}"
+  data-product-id="{{ current_id }}"
+  data-recommendations-url="{{ routes.product_recommendations_url }}?section_id={{ section.id }}&product_id={{ current_id }}&limit={{ rec_limit }}&intent=related"
+  data-wheel="{% if section.settings.enable_wheel %}true{% else %}false{% endif %}"
+  data-drag="{% if section.settings.enable_drag %}true{% else %}false{% endif %}"
+  data-arrows="{% if section.settings.enable_arrows %}true{% else %}false{% endif %}"
+  data-step="{{ section.settings.slides_per_step | default: 1 }}"
+  data-speed="{{ section.settings.scroll_speed | default: 450 }}"
+  data-autoplay="{% if section.settings.autoplay %}true{% else %}false{% endif %}"
+  data-interval="{{ section.settings.autoplay_interval | default: 5 }}"
+  data-swipe="{% if section.settings.enable_swipe %}true{% else %}false{% endif %}"
+  style="--ymal-bg: {{ section.settings.background | default: '#ffffff' }}; --ymal-heading: {{ section.settings.heading_size | default: 28 }}px; --ymal-heading-color: {{ section.settings.heading_color | default: '#000000' }}; --ymal-pad-top: {{ section.settings.padding_top | default: 48 }}px; --ymal-pad-bottom: {{ section.settings.padding_bottom | default: 24 }}px; --ymal-max: {{ section.settings.container_width | default: 1320 }}px; --ymal-card: {{ card_width }}px; --ymal-image: {{ image_height }}px; --ymal-gap: {{ section.settings.gap | default: 18 }}px; --ymal-visible-d: {{ section.settings.visible_desktop | default: 4 }}; --ymal-visible-t: {{ section.settings.visible_tablet | default: 3 }}; --ymal-visible-m: {{ section.settings.visible_mobile | default: 2 }}; --ymal-fit: {{ section.settings.image_fit | default: 'contain' }}; --ymal-image-bg: {{ section.settings.image_background | default: '#f1f1f1' }}; --ymal-title: {{ section.settings.title_size | default: 14 }}px; --ymal-title-color: {{ section.settings.title_color | default: '#222222' }}; --ymal-lines: {{ section.settings.title_lines | default: 1 }}; --ymal-border: {% if section.settings.show_border %}1px solid {{ section.settings.border_color | default: '#e6e6e6' }}{% else %}0{% endif %};"
+>
+  <div class="ymal__inner">
+    {%- if section.settings.heading != blank -%}
+      <h2 class="ymal__heading">{{ section.settings.heading | escape }}</h2>
+    {%- endif -%}
+
+    <div class="ymal__stage">
+      {%- if section.settings.enable_arrows -%}
+        <button type="button" class="ymal__arrow ymal__arrow--prev" aria-label="Previous products" disabled>
+          <svg width="10" height="16" viewBox="0 0 10 16" aria-hidden="true"><path d="M8 2L2 8L8 14" fill="none" stroke="currentColor" stroke-width="1.4"/></svg>
+        </button>
+      {%- endif -%}
+      <div class="ymal__viewport" tabindex="0">
+        <div class="ymal__track" data-track>
+          {%- assign shown = 0 -%}
+          {%- for item in feed -%}
+            {%- if shown >= max_products -%}{% break %}{%- endif -%}
+            {%- if current_id != blank and item.id == current_id -%}{% continue %}{%- endif -%}
+            {%- assign shown = shown | plus: 1 -%}
+            <article class="ymal__card">
+              <a class="ymal__link" href="{{ item.url }}">
+                <span class="ymal__media">
+                  {%- if item.featured_image -%}
+                    {{ item.featured_image | image_url: width: 640 | image_tag: alt: item.title, loading: 'lazy', widths: '209,320,480,640' }}
+                  {%- endif -%}
+                </span>
+                <span class="ymal__title">{{ item.title | escape }}</span>
+                {%- if section.settings.show_vendor and item.vendor != blank -%}
+                  <span class="ymal__meta">{{ item.vendor | escape }}</span>
+                {%- endif -%}
+                {%- if section.settings.show_price -%}
+                  <span class="ymal__price">
+                    {{ item.price | money }}
+                    {%- if item.compare_at_price > item.price -%}
+                      <s>{{ item.compare_at_price | money }}</s>
+                    {%- endif -%}
+                  </span>
+                {%- endif -%}
+              </a>
+              {%- if section.settings.show_badge and item.compare_at_price > item.price -%}
+                <span class="ymal__badge">Sale</span>
+              {%- endif -%}
+              {%- if section.settings.show_wishlist -%}
+                <button
+                  type="button"
+                  class="ymal__heart"
+                  aria-label="Wishlist"
+                  aria-pressed="false"
+                  data-wish-handle="{{ item.handle | escape }}"
+                  data-wish-id="{{ item.id }}"
+                  data-wish-title="{{ item.title | escape }}"
+                  data-wish-url="{{ item.url }}"
+                  data-wish-image="{% if item.featured_image %}{{ item.featured_image | image_url: width: 600 }}{% endif %}"
+                  data-wish-price="{{ item.price | money | escape }}"
+                >
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M12 20.4s-7.6-4.5-9.3-9.4C1.6 7.7 3.6 4.4 7 4.4c2.1 0 3.6 1.2 5 3.1 1.4-1.9 2.9-3.1 5-3.1 3.4 0 5.4 3.3 4.3 6.6-1.7 4.9-9.3 9.4-9.3 9.4z"/></svg>
+                </button>
+              {%- endif -%}
+            </article>
+          {%- endfor -%}
+        </div>
+      </div>
+      {%- if section.settings.enable_arrows -%}
+        <button type="button" class="ymal__arrow ymal__arrow--next" aria-label="Next products" disabled>
+          <svg width="10" height="16" viewBox="0 0 10 16" aria-hidden="true"><path d="M2 2L8 8L2 14" fill="none" stroke="currentColor" stroke-width="1.4"/></svg>
+        </button>
+      {%- endif -%}
+    </div>
+    {%- if shown == 0 and request.design_mode -%}
+      <p class="ymal__empty">This carousel fills from product recommendations, or from the collection selected in the theme editor.</p>
+    {%- endif -%}
+  </div>
+</section>
+
+<style>
+  #shopify-section-{{ section.id }} .ymal {
+    background: var(--ymal-bg, #fff);
+    border-top: var(--ymal-border, 1px solid #e6e6e6);
+    color: #111;
+    font-family: HelveticaLTPro-Roman, Helvetica, Arial, sans-serif;
+  }
+  #shopify-section-{{ section.id }} .ymal__inner {
+    width: min(var(--ymal-max, 1320px), calc(100% - 48px));
+    margin: 0 auto;
+    padding: var(--ymal-pad-top, 48px) 0 var(--ymal-pad-bottom, 24px);
+  }
+  #shopify-section-{{ section.id }} .ymal__heading {
+    margin: 0 0 34px;
+    text-align: center;
+    font-size: var(--ymal-heading, 28px);
+    font-weight: 700;
+    line-height: 1.2;
+    color: var(--ymal-heading-color, #000);
+  }
+  #shopify-section-{{ section.id }} .ymal__stage {
+    position: relative;
+    width: min(100%, calc(var(--ymal-card) * var(--ymal-visible-d) + var(--ymal-gap) * (var(--ymal-visible-d) - 1)));
+    margin: 0 auto;
+  }
+  #shopify-section-{{ section.id }} .ymal__viewport {
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    touch-action: pan-x pan-y;
+    cursor: grab;
+  }
+  #shopify-section-{{ section.id }} .ymal__viewport::-webkit-scrollbar { display: none; }
+  #shopify-section-{{ section.id }} .ymal__viewport.is-dragging { cursor: grabbing; scroll-snap-type: none; }
+  #shopify-section-{{ section.id }} .ymal__track {
+    display: flex;
+    gap: var(--ymal-gap, 18px);
+    width: max-content;
+  }
+  #shopify-section-{{ section.id }} .ymal__card {
+    position: relative;
+    flex: 0 0 var(--ymal-card, 209px);
+    width: var(--ymal-card, 209px);
+    scroll-snap-align: start;
+  }
+  #shopify-section-{{ section.id }} .ymal__link {
+    display: block;
+    color: inherit;
+    text-decoration: none;
+  }
+  #shopify-section-{{ section.id }} .ymal__media {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: var(--ymal-image, 271px);
+    background: var(--ymal-image-bg, #f1f1f1);
+    overflow: hidden;
+  }
+  #shopify-section-{{ section.id }} .ymal__media img {
+    display: block;
+    width: auto;
+    height: auto;
+    max-width: 86%;
+    max-height: 78%;
+    object-fit: var(--ymal-fit, contain);
+    object-position: center;
+  }
+  #shopify-section-{{ section.id }} .ymal__title {
+    display: -webkit-box;
+    margin: 16px 0 0;
+    overflow: hidden;
+    color: var(--ymal-title-color, #222);
+    font-size: var(--ymal-title, 14px);
+    font-weight: 400;
+    line-height: 1.35;
+    text-align: center;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: var(--ymal-lines, 1);
+  }
+  #shopify-section-{{ section.id }} .ymal__meta,
+  #shopify-section-{{ section.id }} .ymal__price {
+    display: block;
+    margin-top: 4px;
+    text-align: center;
+    font-size: 13px;
+    color: #444;
+  }
+  #shopify-section-{{ section.id }} .ymal__price s { margin-left: 6px; color: #888; }
+  #shopify-section-{{ section.id }} .ymal__badge {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    padding: 2px 6px;
+    background: #111;
+    color: #fff;
+    font-size: 11px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  #shopify-section-{{ section.id }} .ymal__heart {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    height: 22px;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: #111;
+    cursor: pointer;
+  }
+  #shopify-section-{{ section.id }} .ymal__heart.is-on svg { fill: #111; }
+  #shopify-section-{{ section.id }} .ymal__arrow {
+    position: absolute;
+    z-index: 3;
+    top: calc(var(--ymal-image, 271px) / 2 - 12px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 24px;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: #222;
+    cursor: pointer;
+  }
+  #shopify-section-{{ section.id }} .ymal__arrow--prev { left: -36px; }
+  #shopify-section-{{ section.id }} .ymal__arrow--next { right: -36px; }
+  #shopify-section-{{ section.id }} .ymal__arrow:disabled { visibility: hidden; }
+  #shopify-section-{{ section.id }} .ymal__empty {
+    margin: 12px 0 0;
+    text-align: center;
+    color: #777;
+    font-size: 14px;
+  }
+  @media screen and (max-width: 1199px) {
+    #shopify-section-{{ section.id }} .ymal__stage {
+      width: min(100%, calc(var(--ymal-card) * var(--ymal-visible-t) + var(--ymal-gap) * (var(--ymal-visible-t) - 1)));
+    }
+  }
+  @media screen and (max-width: 749px) {
+    #shopify-section-{{ section.id }} .ymal__inner { width: calc(100% - 24px); }
+    #shopify-section-{{ section.id }} .ymal__stage { width: 100%; }
+    #shopify-section-{{ section.id }} .ymal__card {
+      flex-basis: calc((100% - (var(--ymal-visible-m) - 1) * var(--ymal-gap)) / var(--ymal-visible-m));
+      width: calc((100% - (var(--ymal-visible-m) - 1) * var(--ymal-gap)) / var(--ymal-visible-m));
+    }
+    #shopify-section-{{ section.id }} .ymal__media {
+      height: auto;
+      aspect-ratio: {{ card_width }} / {{ image_height }};
+    }
+    #shopify-section-{{ section.id }} .ymal__arrow--prev { left: 0; }
+    #shopify-section-{{ section.id }} .ymal__arrow--next { right: 0; }
+  }
+</style>
+
+<script>
+  (function () {
+    const root = document.getElementById('ymal-{{ section.id }}');
+    if (!root || root.dataset.booted === 'true') return;
+    root.dataset.booted = 'true';
+
+    const viewport = root.querySelector('.ymal__viewport');
+    const track = root.querySelector('[data-track]');
+    const prev = root.querySelector('.ymal__arrow--prev');
+    const next = root.querySelector('.ymal__arrow--next');
+    if (!viewport || !track) return;
+
+    const stepCount = Math.max(1, Number(root.dataset.step) || 1);
+    const speed = Math.max(150, Number(root.dataset.speed) || 450);
+
+    function cardStep() {
+      const card = track.querySelector('.ymal__card');
+      if (!card) return viewport.clientWidth;
+      const styles = window.getComputedStyle(track);
+      const gap = parseFloat(styles.columnGap || styles.gap) || 0;
+      return (card.getBoundingClientRect().width + gap) * stepCount;
+    }
+
+    function atStart() { return viewport.scrollLeft <= 2; }
+    function atEnd() { return viewport.scrollLeft + viewport.clientWidth >= viewport.scrollWidth - 2; }
+
+    function updateArrows() {
+      const count = track.children.length;
+      if (prev) prev.disabled = count === 0 || atStart();
+      if (next) next.disabled = count === 0 || atEnd();
+      if (count === 0 && root.dataset.loaded === 'true' && !root.querySelector('.ymal__empty')) root.hidden = true;
+    }
+
+    function animateTo(left) {
+      const start = viewport.scrollLeft;
+      const change = left - start;
+      const begin = performance.now();
+      function frame(now) {
+        const progress = Math.min(1, (now - begin) / speed);
+        const eased = 1 - Math.pow(1 - progress, 3);
+        viewport.scrollLeft = start + change * eased;
+        if (progress < 1) requestAnimationFrame(frame);
+        else updateArrows();
+      }
+      requestAnimationFrame(frame);
+    }
+
+    function scrollByStep(direction) {
+      const max = viewport.scrollWidth - viewport.clientWidth;
+      const target = Math.max(0, Math.min(max, viewport.scrollLeft + cardStep() * direction));
+      animateTo(target);
+    }
+
+    prev && prev.addEventListener('click', function () { scrollByStep(-1); });
+    next && next.addEventListener('click', function () { scrollByStep(1); });
+    viewport.addEventListener('scroll', updateArrows, { passive: true });
+
+    if (root.dataset.wheel === 'true') {
+      viewport.addEventListener('wheel', function (event) {
+        if (Math.abs(event.deltaX) <= Math.abs(event.deltaY)) return;
+        if (viewport.scrollWidth <= viewport.clientWidth + 2) return;
+        event.preventDefault();
+        viewport.scrollLeft += event.deltaX;
+      }, { passive: false });
+    }
+
+    if (root.dataset.drag === 'true') {
+      let dragging = false;
+      let moved = false;
+      let startX = 0;
+      let startScroll = 0;
+      viewport.addEventListener('mousedown', function (event) {
+        if (event.button !== 0) return;
+        dragging = true;
+        moved = false;
+        startX = event.pageX;
+        startScroll = viewport.scrollLeft;
+        viewport.classList.add('is-dragging');
+      });
+      window.addEventListener('mousemove', function (event) {
+        if (!dragging) return;
+        const delta = event.pageX - startX;
+        if (Math.abs(delta) > 4) moved = true;
+        viewport.scrollLeft = startScroll - delta;
+      });
+      window.addEventListener('mouseup', function () {
+        if (!dragging) return;
+        dragging = false;
+        viewport.classList.remove('is-dragging');
+        updateArrows();
+      });
+      viewport.addEventListener('click', function (event) {
+        if (!moved) return;
+        event.preventDefault();
+        event.stopPropagation();
+        moved = false;
+      }, true);
+    }
+
+    viewport.addEventListener('keydown', function (event) {
+      if (event.key === 'ArrowRight') { event.preventDefault(); scrollByStep(1); }
+      if (event.key === 'ArrowLeft') { event.preventDefault(); scrollByStep(-1); }
+    });
+
+    function syncHearts() {
+      if (!window.CoachWishlist) return;
+      root.querySelectorAll('.ymal__heart').forEach(function (button) {
+        const saved = window.CoachWishlist.has(button.dataset.wishHandle);
+        button.classList.toggle('is-on', saved);
+        button.setAttribute('aria-pressed', saved ? 'true' : 'false');
+      });
+    }
+
+    root.addEventListener('click', function (event) {
+      const button = event.target.closest('.ymal__heart');
+      if (!button || !window.CoachWishlist) return;
+      event.preventDefault();
+      const saved = window.CoachWishlist.toggle({
+        handle: button.dataset.wishHandle,
+        id: button.dataset.wishId,
+        title: button.dataset.wishTitle,
+        url: button.dataset.wishUrl,
+        image: button.dataset.wishImage,
+        price: button.dataset.wishPrice
+      });
+      button.classList.toggle('is-on', saved);
+      button.setAttribute('aria-pressed', saved ? 'true' : 'false');
+    });
+    document.addEventListener('coach:wishlist', syncHearts);
+    syncHearts();
+
+    let autoplayTimer;
+    function startAutoplay() {
+      if (root.dataset.autoplay !== 'true') return;
+      const interval = Math.max(2, Number(root.dataset.interval) || 5) * 1000;
+      autoplayTimer = window.setInterval(function () {
+        if (atEnd()) animateTo(0);
+        else scrollByStep(1);
+      }, interval);
+    }
+    root.addEventListener('mouseenter', function () { window.clearInterval(autoplayTimer); });
+    root.addEventListener('mouseleave', startAutoplay);
+
+    function boot() {
+      if (root.dataset.swipe === 'false') viewport.style.touchAction = 'pan-y';
+      updateArrows();
+      startAutoplay();
+      syncHearts();
+    }
+
+    if (root.dataset.source === 'recommendations' && root.dataset.productId && !track.children.length && root.dataset.recommendationsUrl) {
+      fetch(root.dataset.recommendationsUrl)
+        .then(function (response) { return response.text(); })
+        .then(function (html) {
+          const parsed = new DOMParser().parseFromString(html, 'text/html');
+          const fresh = parsed.querySelector('[data-track]');
+          if (fresh) track.innerHTML = fresh.innerHTML;
+          root.dataset.loaded = 'true';
+          boot();
+        })
+        .catch(function () {
+          root.dataset.loaded = 'true';
+          boot();
+        });
+    } else {
+      boot();
+    }
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "You may also like",
+  "tag": "div",
+  "class": "ymal-section",
+  "enabled_on": { "templates": ["product"] },
+  "settings": [
+    { "type": "header", "content": "Section" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "You May Also Like" },
+    { "type": "range", "id": "heading_size", "min": 16, "max": 48, "step": 1, "unit": "px", "label": "Heading font size", "default": 28 },
+    { "type": "color", "id": "heading_color", "label": "Heading color", "default": "#000000" },
+    { "type": "color", "id": "background", "label": "Section background", "default": "#ffffff" },
+    { "type": "range", "id": "padding_top", "min": 0, "max": 120, "step": 2, "unit": "px", "label": "Section top padding", "default": 48 },
+    { "type": "range", "id": "padding_bottom", "min": 0, "max": 120, "step": 2, "unit": "px", "label": "Section bottom padding", "default": 24 },
+    { "type": "range", "id": "container_width", "min": 600, "max": 1600, "step": 10, "unit": "px", "label": "Container maximum width", "default": 1320 },
+    { "type": "checkbox", "id": "show_border", "label": "Top border", "default": true },
+    { "type": "color", "id": "border_color", "label": "Top border color", "default": "#e6e6e6" },
+    { "type": "header", "content": "Products" },
+    { "type": "select", "id": "source", "label": "Product source", "default": "recommendations", "options": [
+      { "value": "recommendations", "label": "Product recommendations" },
+      { "value": "collection", "label": "Collection" }
+    ] },
+    { "type": "collection", "id": "collection", "label": "Collection", "info": "Used when the source is Collection. Also used as the product list in the theme editor." },
+    { "type": "range", "id": "max_products", "min": 4, "max": 20, "step": 1, "label": "Maximum products", "default": 12 },
+    { "type": "range", "id": "visible_desktop", "min": 1, "max": 6, "step": 1, "label": "Desktop visible products", "default": 4 },
+    { "type": "range", "id": "visible_tablet", "min": 1, "max": 4, "step": 1, "label": "Tablet visible products", "default": 3 },
+    { "type": "select", "id": "visible_mobile", "label": "Mobile visible products", "default": "2", "options": [
+      { "value": "1", "label": "1" },
+      { "value": "1.5", "label": "1.5" },
+      { "value": "2", "label": "2" },
+      { "value": "3", "label": "3" }
+    ] },
+    { "type": "range", "id": "card_width", "min": 140, "max": 360, "step": 1, "unit": "px", "label": "Product card width", "default": 209 },
+    { "type": "range", "id": "image_height", "min": 160, "max": 480, "step": 1, "unit": "px", "label": "Product image height", "default": 271 },
+    { "type": "checkbox", "id": "use_aspect_ratio", "label": "Size images from aspect ratio", "default": false },
+    { "type": "range", "id": "aspect_ratio", "min": 50, "max": 120, "step": 1, "label": "Aspect ratio × 100", "info": "77 means 0.77 width/height. Used only when the aspect-ratio option is on.", "default": 77 },
+    { "type": "range", "id": "gap", "min": 0, "max": 40, "step": 1, "unit": "px", "label": "Product spacing", "default": 18 },
+    { "type": "select", "id": "image_fit", "label": "Image fit", "default": "contain", "options": [
+      { "value": "contain", "label": "Contain" },
+      { "value": "cover", "label": "Cover" }
+    ] },
+    { "type": "color", "id": "image_background", "label": "Image background", "default": "#f1f1f1" },
+    { "type": "range", "id": "title_size", "min": 10, "max": 24, "step": 1, "unit": "px", "label": "Title font size", "default": 14 },
+    { "type": "color", "id": "title_color", "label": "Title color", "default": "#222222" },
+    { "type": "range", "id": "title_lines", "min": 1, "max": 3, "step": 1, "label": "Title line limit", "default": 1 },
+    { "type": "header", "content": "Display" },
+    { "type": "checkbox", "id": "show_wishlist", "label": "Wishlist icon", "default": true },
+    { "type": "checkbox", "id": "show_price", "label": "Price", "default": false },
+    { "type": "checkbox", "id": "show_vendor", "label": "Vendor", "default": false },
+    { "type": "checkbox", "id": "show_badge", "label": "Sale badge", "default": false },
+    { "type": "header", "content": "Carousel" },
+    { "type": "checkbox", "id": "enable_arrows", "label": "Arrow navigation", "default": true },
+    { "type": "checkbox", "id": "enable_wheel", "label": "Horizontal mouse-wheel scrolling", "default": true },
+    { "type": "checkbox", "id": "enable_drag", "label": "Mouse drag", "default": true },
+    { "type": "checkbox", "id": "enable_swipe", "label": "Touch swipe", "default": true, "info": "Touch swipe uses the native scroller so vertical page scrolling still works." },
+    { "type": "range", "id": "scroll_speed", "min": 200, "max": 1000, "step": 50, "unit": "ms", "label": "Scroll speed", "default": 450 },
+    { "type": "range", "id": "slides_per_step", "min": 1, "max": 4, "step": 1, "label": "Slides per arrow click", "default": 1 },
+    { "type": "checkbox", "id": "autoplay", "label": "Autoplay", "default": false },
+    { "type": "range", "id": "autoplay_interval", "min": 2, "max": 12, "step": 1, "unit": "s", "label": "Autoplay interval", "default": 5 }
+  ],
+  "presets": [{ "name": "You may also like" }]
+}
+{% endschema %}

@@ -206,40 +206,6 @@
             "space_below": 24
           }
         },
-        "also": {
-          "type": "also",
-          "settings": {
-            "heading": "You May Also Like",
-            "heading_size": 18,
-            "heading_color": "#111111",
-            "heading_align": "center",
-            "limit": 8,
-            "image_background": "#f2f2f2",
-            "title_size": 12,
-            "title_color": "#757575",
-            "show_wishlist": true,
-            "quantity_desktop": 4,
-            "layout_desktop": "fixed-row",
-            "width_desktop": 210,
-            "height_desktop": 270,
-            "image_scale_desktop": 72,
-            "gap_desktop": 16,
-            "section_width_desktop": 100,
-            "section_align_desktop": "center",
-            "space_above_desktop": 48,
-            "space_below_desktop": 0,
-            "quantity_mobile": 2,
-            "layout_mobile": "equal-row",
-            "width_mobile": 160,
-            "height_mobile": 180,
-            "image_scale_mobile": 78,
-            "gap_mobile": 12,
-            "section_width_mobile": 100,
-            "section_align_mobile": "center",
-            "space_above_mobile": 24,
-            "space_below_mobile": 0
-          }
-        },
         "recent": {
           "type": "recent",
           "settings": {
@@ -292,7 +258,6 @@
         "notes",
         "share",
         "separator",
-        "also",
         "recent",
         "faq-1",
         "faq-2",
@@ -316,9 +281,14 @@
         "page_width": 1320,
         "info_gap": 27
       }
+    },
+    "you-may-also-like": {
+      "type": "you-may-also-like",
+      "settings": {}
     }
   },
   "order": [
-    "main"
+    "main",
+    "you-may-also-like"
   ]
 }
