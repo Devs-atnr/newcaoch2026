@@ -853,7 +853,7 @@ coach-product-page.coach-product {
   text-align: var(--recent-heading-align-d, center);
 }
 .coach-product__rail--recent .coach-product__rail-row {
-  width: 100%;
+  width: max-content;
   max-width: 100%;
   margin-left: auto;
   margin-right: auto;
@@ -862,7 +862,7 @@ coach-product-page.coach-product {
   display: flex;
   justify-content: flex-start;
   gap: var(--recent-gap-d, 18px);
-  width: 100%;
+  width: calc(var(--recent-count-d, 4) * 216px + (var(--recent-count-d, 4) - 1) * var(--recent-gap-d, 18px));
   max-width: 100%;
   margin: 0 auto;
   overflow-x: auto;
@@ -871,24 +871,29 @@ coach-product-page.coach-product {
 }
 .coach-product__rail--recent .coach-product__rail-track::-webkit-scrollbar { display: none; }
 .coach-product__rail--recent .coach-rail-card {
-  flex: 0 0 calc((100% - (var(--recent-count-d, 4) - 1) * var(--recent-gap-d, 18px)) / var(--recent-count-d, 4));
-  width: calc((100% - (var(--recent-count-d, 4) - 1) * var(--recent-gap-d, 18px)) / var(--recent-count-d, 4));
+  flex: 0 0 216px;
+  width: 216px;
   scroll-snap-align: start;
 }
 .coach-product__rail--recent .coach-rail-card__media {
-  width: 100%;
-  height: auto;
-  aspect-ratio: 216 / 270;
+  width: 216px;
+  height: 270px;
+  max-width: 100%;
+  aspect-ratio: auto;
   overflow: hidden;
   background: var(--recent-bg, #F0F0F0);
 }
 .coach-product__rail--recent .coach-rail-card__media img {
   display: block;
-  width: 100%;
-  height: 100%;
+  width: 216px;
+  height: 270px;
   max-width: 100%;
-  object-fit: contain;
+  object-fit: cover;
   vertical-align: bottom;
+}
+.coach-product__rail--recent .coach-rail-card__heart {
+  top: 40px;
+  right: 12px;
 }
 .coach-product__rail--recent .coach-rail-card__title {
   max-width: none;
@@ -1646,7 +1651,14 @@ body.coach-sheet-open { overflow: hidden; }
     width: calc((100% - (var(--recent-count-m, 2) - 1) * var(--recent-gap-m, 16px)) / var(--recent-count-m, 2));
   }
   .coach-product__rail--recent .coach-rail-card__media,
-  .coach-product__rail--recent .coach-rail-card__media img,
+  .coach-product__rail--recent .coach-rail-card__media img {
+    width: 100%;
+    height: auto;
+    max-width: 100%;
+    aspect-ratio: 216 / 270;
+    object-fit: cover;
+    vertical-align: bottom;
+  }
   .coach-product__rail[data-rail="also"] .coach-rail-card__media,
   .coach-product__rail[data-rail="also"] .coach-rail-card__media img {
     width: 100%;
