@@ -243,7 +243,12 @@
         "recent": {
           "type": "recent",
           "settings": {
-            "heading": "Recently Viewed"
+            "heading": "Recently Viewed",
+            "quantity_desktop": 4,
+            "width_desktop": 209,
+            "height_desktop": 271,
+            "gap_desktop": 18,
+            "quantity_mobile": 2
           }
         },
         "faq-1": {

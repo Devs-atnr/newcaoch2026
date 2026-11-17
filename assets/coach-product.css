@@ -796,16 +796,20 @@ coach-product-page.coach-product {
 }
 .coach-product__rail--recent .coach-product__rail-track {
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   gap: var(--recent-gap-d, 18px);
-  width: calc(var(--recent-count-d, 2) * var(--recent-width-d, 209px) + (var(--recent-count-d, 2) - 1) * var(--recent-gap-d, 18px));
+  width: calc(var(--recent-count-d, 4) * var(--recent-width-d, 209px) + (var(--recent-count-d, 4) - 1) * var(--recent-gap-d, 18px));
   max-width: 100%;
   margin: 0 auto;
   overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
 }
+.coach-product__rail--recent .coach-product__rail-track::-webkit-scrollbar { display: none; }
 .coach-product__rail--recent .coach-rail-card {
   flex: 0 0 var(--recent-width-d, 209px);
   width: var(--recent-width-d, 209px);
+  scroll-snap-align: start;
 }
 .coach-product__rail--recent .coach-rail-card__media {
   width: 100%;
