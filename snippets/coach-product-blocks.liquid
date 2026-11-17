@@ -324,6 +324,59 @@
           <div class="coach-product__rail-track js-recent"></div>
         </div>
       </div>
+    {%- when 'faq_group' -%}
+      {%- liquid
+        assign show_group = true
+        if block.settings.collection != blank
+          assign show_group = false
+          for col in product.collections
+            if col.id == block.settings.collection.id
+              assign show_group = true
+            endif
+          endfor
+        endif
+        assign group_heading_font = 'HelveticaLTPro-Roman, Helvetica, Arial, sans-serif'
+        if block.settings.heading_font == 'garamond'
+          assign group_heading_font = 'GaramondMTProRegular, Times New Roman, Times, serif'
+        endif
+        assign group_q_font = 'HelveticaLTPro-Roman, Helvetica, Arial, sans-serif'
+        if block.settings.question_font == 'garamond'
+          assign group_q_font = 'GaramondMTProRegular, Times New Roman, Times, serif'
+        endif
+        assign group_a_font = 'HelveticaLTPro-Roman, Helvetica, Arial, sans-serif'
+        if block.settings.answer_font == 'garamond'
+          assign group_a_font = 'GaramondMTProRegular, Times New Roman, Times, serif'
+        endif
+        assign group_line_color = block.settings.line_color | default: '#e6e6e6'
+        assign group_line = '1px solid ' | append: group_line_color
+        if block.settings.show_lines == false
+          assign group_line = '0'
+        endif
+      -%}
+      {%- if show_group -%}
+        {%- capture group_items -%}
+          {%- for i in (1..8) -%}
+            {%- liquid
+              assign q_key = 'question_' | append: i
+              assign a_key = 'answer_' | append: i
+              assign group_question = block.settings[q_key]
+              assign group_answer = block.settings[a_key]
+            -%}
+            {%- if group_question != blank -%}
+              <details class="coach-product__faq-item">
+                <summary>{{ group_question | escape }}</summary>
+                <div class="rte">{{ group_answer }}</div>
+              </details>
+            {%- endif -%}
+          {%- endfor -%}
+        {%- endcapture -%}
+        {%- if group_items != blank -%}
+          <div class="coach-product__faq" {{ block.shopify_attributes }} style="--faq-heading-font: {{ group_heading_font }}; --faq-heading-size: {{ block.settings.heading_size | default: 22 }}px; --faq-heading-weight: {{ block.settings.heading_weight | default: 700 }}; --faq-heading-color: {{ block.settings.heading_color | default: '#111111' }}; --faq-q-font: {{ group_q_font }}; --faq-q-size: {{ block.settings.question_size | default: 16 }}px; --faq-q-weight: {{ block.settings.question_weight | default: 400 }}; --faq-q-color: {{ block.settings.question_color | default: '#111111' }}; --faq-a-font: {{ group_a_font }}; --faq-a-size: {{ block.settings.answer_size | default: 14 }}px; --faq-a-weight: {{ block.settings.answer_weight | default: 400 }}; --faq-a-color: {{ block.settings.answer_color | default: '#333333' }}; --faq-line: {{ group_line }};">
+            <h2>{{ block.settings.heading | default: 'Frequently Asked Questions' | escape }}</h2>
+            {{ group_items }}
+          </div>
+        {%- endif -%}
+      {%- endif -%}
     {%- when 'faq' -%}
       {%- unless faq_open -%}
         {%- assign faq_open = true -%}
