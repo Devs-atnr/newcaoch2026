@@ -1,0 +1,131 @@
+{{ 'coach-collection-faq.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign faq_visible = false
+  if collection != blank
+    for block in section.blocks
+      if block.type == 'faq' and block.settings.question != blank and block.settings.collection != blank and block.settings.collection.id == collection.id
+        assign faq_visible = true
+        break
+      endif
+    endfor
+  endif
+
+  assign heading_font = 'HelveticaLTPro-Roman, Helvetica, Arial, sans-serif'
+  if section.settings.heading_font == 'garamond'
+    assign heading_font = 'GaramondMTProRegular, Times New Roman, Times, serif'
+  endif
+  assign question_font = 'HelveticaLTPro-Roman, Helvetica, Arial, sans-serif'
+  if section.settings.question_font == 'garamond'
+    assign question_font = 'GaramondMTProRegular, Times New Roman, Times, serif'
+  endif
+  assign answer_font = 'HelveticaLTPro-Roman, Helvetica, Arial, sans-serif'
+  if section.settings.answer_font == 'garamond'
+    assign answer_font = 'GaramondMTProRegular, Times New Roman, Times, serif'
+  endif
+  assign line_color = section.settings.line_color | default: '#e6e6e6'
+  assign line_rule = '1px solid ' | append: line_color
+  if section.settings.show_lines == false
+    assign line_rule = '0'
+  endif
+-%}
+
+{%- if faq_visible -%}
+  <section
+    class="coach-collection-faq"
+    {{ section.shopify_attributes }}
+    style="--ccf-width: {{ section.settings.content_width | default: 1440 }}px; --ccf-side: {{ section.settings.side_padding | default: 48 }}px; --ccf-pad-top: {{ section.settings.padding_top | default: 48 }}px; --ccf-pad-bottom: {{ section.settings.padding_bottom | default: 48 }}px; --ccf-heading-font: {{ heading_font }}; --ccf-heading-size: {{ section.settings.heading_size | default: 22 }}px; --ccf-heading-size-m: {{ section.settings.heading_size_mobile | default: 22 }}px; --ccf-heading-weight: {{ section.settings.heading_weight | default: 700 }}; --ccf-heading-color: {{ section.settings.heading_color | default: '#111111' }}; --ccf-q-font: {{ question_font }}; --ccf-q-size: {{ section.settings.question_size | default: 16 }}px; --ccf-q-weight: {{ section.settings.question_weight | default: 400 }}; --ccf-q-color: {{ section.settings.question_color | default: '#111111' }}; --ccf-a-font: {{ answer_font }}; --ccf-a-size: {{ section.settings.answer_size | default: 14 }}px; --ccf-a-weight: {{ section.settings.answer_weight | default: 400 }}; --ccf-a-color: {{ section.settings.answer_color | default: '#333333' }}; --ccf-line: {{ line_rule }};"
+  >
+    <div class="coach-collection-faq__inner">
+      {%- if section.settings.heading != blank -%}
+        <h2 class="coach-collection-faq__heading">{{ section.settings.heading | escape }}</h2>
+      {%- endif -%}
+      {%- for block in section.blocks -%}
+        {%- if block.type == 'faq' and block.settings.question != blank and block.settings.collection != blank and block.settings.collection.id == collection.id -%}
+          <details class="coach-collection-faq__item" {{ block.shopify_attributes }}>
+            <summary>{{ block.settings.question | escape }}</summary>
+            {%- if block.settings.answer != blank -%}
+              <div class="coach-collection-faq__answer rte">{{ block.settings.answer }}</div>
+            {%- endif -%}
+          </details>
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+  </section>
+{%- elsif request.design_mode -%}
+  <section class="coach-collection-faq" {{ section.shopify_attributes }}>
+    <div class="coach-collection-faq__inner">
+      <p class="coach-collection-faq__empty">No questions are assigned to this collection. Add a FAQ block and select this collection.</p>
+    </div>
+  </section>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Collection FAQ",
+  "tag": "div",
+  "class": "coach-collection-faq-section",
+  "enabled_on": {
+    "templates": ["collection"]
+  },
+  "max_blocks": 50,
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Frequently Asked Questions" },
+    { "type": "checkbox", "id": "show_lines", "label": "Show divider lines", "default": true },
+    { "type": "color", "id": "line_color", "label": "Divider color", "default": "#e6e6e6" },
+    { "type": "header", "content": "Heading" },
+    { "type": "select", "id": "heading_font", "label": "Font", "default": "helvetica", "options": [
+      { "value": "helvetica", "label": "Helvetica" },
+      { "value": "garamond", "label": "Garamond" }
+    ] },
+    { "type": "range", "id": "heading_size", "min": 16, "max": 40, "step": 1, "unit": "px", "label": "Size", "default": 22 },
+    { "type": "range", "id": "heading_size_mobile", "min": 16, "max": 36, "step": 1, "unit": "px", "label": "Mobile size", "default": 22 },
+    { "type": "select", "id": "heading_weight", "label": "Weight", "default": "700", "options": [
+      { "value": "400", "label": "Regular" },
+      { "value": "700", "label": "Bold" }
+    ] },
+    { "type": "color", "id": "heading_color", "label": "Color", "default": "#111111" },
+    { "type": "header", "content": "Question" },
+    { "type": "select", "id": "question_font", "label": "Font", "default": "helvetica", "options": [
+      { "value": "helvetica", "label": "Helvetica" },
+      { "value": "garamond", "label": "Garamond" }
+    ] },
+    { "type": "range", "id": "question_size", "min": 12, "max": 24, "step": 1, "unit": "px", "label": "Size", "default": 16 },
+    { "type": "select", "id": "question_weight", "label": "Weight", "default": "400", "options": [
+      { "value": "400", "label": "Regular" },
+      { "value": "700", "label": "Bold" }
+    ] },
+    { "type": "color", "id": "question_color", "label": "Color", "default": "#111111" },
+    { "type": "header", "content": "Answer" },
+    { "type": "select", "id": "answer_font", "label": "Font", "default": "helvetica", "options": [
+      { "value": "helvetica", "label": "Helvetica" },
+      { "value": "garamond", "label": "Garamond" }
+    ] },
+    { "type": "range", "id": "answer_size", "min": 12, "max": 22, "step": 1, "unit": "px", "label": "Size", "default": 14 },
+    { "type": "select", "id": "answer_weight", "label": "Weight", "default": "400", "options": [
+      { "value": "400", "label": "Regular" },
+      { "value": "700", "label": "Bold" }
+    ] },
+    { "type": "color", "id": "answer_color", "label": "Color", "default": "#333333" },
+    { "type": "header", "content": "Layout" },
+    { "type": "range", "id": "content_width", "min": 600, "max": 1600, "step": 20, "unit": "px", "label": "Content width", "default": 1440 },
+    { "type": "range", "id": "side_padding", "min": 0, "max": 80, "step": 4, "unit": "px", "label": "Side padding", "default": 48 },
+    { "type": "range", "id": "padding_top", "min": 0, "max": 120, "step": 4, "unit": "px", "label": "Space above", "default": 48 },
+    { "type": "range", "id": "padding_bottom", "min": 0, "max": 120, "step": 4, "unit": "px", "label": "Space below", "default": 48 }
+  ],
+  "blocks": [
+    {
+      "type": "faq",
+      "name": "Question",
+      "settings": [
+        { "type": "collection", "id": "collection", "label": "Collection", "info": "This question appears only on the collection you select." },
+        { "type": "text", "id": "question", "label": "Question" },
+        { "type": "richtext", "id": "answer", "label": "Answer" }
+      ]
+    }
+  ],
+  "presets": [
+    { "name": "Collection FAQ" }
+  ]
+}
+{% endschema %}

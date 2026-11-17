@@ -1,0 +1,100 @@
+.coach-collection-faq {
+  background: var(--ccf-bg, transparent);
+  padding: var(--ccf-pad-top, 48px) 16px var(--ccf-pad-bottom, 48px);
+}
+
+.coach-collection-faq__inner {
+  width: min(100%, var(--ccf-width, 1440px));
+  margin: 0 auto;
+}
+
+.coach-collection-faq__heading {
+  margin: 0 0 20px;
+  text-align: left;
+  font-family: var(--ccf-heading-font, HelveticaLTPro-Roman, Helvetica, Arial, sans-serif);
+  font-size: var(--ccf-heading-size-m, 22px);
+  font-weight: var(--ccf-heading-weight, 700);
+  line-height: 1.2;
+  color: var(--ccf-heading-color, #111111);
+}
+
+.coach-collection-faq__item {
+  border-top: var(--ccf-line, 1px solid #e6e6e6);
+  border-bottom: 0;
+}
+
+.coach-collection-faq__item:last-child {
+  border-bottom: 0;
+}
+
+.coach-collection-faq__item summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  min-height: 52px;
+  padding: 14px 0;
+  cursor: pointer;
+  list-style: none;
+  font-family: var(--ccf-q-font, HelveticaLTPro-Roman, Helvetica, Arial, sans-serif);
+  font-size: var(--ccf-q-size, 16px);
+  font-weight: var(--ccf-q-weight, 400);
+  line-height: 1.4;
+  color: var(--ccf-q-color, #111111);
+}
+
+.coach-collection-faq__item summary::-webkit-details-marker {
+  display: none;
+}
+
+.coach-collection-faq__item summary::after {
+  content: "";
+  flex: 0 0 auto;
+  width: 8px;
+  height: 8px;
+  border-right: 1.5px solid currentColor;
+  border-bottom: 1.5px solid currentColor;
+  transform: rotate(45deg);
+  margin-right: 6px;
+}
+
+.coach-collection-faq__item[open] summary::after {
+  transform: rotate(225deg);
+}
+
+.coach-collection-faq__answer {
+  padding: 0 28px 16px 0;
+  font-family: var(--ccf-a-font, HelveticaLTPro-Roman, Helvetica, Arial, sans-serif);
+  font-size: var(--ccf-a-size, 14px);
+  font-weight: var(--ccf-a-weight, 400);
+  line-height: 1.5;
+  color: var(--ccf-a-color, #333333);
+}
+
+.coach-collection-faq__answer p {
+  margin: 0 0 8px;
+  font: inherit;
+  color: inherit;
+}
+
+.coach-collection-faq__answer p:last-child {
+  margin-bottom: 0;
+}
+
+.coach-collection-faq__empty {
+  margin: 0;
+  font-family: HelveticaLTPro-Roman, Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  color: #666666;
+}
+
+@media screen and (min-width: 750px) {
+  .coach-collection-faq {
+    padding-left: var(--ccf-side, 48px);
+    padding-right: var(--ccf-side, 48px);
+  }
+
+  .coach-collection-faq__heading {
+    font-size: var(--ccf-heading-size, 22px);
+  }
+}
