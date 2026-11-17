@@ -219,9 +219,9 @@
             "title_color": "#222222",
             "show_wishlist": true,
             "quantity_desktop": 4,
-            "layout_desktop": "equal-row",
-            "width_desktop": 208,
-            "height_desktop": 272,
+            "layout_desktop": "fixed-row",
+            "width_desktop": 216,
+            "height_desktop": 270,
             "image_scale_desktop": 100,
             "gap_desktop": 18,
             "section_width_desktop": 75,
@@ -243,7 +243,10 @@
         "recent": {
           "type": "recent",
           "settings": {
-            "heading": "Recently Viewed"
+            "heading": "Recently Viewed",
+            "quantity_desktop": 4,
+            "width_desktop": 216,
+            "height_desktop": 270
           }
         },
         "faq-1": {
