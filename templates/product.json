@@ -93,6 +93,7 @@
           "settings": {
             "enable": true,
             "label": "Size Guide",
+            "align": "left",
             "font_size": 14,
             "link_color": "#111111",
             "spacing": 16,
@@ -148,25 +149,49 @@
           "type": "shipping",
           "settings": {
             "heading": "Shipping And Returns",
+            "promo_title": "Free shipping",
+            "promo_note": "On orders $75 +",
+            "learn_more": "Learn more",
+            "popup_lead": "For full details, please visit our",
+            "shipping_label": "SHIPPING",
+            "shipping_page": "/pages/shipping",
+            "returns_label": "RETURNS",
+            "returns_page": "/pages/returns",
+            "open": false,
             "text": "<p>Complimentary shipping and easy returns. See our shipping and returns pages for full details.</p>"
           }
         },
         "details": {
           "type": "details",
           "settings": {
-            "heading": "Product Details"
+            "heading": "Product Details",
+            "style_label": "Style Number",
+            "materials_label": "Materials",
+            "features_label": "Features",
+            "measurements_label": "Measurements",
+            "notes_label": "Editor's Notes",
+            "open": false
           }
         },
         "notes": {
           "type": "notes",
           "settings": {
-            "heading": "Editor's Notes"
+            "heading": "Editor's Notes",
+            "open": false
           }
         },
         "share": {
           "type": "share",
           "settings": {
-            "label": "Share This Product"
+            "label": "Share This Product",
+            "show_facebook": true,
+            "show_line": true,
+            "show_pinterest": true,
+            "show_x": true,
+            "show_email": true,
+            "icon_size": 22,
+            "icon_gap": 18,
+            "icon_color": "#111111"
           }
         },
         "separator": {
@@ -184,7 +209,35 @@
         "also": {
           "type": "also",
           "settings": {
-            "heading": "You May Also Like"
+            "heading": "You May Also Like",
+            "heading_size": 34,
+            "heading_color": "#111111",
+            "heading_align": "center",
+            "limit": 8,
+            "image_background": "#f2f2f2",
+            "title_size": 13,
+            "title_color": "#222222",
+            "show_wishlist": true,
+            "quantity_desktop": 4,
+            "layout_desktop": "equal-row",
+            "width_desktop": 120,
+            "height_desktop": 292,
+            "image_scale_desktop": 52,
+            "gap_desktop": 18,
+            "section_width_desktop": 100,
+            "section_align_desktop": "center",
+            "space_above_desktop": 36,
+            "space_below_desktop": 0,
+            "quantity_mobile": 2,
+            "layout_mobile": "equal-row",
+            "width_mobile": 160,
+            "height_mobile": 180,
+            "image_scale_mobile": 78,
+            "gap_mobile": 12,
+            "section_width_mobile": 100,
+            "section_align_mobile": "center",
+            "space_above_mobile": 24,
+            "space_below_mobile": 0
           }
         },
         "recent": {
