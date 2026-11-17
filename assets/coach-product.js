@@ -645,20 +645,33 @@ class CoachProductPage extends HTMLElement {
       const showHeart = rail?.dataset.alsoHeart !== 'false';
       track.innerHTML = products.map((product) => this.card(product, { heart: showHeart })).join('');
       this.markSavedHearts(track);
+      const prev = this.querySelector('.js-also-prev');
       const next = this.querySelector('.js-also-next');
-      if (next) {
-        const syncNext = () => {
-          const mobile = window.matchMedia('(max-width: 1100px)').matches;
-          const visible = mobile ? mobileVisible : desktopVisible;
-          const layout = mobile ? rail.dataset.layoutMobile : rail.dataset.layoutDesktop;
-          next.hidden = layout === 'equal-grid' || layout === 'fixed-grid' || products.length <= visible;
-        };
-        syncNext();
-        window.matchMedia('(max-width: 1100px)').addEventListener('change', syncNext);
-        next.addEventListener('click', () => {
-          track.scrollBy({ left: track.clientWidth, behavior: 'smooth' });
+      const cardStep = () => {
+        const card = track.querySelector('.coach-rail-card');
+        if (!card) return track.clientWidth;
+        const styles = window.getComputedStyle(track);
+        const gap = parseFloat(styles.columnGap || styles.gap) || 0;
+        return card.getBoundingClientRect().width + gap;
+      };
+      const syncArrows = () => {
+        const mobile = window.matchMedia('(max-width: 1100px)').matches;
+        const layout = mobile ? rail.dataset.layoutMobile : rail.dataset.layoutDesktop;
+        const grid = layout === 'equal-grid' || layout === 'fixed-grid';
+        const atStart = track.scrollLeft <= 2;
+        const atEnd = track.scrollLeft + track.clientWidth >= track.scrollWidth - 2;
+        [prev, next].forEach((button) => {
+          if (!button) return;
+          button.hidden = grid;
         });
-      }
+        if (prev) prev.disabled = grid || atStart;
+        if (next) next.disabled = grid || atEnd || products.length <= (mobile ? mobileVisible : desktopVisible);
+      };
+      syncArrows();
+      track.addEventListener('scroll', syncArrows, { passive: true });
+      window.matchMedia('(max-width: 1100px)').addEventListener('change', syncArrows);
+      if (prev) prev.addEventListener('click', () => track.scrollBy({ left: -cardStep(), behavior: 'smooth' }));
+      if (next) next.addEventListener('click', () => track.scrollBy({ left: cardStep(), behavior: 'smooth' }));
     } catch (error) {
       if (rail) rail.hidden = true;
     }
