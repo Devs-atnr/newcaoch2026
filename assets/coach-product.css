@@ -2,8 +2,11 @@ coach-product-page.coach-product {
   display: block;
 }
 
+.coach-product-shell {
+  background: var(--pdp-bg, #fff);
+}
 .coach-product {
-  background: #fff;
+  background: transparent;
   color: #111;
   font-family: var(--pdp-font, HelveticaLTPro-Roman);
   color: var(--pdp-text, #111);
@@ -713,6 +716,7 @@ coach-product-page.coach-product {
 }
 .coach-product__rail[data-rail="also"] {
   box-sizing: border-box;
+  background: var(--also-section-bg, transparent);
   width: var(--also-section-desktop, 100%);
   max-width: 100%;
   margin-top: var(--also-space-top-desktop, 36px);
@@ -778,7 +782,7 @@ coach-product-page.coach-product {
   width: 100%;
   height: var(--also-height-desktop, 271px);
   aspect-ratio: auto;
-  background: var(--also-image-bg, #f1f1f1);
+  background: transparent;
 }
 .coach-product__rail[data-rail="also"] .coach-rail-card__media img {
   width: 86%;
@@ -835,6 +839,7 @@ coach-product-page.coach-product {
   cursor: default;
 }
 .coach-product__rail--recent {
+  background: var(--recent-section-bg, transparent);
   width: 100%;
   margin-top: var(--recent-space-d, 48px);
   margin-bottom: 0;
@@ -873,7 +878,7 @@ coach-product-page.coach-product {
 .coach-product__rail--recent .coach-rail-card__media {
   width: 100%;
   height: var(--recent-height-d, 271px);
-  background: var(--recent-bg, #f1f1f1);
+  background: transparent;
 }
 .coach-product__rail--recent .coach-rail-card__media img {
   width: var(--recent-image-d, 86%);
@@ -976,7 +981,7 @@ coach-product-page.coach-product {
   justify-content: center;
   width: 240px;
   height: 240px;
-  background: #f2f2f2;
+  background: transparent;
 }
 .coach-rail-card__media img {
   width: 78%;

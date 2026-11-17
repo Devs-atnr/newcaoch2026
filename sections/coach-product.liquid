@@ -48,6 +48,7 @@
   assign guide_block = section.blocks | where: 'type', 'size_guide' | first
 -%}
 
+<div class="coach-product-shell" style="--pdp-bg: {{ section.settings.background | default: '#ffffff' }};">
 <coach-product-page
   class="coach-product"
   data-section-id="{{ section.id }}"
@@ -211,6 +212,7 @@
     }
   </script>
 </coach-product-page>
+</div>
 
 {% schema %}
 {
@@ -231,7 +233,7 @@
     { "type": "text", "id": "title_spacing", "label": "Title letter spacing", "default": "0.4px" },
     { "type": "range", "id": "price_size", "min": 16, "max": 40, "step": 1, "unit": "px", "label": "Price size", "default": 28 },
     { "type": "color", "id": "text_color", "label": "Text color", "default": "#111111" },
-    { "type": "color", "id": "background", "label": "Background", "default": "#ffffff" },
+    { "type": "color", "id": "background", "label": "Section background color", "default": "#ffffff" },
     { "type": "range", "id": "page_width", "min": 1000, "max": 1600, "step": 20, "unit": "px", "label": "Page width", "default": 1320 },
     { "type": "range", "id": "info_gap", "min": 12, "max": 64, "step": 1, "unit": "px", "label": "Space between image and details", "default": 27 }
   ],
@@ -491,6 +493,7 @@
       "name": "You may also like",
       "limit": 1,
       "settings": [
+        { "type": "color", "id": "section_background", "label": "Section background color", "info": "Colors the whole You May Also Like area. Leave empty for no background." },
         { "type": "text", "id": "heading", "label": "Heading", "default": "You May Also Like" },
         { "type": "range", "id": "heading_size", "min": 14, "max": 36, "step": 1, "unit": "px", "label": "Heading size", "default": 20 },
         { "type": "color", "id": "heading_color", "label": "Heading color", "default": "#111111" },
@@ -576,6 +579,7 @@
       "name": "Recently viewed",
       "limit": 1,
       "settings": [
+        { "type": "color", "id": "section_background", "label": "Section background color", "info": "Colors the whole Recently Viewed area. Leave empty for no background." },
         { "type": "text", "id": "heading", "label": "Heading", "default": "Recently Viewed" },
         { "type": "color", "id": "heading_color", "label": "Heading color", "default": "#111111" },
         { "type": "color", "id": "image_background", "label": "Image background", "default": "#f1f1f1" },
