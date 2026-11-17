@@ -3,14 +3,13 @@ coach-product-page.coach-product {
 }
 
 .coach-product-shell {
-  background: var(--pdp-bg, #F0F0F0);
+  background: transparent;
 }
 .coach-product {
   background: transparent;
   color: #111;
   font-family: var(--pdp-font, HelveticaLTPro-Roman);
   color: var(--pdp-text, #111);
-  background: var(--pdp-bg, #F0F0F0);
   box-sizing: border-box;
   display: block;
   width: min(var(--pdp-page, 1320px), calc(100% - 48px));
@@ -1220,6 +1219,10 @@ body.coach-sheet-open { overflow: hidden; }
 @keyframes coach-sheet-up { from { transform: translateY(100%); } to { transform: translateY(0); } }
 
 @media screen and (max-width: 1100px) {
+  .coach-product-shell,
+  .coach-product {
+    background: var(--pdp-bg, #F0F0F0);
+  }
   .coach-product {
     width: auto;
     max-width: none;
