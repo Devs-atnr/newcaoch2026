@@ -632,7 +632,8 @@ class CoachProductPage extends HTMLElement {
     if (!track) return;
     try {
       const limit = Math.min(10, Math.max(2, Number(rail?.dataset.alsoLimit) || 8));
-      const visible = Math.max(2, Number(rail?.dataset.alsoVisible) || 4);
+      const desktopVisible = Math.max(1, Number(rail?.dataset.alsoVisible) || 4);
+      const mobileVisible = Math.max(1, Number(rail?.dataset.alsoVisibleMobile) || 2);
       const response = await fetch(`/recommendations/products.json?product_id=${this.dataset.productId}&limit=${limit}`);
       if (!response.ok) throw new Error('recommendations');
       const data = await response.json();
@@ -646,7 +647,14 @@ class CoachProductPage extends HTMLElement {
       this.markSavedHearts(track);
       const next = this.querySelector('.js-also-next');
       if (next) {
-        next.hidden = products.length <= visible;
+        const syncNext = () => {
+          const mobile = window.matchMedia('(max-width: 1100px)').matches;
+          const visible = mobile ? mobileVisible : desktopVisible;
+          const layout = mobile ? rail.dataset.layoutMobile : rail.dataset.layoutDesktop;
+          next.hidden = layout === 'equal-grid' || layout === 'fixed-grid' || products.length <= visible;
+        };
+        syncNext();
+        window.matchMedia('(max-width: 1100px)').addEventListener('change', syncNext);
         next.addEventListener('click', () => {
           track.scrollBy({ left: track.clientWidth, behavior: 'smooth' });
         });
