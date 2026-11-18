@@ -1514,14 +1514,14 @@ body.coach-sheet-open { overflow: hidden; }
     display: flex;
     align-items: center;
     justify-content: center;
-    width: var(--m-arrow, 36px);
-    height: var(--m-arrow, 36px);
+    width: 62px;
+    height: 36px;
     padding: 0;
     border: 0;
-    border-radius: 50%;
-    background: var(--m-arrow-bg, #ececec);
+    border-radius: 999px;
+    background: #ffffff;
     color: var(--m-arrow-color, #222);
-    box-shadow: none;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
     transform: translateY(-50%);
   }
   .coach-product__thumb-nav.js-thumb-prev { left: 10px; }

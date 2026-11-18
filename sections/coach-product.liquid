@@ -3,7 +3,7 @@
 {%- style -%}
   #shopify-section-{{ section.id }} {
     --m-arrow: {{ section.settings.mobile_arrow_size | default: 36 }}px;
-    --m-arrow-bg: {{ section.settings.mobile_arrow_bg | default: '#ececec' }};
+    --m-arrow-bg: {{ section.settings.mobile_arrow_bg | default: '#ffffff' }};
     --m-arrow-color: {{ section.settings.mobile_arrow_color | default: '#222222' }};
     --m-title: {{ section.settings.mobile_title_size | default: 16 }}px;
     --m-price: {{ section.settings.mobile_price_size | default: 14 }}px;
@@ -252,7 +252,7 @@
     { "type": "color", "id": "background", "label": "Section background color", "default": "#F0F0F0" },
     { "type": "header", "content": "Mobile product" },
     { "type": "range", "id": "mobile_arrow_size", "min": 28, "max": 52, "step": 2, "unit": "px", "label": "Image arrow size", "default": 36 },
-    { "type": "color", "id": "mobile_arrow_bg", "label": "Image arrow background", "default": "#ececec" },
+    { "type": "color", "id": "mobile_arrow_bg", "label": "Image arrow background", "default": "#ffffff" },
     { "type": "color", "id": "mobile_arrow_color", "label": "Image arrow color", "default": "#222222" },
     { "type": "range", "id": "mobile_title_size", "min": 14, "max": 24, "step": 1, "unit": "px", "label": "Title size", "default": 16 },
     { "type": "range", "id": "mobile_price_size", "min": 12, "max": 22, "step": 1, "unit": "px", "label": "Price size", "default": 14 },
