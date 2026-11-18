@@ -312,11 +312,9 @@ class CoachProductPage extends HTMLElement {
       button.disabled = !variant.available || this.maxQuantity(variant) < 1;
     });
     this.updateQuantity(variant);
-    const left = Number(variant.inventory);
-    const showStock = variant.tracked && left > 0 && left <= 10;
     this.querySelectorAll('.js-stock').forEach((stock) => {
-      stock.hidden = !showStock;
-      stock.textContent = showStock ? `Only ${left} item(s) left!` : '';
+      stock.hidden = true;
+      stock.textContent = '';
     });
     this.syncWishlist();
     if (variant.image) {
