@@ -70,7 +70,7 @@
       "block_order": ["card_1", "card_2", "card_3", "card_4"],
       "settings": {
         "heading": "Check off your list",
-        "show_heading_desktop": false,
+        "show_heading_desktop": true,
         "show_heading_mobile": true
       }
     },
