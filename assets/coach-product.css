@@ -904,9 +904,71 @@ html.coach-zoom-open { overflow: hidden; }
   border-bottom: 0;
 }
 .coach-product__reviews {
-  margin-top: 64px;
-  padding-top: 36px;
-  border-top: 1px solid #ececec;
+  box-sizing: border-box;
+  width: 100vw;
+  max-width: 100vw;
+  margin-top: 48px;
+  margin-left: calc(50% - 50vw);
+  margin-right: calc(50% - 50vw);
+  padding: 40px 20px 36px;
+  background: #fff;
+  border-top: 1px solid #e6e6e6;
+  border-bottom: 1px solid #e6e6e6;
+  text-align: center;
+  color: #111;
+}
+.coach-product__reviews-title,
+.coach-product__reviews .jdgm-rev-widg__title {
+  margin: 0 0 16px;
+  font-family: HelveticaLTPro-Roman, Helvetica, Arial, sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1.3;
+  letter-spacing: 0;
+  text-align: center;
+  color: #111;
+}
+.coach-product__reviews:has(.jdgm-rev-widg__title) .coach-product__reviews-title { display: none; }
+.coach-product__reviews .jdgm-widget,
+.coach-product__reviews .jdgm-rev-widg,
+.coach-product__reviews .jdgm-rev-widg__header,
+.coach-product__reviews .jdgm-rev-widg__summary {
+  max-width: 720px;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+}
+.coach-product__reviews .jdgm-rev-widg__summary-stars,
+.coach-product__reviews .jdgm-prev-badge__stars,
+.coach-product__reviews .jdgm-star {
+  color: #111;
+}
+.coach-product__reviews .jdgm-rev-widg__summary-text,
+.coach-product__reviews .jdgm-prev-badge__text {
+  display: block;
+  margin-top: 8px;
+  color: #6f6f6f;
+  font-family: HelveticaLTPro-Roman, Helvetica, Arial, sans-serif;
+  font-size: 13px;
+}
+.coach-product__reviews .jdgm-histogram,
+.coach-product__reviews .jdgm-widget-actions-wrapper,
+.coach-product__reviews .jdgm-write-rev-link,
+.coach-product__reviews .jdgm-rev-widg__sort-wrapper,
+.coach-product__reviews .jdgm-form-wrapper { display: none; }
+.coach-product__reviews .jdgm-ai-summary,
+.coach-product__reviews [class*="ai-summary"],
+.coach-product__reviews .jdgm-rev-widg__body {
+  max-width: 680px;
+  margin: 22px auto 0;
+  text-align: center;
+  font-family: HelveticaLTPro-Roman, Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  line-height: 1.55;
+  color: #222;
+}
+.coach-product__reviews .jdgm-rev {
+  text-align: left;
 }
 .coach-product__rail {
   margin-top: 0;
@@ -1130,8 +1192,7 @@ html.coach-zoom-open { overflow: hidden; }
 }
 
 .coach-product__rail h2,
-.coach-product__faq h2,
-.coach-product__reviews h2 {
+.coach-product__faq h2 {
   margin: 0 0 28px;
   text-align: center;
   font-size: 28px !important;

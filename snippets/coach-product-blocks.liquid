@@ -483,8 +483,15 @@
         {%- endif -%}
       {%- endunless -%}
     {%- when 'reviews' -%}
-      <div class="coach-product__reviews" id="judgeme_product_reviews" {{ block.shopify_attributes }}>
-        <div class="jdgm-widget jdgm-review-widget" data-id="{{ product.id }}" data-product-title="{{ product.title | escape }}">{{ product.metafields.judgeme.widget }}</div>
+      <div class="coach-product__reviews" {{ block.shopify_attributes }}>
+        <h2 class="coach-product__reviews-title">Reviews</h2>
+        <div
+          id="judgeme_product_reviews"
+          class="jdgm-widget jdgm-review-widget"
+          data-id="{{ product.id }}"
+          data-product-title="{{ product.title | escape }}"
+          data-auto-install="false"
+        >{{ product.metafields.judgeme.widget }}</div>
       </div>
   {%- endcase -%}
 {%- endfor -%}
