@@ -1742,8 +1742,8 @@ button.coach-sort-btn {
   padding: 0;
   max-width: 760px;
   font-family: var(--coach-font, HelveticaLTPro-Roman, "Helvetica Neue", Helvetica, Arial, sans-serif);
-  font-size: var(--coach-breadcrumb-size, 12px);
-  color: var(--coach-breadcrumb-color, #8a8a8a);
+  font-size: var(--coach-breadcrumb-size, 13px);
+  color: #6f6f6f;
   text-align: center;
   line-height: 1.4;
 }
