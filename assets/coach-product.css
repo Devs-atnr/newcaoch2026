@@ -1222,7 +1222,7 @@ html.coach-zoom-open { overflow: hidden; }
   color: var(--faq-q-color, #111);
 }
 .coach-product__faq .coach-product__faq-item summary::after {
-  border-color: var(--faq-q-color, #111);
+  border-color: var(--faq-q-color, #11111149);
 }
 .coach-product__faq .coach-product__faq-item .rte,
 .coach-product__faq .coach-product__faq-item .rte p {
