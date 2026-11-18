@@ -681,7 +681,10 @@ coach-product-page.coach-product {
   width: 100% !important;
   height: auto !important;
   margin: 0;
+  border: 0 !important;
   border-collapse: collapse;
+  box-shadow: none !important;
+  outline: none;
   table-layout: fixed;
 }
 .coach-product__info .coach-product__spec-table thead,
