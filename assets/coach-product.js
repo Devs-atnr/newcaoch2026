@@ -133,12 +133,15 @@ class CoachProductPage extends HTMLElement {
       image.alt = main.alt || '';
     };
     const open = () => {
-      render(main.getAttribute('src'));
+      render(main.currentSrc || main.getAttribute('src'));
+      document.body.appendChild(zoom);
       zoom.hidden = false;
+      zoom.classList.add('is-open');
       document.documentElement.classList.add('coach-zoom-open');
     };
     const close = () => {
       zoom.hidden = true;
+      zoom.classList.remove('is-open');
       document.documentElement.classList.remove('coach-zoom-open');
     };
     const step = (direction) => {
@@ -147,6 +150,11 @@ class CoachProductPage extends HTMLElement {
       const next = buttons[current + direction];
       if (next) next.click();
     };
+    this.querySelector('.js-zoom-open')?.addEventListener('click', (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      open();
+    });
     main.addEventListener('click', open);
     zoom.querySelector('.js-zoom-close')?.addEventListener('click', close);
     zoom.querySelector('.js-zoom-prev')?.addEventListener('click', () => step(-1));

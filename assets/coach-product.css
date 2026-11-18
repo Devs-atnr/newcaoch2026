@@ -154,7 +154,13 @@ coach-product-page.coach-product {
   transition: opacity 0.2s ease;
   cursor: zoom-in;
 }
-.coach-product__zoom[hidden] { display: none; }
+.coach-product__zoom[hidden] { display: none !important; }
+.coach-product__zoom.is-open {
+  display: grid !important;
+  position: fixed;
+  inset: 0;
+  z-index: 10050;
+}
 .coach-product__zoom {
   position: fixed;
   inset: 0;
@@ -277,7 +283,17 @@ html.coach-zoom-open { overflow: hidden; }
 .coach-product__heart {
   position: absolute;
   right: 12px;
+  z-index: 3;
   cursor: pointer;
+}
+.coach-product__zoom-hit {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  border: 0;
+  padding: 0;
+  background: transparent;
+  cursor: zoom-in;
 }
 
 .coach-product__size-btn {
