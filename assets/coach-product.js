@@ -3,6 +3,7 @@ class CoachProductPage extends HTMLElement {
     this.data = this.readData();
     this.selected = (this.data.variants.find((variant) => String(variant.id) === this.querySelector('.js-variant-id')?.value) || this.data.variants[0] || {}).options?.slice() || [];
     this.bindGallery();
+    this.bindZoom();
     this.bindOptions();
     this.prepareSelection();
     this.bindSizeGuide();
@@ -92,6 +93,70 @@ class CoachProductPage extends HTMLElement {
     buttons.forEach((button) => button.classList.toggle('is-active', thumb ? button === thumb : button.dataset.src === src));
     const active = thumb || buttons.find((button) => button.classList.contains('is-active'));
     if (list && active) this.placeThumb(list, active);
+  }
+
+  bindZoom() {
+    const zoom = this.querySelector('.js-zoom');
+    const main = this.querySelector('.js-main-image');
+    const list = zoom?.querySelector('.js-zoom-list');
+    const image = zoom?.querySelector('.js-zoom-image');
+    if (!zoom || !main || !list || !image) return;
+    const sourceThumbs = () => [...this.querySelectorAll('.js-thumbs .coach-product__thumb')];
+    const show = (src, alt) => {
+      const match = sourceThumbs().find((thumb) => thumb.dataset.src === src);
+      if (match) this.showImage(src, alt, match);
+      image.src = src;
+      image.alt = alt || main.alt || '';
+      list.querySelectorAll('.coach-product__zoom-thumb').forEach((button) => {
+        const active = button.dataset.src === src;
+        button.classList.toggle('is-active', active);
+        if (active) button.scrollIntoView({ block: 'nearest' });
+      });
+    };
+    const render = (src) => {
+      list.replaceChildren();
+      sourceThumbs().forEach((thumb) => {
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.className = 'coach-product__zoom-thumb';
+        button.dataset.src = thumb.dataset.src || '';
+        button.dataset.alt = thumb.dataset.alt || '';
+        if (button.dataset.src === src) button.classList.add('is-active');
+        const thumbImage = document.createElement('img');
+        thumbImage.src = thumb.querySelector('img')?.currentSrc || thumb.querySelector('img')?.src || button.dataset.src;
+        thumbImage.alt = '';
+        button.appendChild(thumbImage);
+        button.addEventListener('click', () => show(button.dataset.src, button.dataset.alt));
+        list.appendChild(button);
+      });
+      image.src = src || main.currentSrc || main.src;
+      image.alt = main.alt || '';
+    };
+    const open = () => {
+      render(main.getAttribute('src'));
+      zoom.hidden = false;
+      document.documentElement.classList.add('coach-zoom-open');
+    };
+    const close = () => {
+      zoom.hidden = true;
+      document.documentElement.classList.remove('coach-zoom-open');
+    };
+    const step = (direction) => {
+      const buttons = [...list.querySelectorAll('.coach-product__zoom-thumb')];
+      const current = buttons.findIndex((button) => button.classList.contains('is-active'));
+      const next = buttons[current + direction];
+      if (next) next.click();
+    };
+    main.addEventListener('click', open);
+    zoom.querySelector('.js-zoom-close')?.addEventListener('click', close);
+    zoom.querySelector('.js-zoom-prev')?.addEventListener('click', () => step(-1));
+    zoom.querySelector('.js-zoom-next')?.addEventListener('click', () => step(1));
+    document.addEventListener('keydown', (event) => {
+      if (zoom.hidden) return;
+      if (event.key === 'Escape') close();
+      if (event.key === 'ArrowUp') step(-1);
+      if (event.key === 'ArrowDown') step(1);
+    });
   }
 
   placeThumb(list, active) {
