@@ -1,5 +1,21 @@
 {{ 'coach-product.css' | asset_url | stylesheet_tag }}
 <script src="{{ 'coach-product.js' | asset_url }}" defer="defer"></script>
+{%- style -%}
+  #shopify-section-{{ section.id }} {
+    --m-arrow: {{ section.settings.mobile_arrow_size | default: 36 }}px;
+    --m-arrow-bg: {{ section.settings.mobile_arrow_bg | default: '#ececec' }};
+    --m-arrow-color: {{ section.settings.mobile_arrow_color | default: '#222222' }};
+    --m-title: {{ section.settings.mobile_title_size | default: 16 }}px;
+    --m-price: {{ section.settings.mobile_price_size | default: 14 }}px;
+    --m-rating: {{ section.settings.mobile_rating_size | default: 12 }}px;
+    --m-swatch-w: {{ section.settings.mobile_swatch_w | default: 52 }}px;
+    --m-swatch-h: {{ section.settings.mobile_swatch_h | default: 60 }}px;
+    --m-swatch-border: {{ section.settings.mobile_swatch_border | default: '#111111' }};
+    --m-btn-h: {{ section.settings.mobile_btn_h | default: 46 }}px;
+    --m-btn-radius: {{ section.settings.mobile_btn_radius | default: 2 }}px;
+    --m-qty-w: {{ section.settings.mobile_qty_w | default: 52 }}px;
+  }
+{%- endstyle -%}
 
 {%- liquid
   assign current = product.selected_or_first_available_variant
@@ -234,6 +250,19 @@
     { "type": "range", "id": "price_size", "min": 16, "max": 40, "step": 1, "unit": "px", "label": "Price size", "default": 28 },
     { "type": "color", "id": "text_color", "label": "Text color", "default": "#111111" },
     { "type": "color", "id": "background", "label": "Section background color", "default": "#F0F0F0" },
+    { "type": "header", "content": "Mobile product" },
+    { "type": "range", "id": "mobile_arrow_size", "min": 28, "max": 52, "step": 2, "unit": "px", "label": "Image arrow size", "default": 36 },
+    { "type": "color", "id": "mobile_arrow_bg", "label": "Image arrow background", "default": "#ececec" },
+    { "type": "color", "id": "mobile_arrow_color", "label": "Image arrow color", "default": "#222222" },
+    { "type": "range", "id": "mobile_title_size", "min": 14, "max": 24, "step": 1, "unit": "px", "label": "Title size", "default": 16 },
+    { "type": "range", "id": "mobile_price_size", "min": 12, "max": 22, "step": 1, "unit": "px", "label": "Price size", "default": 14 },
+    { "type": "range", "id": "mobile_rating_size", "min": 10, "max": 16, "step": 1, "unit": "px", "label": "Rating size", "default": 12 },
+    { "type": "range", "id": "mobile_swatch_w", "min": 40, "max": 80, "step": 2, "unit": "px", "label": "Swatch width", "default": 52 },
+    { "type": "range", "id": "mobile_swatch_h", "min": 48, "max": 96, "step": 2, "unit": "px", "label": "Swatch height", "default": 60 },
+    { "type": "color", "id": "mobile_swatch_border", "label": "Selected swatch border", "default": "#111111" },
+    { "type": "range", "id": "mobile_btn_h", "min": 40, "max": 64, "step": 2, "unit": "px", "label": "Button height", "default": 46 },
+    { "type": "range", "id": "mobile_btn_radius", "min": 0, "max": 16, "step": 1, "unit": "px", "label": "Button corner radius", "default": 2 },
+    { "type": "range", "id": "mobile_qty_w", "min": 44, "max": 72, "step": 2, "unit": "px", "label": "Quantity width", "default": 52 },
     { "type": "range", "id": "page_width", "min": 1000, "max": 1600, "step": 20, "unit": "px", "label": "Page width", "default": 1320 },
     { "type": "range", "id": "info_gap", "min": 12, "max": 64, "step": 1, "unit": "px", "label": "Space between image and details", "default": 27 }
   ],
