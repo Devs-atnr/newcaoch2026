@@ -170,7 +170,7 @@
             "features_label": "Features",
             "measurements_label": "Measurements",
             "notes_label": "Editor's Notes",
-            "open": false
+            "open": true
           }
         },
         "notes": {

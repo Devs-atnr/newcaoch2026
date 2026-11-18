@@ -675,6 +675,52 @@ coach-product-page.coach-product {
   padding-bottom: 4px;
   font-weight: 700;
 }
+.coach-product__info .coach-product__spec-table h3 { display: none; }
+.coach-product__info .coach-product__spec-table table {
+  display: table !important;
+  width: 100% !important;
+  height: auto !important;
+  margin: 0;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+.coach-product__info .coach-product__spec-table thead,
+.coach-product__info .coach-product__spec-table tbody,
+.coach-product__info .coach-product__spec-table tfoot,
+.coach-product__info .coach-product__spec-table tr {
+  display: table-row !important;
+  width: auto !important;
+  margin: 0 !important;
+}
+.coach-product__info .coach-product__spec-table th,
+.coach-product__info .coach-product__spec-table td {
+  display: table-cell !important;
+  width: auto !important;
+  height: auto !important;
+  padding: 0 0 22px !important;
+  border: 0 !important;
+  vertical-align: top;
+  white-space: normal !important;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.45;
+  color: #6a6a6a;
+}
+.coach-product__info .coach-product__spec-table td:first-child,
+.coach-product__info .coach-product__spec-table th {
+  width: 168px !important;
+  padding-right: 28px !important;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  line-height: 1.4;
+  text-transform: uppercase;
+  color: #111111;
+}
+.coach-product__info .coach-product__spec-table tr:last-child td,
+.coach-product__info .coach-product__spec-table tr:last-child th {
+  padding-bottom: 0 !important;
+}
 .coach-product__acc-body img,
 .coach-product__specs-extra img,
 .coach-product__acc-body video,
@@ -1796,6 +1842,12 @@ body.coach-sheet-open { overflow: hidden; }
     grid-template-columns: 108px minmax(0, 1fr);
     column-gap: 16px;
     margin-bottom: 16px;
+  }
+  .coach-product__info .coach-product__spec-table td:first-child,
+  .coach-product__info .coach-product__spec-table th {
+    width: 112px !important;
+    padding-right: 14px !important;
+    font-size: 12px;
   }
   .coach-product__specs dt {
     font-size: 11px;

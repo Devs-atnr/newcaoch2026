@@ -170,12 +170,26 @@
             </div>
           </div>
         {%- when 'details' -%}
-          {%- assign details_content = product.metafields.custom.product_details | default: product.metafields.custom.details -%}
-          {%- assign style_number = product.metafields.custom.style_number | default: current.sku -%}
-          {%- if details_content != blank or measurements != blank or materials != blank or strap != blank or features != blank or style_number != blank -%}
-            <details class="coach-product__acc" {{ block.shopify_attributes }}{% if block.settings.open %} open{% endif %}>
+          {%- liquid
+            assign details_content = product.metafields.custom.product_details | default: product.metafields.custom.details
+            assign style_number = product.metafields.custom.style_number | default: current.sku
+            assign spec_html = details_content
+            if spec_html == blank
+              assign spec_html = product.description
+            endif
+            assign has_spec_table = false
+            if spec_html contains '<table'
+              assign has_spec_table = true
+              assign spec_html = spec_html | split: '<h3>Editor' | first | split: '<h3>editor' | first
+            endif
+          -%}
+          {%- if has_spec_table or measurements != blank or materials != blank or strap != blank or features != blank or style_number != blank -%}
+            <details class="coach-product__acc" {{ block.shopify_attributes }}{% if block.settings.open != false %} open{% endif %}>
               <summary>{{ block.settings.heading | escape }}</summary>
               <div class="coach-product__acc-body">
+                {%- if has_spec_table -%}
+                  <div class="coach-product__spec-table rte">{{ spec_html }}</div>
+                {%- else -%}
                 <dl class="coach-product__specs">
                   {%- if style_number != blank -%}<div><dt>{{ block.settings.style_label | default: 'Style Number' | escape }}</dt><dd>{%- if style_number.type != blank -%}{{ style_number | metafield_tag }}{%- else -%}{{ style_number | escape }}{%- endif -%}</dd></div>{%- endif -%}
                   {%- if measurements != blank -%}
@@ -235,8 +249,6 @@
                     </div>
                   {%- endif -%}
                 </dl>
-                {%- if details_content != blank -%}
-                  <div class="coach-product__specs-extra rte">{%- if details_content.type != blank -%}{{ details_content | metafield_tag }}{%- else -%}{{ details_content }}{%- endif -%}</div>
                 {%- endif -%}
               </div>
             </details>
