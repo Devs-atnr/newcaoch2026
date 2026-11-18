@@ -483,8 +483,20 @@
         {%- endif -%}
       {%- endunless -%}
     {%- when 'reviews' -%}
-      <div class="coach-product__reviews" {{ block.shopify_attributes }}>
-        <h2 class="coach-product__reviews-title">Reviews</h2>
+      {%- liquid
+        assign review_font = 'HelveticaLTPro-Roman, Helvetica, Arial, sans-serif'
+        if block.settings.heading_font == 'garamond'
+          assign review_font = 'GaramondMTProRegular, Times New Roman, Times, serif'
+        endif
+      -%}
+      <div
+        class="coach-product__reviews"
+        {{ block.shopify_attributes }}
+        style="--rev-bg: {{ block.settings.background | default: '#ffffff' }}; --rev-border: {{ block.settings.border_color | default: '#e6e6e6' }}; --rev-pad: {{ block.settings.padding | default: 40 }}px; --rev-width: {{ block.settings.content_width | default: 720 }}px; --rev-align: {{ block.settings.align | default: 'center' }};"
+      >
+        {%- if block.settings.show_heading != false -%}
+          <h2 class="coach-product__reviews-title" style="font-family: {{ review_font }}; font-size: {{ block.settings.heading_size | default: 18 }}px; font-weight: {{ block.settings.heading_weight | default: '700' }}; color: {{ block.settings.heading_color | default: '#111111' }}; text-align: {{ block.settings.align | default: 'center' }};">{{ block.settings.heading | default: 'Reviews' | escape }}</h2>
+        {%- endif -%}
         <div
           id="judgeme_product_reviews"
           class="jdgm-widget jdgm-review-widget"
