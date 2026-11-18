@@ -374,10 +374,8 @@ class CoachProductPage extends HTMLElement {
     this.dataset.adding = 'true';
     const mobileAdd = !checkout && window.matchMedia('(max-width: 1100px)').matches;
     const addButton = mobileAdd ? this.querySelector('.js-add') : null;
-    const addLabel = addButton ? addButton.textContent : '';
     if (addButton) {
       addButton.classList.add('is-adding');
-      addButton.textContent = 'ADDING TO BAG';
     } else {
       this.showLoader(true);
     }
@@ -407,10 +405,7 @@ class CoachProductPage extends HTMLElement {
     } finally {
       this.dataset.adding = 'false';
       this.showLoader(false);
-      if (addButton) {
-        addButton.classList.remove('is-adding');
-        addButton.textContent = addLabel;
-      }
+      if (addButton) addButton.classList.remove('is-adding');
     }
   }
 

@@ -531,12 +531,8 @@ coach-product-page.coach-product {
   outline: none;
   box-shadow: none;
 }
-@keyframes coach-add-rise {
-  from { transform: translateY(100%); }
-  to { transform: translateY(0); }
-}
 @keyframes coach-add-text {
-  from { transform: translateY(120%); }
+  from { transform: translateY(100%); }
   to { transform: translateY(0); }
 }
 @keyframes coach-add-fill {
@@ -1772,9 +1768,6 @@ body.coach-sheet-open { overflow: hidden; }
     outline: none;
     box-shadow: none;
   }
-  .coach-product__form:has(.coach-product__add.is-adding) {
-    overflow: hidden;
-  }
   .coach-product__form:has(.coach-product__add.is-adding) .coach-product__qty-box,
   .coach-product__form:has(.coach-product__add.is-adding) .coach-product__qty-box:hover,
   .coach-product__form:has(.coach-product__add.is-adding) .coach-product__qty-box:focus,
@@ -1787,28 +1780,28 @@ body.coach-sheet-open { overflow: hidden; }
   .coach-product__form:has(.coach-product__add.is-adding) .coach-product__qty-box svg {
     opacity: 0;
   }
-  .coach-product__add.is-adding {
+  .coach-product__add.is-adding,
+  .coach-product__add.is-adding:hover,
+  .coach-product__add.is-adding:focus,
+  .coach-product__add.is-adding:active {
     position: relative;
-    z-index: 4;
+    z-index: 3;
     isolation: isolate;
     overflow: hidden;
-    margin-left: -62px;
-    width: calc(100% + 62px);
-    padding-left: 0 !important;
+    font-size: 0 !important;
     color: transparent !important;
     background: #111 !important;
-    animation: coach-add-rise 0.38s ease both;
   }
   .coach-product__add.is-adding::before {
     content: "";
     position: absolute;
-    z-index: -1;
+    z-index: 0;
     left: 0;
     top: 0;
     bottom: 0;
     width: 0;
     background: #1a8f3c;
-    animation: coach-add-fill 0.85s ease-out 0.32s forwards;
+    animation: coach-add-fill 0.85s ease-out 0.2s forwards;
   }
   .coach-product__add.is-adding::after {
     content: "ADDING TO BAG";
@@ -1821,8 +1814,10 @@ body.coach-sheet-open { overflow: hidden; }
     color: #fff;
     font-size: 15px;
     font-weight: 600;
-    letter-spacing: 0.04em;
-    animation: coach-add-text 0.38s ease 0.2s both;
+    line-height: 1;
+    letter-spacing: 0;
+    white-space: nowrap;
+    animation: coach-add-text 0.38s ease both;
   }
   .coach-product__add:hover,
   .coach-product__add:focus,
