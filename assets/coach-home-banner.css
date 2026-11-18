@@ -5,12 +5,16 @@
 }
 .coach-home-banner__frame {
   position: relative;
+  height: var(--hb-h, 560px);
+  overflow: hidden;
   background: var(--hb-bg, #ead9c8);
 }
 .coach-home-banner__img {
+  position: absolute;
+  inset: 0;
   display: block;
   width: 100%;
-  height: var(--hb-h, 560px);
+  height: 100%;
   object-fit: cover;
   object-position: center right;
 }
@@ -59,20 +63,25 @@
 }
 @media screen and (max-width: 749px) {
   .coach-home-banner {
-    padding: var(--hb-pt-m, 0) var(--hb-pr-m, 0) var(--hb-pb-m, 24px) var(--hb-pl-m, 0);
+    padding: var(--hb-pt-m, 0) var(--hb-pr-m, 0) var(--hb-pb-m, 0) var(--hb-pl-m, 0);
   }
+  .coach-home-banner__frame { height: var(--hb-h-m, 620px); }
   .coach-home-banner__img--desk { display: none; }
   .coach-home-banner__img--mob {
     display: block;
-    height: auto;
-    object-fit: contain;
-    object-position: center;
+    object-fit: cover;
+    object-position: center top;
   }
   .coach-home-banner__copy {
-    position: static;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: auto;
+    bottom: 28px;
+    width: min(320px, calc(100% - 32px));
     max-width: 320px;
-    margin: 8px auto 0;
-    padding: 0 20px 8px;
+    margin: 0 auto;
+    padding: 0 16px;
     transform: none;
     text-align: center;
   }
