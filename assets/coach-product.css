@@ -531,14 +531,6 @@ coach-product-page.coach-product {
   outline: none;
   box-shadow: none;
 }
-@keyframes coach-add-text {
-  from { transform: translateY(100%); }
-  to { transform: translateY(0); }
-}
-@keyframes coach-add-fill {
-  from { width: 0; }
-  to { width: 100%; }
-}
 .coach-product__add:disabled,
 .coach-product__now:disabled { opacity: 0.45; cursor: default; }
 .coach-product__choice:hover:not(:disabled):not(.is-disabled):not(.is-active) { border-color: #111; }
@@ -1767,57 +1759,6 @@ body.coach-sheet-open { overflow: hidden; }
     border: 1px solid #ececec !important;
     outline: none;
     box-shadow: none;
-  }
-  .coach-product__form:has(.coach-product__add.is-adding) .coach-product__qty-box,
-  .coach-product__form:has(.coach-product__add.is-adding) .coach-product__qty-box:hover,
-  .coach-product__form:has(.coach-product__add.is-adding) .coach-product__qty-box:focus,
-  .coach-product__form:has(.coach-product__add.is-adding) .coach-product__qty-box:active {
-    color: transparent !important;
-    background: transparent !important;
-    background-color: transparent !important;
-    border-right-color: transparent !important;
-  }
-  .coach-product__form:has(.coach-product__add.is-adding) .coach-product__qty-box svg {
-    opacity: 0;
-  }
-  .coach-product__add.is-adding,
-  .coach-product__add.is-adding:hover,
-  .coach-product__add.is-adding:focus,
-  .coach-product__add.is-adding:active {
-    position: relative;
-    z-index: 3;
-    isolation: isolate;
-    overflow: hidden;
-    font-size: 0 !important;
-    color: transparent !important;
-    background: #111 !important;
-  }
-  .coach-product__add.is-adding::before {
-    content: "";
-    position: absolute;
-    z-index: 0;
-    left: 0;
-    top: 0;
-    bottom: 0;
-    width: 0;
-    background: #1a8f3c;
-    animation: coach-add-fill 0.85s ease-out 0.2s forwards;
-  }
-  .coach-product__add.is-adding::after {
-    content: "ADDING TO BAG";
-    position: absolute;
-    inset: 0;
-    z-index: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #fff;
-    font-size: 15px;
-    font-weight: 600;
-    line-height: 1;
-    letter-spacing: 0;
-    white-space: nowrap;
-    animation: coach-add-text 0.38s ease both;
   }
   .coach-product__add:hover,
   .coach-product__add:focus,
