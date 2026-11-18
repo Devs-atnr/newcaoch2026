@@ -330,7 +330,25 @@ coach-product-page.coach-product {
 }
 
 .coach-product__swatch.is-active { border-color: var(--pdp-swatch-active, #000); }
-.coach-product__swatch.is-unavailable { opacity: 0.35; cursor: default; }
+.coach-product__swatch.is-unavailable {
+  position: relative;
+  opacity: 1;
+  cursor: default;
+}
+.coach-product__swatch.is-unavailable::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background: linear-gradient(
+    to bottom right,
+    transparent calc(50% - 0.6px),
+    #fff calc(50% - 0.6px),
+    #fff calc(50% + 0.6px),
+    transparent calc(50% + 0.6px)
+  );
+}
 .coach-product__swatch img {
   display: block;
   width: 100%;
