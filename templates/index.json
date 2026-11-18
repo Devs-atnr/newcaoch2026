@@ -59,6 +59,21 @@
         "padding_right_mobile": 0
       }
     },
+    "coach_home_categories": {
+      "type": "coach-home-categories",
+      "blocks": {
+        "card_1": { "type": "card", "settings": { "title": "New Arrivals" } },
+        "card_2": { "type": "card", "settings": { "title": "Shoulder Bags" } },
+        "card_3": { "type": "card", "settings": { "title": "Wallets & Wristlets" } },
+        "card_4": { "type": "card", "settings": { "title": "Men's" } }
+      },
+      "block_order": ["card_1", "card_2", "card_3", "card_4"],
+      "settings": {
+        "heading": "Check off your list",
+        "show_heading_desktop": false,
+        "show_heading_mobile": true
+      }
+    },
     "image_banner": {
       "type": "image-banner",
       "blocks": {
@@ -129,6 +144,7 @@
   },
   "order": [
     "coach_home_banner",
+    "coach_home_categories",
     "image_banner",
     "featured_collection"
   ]
