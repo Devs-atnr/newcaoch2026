@@ -372,8 +372,16 @@ class CoachProductPage extends HTMLElement {
     }
     if (this.dataset.adding === 'true') return;
     this.dataset.adding = 'true';
-    this.showLoader(true);
+    const addButton = checkout ? null : this.querySelector('.js-add');
+    const addLabel = addButton ? addButton.textContent : '';
+    if (addButton) {
+      addButton.classList.add('is-adding');
+      addButton.textContent = 'ADDING TO BAG';
+    } else {
+      this.showLoader(true);
+    }
     if (error) error.textContent = '';
+    const started = Date.now();
     try {
       const response = await fetch((window.routes && window.routes.cart_add_url) || '/cart/add.js', {
         method: 'POST',
@@ -383,6 +391,10 @@ class CoachProductPage extends HTMLElement {
       const data = await response.json().catch(() => ({}));
       if (!response.ok) throw new Error(data.description || data.message || 'Could not add this product to your bag.');
       await this.updateCount();
+      if (addButton) {
+        const wait = 950 - (Date.now() - started);
+        if (wait > 0) await new Promise((resolve) => setTimeout(resolve, wait));
+      }
       this.showLoader(false);
       if (checkout) {
         window.location.href = '/checkout';
@@ -394,6 +406,10 @@ class CoachProductPage extends HTMLElement {
     } finally {
       this.dataset.adding = 'false';
       this.showLoader(false);
+      if (addButton) {
+        addButton.classList.remove('is-adding');
+        addButton.textContent = addLabel;
+      }
     }
   }
 
