@@ -1,5 +1,9 @@
 {
   "sections": {
+    "coach_home_banner": {
+      "type": "coach-home-banner",
+      "settings": {}
+    },
     "image_banner": {
       "type": "image-banner",
       "blocks": {
@@ -69,6 +73,7 @@
     }
   },
   "order": [
+    "coach_home_banner",
     "image_banner",
     "featured_collection"
   ]
