@@ -1728,17 +1728,22 @@ button.coach-sort-btn {
 /* ==========================================================================
    Pagination
    ========================================================================== */
+.coach-collection-bottom {
+  margin: 56px 0 8px;
+  text-align: center;
+}
+
 .coach-breadcrumb {
   display: flex;
   justify-content: center;
   align-items: center;
   flex-wrap: wrap;
-  margin: 72px auto 56px;
-  padding: 0 16px;
-  max-width: var(--coach-content-width, 1440px);
+  margin: 0 auto 16px;
+  padding: 0;
+  max-width: 760px;
   font-family: var(--coach-font, HelveticaLTPro-Roman, "Helvetica Neue", Helvetica, Arial, sans-serif);
-  font-size: 11px;
-  color: #b5b5b5;
+  font-size: var(--coach-breadcrumb-size, 12px);
+  color: var(--coach-breadcrumb-color, #8a8a8a);
   text-align: center;
   line-height: 1.4;
 }
@@ -1816,13 +1821,60 @@ button.coach-sort-btn {
   color: #ffffff;
 }
 
+.coach-collection-more {
+  display: block;
+  max-width: 760px;
+  margin: 0 auto;
+}
+
+.coach-collection-more__copy {
+  max-height: 3.2em;
+  overflow: hidden;
+  font-size: 14px;
+  line-height: 1.6;
+  color: #222222;
+}
+
+.coach-collection-more__copy p {
+  margin: 0;
+}
+
+.coach-collection-more__copy.is-open {
+  max-height: none;
+}
+
+.coach-collection-more__toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 16px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #111111;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.coach-collection-more__toggle svg {
+  display: block;
+  transition: transform 0.2s ease;
+}
+
+.coach-collection-more__copy.is-open + .coach-collection-more__toggle svg {
+  transform: rotate(180deg);
+}
+
 .coach-mobile-filter-btn,
 .coach-mobile-drawer-top,
 .coach-mobile-filter-head,
 .coach-mobile-sort-label,
 .coach-mobile-view-bar,
-.coach-card__mobile-actions,
-.coach-collection-more {
+.coach-card__mobile-actions {
   display: none;
 }
 
@@ -2372,42 +2424,38 @@ button.coach-sort-btn {
     display: none;
   }
 
+  .coach-collection-bottom {
+    margin: 12px 0 4px;
+    padding-top: 22px;
+    border-top: 1px solid #e3e3e3;
+    text-align: left;
+  }
+
+  .coach-collection-bottom .coach-breadcrumb {
+    justify-content: flex-start;
+    max-width: none;
+    margin: 0 0 22px;
+    font-size: 13px;
+    color: #222222;
+    text-align: left;
+  }
+
   .coach-collection-more {
-    display: block;
-    max-width: var(--coach-content-width, 1440px);
-    margin: 28px auto 0;
-    padding: 0 16px 8px;
+    max-width: none;
+    margin: 0;
   }
 
   .coach-collection-more__copy {
-    max-height: 4.6em;
-    overflow: hidden;
+    max-height: 4.7em;
     font-size: 16px;
     line-height: 1.55;
     color: #111111;
   }
 
-  .coach-collection-more__copy.is-open {
-    max-height: none;
-  }
-
   .coach-collection-more__toggle {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    margin-top: 18px;
-    padding: 0;
-    border: 0;
-    background: transparent;
+    margin-top: 20px;
     font-size: 13px;
-    font-weight: 600;
     letter-spacing: 0.06em;
-    text-transform: uppercase;
-    cursor: pointer;
-  }
-
-  .coach-collection-more__copy.is-open + .coach-collection-more__toggle svg {
-    transform: rotate(180deg);
   }
 }
 
