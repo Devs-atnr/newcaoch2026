@@ -151,8 +151,9 @@
           </button>
           <details class="coach-product__acc coach-product__acc--ship"{% if block.settings.open %} open{% endif %}>
             <summary>{{ block.settings.heading | escape }}</summary>
-            <div class="coach-product__acc-body rte">
-              {%- if shipping_content != blank -%}{{ shipping_content }}{%- else -%}{{ block.settings.text }}{%- endif -%}
+            <div class="coach-product__acc-body coach-product__ship-copy rte">
+              <p>{{ block.settings.popup_lead | default: 'For full details, please visit our' | escape }} <a href="{{ block.settings.shipping_page | default: '/pages/shipping' }}">{{ block.settings.shipping_label | default: 'SHIPPING' | escape }}</a> and <a href="{{ block.settings.returns_page | default: '/pages/returns' }}">{{ block.settings.returns_label | default: 'RETURNS' | escape }}</a> pages.</p>
+              {%- if shipping_content != blank -%}{{ shipping_content }}{%- endif -%}
             </div>
           </details>
           <div class="coach-ship-sheet js-ship-sheet" hidden>
@@ -171,30 +172,71 @@
         {%- when 'details' -%}
           {%- assign details_content = product.metafields.custom.product_details | default: product.metafields.custom.details -%}
           {%- assign style_number = product.metafields.custom.style_number | default: current.sku -%}
-          {%- assign note_field = product.metafields.custom.editors_note -%}
-          {%- assign story = details_content -%}
-          {%- if story == blank and note_field == blank -%}
-            {%- assign story = product.description -%}
-          {%- endif -%}
-          {%- if story != blank or note_field != blank or measurements != blank or materials != blank or strap != blank or features != blank or style_number != blank -%}
+          {%- if details_content != blank or measurements != blank or materials != blank or strap != blank or features != blank or style_number != blank -%}
             <details class="coach-product__acc" {{ block.shopify_attributes }}{% if block.settings.open %} open{% endif %}>
               <summary>{{ block.settings.heading | escape }}</summary>
               <div class="coach-product__acc-body">
                 <dl class="coach-product__specs">
                   {%- if style_number != blank -%}<div><dt>{{ block.settings.style_label | default: 'Style Number' | escape }}</dt><dd>{%- if style_number.type != blank -%}{{ style_number | metafield_tag }}{%- else -%}{{ style_number | escape }}{%- endif -%}</dd></div>{%- endif -%}
-                  {%- if measurements != blank -%}<div><dt>{{ block.settings.measurements_label | default: 'Measurements' | escape }}</dt><dd>{{ measurements | metafield_tag }}</dd></div>{%- endif -%}
-                  {%- if materials != blank -%}<div><dt>{{ block.settings.materials_label | default: 'Materials' | escape }}</dt><dd>{{ materials | metafield_tag }}</dd></div>{%- endif -%}
-                  {%- if strap != blank -%}<div><dt>{{ block.settings.strap_label | default: 'Strap' | escape }}</dt><dd>{{ strap | metafield_tag }}</dd></div>{%- endif -%}
-                  {%- if features != blank -%}<div><dt>{{ block.settings.features_label | default: 'Features' | escape }}</dt><dd>{{ features | metafield_tag }}</dd></div>{%- endif -%}
-                  {%- if note_field != blank -%}
+                  {%- if measurements != blank -%}
                     <div>
-                      <dt>{{ block.settings.notes_label | default: "Editor's Notes" | escape }}</dt>
-                      <dd class="rte">{{ note_field | metafield_tag }}</dd>
+                      <dt>{{ block.settings.measurements_label | default: 'Measurements' | escape }}</dt>
+                      <dd>
+                        {%- if measurements.type == 'multi_line_text_field' -%}
+                          {{ measurements.value | newline_to_br }}
+                        {%- elsif measurements.type == 'list.single_line_text_field' -%}
+                          {%- for item in measurements.value -%}{{ item | escape }}{%- unless forloop.last -%}<br>{%- endunless -%}{%- endfor -%}
+                        {%- else -%}
+                          {{ measurements | metafield_tag }}
+                        {%- endif -%}
+                      </dd>
+                    </div>
+                  {%- endif -%}
+                  {%- if materials != blank -%}
+                    <div>
+                      <dt>{{ block.settings.materials_label | default: 'Materials' | escape }}</dt>
+                      <dd>
+                        {%- if materials.type == 'multi_line_text_field' -%}
+                          {{ materials.value | newline_to_br }}
+                        {%- elsif materials.type == 'list.single_line_text_field' -%}
+                          {%- for item in materials.value -%}{{ item | escape }}{%- unless forloop.last -%}<br>{%- endunless -%}{%- endfor -%}
+                        {%- else -%}
+                          {{ materials | metafield_tag }}
+                        {%- endif -%}
+                      </dd>
+                    </div>
+                  {%- endif -%}
+                  {%- if strap != blank -%}
+                    <div>
+                      <dt>{{ block.settings.strap_label | default: 'Strap' | escape }}</dt>
+                      <dd>
+                        {%- if strap.type == 'multi_line_text_field' -%}
+                          {{ strap.value | newline_to_br }}
+                        {%- elsif strap.type == 'list.single_line_text_field' -%}
+                          {%- for item in strap.value -%}{{ item | escape }}{%- unless forloop.last -%}<br>{%- endunless -%}{%- endfor -%}
+                        {%- else -%}
+                          {{ strap | metafield_tag }}
+                        {%- endif -%}
+                      </dd>
+                    </div>
+                  {%- endif -%}
+                  {%- if features != blank -%}
+                    <div>
+                      <dt>{{ block.settings.features_label | default: 'Features' | escape }}</dt>
+                      <dd>
+                        {%- if features.type == 'multi_line_text_field' -%}
+                          {{ features.value | newline_to_br }}
+                        {%- elsif features.type == 'list.single_line_text_field' -%}
+                          {%- for item in features.value -%}{{ item | escape }}{%- unless forloop.last -%}<br>{%- endunless -%}{%- endfor -%}
+                        {%- else -%}
+                          {{ features | metafield_tag }}
+                        {%- endif -%}
+                      </dd>
                     </div>
                   {%- endif -%}
                 </dl>
-                {%- if story != blank -%}
-                  <div class="coach-product__specs-extra rte">{%- if story.type != blank -%}{{ story | metafield_tag }}{%- else -%}{{ story }}{%- endif -%}</div>
+                {%- if details_content != blank -%}
+                  <div class="coach-product__specs-extra rte">{%- if details_content.type != blank -%}{{ details_content | metafield_tag }}{%- else -%}{{ details_content }}{%- endif -%}</div>
                 {%- endif -%}
               </div>
             </details>

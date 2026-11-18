@@ -103,12 +103,16 @@ coach-product-page.coach-product {
   height: var(--pdp-thumb-h, 108px);
   flex: 0 0 var(--pdp-thumb-h, 108px);
   padding: 0;
-  border: var(--pdp-border, 1px) solid var(--pdp-border-color, #d9d9d9);
+  border: 1px solid transparent;
   background: #f3f3f3;
   cursor: pointer;
+  opacity: 0.45;
 }
 
-.coach-product__thumb.is-active { border-color: var(--pdp-thumb-border, #000); }
+.coach-product__thumb.is-active {
+  opacity: 1;
+  border-color: #111111;
+}
 
 .coach-product__gallery.is-right { grid-template-columns: minmax(0, 750px) var(--pdp-thumb-w, 86px); }
 .coach-product__gallery.is-right .coach-product__thumbs { order: 2; }
@@ -580,27 +584,54 @@ coach-product-page.coach-product {
   line-height: 1.5;
 }
 
-.coach-product__specs { margin: 4px 0 0; }
+.coach-product__info .coach-product__acc {
+  border-top: 1px solid #e6e6e6;
+  border-bottom: 0;
+}
+.coach-product__info .coach-product__acc summary {
+  min-height: 52px;
+  padding: 16px 0;
+  font-size: 16px;
+  font-weight: 400;
+  color: #111111;
+}
+.coach-product__info .coach-product__acc-body {
+  padding: 0 0 20px;
+  color: #333333;
+  font-size: 14px;
+  line-height: 1.5;
+}
+.coach-product__ship-copy p { margin: 0; }
+.coach-product__ship-copy a {
+  color: inherit;
+  font-weight: 400;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.coach-product__specs { margin: 2px 0 0; }
 .coach-product__specs div {
   display: grid;
   grid-template-columns: 148px minmax(0, 1fr);
-  gap: 20px;
-  margin-bottom: 18px;
+  column-gap: 28px;
+  margin: 0 0 20px;
   align-items: start;
 }
 .coach-product__specs dt {
   margin: 0;
   font-size: 12px;
   font-weight: 700;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.04em;
+  line-height: 1.45;
   text-transform: uppercase;
+  color: #111111;
 }
 .coach-product__specs dd {
   margin: 0;
   min-width: 0;
   font-size: 14px;
+  font-weight: 400;
   line-height: 1.45;
-  color: #222;
+  color: #222222;
 }
 .coach-product__info,
 .coach-product__form,
@@ -1368,9 +1399,8 @@ body.coach-guide-open { overflow: hidden; }
 .coach-product__specs dd .metafield-rich_text_field,
 .coach-product__specs-extra .metafield-rich_text_field { display: block; }
 .coach-product__specs dd p,
-.coach-product__specs-extra p { margin: 0 0 16px; }
-.coach-product__specs dd p:last-child,
-.coach-product__specs-extra p:last-child { margin-bottom: 0; }
+.coach-product__specs-extra p { margin: 0; }
+.coach-product__specs dd p + p { margin-top: 2px; }
 .coach-product__notes-inline { margin-top: 18px; }
 .coach-product__notes-inline h3 {
   margin: 0 0 8px;
@@ -1466,10 +1496,7 @@ body.coach-sheet-open { overflow: hidden; }
     position: absolute;
     inset: 0;
   }
-  .coach-product__ship-row { display: grid; }
-  .coach-product__acc--ship,
-  .coach-product__acc--notes { display: none; }
-  .coach-product__notes-inline { display: block; }
+  .coach-product__acc--notes { display: block; }
   .coach-product__stock--under {
     display: block;
     margin: 8px 0 0;
@@ -1760,30 +1787,24 @@ body.coach-sheet-open { overflow: hidden; }
   }
   .coach-rail-card__media { width: 100%; height: auto; aspect-ratio: 1; }
   .coach-rail-card__title { max-width: none; }
-  .coach-product__acc summary {
-    min-height: 52px;
-    font-size: 18px;
-    font-weight: 700;
-    color: #111;
+  .coach-product__info .coach-product__acc summary {
+    min-height: 48px;
+    font-size: 16px;
+    font-weight: 400;
   }
-  .coach-product__acc-body { overflow: visible; }
   .coach-product__specs div {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    margin-bottom: 18px;
+    grid-template-columns: 108px minmax(0, 1fr);
+    column-gap: 16px;
+    margin-bottom: 16px;
   }
-  .coach-product__specs dd { width: 100%; }
   .coach-product__specs dt {
-    font-size: 14px;
+    font-size: 11px;
     font-weight: 700;
-    letter-spacing: 0;
-    text-transform: none;
-    text-decoration: underline;
-    text-underline-offset: 3px;
-    color: #111;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    text-decoration: none;
   }
-  .coach-product__specs dd { font-size: 14px; font-weight: 400; line-height: 1.5; color: #222; }
+  .coach-product__specs dd { font-size: 14px; font-weight: 400; line-height: 1.45; color: #222; }
   .coach-ship-sheet__body a { color: #111; font-weight: 700; text-decoration: underline; text-underline-offset: 2px; }
   .coach-size-guide { padding: 12px; }
   .coach-size-guide__card {
