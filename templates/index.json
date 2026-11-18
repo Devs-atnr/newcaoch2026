@@ -1,8 +1,50 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "coach_home_banner": {
       "type": "coach-home-banner",
-      "settings": {}
+      "settings": {
+        "desktop_image": "shopify://shop_images/ce-20261102-hp1.webp",
+        "mobile_image": "shopify://shop_images/ce-20261102-hp1-m.webp",
+        "image_alt": "",
+        "desktop_height": 800,
+        "background": "rgba(0,0,0,0)",
+        "heading": "Holiday starts now.",
+        "heading_font": "helvetica",
+        "heading_size": 26,
+        "heading_size_mobile": 22,
+        "heading_color": "#111111",
+        "text": "Find styles for everything the holidays have in store.",
+        "text_font": "helvetica",
+        "text_size": 14,
+        "text_size_mobile": 14,
+        "text_color": "#111111",
+        "text_width": 320,
+        "button_1_text": "Shop Bags",
+        "button_1_link": "",
+        "button_1_color": "#111111",
+        "button_2_text": "Shop Tabby",
+        "button_2_link": "",
+        "button_2_color": "#111111",
+        "button_size": 14,
+        "button_gap": 18,
+        "padding_top": 0,
+        "padding_bottom": 0,
+        "padding_left": 0,
+        "padding_right": 0,
+        "padding_top_mobile": 0,
+        "padding_bottom_mobile": 24,
+        "padding_left_mobile": 0,
+        "padding_right_mobile": 0
+      }
     },
     "image_banner": {
       "type": "image-banner",
@@ -33,33 +75,32 @@
       "settings": {
         "image_overlay_opacity": 40,
         "image_height": "large",
-        "desktop_content_position": "bottom-center",
-        "show_text_box": false,
         "image_behavior": "none",
+        "desktop_content_position": "bottom-center",
         "desktop_content_alignment": "center",
+        "show_text_box": false,
         "color_scheme": "scheme-3",
-        "mobile_content_alignment": "center",
         "stack_images_on_mobile": false,
+        "mobile_content_alignment": "center",
         "show_text_below": false
       }
     },
     "featured_collection": {
       "type": "featured-collection",
       "settings": {
+        "collection": "all",
+        "products_to_show": 8,
         "title": "Featured products",
         "heading_size": "h2",
         "description": "",
         "show_description": false,
         "description_style": "body",
-        "collection": "all",
-        "products_to_show": 8,
         "columns_desktop": 4,
-        "color_scheme": "scheme-1",
+        "enable_desktop_slider": false,
         "full_width": false,
         "show_view_all": true,
         "view_all_style": "solid",
-        "enable_desktop_slider": false,
-        "swipe_on_mobile": false,
+        "color_scheme": "scheme-1",
         "image_ratio": "adapt",
         "image_shape": "default",
         "show_secondary_image": true,
@@ -67,6 +108,7 @@
         "show_rating": false,
         "quick_add": "none",
         "columns_mobile": "2",
+        "swipe_on_mobile": false,
         "padding_top": 44,
         "padding_bottom": 36
       }
