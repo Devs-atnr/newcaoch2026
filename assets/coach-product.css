@@ -160,8 +160,8 @@ coach-product-page.coach-product {
   inset: 0;
   z-index: 900;
   display: grid;
-  grid-template-columns: 132px minmax(0, 1fr);
-  background: #f3f3f3;
+  grid-template-columns: minmax(280px, 36vw) minmax(0, 1fr);
+  background: #f2f2f2;
 }
 html.coach-zoom-open { overflow: hidden; }
 .coach-product__zoom-close {
@@ -185,8 +185,9 @@ html.coach-zoom-open { overflow: hidden; }
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 12px;
+  gap: 14px;
   min-height: 0;
+  background: #fff;
 }
 .coach-product__zoom-nav {
   display: flex;
@@ -211,9 +212,9 @@ html.coach-zoom-open { overflow: hidden; }
 .coach-product__zoom-list::-webkit-scrollbar { display: none; }
 .coach-product__zoom-thumb {
   box-sizing: border-box;
-  width: 72px;
-  height: 90px;
-  flex: 0 0 90px;
+  width: 64px;
+  height: 80px;
+  flex: 0 0 80px;
   padding: 0;
   border: 1px solid transparent;
   background: #fff;
@@ -231,15 +232,17 @@ html.coach-zoom-open { overflow: hidden; }
   align-items: center;
   justify-content: center;
   min-width: 0;
-  padding: 56px 72px 56px 12px;
+  padding: 72px 80px;
+  background: #f2f2f2;
 }
 .coach-product__zoom-stage img {
   display: block;
-  max-width: min(760px, 100%);
-  max-height: calc(100vh - 112px);
+  max-width: min(560px, 100%);
+  max-height: calc(100vh - 160px);
   width: auto;
   height: auto;
   object-fit: contain;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.08);
 }
 
 .coach-product__flag,
@@ -1587,10 +1590,10 @@ body.coach-sheet-open { overflow: hidden; }
 @keyframes coach-sheet-up { from { transform: translateY(100%); } to { transform: translateY(0); } }
 
 @media screen and (max-width: 1100px) {
-  .coach-product__zoom { grid-template-columns: 76px minmax(0, 1fr); }
+  .coach-product__zoom { grid-template-columns: 108px minmax(0, 1fr); }
   .coach-product__zoom-close { top: 12px; right: 10px; }
   .coach-product__zoom-thumb { width: 48px; height: 62px; flex-basis: 62px; }
-  .coach-product__zoom-stage { padding: 52px 16px 24px 0; }
+  .coach-product__zoom-stage { padding: 56px 16px 24px; }
   .coach-product-shell,
   .coach-product {
     background: var(--pdp-bg, #F0F0F0);
