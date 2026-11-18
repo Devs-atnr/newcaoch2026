@@ -21,14 +21,22 @@
 .coach-home-banner__img--mob { display: none; }
 .coach-home-banner__copy {
   position: absolute;
-  left: 7%;
-  top: 50%;
   z-index: 1;
   max-width: var(--hb-text-w, 320px);
-  transform: translateY(-42%);
-  text-align: left;
   color: var(--hb-heading-color, #111);
 }
+.coach-home-banner__copy.is-desk-left { left: var(--hb-cl, 64px); right: auto; text-align: left; }
+.coach-home-banner__copy.is-desk-center { left: 50%; right: auto; text-align: center; transform: translateX(-50%); }
+.coach-home-banner__copy.is-desk-right { right: var(--hb-cr, 48px); left: auto; text-align: right; }
+.coach-home-banner__copy.is-desk-top { top: var(--hb-ct, 40px); bottom: auto; }
+.coach-home-banner__copy.is-desk-middle { top: 50%; bottom: auto; }
+.coach-home-banner__copy.is-desk-bottom { bottom: var(--hb-cb, 40px); top: auto; }
+.coach-home-banner__copy.is-desk-left.is-desk-middle,
+.coach-home-banner__copy.is-desk-right.is-desk-middle { transform: translateY(-50%); }
+.coach-home-banner__copy.is-desk-center.is-desk-middle { transform: translate(-50%, -50%); }
+.coach-home-banner__copy.is-desk-left .coach-home-banner__links { justify-content: flex-start; }
+.coach-home-banner__copy.is-desk-center .coach-home-banner__links { justify-content: center; }
+.coach-home-banner__copy.is-desk-right .coach-home-banner__links { justify-content: flex-end; }
 .coach-home-banner__copy h2 {
   margin: 0 0 8px;
   font-family: var(--hb-heading, HelveticaLTPro-Roman, Helvetica, Arial, sans-serif);
@@ -72,20 +80,18 @@
     object-fit: cover;
     object-position: center top;
   }
-  .coach-home-banner__copy {
-    position: absolute;
-    left: 0;
-    right: 0;
-    top: auto;
-    bottom: 28px;
-    width: min(320px, calc(100% - 32px));
-    max-width: 320px;
-    margin: 0 auto;
-    padding: 0 16px;
-    transform: none;
-    text-align: center;
-  }
+  .coach-home-banner__copy.is-mob-left { left: var(--hb-cl-m, 16px); right: auto; width: auto; margin: 0; text-align: left; transform: none; }
+  .coach-home-banner__copy.is-mob-center { left: 0; right: 0; width: min(320px, calc(100% - 32px)); margin: 0 auto; text-align: center; transform: none; }
+  .coach-home-banner__copy.is-mob-right { right: var(--hb-cr-m, 16px); left: auto; width: auto; margin: 0; text-align: right; transform: none; }
+  .coach-home-banner__copy.is-mob-top { top: var(--hb-ct-m, 24px); bottom: auto; }
+  .coach-home-banner__copy.is-mob-middle { top: 50%; bottom: auto; }
+  .coach-home-banner__copy.is-mob-bottom { bottom: var(--hb-cb-m, 32px); top: auto; }
+  .coach-home-banner__copy.is-mob-left.is-mob-middle,
+  .coach-home-banner__copy.is-mob-right.is-mob-middle { transform: translateY(-50%); }
+  .coach-home-banner__copy.is-mob-center.is-mob-middle { top: 50%; transform: translateY(-50%); }
+  .coach-home-banner__copy.is-mob-left .coach-home-banner__links { justify-content: flex-start; }
+  .coach-home-banner__copy.is-mob-center .coach-home-banner__links { justify-content: center; }
+  .coach-home-banner__copy.is-mob-right .coach-home-banner__links { justify-content: flex-end; }
   .coach-home-banner__copy h2 { font-size: var(--hb-heading-size-m, 22px); }
   .coach-home-banner__copy p { font-size: var(--hb-text-size-m, 14px); }
-  .coach-home-banner__links { justify-content: center; }
 }

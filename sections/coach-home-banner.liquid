@@ -16,7 +16,7 @@
 
 <section
   class="coach-home-banner"
-  style="--hb-bg: {{ section.settings.background | default: '#ead9c8' }}; --hb-h: {{ section.settings.desktop_height | default: 560 }}px; --hb-h-m: {{ section.settings.mobile_height | default: 620 }}px; --hb-pt: {{ section.settings.padding_top | default: 0 }}px; --hb-pr: {{ section.settings.padding_right | default: 0 }}px; --hb-pb: {{ section.settings.padding_bottom | default: 0 }}px; --hb-pl: {{ section.settings.padding_left | default: 0 }}px; --hb-pt-m: {{ section.settings.padding_top_mobile | default: 0 }}px; --hb-pr-m: {{ section.settings.padding_right_mobile | default: 0 }}px; --hb-pb-m: {{ section.settings.padding_bottom_mobile | default: 0 }}px; --hb-pl-m: {{ section.settings.padding_left_mobile | default: 0 }}px; --hb-text-w: {{ section.settings.text_width | default: 320 }}px; --hb-heading: {{ heading_font }}; --hb-heading-size: {{ section.settings.heading_size | default: 26 }}px; --hb-heading-size-m: {{ section.settings.heading_size_mobile | default: 22 }}px; --hb-heading-color: {{ section.settings.heading_color | default: '#111111' }}; --hb-text: {{ text_font }}; --hb-text-size: {{ section.settings.text_size | default: 14 }}px; --hb-text-size-m: {{ section.settings.text_size_mobile | default: 14 }}px; --hb-text-color: {{ section.settings.text_color | default: '#111111' }}; --hb-btn-size: {{ section.settings.button_size | default: 14 }}px; --hb-gap: {{ section.settings.button_gap | default: 18 }}px;"
+  style="--hb-bg: {{ section.settings.background | default: '#ead9c8' }}; --hb-h: {{ section.settings.desktop_height | default: 560 }}px; --hb-h-m: {{ section.settings.mobile_height | default: 620 }}px; --hb-pt: {{ section.settings.padding_top | default: 0 }}px; --hb-pr: {{ section.settings.padding_right | default: 0 }}px; --hb-pb: {{ section.settings.padding_bottom | default: 0 }}px; --hb-pl: {{ section.settings.padding_left | default: 0 }}px; --hb-pt-m: {{ section.settings.padding_top_mobile | default: 0 }}px; --hb-pr-m: {{ section.settings.padding_right_mobile | default: 0 }}px; --hb-pb-m: {{ section.settings.padding_bottom_mobile | default: 0 }}px; --hb-pl-m: {{ section.settings.padding_left_mobile | default: 0 }}px; --hb-cl: {{ section.settings.content_left | default: 64 }}px; --hb-cr: {{ section.settings.content_right | default: 48 }}px; --hb-ct: {{ section.settings.content_top | default: 40 }}px; --hb-cb: {{ section.settings.content_bottom | default: 40 }}px; --hb-cl-m: {{ section.settings.content_left_mobile | default: 16 }}px; --hb-cr-m: {{ section.settings.content_right_mobile | default: 16 }}px; --hb-ct-m: {{ section.settings.content_top_mobile | default: 24 }}px; --hb-cb-m: {{ section.settings.content_bottom_mobile | default: 32 }}px; --hb-text-w: {{ section.settings.text_width | default: 320 }}px; --hb-heading: {{ heading_font }}; --hb-heading-size: {{ section.settings.heading_size | default: 26 }}px; --hb-heading-size-m: {{ section.settings.heading_size_mobile | default: 22 }}px; --hb-heading-color: {{ section.settings.heading_color | default: '#111111' }}; --hb-text: {{ text_font }}; --hb-text-size: {{ section.settings.text_size | default: 14 }}px; --hb-text-size-m: {{ section.settings.text_size_mobile | default: 14 }}px; --hb-text-color: {{ section.settings.text_color | default: '#111111' }}; --hb-btn-size: {{ section.settings.button_size | default: 14 }}px; --hb-gap: {{ section.settings.button_gap | default: 18 }}px;"
 >
   <div class="coach-home-banner__frame">
     {%- if desk_image != blank or mob_image != blank -%}
@@ -31,7 +31,7 @@
       {{ 'lifestyle-1' | placeholder_svg_tag: 'coach-home-banner__img coach-home-banner__img--mob' }}
     {%- endif -%}
 
-    <div class="coach-home-banner__copy">
+    <div class="coach-home-banner__copy is-desk-{{ section.settings.content_horizontal | default: 'left' }} is-desk-{{ section.settings.content_vertical | default: 'middle' }} is-mob-{{ section.settings.content_horizontal_mobile | default: 'center' }} is-mob-{{ section.settings.content_vertical_mobile | default: 'bottom' }}">
       {%- if section.settings.heading != blank -%}
         <h2>{{ section.settings.heading | escape }}</h2>
       {%- endif -%}
@@ -95,6 +95,36 @@
     { "type": "color", "id": "button_2_color", "label": "Color", "default": "#111111" },
     { "type": "range", "id": "button_size", "min": 12, "max": 22, "step": 1, "unit": "px", "label": "Button size", "default": 14 },
     { "type": "range", "id": "button_gap", "min": 8, "max": 40, "step": 2, "unit": "px", "label": "Space between buttons", "default": 18 },
+    { "type": "header", "content": "Desktop content position" },
+    { "type": "select", "id": "content_horizontal", "label": "Horizontal", "default": "left", "options": [
+      { "value": "left", "label": "Left" },
+      { "value": "center", "label": "Center" },
+      { "value": "right", "label": "Right" }
+    ] },
+    { "type": "select", "id": "content_vertical", "label": "Vertical", "default": "middle", "options": [
+      { "value": "top", "label": "Top" },
+      { "value": "middle", "label": "Middle" },
+      { "value": "bottom", "label": "Bottom" }
+    ] },
+    { "type": "range", "id": "content_left", "min": 0, "max": 240, "step": 4, "unit": "px", "label": "Left", "default": 64 },
+    { "type": "range", "id": "content_right", "min": 0, "max": 240, "step": 4, "unit": "px", "label": "Right", "default": 48 },
+    { "type": "range", "id": "content_top", "min": 0, "max": 240, "step": 4, "unit": "px", "label": "Top", "default": 40 },
+    { "type": "range", "id": "content_bottom", "min": 0, "max": 240, "step": 4, "unit": "px", "label": "Bottom", "default": 40 },
+    { "type": "header", "content": "Mobile content position" },
+    { "type": "select", "id": "content_horizontal_mobile", "label": "Horizontal", "default": "center", "options": [
+      { "value": "left", "label": "Left" },
+      { "value": "center", "label": "Center" },
+      { "value": "right", "label": "Right" }
+    ] },
+    { "type": "select", "id": "content_vertical_mobile", "label": "Vertical", "default": "bottom", "options": [
+      { "value": "top", "label": "Top" },
+      { "value": "middle", "label": "Middle" },
+      { "value": "bottom", "label": "Bottom" }
+    ] },
+    { "type": "range", "id": "content_left_mobile", "min": 0, "max": 80, "step": 4, "unit": "px", "label": "Left", "default": 16 },
+    { "type": "range", "id": "content_right_mobile", "min": 0, "max": 80, "step": 4, "unit": "px", "label": "Right", "default": 16 },
+    { "type": "range", "id": "content_top_mobile", "min": 0, "max": 160, "step": 4, "unit": "px", "label": "Top", "default": 24 },
+    { "type": "range", "id": "content_bottom_mobile", "min": 0, "max": 160, "step": 4, "unit": "px", "label": "Bottom", "default": 32 },
     { "type": "header", "content": "Desktop padding" },
     { "type": "range", "id": "padding_top", "min": 0, "max": 120, "step": 4, "unit": "px", "label": "Top", "default": 0 },
     { "type": "range", "id": "padding_bottom", "min": 0, "max": 120, "step": 4, "unit": "px", "label": "Bottom", "default": 0 },
