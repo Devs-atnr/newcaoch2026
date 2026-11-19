@@ -1707,7 +1707,7 @@ body.coach-sheet-open { overflow: hidden; }
   .coach-product__thumb-nav.js-thumb-prev { left: 10px; }
   .coach-product__thumb-nav.js-thumb-next { right: 10px; }
   .coach-product__thumb-nav .coach-product__arrow-up { display: none; }
-  .coach-product__thumb-nav .coach-product__arrow-side { display: block; width: 14px; height: 8px; }
+  .coach-product__thumb-nav .coach-product__arrow-side { display: block; width: 14px; height: 10px; }
   .coach-product__thumb-nav.js-thumb-prev .coach-product__arrow-side { transform: scaleX(-1); }
   .coach-product__stage {
     width: 100%;
