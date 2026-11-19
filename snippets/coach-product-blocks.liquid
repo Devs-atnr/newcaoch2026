@@ -27,10 +27,10 @@
             {%- endif -%}
           </div>
         {%- when 'price' -%}
-          <p class="coach-product__price" {{ block.shopify_attributes }} style="font-size: {{ block.settings.font_size | default: 28 }}px; color: {{ block.settings.color | default: '#000000' }}; margin-top: {{ block.settings.space_top | default: 6 }}px; margin-bottom: {{ block.settings.space_bottom | default: 6 }}px;">
-            <span class="js-price-now">{{ current.price | money }}</span>
+          <p class="coach-product__price" {{ block.shopify_attributes }} style="font-size: {{ block.settings.font_size | default: 14 }}px; color: {{ block.settings.color | default: '#000000' }}; margin-top: {{ block.settings.space_top | default: 6 }}px; margin-bottom: {{ block.settings.space_bottom | default: 6 }}px;">
+            <span class="js-price-now">{{ current.price | money_without_trailing_zeros }}</span>
             {%- if block.settings.show_compare -%}
-              <s class="js-price-compare"{% unless current.compare_at_price > current.price %} hidden{% endunless %}>{% if current.compare_at_price > current.price %}{{ current.compare_at_price | money }}{% endif %}</s>
+              <s class="js-price-compare"{% unless current.compare_at_price > current.price %} hidden{% endunless %}>{% if current.compare_at_price > current.price %}{{ current.compare_at_price | money_without_trailing_zeros }}{% endif %}</s>
             {%- endif -%}
           </p>
           {%- assign size_note = blocks | where: 'type', 'size' | first -%}

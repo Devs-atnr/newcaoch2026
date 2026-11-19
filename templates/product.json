@@ -48,7 +48,7 @@
           "type": "price",
           "settings": {
             "show_compare": true,
-            "font_size": 28,
+            "font_size": 14,
             "color": "#000000",
             "space_top": 6,
             "space_bottom": 6
@@ -323,7 +323,7 @@
         "title_line": 28,
         "title_weight": "400",
         "title_spacing": "0.4px",
-        "price_size": 22,
+        "price_size": 14,
         "text_color": "#111111",
         "background": "#f0f0f0",
         "page_width": 1320,
