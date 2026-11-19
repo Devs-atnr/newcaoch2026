@@ -260,10 +260,10 @@
                 {%- assign is_active_swatch = true -%}
               {%- endif -%}
 
-              {%- assign var_price = variant.price | money | escape -%}
+              {%- assign var_price = variant.price | money_without_trailing_zeros | escape -%}
               {%- assign var_compare_price = '' -%}
               {%- if variant.compare_at_price > variant.price -%}
-                {%- assign var_compare_price = variant.compare_at_price | money | escape -%}
+                {%- assign var_compare_price = variant.compare_at_price | money_without_trailing_zeros | escape -%}
               {%- endif -%}
               {%- assign var_img_src = '' -%}
               {%- assign swatch_img = '' -%}
@@ -325,10 +325,10 @@
     {%- comment -%} Price (Centered) {%- endcomment -%}
     <div class="coach-card__price">
       {%- if current_variant.compare_at_price > current_variant.price -%}
-        <span class="coach-card__price-sale">{{ current_variant.price | money }}</span>
-        <span class="coach-card__price-compare">{{ current_variant.compare_at_price | money }}</span>
+        <span class="coach-card__price-sale">{{ current_variant.price | money_without_trailing_zeros }}</span>
+        <span class="coach-card__price-compare">{{ current_variant.compare_at_price | money_without_trailing_zeros }}</span>
       {%- else -%}
-        <span class="coach-card__price-regular">{{ current_variant.price | money }}</span>
+        <span class="coach-card__price-regular">{{ current_variant.price | money_without_trailing_zeros }}</span>
       {%- endif -%}
     </div>
 

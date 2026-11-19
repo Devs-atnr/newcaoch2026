@@ -587,6 +587,7 @@ class CoachCollection {
     cards.forEach((card) => {
       if (card.dataset.cardBound === 'true') return;
       card.dataset.cardBound = 'true';
+      stripCollectionPriceZeros(card.querySelector('.coach-card__price'));
 
       // 1. Image Slider (< >)
       const prevBtn = card.querySelector('.coach-card__arrow--prev');
@@ -763,6 +764,7 @@ class CoachCollection {
                 else node.appendChild(icon);
               });
             }
+            stripCollectionPriceZeros(node);
           };
 
           if (comparePrice && priceSale && priceCompare) {
@@ -1018,6 +1020,17 @@ class CoachCollection {
       console.warn('Could not update cart count bubble', e);
     }
   }
+}
+
+function stripCollectionPriceZeros(root) {
+  if (!root) return;
+  const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+  const nodes = [];
+  while (walker.nextNode()) nodes.push(walker.currentNode);
+  nodes.forEach((node) => {
+    const next = node.nodeValue.replace(/[.,]00(?!\d)/g, '');
+    if (next !== node.nodeValue) node.nodeValue = next;
+  });
 }
 
 function initCoachCollection() {

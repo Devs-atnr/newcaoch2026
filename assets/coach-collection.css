@@ -1703,7 +1703,8 @@ button.coach-sort-btn {
 .coach-card__price {
   font-family: var(--coach-font, HelveticaLTPro-Roman, "Helvetica Neue", Helvetica, Arial, sans-serif);
   font-size: var(--coach-card-price-size, 14px) !important;
-  font-weight: 400;
+  font-weight: 400 !important;
+  font-synthesis: none;
   color: var(--coach-price-color, #1a202c);
   display: block;
   width: 100%;
@@ -1712,6 +1713,13 @@ button.coach-sort-btn {
   letter-spacing: 0;
   flex: 0 0 auto;
   position: static;
+}
+
+.coach-card__price span,
+.coach-card__price b,
+.coach-card__price strong {
+  font-weight: 400 !important;
+  font-synthesis: none;
 }
 
 .coach-card__price svg,
