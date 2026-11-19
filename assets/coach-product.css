@@ -1886,26 +1886,44 @@ body.coach-sheet-open { overflow: hidden; }
     font-size: 14px;
   }
   .coach-product__qty-box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
     width: 54px;
     height: 58px;
-    padding: 0 8px;
+    padding: 0;
     border: 0;
-    border-right: 1px solid rgba(255, 255, 255, 0.7);
+    border-right: 1px solid rgba(255, 255, 255, 0.75);
     border-radius: 8px 0 0 8px;
     background: #000;
     color: #fff;
-    font-size: 15px;
-    font-weight: 600;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 1;
+    box-sizing: border-box;
   }
-  .coach-product__qty-box svg { transform: rotate(180deg); }
+  .coach-product__qty-box svg {
+    display: block;
+    transform: rotate(180deg);
+  }
   .coach-product__add,
   .coach-product__now {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     height: 58px !important;
+    padding: 0;
     border-radius: 8px;
-    font-size: 15px !important;
-    font-weight: 600;
+    font-size: 16px !important;
+    font-weight: 500;
+    line-height: 1;
     letter-spacing: 0 !important;
     text-transform: none;
+    box-sizing: border-box;
+  }
+  .coach-product__add {
+    padding-left: 54px;
   }
   .coach-product__now,
   .coach-product__now:hover,
