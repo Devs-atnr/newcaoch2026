@@ -58,8 +58,8 @@
           "type": "color",
           "settings": {
             "show_label": true,
-            "width": 92,
-            "height": 92,
+            "width": 60,
+            "height": 62,
             "gap": 8,
             "border_color": "#d5d5d5",
             "active_color": "#000000",
