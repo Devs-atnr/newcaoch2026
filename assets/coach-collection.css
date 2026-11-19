@@ -1714,6 +1714,14 @@ button.coach-sort-btn {
   position: static;
 }
 
+.coach-card__price svg,
+.coach-card__price img {
+  display: inline-block;
+  width: 14px !important;
+  height: 14px !important;
+  vertical-align: -2px;
+}
+
 .coach-card__price-sale {
   color: #d91b24;
   margin-right: 6px;
