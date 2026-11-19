@@ -17,7 +17,7 @@
         "image_alt": "",
         "desktop_height": 800,
         "mobile_height": 620,
-        "background": "rgba(0,0,0,0)",
+        "background": "#ffffff",
         "heading": "Holiday starts now.",
         "heading_font": "helvetica",
         "heading_size": 26,
