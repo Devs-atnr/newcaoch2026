@@ -67,6 +67,7 @@
         "icon_height": 72,
         "icon_width": 140,
         "photo_height": 340,
+        "photo_height_mobile": 280,
         "image_fit": "contain",
         "background": "#f0f0f0",
         "image_background": "#f0f0f0",
@@ -76,7 +77,6 @@
         "label_color": "#6a6a6a",
         "icon_height_mobile": 64,
         "icon_width_mobile": 88,
-        "photo_height_mobile": 280,
         "heading_size_mobile": 24,
         "heading_color_mobile": "#111111",
         "label_size_mobile": 12,
@@ -131,9 +131,7 @@
       ],
       "name": "Women collection",
       "settings": {
-        "collections": [
-          "women_fp_bags"
-        ],
+        "collections": [],
         "heading": "",
         "show_heading": false,
         "heading_size": 28,
@@ -145,6 +143,7 @@
         "icon_height": 72,
         "icon_width": 140,
         "photo_height": 340,
+        "photo_height_mobile": 200,
         "image_fit": "contain",
         "background": "#f0f0f0",
         "image_background": "#f0f0f0",
@@ -154,7 +153,6 @@
         "label_color": "#111111",
         "icon_height_mobile": 64,
         "icon_width_mobile": 88,
-        "photo_height_mobile": 280,
         "heading_size_mobile": 24,
         "heading_color_mobile": "#111111",
         "label_size_mobile": 14,
