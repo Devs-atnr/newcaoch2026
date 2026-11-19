@@ -21,6 +21,7 @@
         "enable_filtering": true,
         "enable_sorting": true,
         "show_filter_counts": false,
+        "card_price_size": 14,
         "image_ratio": "portrait",
         "enable_slider": true,
         "show_quick_add": true,

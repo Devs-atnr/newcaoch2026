@@ -10,7 +10,7 @@
      * Minimalist black chevron arrows (< and >)
      * Speech-bubble badges with bottom pointer (Sold Out, New Arrival, Coming Soon)
      * "Add To Bag" bar (white for available, light grey for sold out)
-     * Centered title, swatches (with double-ring outline & white slash), and bold price
+     * Centered title, swatches (with double-ring outline & white slash), and regular 14px price
    ========================================================================== */
 
 .coach-collection-section {
@@ -1702,8 +1702,8 @@ button.coach-sort-btn {
 /* Price (Centered - Images 1, 2, 4, 5) */
 .coach-card__price {
   font-family: var(--coach-font, HelveticaLTPro-Roman, "Helvetica Neue", Helvetica, Arial, sans-serif);
-  font-size: var(--coach-card-price-size, 16px) !important;
-  font-weight: 700;
+  font-size: var(--coach-card-price-size, 14px) !important;
+  font-weight: 400;
   color: var(--coach-price-color, #1a202c);
   display: block;
   width: 100%;
