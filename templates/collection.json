@@ -86,6 +86,7 @@
         "card_1": {
           "type": "card",
           "settings": {
+            "image": "shopify://shop_images/20260225-plp-campaign-3.webp",
             "title": "Tabby",
             "link": ""
           }
@@ -93,6 +94,7 @@
         "card_2": {
           "type": "card",
           "settings": {
+            "image": "shopify://shop_images/20260225-plp-campaign-2.webp",
             "title": "Shoulder Bags",
             "link": ""
           }
@@ -100,6 +102,7 @@
         "card_3": {
           "type": "card",
           "settings": {
+            "image": "shopify://shop_images/20260225-plp-campaign-1.webp",
             "title": "Bag Charms",
             "link": ""
           }
@@ -107,6 +110,7 @@
         "card_4": {
           "type": "card",
           "settings": {
+            "image": "shopify://shop_images/20260225-plp-campaign-4.webp",
             "title": "Shoes",
             "link": ""
           }
@@ -141,7 +145,6 @@
         "label_weight": "400",
         "label_space": 10,
         "label_color": "#111111",
-        "label_color_mobile": "#111111",
         "padding_top": 0,
         "padding_bottom": 12,
         "padding_left": 0,
