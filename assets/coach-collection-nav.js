@@ -4,8 +4,12 @@
 
   const bindGrid = (grid) => {
     if (!grid || grid.dataset.loopReady === 'true') return;
+    const section = grid.closest('.coach-colnav');
+    if (!section || !section.classList.contains('is-photos')) return;
     const cards = [...grid.children].filter((node) => node.classList.contains('coach-colnav__card'));
     if (cards.length < 2) return;
+
+    grid.querySelectorAll('a, img').forEach((node) => node.setAttribute('draggable', 'false'));
 
     const before = document.createDocumentFragment();
     const after = document.createDocumentFragment();
@@ -26,6 +30,8 @@
 
     const setWidth = () => grid.scrollWidth / 3;
     let jumping = false;
+    let placed = false;
+
     const normalize = () => {
       if (jumping) return;
       const width = setWidth();
@@ -41,33 +47,66 @@
       }
     };
 
-    grid.scrollLeft = setWidth();
+    const place = () => {
+      const width = setWidth();
+      if (width < 8) return;
+      if (placed && grid.scrollLeft > 8) return;
+      jumping = true;
+      grid.scrollLeft = width;
+      jumping = false;
+      placed = true;
+    };
+
+    place();
+    requestAnimationFrame(place);
+    window.addEventListener('load', place);
+    if (window.ResizeObserver) {
+      const observer = new ResizeObserver(place);
+      observer.observe(grid);
+    }
     grid.addEventListener('scroll', normalize, { passive: true });
 
     let dragging = false;
     let moved = false;
+    let axis = '';
     let startX = 0;
+    let startY = 0;
     let startLeft = 0;
 
     grid.addEventListener('pointerdown', (event) => {
-      if (event.pointerType !== 'mouse' || event.button !== 0) return;
+      if (event.pointerType === 'mouse' && event.button !== 0) return;
+      if (event.pointerType === 'mouse') event.preventDefault();
       dragging = true;
       moved = false;
+      axis = '';
       startX = event.clientX;
+      startY = event.clientY;
       startLeft = grid.scrollLeft;
-      grid.classList.add('is-dragging');
-      grid.setPointerCapture(event.pointerId);
     });
 
     grid.addEventListener('pointermove', (event) => {
       if (!dragging) return;
-      const delta = event.clientX - startX;
-      if (Math.abs(delta) > 4) moved = true;
-      grid.scrollLeft = startLeft - delta;
+      const dx = event.clientX - startX;
+      const dy = event.clientY - startY;
+      if (!axis) {
+        if (Math.abs(dx) < 8 && Math.abs(dy) < 8) return;
+        axis = Math.abs(dx) >= Math.abs(dy) ? 'x' : 'y';
+        if (axis === 'y') {
+          dragging = false;
+          return;
+        }
+        grid.classList.add('is-dragging');
+        if (grid.setPointerCapture) grid.setPointerCapture(event.pointerId);
+      }
+      if (axis !== 'x') return;
+      moved = true;
+      grid.scrollLeft = startLeft - dx;
+      if (event.cancelable) event.preventDefault();
     });
 
     const stopDrag = () => {
       dragging = false;
+      axis = '';
       grid.classList.remove('is-dragging');
     };
     grid.addEventListener('pointerup', stopDrag);
@@ -84,17 +123,23 @@
       const delta = Math.abs(event.deltaX) > Math.abs(event.deltaY) ? event.deltaX : event.deltaY;
       if (!delta) return;
       event.preventDefault();
-      grid.scrollLeft += delta;
+      const scale = event.deltaMode === 1 ? 16 : event.deltaMode === 2 ? grid.clientWidth : 1;
+      grid.scrollLeft += delta * scale;
     }, { passive: false });
 
     window.addEventListener('resize', () => {
       const width = setWidth();
-      if (grid.scrollLeft < width * 0.5 || grid.scrollLeft > width * 1.5) grid.scrollLeft = width;
+      if (width < 8) return;
+      if (grid.scrollLeft < width * 0.5 || grid.scrollLeft > width * 1.5) {
+        jumping = true;
+        grid.scrollLeft = width;
+        jumping = false;
+      }
     });
   };
 
   const init = () => {
-    document.querySelectorAll('.coach-colnav__grid').forEach(bindGrid);
+    document.querySelectorAll('.coach-colnav.is-photos .coach-colnav__grid').forEach(bindGrid);
   };
 
   if (document.readyState === 'loading') {
