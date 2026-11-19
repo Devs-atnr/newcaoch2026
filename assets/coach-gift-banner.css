@@ -1,0 +1,81 @@
+.coach-gift-banner {
+  box-sizing: border-box;
+  background: #111;
+  padding: var(--gb-pt, 0) var(--gb-pr, 0) var(--gb-pb, 0) var(--gb-pl, 0);
+}
+.coach-gift-banner__frame {
+  position: relative;
+  height: var(--gb-h, 720px);
+  overflow: hidden;
+  background: #c9b7a2;
+}
+.coach-gift-banner__img {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center center;
+}
+.coach-gift-banner__img--mob { display: none; }
+.coach-gift-banner__shade {
+  position: absolute;
+  inset: 0;
+  background: #000;
+  opacity: var(--gb-shade, 0);
+  pointer-events: none;
+}
+.coach-gift-banner__copy {
+  position: absolute;
+  z-index: 1;
+  left: 50%;
+  width: min(var(--gb-text-w, 560px), calc(100% - 32px));
+  text-align: center;
+  transform: translateX(-50%);
+}
+.coach-gift-banner__copy.is-middle {
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+.coach-gift-banner__copy.is-bottom {
+  bottom: var(--gb-cb, 72px);
+}
+.coach-gift-banner__copy h2 {
+  margin: 0;
+  font-family: var(--gb-heading, HelveticaLTPro-Roman, Helvetica, Arial, sans-serif);
+  font-size: var(--gb-heading-size, 28px);
+  font-weight: 700;
+  line-height: 1.25;
+  color: var(--gb-heading-color, #fff);
+}
+.coach-gift-banner__copy p {
+  margin: 8px 0 0;
+  font-family: var(--gb-text, HelveticaLTPro-Roman, Helvetica, Arial, sans-serif);
+  font-size: var(--gb-text-size, 16px);
+  font-weight: 400;
+  line-height: 1.4;
+  color: var(--gb-text-color, #fff);
+}
+.coach-gift-banner__copy a {
+  display: inline-block;
+  margin-top: 14px;
+  font-family: HelveticaLTPro-Roman, Helvetica, Arial, sans-serif;
+  font-size: var(--gb-btn-size, 14px);
+  font-weight: 400;
+  line-height: 1.3;
+  color: var(--gb-btn-color, #fff);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+@media screen and (max-width: 749px) {
+  .coach-gift-banner {
+    padding: var(--gb-pt-m, 0) var(--gb-pr-m, 0) var(--gb-pb-m, 0) var(--gb-pl-m, 0);
+  }
+  .coach-gift-banner__frame { height: var(--gb-h-m, 640px); }
+  .coach-gift-banner__img--desk { display: none; }
+  .coach-gift-banner__img--mob { display: block; }
+  .coach-gift-banner__copy h2 { font-size: var(--gb-heading-size-m, 24px); }
+  .coach-gift-banner__copy p { font-size: var(--gb-text-size-m, 14px); }
+  .coach-gift-banner__copy.is-bottom { bottom: var(--gb-cb-m, 48px); }
+}

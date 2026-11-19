@@ -1,0 +1,108 @@
+{{ 'coach-gift-banner.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign heading_font = 'HelveticaLTPro-Roman, Helvetica, Arial, sans-serif'
+  if section.settings.heading_font == 'garamond'
+    assign heading_font = 'GaramondMTProRegular, Times New Roman, Times, serif'
+  endif
+  assign text_font = 'HelveticaLTPro-Roman, Helvetica, Arial, sans-serif'
+  if section.settings.text_font == 'garamond'
+    assign text_font = 'GaramondMTProRegular, Times New Roman, Times, serif'
+  endif
+  assign banner_alt = section.settings.image_alt | default: section.settings.heading
+  assign desk_image = section.settings.desktop_image | default: section.settings.mobile_image
+  assign mob_image = section.settings.mobile_image | default: section.settings.desktop_image
+  assign shade = section.settings.overlay | default: 0 | times: 1.0 | divided_by: 100.0
+-%}
+
+<section
+  class="coach-gift-banner"
+  style="--gb-h: {{ section.settings.desktop_height | default: 720 }}px; --gb-h-m: {{ section.settings.mobile_height | default: 640 }}px; --gb-shade: {{ shade }}; --gb-text-w: {{ section.settings.text_width | default: 560 }}px; --gb-cb: {{ section.settings.content_bottom | default: 72 }}px; --gb-cb-m: {{ section.settings.content_bottom_mobile | default: 48 }}px; --gb-pt: {{ section.settings.padding_top | default: 0 }}px; --gb-pr: {{ section.settings.padding_right | default: 0 }}px; --gb-pb: {{ section.settings.padding_bottom | default: 0 }}px; --gb-pl: {{ section.settings.padding_left | default: 0 }}px; --gb-pt-m: {{ section.settings.padding_top_mobile | default: 0 }}px; --gb-pr-m: {{ section.settings.padding_right_mobile | default: 0 }}px; --gb-pb-m: {{ section.settings.padding_bottom_mobile | default: 0 }}px; --gb-pl-m: {{ section.settings.padding_left_mobile | default: 0 }}px; --gb-heading: {{ heading_font }}; --gb-heading-size: {{ section.settings.heading_size | default: 28 }}px; --gb-heading-size-m: {{ section.settings.heading_size_mobile | default: 24 }}px; --gb-heading-color: {{ section.settings.heading_color | default: '#ffffff' }}; --gb-text: {{ text_font }}; --gb-text-size: {{ section.settings.text_size | default: 16 }}px; --gb-text-size-m: {{ section.settings.text_size_mobile | default: 14 }}px; --gb-text-color: {{ section.settings.text_color | default: '#ffffff' }}; --gb-btn-size: {{ section.settings.button_size | default: 14 }}px; --gb-btn-color: {{ section.settings.button_color | default: '#ffffff' }};"
+>
+  <div class="coach-gift-banner__frame">
+    {%- if desk_image != blank or mob_image != blank -%}
+      {%- if desk_image != blank -%}
+        {{ desk_image | image_url: width: 2400 | image_tag: class: 'coach-gift-banner__img coach-gift-banner__img--desk', alt: banner_alt, loading: 'eager' }}
+      {%- endif -%}
+      {%- if mob_image != blank -%}
+        {{ mob_image | image_url: width: 1400 | image_tag: class: 'coach-gift-banner__img coach-gift-banner__img--mob', alt: banner_alt, loading: 'eager' }}
+      {%- endif -%}
+    {%- else -%}
+      {{ 'lifestyle-2' | placeholder_svg_tag: 'coach-gift-banner__img coach-gift-banner__img--desk' }}
+      {{ 'lifestyle-2' | placeholder_svg_tag: 'coach-gift-banner__img coach-gift-banner__img--mob' }}
+    {%- endif -%}
+    <div class="coach-gift-banner__shade"></div>
+    <div class="coach-gift-banner__copy is-{{ section.settings.content_vertical | default: 'middle' }}">
+      {%- if section.settings.heading != blank -%}
+        <h2>{{ section.settings.heading | escape }}</h2>
+      {%- endif -%}
+      {%- if section.settings.text != blank -%}
+        <p>{{ section.settings.text | escape }}</p>
+      {%- endif -%}
+      {%- if section.settings.button_text != blank -%}
+        <a href="{{ section.settings.button_link | default: '#' }}">{{ section.settings.button_text | escape }}</a>
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Gift banner",
+  "tag": "section",
+  "class": "coach-gift-banner-section",
+  "settings": [
+    { "type": "header", "content": "Images" },
+    { "type": "image_picker", "id": "desktop_image", "label": "Desktop image" },
+    { "type": "image_picker", "id": "mobile_image", "label": "Mobile image" },
+    { "type": "text", "id": "image_alt", "label": "Image alt text" },
+    { "type": "range", "id": "desktop_height", "min": 420, "max": 900, "step": 20, "unit": "px", "label": "Desktop height", "default": 720 },
+    { "type": "range", "id": "mobile_height", "min": 480, "max": 900, "step": 20, "unit": "px", "label": "Mobile height", "default": 640 },
+    { "type": "range", "id": "overlay", "min": 0, "max": 60, "step": 5, "unit": "%", "label": "Dark overlay", "default": 0 },
+    { "type": "header", "content": "Heading" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Get ahead on gifting." },
+    { "type": "select", "id": "heading_font", "label": "Font", "default": "helvetica", "options": [
+      { "value": "helvetica", "label": "Helvetica" },
+      { "value": "garamond", "label": "Garamond" }
+    ] },
+    { "type": "range", "id": "heading_size", "min": 16, "max": 48, "step": 1, "unit": "px", "label": "Desktop size", "default": 28 },
+    { "type": "range", "id": "heading_size_mobile", "min": 16, "max": 36, "step": 1, "unit": "px", "label": "Mobile size", "default": 24 },
+    { "type": "color", "id": "heading_color", "label": "Color", "default": "#ffffff" },
+    { "type": "header", "content": "Text" },
+    { "type": "text", "id": "text", "label": "Text", "default": "Find something for everyone on your list." },
+    { "type": "select", "id": "text_font", "label": "Font", "default": "helvetica", "options": [
+      { "value": "helvetica", "label": "Helvetica" },
+      { "value": "garamond", "label": "Garamond" }
+    ] },
+    { "type": "range", "id": "text_size", "min": 12, "max": 24, "step": 1, "unit": "px", "label": "Desktop size", "default": 16 },
+    { "type": "range", "id": "text_size_mobile", "min": 12, "max": 22, "step": 1, "unit": "px", "label": "Mobile size", "default": 14 },
+    { "type": "color", "id": "text_color", "label": "Color", "default": "#ffffff" },
+    { "type": "range", "id": "text_width", "min": 240, "max": 800, "step": 20, "unit": "px", "label": "Text width", "default": 560 },
+    { "type": "header", "content": "Link" },
+    { "type": "text", "id": "button_text", "label": "Text", "default": "Shop Gifts" },
+    { "type": "url", "id": "button_link", "label": "Link" },
+    { "type": "color", "id": "button_color", "label": "Color", "default": "#ffffff" },
+    { "type": "range", "id": "button_size", "min": 12, "max": 22, "step": 1, "unit": "px", "label": "Size", "default": 14 },
+    { "type": "header", "content": "Position" },
+    { "type": "select", "id": "content_vertical", "label": "Vertical", "default": "middle", "options": [
+      { "value": "middle", "label": "Middle" },
+      { "value": "bottom", "label": "Bottom" }
+    ] },
+    { "type": "range", "id": "content_bottom", "min": 24, "max": 160, "step": 4, "unit": "px", "label": "Desktop space from bottom", "default": 72 },
+    { "type": "range", "id": "content_bottom_mobile", "min": 16, "max": 120, "step": 4, "unit": "px", "label": "Mobile space from bottom", "default": 48 },
+    { "type": "header", "content": "Desktop padding" },
+    { "type": "range", "id": "padding_top", "min": 0, "max": 80, "step": 4, "unit": "px", "label": "Top", "default": 0 },
+    { "type": "range", "id": "padding_bottom", "min": 0, "max": 80, "step": 4, "unit": "px", "label": "Bottom", "default": 0 },
+    { "type": "range", "id": "padding_left", "min": 0, "max": 80, "step": 4, "unit": "px", "label": "Left", "default": 0 },
+    { "type": "range", "id": "padding_right", "min": 0, "max": 80, "step": 4, "unit": "px", "label": "Right", "default": 0 },
+    { "type": "header", "content": "Mobile padding" },
+    { "type": "range", "id": "padding_top_mobile", "min": 0, "max": 80, "step": 4, "unit": "px", "label": "Top", "default": 0 },
+    { "type": "range", "id": "padding_bottom_mobile", "min": 0, "max": 80, "step": 4, "unit": "px", "label": "Bottom", "default": 0 },
+    { "type": "range", "id": "padding_left_mobile", "min": 0, "max": 40, "step": 4, "unit": "px", "label": "Left", "default": 0 },
+    { "type": "range", "id": "padding_right_mobile", "min": 0, "max": 40, "step": 4, "unit": "px", "label": "Right", "default": 0 }
+  ],
+  "presets": [
+    { "name": "Gift banner" }
+  ]
+}
+{% endschema %}

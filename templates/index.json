@@ -9,6 +9,20 @@
  */
 {
   "sections": {
+    "coach_gift_banner": {
+      "type": "coach-gift-banner",
+      "settings": {
+        "heading": "Get ahead on gifting.",
+        "text": "Find something for everyone on your list.",
+        "button_text": "Shop Gifts",
+        "heading_color": "#ffffff",
+        "text_color": "#ffffff",
+        "button_color": "#ffffff",
+        "content_vertical": "middle",
+        "desktop_height": 720,
+        "mobile_height": 640
+      }
+    },
     "coach_home_banner": {
       "type": "coach-home-banner",
       "settings": {
@@ -152,6 +166,7 @@
     }
   },
   "order": [
+    "coach_gift_banner",
     "coach_home_banner",
     "coach_home_categories",
     "image_banner",
