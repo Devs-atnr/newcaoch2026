@@ -131,7 +131,9 @@
       ],
       "name": "Women collection",
       "settings": {
-        "collections": [],
+        "collections": [
+          "women_fp_bags"
+        ],
         "heading": "",
         "show_heading": false,
         "heading_size": 28,
