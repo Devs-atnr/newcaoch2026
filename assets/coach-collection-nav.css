@@ -23,6 +23,31 @@
   justify-content: center;
   flex-wrap: wrap;
 }
+.coach-colnav.is-photos .coach-colnav__grid {
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  overflow-x: auto;
+  gap: var(--cn-gap, 8px);
+  scrollbar-width: none;
+  cursor: grab;
+}
+.coach-colnav.is-photos .coach-colnav__grid::-webkit-scrollbar { display: none; }
+.coach-colnav.is-photos .coach-colnav__card {
+  flex: 0 0 min(82vw, 460px);
+  width: min(82vw, 460px);
+}
+.coach-colnav__grid.is-loop {
+  scroll-snap-type: none;
+  cursor: grab;
+}
+.coach-colnav__grid.is-loop.is-dragging {
+  cursor: grabbing;
+  user-select: none;
+}
+.coach-colnav__grid.is-loop .coach-colnav__card {
+  scroll-snap-align: none;
+}
 .coach-colnav__card {
   display: block;
   min-width: 0;
