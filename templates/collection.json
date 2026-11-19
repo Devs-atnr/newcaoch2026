@@ -145,7 +145,7 @@
         "icon_height": 72,
         "icon_width": 140,
         "photo_height": 340,
-        "image_fit": "cover",
+        "image_fit": "contain",
         "background": "#f0f0f0",
         "image_background": "#f0f0f0",
         "label_size": 14,
