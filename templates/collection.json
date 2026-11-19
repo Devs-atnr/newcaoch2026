@@ -17,7 +17,7 @@
         "show_collection_description": false,
         "columns_desktop": 4,
         "columns_mobile": "2",
-        "products_per_page": 24,
+        "products_per_page": 48,
         "enable_filtering": true,
         "enable_sorting": true,
         "show_filter_counts": false,

@@ -501,24 +501,25 @@ class CoachCollection {
      Infinite product loading
      ------------------------------------------------------------------------- */
   bindInfiniteScroll() {
-    if (this.infiniteObserver) {
-      this.infiniteObserver.disconnect();
-      this.infiniteObserver = null;
-    }
-
-    const sentinel = this.wrapper.querySelector('[data-infinite-sentinel]');
-    if (!sentinel || !sentinel.dataset.nextUrl) return;
-
-    this.infiniteObserver = new IntersectionObserver((entries) => {
-      if (entries.some((entry) => entry.isIntersecting)) this.loadMoreProducts();
-    }, { rootMargin: '1400px 0px' });
-    this.infiniteObserver.observe(sentinel);
+    this.infiniteToken = (this.infiniteToken || 0) + 1;
+    this.drainProducts(this.infiniteToken);
   }
 
-  async loadMoreProducts() {
+  async drainProducts(token) {
+    let guard = 0;
+    while (token === this.infiniteToken && guard < 200) {
+      const sentinel = this.wrapper.querySelector('[data-infinite-sentinel]');
+      if (!sentinel || !sentinel.dataset.nextUrl) break;
+      const loaded = await this.loadMoreProducts(token);
+      if (!loaded) break;
+      guard += 1;
+    }
+  }
+
+  async loadMoreProducts(token) {
     const sentinel = this.wrapper.querySelector('[data-infinite-sentinel]');
     const nextUrl = sentinel && sentinel.dataset.nextUrl;
-    if (!sentinel || !nextUrl || this.loadingMore) return;
+    if (!sentinel || !nextUrl || this.loadingMore || token !== this.infiniteToken) return false;
 
     this.loadingMore = true;
     sentinel.classList.add('is-loading');
@@ -528,41 +529,31 @@ class CoachCollection {
       const res = await fetch(next.toString());
       if (!res.ok) throw new Error('Network error');
       const htmlText = await res.text();
+      if (token !== this.infiniteToken) return false;
+
       const doc = new DOMParser().parseFromString(htmlText, 'text/html');
       const grid = this.wrapper.querySelector('#CoachProductGrid');
+      if (!grid) return false;
       const items = doc.querySelectorAll('#CoachProductGrid .coach-product-grid__item');
       items.forEach((item) => grid.appendChild(item));
 
       const nextSentinel = doc.querySelector('[data-infinite-sentinel]');
-      if (nextSentinel && nextSentinel.dataset.nextUrl) {
+      if (sentinel.isConnected && nextSentinel && nextSentinel.dataset.nextUrl) {
         sentinel.dataset.nextUrl = nextSentinel.dataset.nextUrl;
-      } else {
+      } else if (sentinel.isConnected) {
         sentinel.removeAttribute('data-next-url');
         sentinel.hidden = true;
-        if (this.infiniteObserver) this.infiniteObserver.disconnect();
       }
 
       this.bindProductCards();
-      const stillNear = sentinel.isConnected && sentinel.dataset.nextUrl && this.isNearViewport(sentinel);
-      if (stillNear) {
-        this.loadingMore = false;
-        if (sentinel.isConnected) sentinel.classList.remove('is-loading');
-        this.loadMoreProducts();
-        return;
-      }
+      return true;
     } catch (err) {
       console.error('Error loading more products:', err);
+      return false;
     } finally {
-      if (this.loadingMore) {
-        this.loadingMore = false;
-        if (sentinel.isConnected) sentinel.classList.remove('is-loading');
-      }
+      this.loadingMore = false;
+      if (sentinel.isConnected) sentinel.classList.remove('is-loading');
     }
-  }
-
-  isNearViewport(node) {
-    const rect = node.getBoundingClientRect();
-    return rect.top < window.innerHeight + 1400;
   }
 
   /* -------------------------------------------------------------------------
