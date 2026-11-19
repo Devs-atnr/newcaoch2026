@@ -75,12 +75,14 @@
 
   # Find color option index
   assign color_option_index = -1
+  assign color_option = blank
   assign size_option_index = -1
   for option in card_product.options_with_values
     assign opt_name = option.name | downcase
     if color_option_index < 0
-      if opt_name == 'color' or opt_name == 'colour' or opt_name == 'couleur' or opt_name == 'farbe'
+      if opt_name contains 'color' or opt_name contains 'colour' or opt_name == 'couleur' or opt_name == 'farbe'
         assign color_option_index = forloop.index0
+        assign color_option = option
       endif
     endif
     if size_option_index < 0
@@ -236,7 +238,7 @@
     </h3>
 
     {%- comment -%} Variant Color Swatches Slider (Centered - Images 1 & 3) {%- endcomment -%}
-    {%- if show_swatches and color_option_index >= 0 -%}
+    {%- if show_swatches -%}
       <div class="coach-card__swatches-wrapper js-coach-swatches-wrapper">
         <button
           type="button"
@@ -249,48 +251,88 @@
         </button>
 
         <div class="coach-card__swatches js-swatches-track" role="radiogroup" aria-label="Color options">
-          {%- assign rendered_colors = '' -%}
-          {%- for variant in card_product.variants -%}
-            {%- assign color_val = variant.options[color_option_index] -%}
-            {%- assign color_slug = color_val | strip | downcase -%}
-            {%- unless rendered_colors contains color_slug -%}
-              {%- assign rendered_colors = rendered_colors | append: ',' | append: color_slug -%}
-              {%- assign is_active_swatch = false -%}
-              {%- if color_val == current_variant.options[color_option_index] -%}
-                {%- assign is_active_swatch = true -%}
-              {%- endif -%}
-
-              {%- assign var_price = variant.price | money_without_trailing_zeros | escape -%}
-              {%- assign var_compare_price = '' -%}
-              {%- if variant.compare_at_price > variant.price -%}
-                {%- assign var_compare_price = variant.compare_at_price | money_without_trailing_zeros | escape -%}
-              {%- endif -%}
-              {%- assign var_img_src = '' -%}
-              {%- assign swatch_img = '' -%}
-              {%- if variant.featured_image -%}
-                {%- assign var_img_src = variant.featured_image | image_url: width: 800 -%}
-                {%- assign swatch_img = variant.featured_image | image_url: width: 160 -%}
-              {%- elsif variant.image -%}
-                {%- assign var_img_src = variant.image | image_url: width: 800 -%}
-                {%- assign swatch_img = variant.image | image_url: width: 160 -%}
-              {%- elsif card_product.featured_image -%}
-                {%- assign var_img_src = card_product.featured_image | image_url: width: 800 -%}
-                {%- assign swatch_img = card_product.featured_image | image_url: width: 160 -%}
-              {%- endif -%}
-
-              {%- capture swatch_style -%}
-                {%- if swatch_img != blank -%}
-                  background-image:url('{{ swatch_img | replace: '&', '&amp;' }}');
-                {%- endif -%}
-              {%- endcapture -%}
-
+          {%- if color_option != blank -%}
+            {%- for value in color_option.values -%}
+              {%- liquid
+                capture color_val
+                  echo value
+                endcapture
+                assign color_val = color_val | strip
+                assign color_slug = color_val | downcase
+                assign matched = value.variant
+                if matched == blank
+                  for variant in card_product.variants
+                    if variant.options[color_option_index] == color_val
+                      if matched == blank or variant.available
+                        assign matched = variant
+                      endif
+                      if variant.available
+                        break
+                      endif
+                    endif
+                  endfor
+                endif
+                if matched == blank
+                  assign matched = current_variant
+                endif
+                assign is_active_swatch = false
+                if color_val == current_variant.options[color_option_index]
+                  assign is_active_swatch = true
+                endif
+                assign var_price = matched.price | money_without_trailing_zeros | escape
+                assign var_compare_price = ''
+                if matched.compare_at_price > matched.price
+                  assign var_compare_price = matched.compare_at_price | money_without_trailing_zeros | escape
+                endif
+                assign var_img_src = ''
+                if matched.featured_image
+                  assign var_img_src = matched.featured_image | image_url: width: 800
+                elsif matched.image
+                  assign var_img_src = matched.image | image_url: width: 800
+                elsif card_product.featured_image
+                  assign var_img_src = card_product.featured_image | image_url: width: 800
+                endif
+                assign named_color = ''
+                case color_slug
+                  when 'black', 'noir'
+                    assign named_color = '#111111'
+                  when 'white', 'blanc'
+                    assign named_color = '#ffffff'
+                  when 'red', 'rouge'
+                    assign named_color = '#d91b24'
+                  when 'blue', 'navy', 'bleu'
+                    assign named_color = '#163b82'
+                  when 'brown', 'chocolat', 'tan', 'saddle'
+                    assign named_color = '#6f3f20'
+                  when 'green', 'vert', 'sage', 'olive'
+                    assign named_color = '#6f8f62'
+                  when 'grey', 'gray', 'gris'
+                    assign named_color = '#9e9e9e'
+                  when 'beige', 'sand', 'nude'
+                    assign named_color = '#e6d7c3'
+                  when 'pink', 'rose'
+                    assign named_color = '#e7a3b0'
+                  when 'orange'
+                    assign named_color = '#e07a2f'
+                  when 'purple', 'violet'
+                    assign named_color = '#7b4bb7'
+                  when 'yellow', 'gold'
+                    assign named_color = '#d4af37'
+                endcase
+                assign fallback_img = ''
+                if value.swatch.image
+                  assign fallback_img = value.swatch.image | image_url: width: 80
+                elsif var_img_src != blank
+                  assign fallback_img = matched.featured_image | default: matched.image | default: card_product.featured_image | image_url: width: 160
+                endif
+              -%}
               <button
                 type="button"
-                class="coach-card__swatch-dot{% if is_active_swatch %} coach-card__swatch-dot--active{% endif %}{% unless variant.available %} coach-card__swatch-dot--sold-out{% endunless %}"
+                class="coach-card__swatch-dot{% if is_active_swatch %} coach-card__swatch-dot--active{% endif %}{% unless matched.available %} coach-card__swatch-dot--sold-out{% endunless %}"
                 title="{{ color_val | escape }}"
                 aria-label="{{ color_val | escape }}"
-                data-variant-id="{{ variant.id }}"
-                data-variant-available="{{ variant.available }}"
+                data-variant-id="{{ matched.id }}"
+                data-variant-available="{{ matched.available }}"
                 data-variant-price="{{ var_price }}"
                 {% if var_compare_price != blank %}
                   data-variant-compare-price="{{ var_compare_price }}"
@@ -299,13 +341,29 @@
                   data-variant-image-src="{{ var_img_src | escape }}"
                 {% endif %}
               >
-                <span class="coach-card__swatch-fill" style="{{ swatch_style | strip }}"></span>
-                {%- unless variant.available -%}
+                <span
+                  class="coach-card__swatch-fill"
+                  style="{% if value.swatch.color %}background-color: rgb({{ value.swatch.color.rgb }});{% elsif named_color != blank %}background-color: {{ named_color }};{% elsif fallback_img != blank %}background-image: url('{{ fallback_img | replace: '&', '&amp;' }}');{% endif %}"
+                ></span>
+                {%- unless matched.available -%}
                   <span class="coach-card__swatch-slash"></span>
                 {%- endunless -%}
               </button>
-            {%- endunless -%}
-          {%- endfor -%}
+            {%- endfor -%}
+          {%- elsif card_product.featured_image -%}
+            <button
+              type="button"
+              class="coach-card__swatch-dot coach-card__swatch-dot--active{% unless card_product.available %} coach-card__swatch-dot--sold-out{% endunless %}"
+              title="{{ card_product.title | escape }}"
+              aria-label="{{ card_product.title | escape }}"
+              data-variant-id="{{ current_variant.id }}"
+              data-variant-available="{{ current_variant.available }}"
+              data-variant-price="{{ current_variant.price | money_without_trailing_zeros | escape }}"
+              data-variant-image-src="{{ card_product.featured_image | image_url: width: 800 | escape }}"
+            >
+              <span class="coach-card__swatch-fill" style="background-image: url('{{ card_product.featured_image | image_url: width: 160 | replace: '&', '&amp;' }}');"></span>
+            </button>
+          {%- endif -%}
         </div>
 
         <button

@@ -1580,7 +1580,7 @@ button.coach-sort-btn {
   scrollbar-width: none;
   -ms-overflow-style: none;
   scroll-behavior: smooth;
-  max-width: 188px;
+  max-width: calc(var(--coach-swatch-size, 28px) * 3 + 20px);
   padding: 6px 2px;
 }
 

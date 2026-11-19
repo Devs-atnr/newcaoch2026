@@ -658,9 +658,10 @@ class CoachCollection {
       const priceCompare = card.querySelector('.coach-card__price-compare');
 
       if (swatchesWrap && swatchesTrack) {
-        if (swatchDots.length <= 4) {
+        if (swatchDots.length <= 3) {
           swatchesWrap.classList.add('coach-card__swatches-wrapper--no-arrows');
         } else {
+          const pageStep = () => swatchesTrack.clientWidth || 104;
           const updateSwatchArrows = () => {
             const maxScroll = swatchesTrack.scrollWidth - swatchesTrack.clientWidth;
             if (swatchPrevBtn) {
@@ -683,7 +684,7 @@ class CoachCollection {
             swatchPrevBtn.addEventListener('click', (e) => {
               e.preventDefault();
               e.stopPropagation();
-              swatchesTrack.scrollBy({ left: -48, behavior: 'smooth' });
+              swatchesTrack.scrollBy({ left: -pageStep(), behavior: 'smooth' });
               setTimeout(updateSwatchArrows, 250);
             });
           }
@@ -692,7 +693,7 @@ class CoachCollection {
             swatchNextBtn.addEventListener('click', (e) => {
               e.preventDefault();
               e.stopPropagation();
-              swatchesTrack.scrollBy({ left: 48, behavior: 'smooth' });
+              swatchesTrack.scrollBy({ left: pageStep(), behavior: 'smooth' });
               setTimeout(updateSwatchArrows, 250);
             });
           }
