@@ -29,17 +29,15 @@
 .coach-colnav__bar {
   display: block;
   position: relative;
-  height: 0;
-  margin: 0;
+  height: 6px;
+  margin: 14px 16px 8px;
   background: #efefef;
   overflow: hidden;
   opacity: 0;
   pointer-events: none;
-  transition: opacity 0.2s ease, height 0.2s ease, margin 0.2s ease;
+  transition: opacity 0.28s ease;
 }
 .coach-colnav__bar.is-on {
-  height: 6px;
-  margin: 14px 16px 8px;
   opacity: 1;
 }
 .coach-colnav__bar[hidden] { display: none; }
@@ -50,6 +48,7 @@
   height: 100%;
   width: 30%;
   background: #8a8a8a;
+  transition: left 0.16s linear, width 0.16s linear;
 }
 .coach-colnav-section {
   display: block;

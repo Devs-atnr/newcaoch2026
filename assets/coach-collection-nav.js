@@ -151,8 +151,9 @@
 
     const show = () => {
       if (!paint()) return;
-      bar.classList.add('is-on');
       clearTimeout(hideTimer);
+      if (bar.classList.contains('is-on')) return;
+      requestAnimationFrame(() => bar.classList.add('is-on'));
     };
 
     const hideLater = () => {
