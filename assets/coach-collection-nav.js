@@ -138,8 +138,43 @@
     });
   };
 
+  const bindIconBar = (grid) => {
+    if (!grid || grid.dataset.barReady === 'true') return;
+    const section = grid.closest('.coach-colnav.is-icons');
+    if (!section) return;
+    grid.dataset.barReady = 'true';
+
+    const bar = document.createElement('div');
+    bar.className = 'coach-colnav__bar';
+    bar.hidden = true;
+    const thumb = document.createElement('span');
+    thumb.className = 'coach-colnav__bar-thumb';
+    bar.appendChild(thumb);
+    grid.insertAdjacentElement('afterend', bar);
+
+    const update = () => {
+      const max = grid.scrollWidth - grid.clientWidth;
+      const mobile = window.matchMedia('(max-width: 749px)').matches;
+      if (!mobile || max < 8) {
+        bar.hidden = true;
+        return;
+      }
+      bar.hidden = false;
+      const width = Math.max(18, (grid.clientWidth / grid.scrollWidth) * 100);
+      const left = max > 0 ? (grid.scrollLeft / max) * (100 - width) : 0;
+      thumb.style.width = width + '%';
+      thumb.style.left = left + '%';
+    };
+
+    grid.addEventListener('scroll', update, { passive: true });
+    window.addEventListener('resize', update);
+    if (window.ResizeObserver) new ResizeObserver(update).observe(grid);
+    update();
+  };
+
   const init = () => {
     document.querySelectorAll('.coach-colnav.is-photos .coach-colnav__grid').forEach(bindGrid);
+    document.querySelectorAll('.coach-colnav.is-icons .coach-colnav__grid').forEach(bindIconBar);
   };
 
   if (document.readyState === 'loading') {
