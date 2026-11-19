@@ -86,6 +86,17 @@
   }
   .coach-colnav__grid::-webkit-scrollbar { display: none; }
   .coach-colnav__card { scroll-snap-align: start; }
+  .coach-colnav.is-icons .coach-colnav__grid,
+  .coach-colnav.is-photos .coach-colnav__grid {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    overflow-x: auto;
+  }
+  .coach-colnav.is-icons .coach-colnav__card,
+  .coach-colnav.is-photos .coach-colnav__card {
+    flex: 0 0 auto;
+  }
   .coach-colnav.is-icons .coach-colnav__card { width: var(--cn-icon-w-m, 88px); }
   .coach-colnav.is-icons .coach-colnav__media { height: var(--cn-icon-h-m, 64px); }
   .coach-colnav.is-photos .coach-colnav__card { width: 78%; }
