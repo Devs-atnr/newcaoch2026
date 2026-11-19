@@ -188,7 +188,7 @@
             endif
           -%}
           {%- if has_spec_table or measurements != blank or materials != blank or strap != blank or features != blank or style_number != blank -%}
-            <details class="coach-product__acc" {{ block.shopify_attributes }}{% if block.settings.open != false %} open{% endif %}>
+            <details class="coach-product__acc coach-product__acc--details" {{ block.shopify_attributes }}{% if block.settings.open != false %} open{% endif %}>
               <summary>{{ block.settings.heading | escape }}</summary>
               <div class="coach-product__acc-body">
                 {%- if has_spec_table -%}

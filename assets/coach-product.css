@@ -1771,6 +1771,8 @@ body.coach-sheet-open { overflow: hidden; }
     inset: 0;
   }
   .coach-product__acc--notes { display: block; }
+  .coach-product__acc--ship,
+  .coach-product__ship-row { display: none !important; }
   .coach-product__stock--under {
     display: block;
     margin: 8px 0 0;

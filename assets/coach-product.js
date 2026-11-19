@@ -16,8 +16,14 @@ class CoachProductPage extends HTMLElement {
     this.bindWishlist();
     this.bindRailAdd();
     this.rememberView();
+    this.closeMobileDetails();
     this.loadAlso();
     this.loadRecent();
+  }
+
+  closeMobileDetails() {
+    if (!window.matchMedia('(max-width: 1100px)').matches) return;
+    this.querySelectorAll('.coach-product__acc--details').forEach((item) => item.removeAttribute('open'));
   }
 
   readData() {
