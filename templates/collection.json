@@ -138,7 +138,7 @@
         "heading_color": "#111111",
         "layout": "photos",
         "columns": 4,
-        "gap": 16,
+        "gap": 12,
         "gap_mobile": 8,
         "icon_height": 72,
         "icon_width": 140,
