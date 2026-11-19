@@ -11,46 +11,140 @@
   "sections": {
     "coach_collection_men": {
       "type": "coach-collection-nav",
-      "name": "Men collection",
       "blocks": {
-        "card_1": { "type": "card", "settings": { "title": "Messenger Bags" } },
-        "card_2": { "type": "card", "settings": { "title": "Totes & Duffles" } },
-        "card_3": { "type": "card", "settings": { "title": "Backpacks" } },
-        "card_4": { "type": "card", "settings": { "title": "Briefcases" } }
+        "card_1": {
+          "type": "card",
+          "settings": {
+            "image": "shopify://shop_images/ce-20240119-plpvf-menbags-1_1.webp",
+            "title": "Messenger Bags",
+            "link": ""
+          }
+        },
+        "card_2": {
+          "type": "card",
+          "settings": {
+            "image": "shopify://shop_images/ce-20240119-plpvf-menbags-2_65057f8e-6d84-40be-9512-92f1fb82dcc7.webp",
+            "title": "Totes & Duffles",
+            "link": ""
+          }
+        },
+        "card_3": {
+          "type": "card",
+          "settings": {
+            "image": "shopify://shop_images/ce-20240119-plpvf-menbags-3_d862acd4-6e83-4270-8d84-f278a70e7a05.webp",
+            "title": "Backpacks",
+            "link": ""
+          }
+        },
+        "card_4": {
+          "type": "card",
+          "settings": {
+            "image": "shopify://shop_images/ce-20240119-plpvf-menbags-4_1.webp",
+            "title": "Briefcases",
+            "link": ""
+          }
+        }
       },
-      "block_order": ["card_1", "card_2", "card_3", "card_4"],
+      "block_order": [
+        "card_1",
+        "card_2",
+        "card_3",
+        "card_4"
+      ],
+      "name": "Men collection",
       "settings": {
+        "collections": [
+          "men_fp_bags"
+        ],
         "heading": "Men's Bags",
         "show_heading": true,
+        "heading_size": 28,
+        "heading_color": "#111111",
         "layout": "icons",
+        "columns": 4,
         "gap": 36,
+        "gap_mobile": 16,
+        "icon_height": 72,
+        "icon_width": 140,
+        "photo_height": 340,
+        "image_fit": "contain",
+        "background": "#f0f0f0",
+        "image_background": "#f0f0f0",
+        "label_size": 13,
+        "label_weight": "400",
+        "label_space": 10,
         "label_color": "#6a6a6a",
-        "background": "#f0f0f0"
+        "padding_top": 28,
+        "padding_bottom": 12,
+        "padding_left": 20,
+        "padding_right": 20
       }
     },
     "coach_collection_women": {
       "type": "coach-collection-nav",
-      "name": "Women collection",
       "blocks": {
-        "card_1": { "type": "card", "settings": { "title": "Tabby" } },
-        "card_2": { "type": "card", "settings": { "title": "Shoulder Bags" } },
-        "card_3": { "type": "card", "settings": { "title": "Bag Charms" } },
-        "card_4": { "type": "card", "settings": { "title": "Shoes" } }
+        "card_1": {
+          "type": "card",
+          "settings": {
+            "title": "Tabby",
+            "link": ""
+          }
+        },
+        "card_2": {
+          "type": "card",
+          "settings": {
+            "title": "Shoulder Bags",
+            "link": ""
+          }
+        },
+        "card_3": {
+          "type": "card",
+          "settings": {
+            "title": "Bag Charms",
+            "link": ""
+          }
+        },
+        "card_4": {
+          "type": "card",
+          "settings": {
+            "title": "Shoes",
+            "link": ""
+          }
+        }
       },
-      "block_order": ["card_1", "card_2", "card_3", "card_4"],
+      "block_order": [
+        "card_1",
+        "card_2",
+        "card_3",
+        "card_4"
+      ],
+      "name": "Women collection",
       "settings": {
+        "collections": [
+          "women_fp_bags"
+        ],
         "heading": "",
         "show_heading": false,
+        "heading_size": 28,
+        "heading_color": "#111111",
         "layout": "photos",
+        "columns": 4,
         "gap": 8,
         "gap_mobile": 8,
+        "icon_height": 72,
+        "icon_width": 140,
+        "photo_height": 340,
         "image_fit": "cover",
+        "background": "#f0f0f0",
+        "image_background": "#f0f0f0",
         "label_size": 14,
+        "label_weight": "400",
+        "label_space": 10,
         "label_color": "#111111",
         "padding_top": 0,
+        "padding_bottom": 12,
         "padding_left": 0,
-        "padding_right": 0,
-        "background": "#f0f0f0"
+        "padding_right": 0
       }
     },
     "coach-collection": {
@@ -59,12 +153,17 @@
         "show_collection_title": true,
         "show_product_count": true,
         "show_collection_description": false,
+        "content_width": 1440,
+        "side_padding": 40,
         "columns_desktop": 4,
         "columns_mobile": "2",
         "products_per_page": 48,
+        "grid_row_gap": 12,
+        "grid_column_gap": 18,
         "enable_filtering": true,
         "enable_sorting": true,
         "show_filter_counts": false,
+        "card_title_size": 16,
         "card_price_size": 14,
         "image_ratio": "portrait",
         "enable_slider": true,
@@ -72,15 +171,68 @@
         "show_swatches": true,
         "show_view_similar": false,
         "new_badge_tag": "new, New Arrival, New, new-arrival",
+        "almost_gone_badge_tag": "almost gone, Almost Gone, almost-gone, low stock, Low Stock",
         "coming_soon_badge_tag": "coming soon, Coming Soon, coming-soon",
+        "title_size": 26,
+        "count_size": 16,
+        "header_bottom_gap": 24,
+        "filter_pill_bg": "#ffffff",
+        "filter_pill_text": "#111111",
+        "filter_pill_border": "#dfdfdf",
+        "popover_bg": "#ffffff",
+        "popover_radius": 16,
         "body_bg_color": "#f0f0f0",
+        "title_color": "#000000",
+        "count_color": "#575757",
+        "filter_font_size": 14,
+        "sort_font_size": 16,
+        "badge_font_size": 12,
+        "badge_bg": "#ffffff",
+        "badge_text": "#111111",
+        "card_title_color": "#000000",
+        "price_color": "#1a202c",
+        "font_family": "HelveticaLTPro-Roman, 'Helvetica Neue', Helvetica, Arial, sans-serif",
+        "bag_font_size": 14,
+        "bag_bg": "#ffffff",
+        "bag_text": "#111111",
+        "bag_hover_bg": "#000000",
+        "bag_hover_text": "#ffffff",
+        "show_breadcrumb": true,
+        "breadcrumb_home": "Coach",
+        "breadcrumb_menu": "",
+        "breadcrumb_size": 12,
+        "breadcrumb_color": "#8a8a8a",
+        "enable_infinite_scroll": true,
+        "hide_page_numbers": true,
+        "swatch_size": 28,
         "padding_top": 32,
         "padding_bottom": 48
       }
     },
     "coach-collection-faq": {
       "type": "coach-collection-faq",
-      "settings": {}
+      "settings": {
+        "heading": "Frequently Asked Questions",
+        "show_lines": true,
+        "line_color": "#e6e6e6",
+        "heading_font": "helvetica",
+        "heading_size": 22,
+        "heading_size_mobile": 22,
+        "heading_weight": "700",
+        "heading_color": "#111111",
+        "question_font": "helvetica",
+        "question_size": 16,
+        "question_weight": "400",
+        "question_color": "#111111",
+        "answer_font": "helvetica",
+        "answer_size": 14,
+        "answer_weight": "400",
+        "answer_color": "#333333",
+        "content_width": 1440,
+        "side_padding": 48,
+        "padding_top": 48,
+        "padding_bottom": 48
+      }
     }
   },
   "order": [
