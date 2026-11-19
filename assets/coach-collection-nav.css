@@ -144,7 +144,7 @@
     width: 82%;
   }
   .coach-colnav.is-photos .coach-colnav__media {
-    height: var(--cn-photo-h-m, 240px);
+    height: var(--cn-photo-h-m, 280px);
   }
   .coach-colnav.is-photos .coach-colnav__media img {
     object-fit: cover;
