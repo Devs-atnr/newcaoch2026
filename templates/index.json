@@ -9,20 +9,6 @@
  */
 {
   "sections": {
-    "coach_gift_banner": {
-      "type": "coach-gift-banner",
-      "settings": {
-        "heading": "Get ahead on gifting.",
-        "text": "Find something for everyone on your list.",
-        "button_text": "Shop Gifts",
-        "heading_color": "#ffffff",
-        "text_color": "#ffffff",
-        "button_color": "#ffffff",
-        "content_vertical": "middle",
-        "desktop_height": 720,
-        "mobile_height": 640
-      }
-    },
     "coach_home_banner": {
       "type": "coach-home-banner",
       "settings": {
@@ -31,7 +17,7 @@
         "image_alt": "",
         "desktop_height": 800,
         "mobile_height": 620,
-        "background": "#ffffff",
+        "background": "rgba(0,0,0,0)",
         "heading": "Holiday starts now.",
         "heading_font": "helvetica",
         "heading_size": 26,
@@ -73,103 +59,47 @@
         "padding_right_mobile": 0
       }
     },
-    "coach_home_categories": {
-      "type": "coach-home-categories",
-      "blocks": {
-        "card_1": { "type": "card", "settings": { "title": "New Arrivals" } },
-        "card_2": { "type": "card", "settings": { "title": "Shoulder Bags" } },
-        "card_3": { "type": "card", "settings": { "title": "Wallets & Wristlets" } },
-        "card_4": { "type": "card", "settings": { "title": "Men's" } }
-      },
-      "block_order": ["card_1", "card_2", "card_3", "card_4"],
+    "coach_gift_banner_qRR4xk": {
+      "type": "coach-gift-banner",
+      "name": "Gift banner",
       "settings": {
-        "heading": "Check off your list",
-        "show_heading_desktop": true,
-        "show_heading_mobile": true,
-        "heading_size": 12,
-        "heading_size_mobile": 12,
-        "heading_spacing": 2,
-        "background": "#ead9c8",
-        "image_background": "#ead9c8",
-        "gap": 8,
-        "gap_mobile": 8,
-        "label_size": 16,
-        "label_space": 16
-      }
-    },
-    "image_banner": {
-      "type": "image-banner",
-      "blocks": {
-        "heading": {
-          "type": "heading",
-          "settings": {
-            "heading": "Browse our latest products",
-            "heading_size": "h0"
-          }
-        },
-        "button": {
-          "type": "buttons",
-          "settings": {
-            "button_label_1": "Shop all",
-            "button_link_1": "shopify://collections/all",
-            "button_style_secondary_1": true,
-            "button_label_2": "",
-            "button_link_2": "",
-            "button_style_secondary_2": false
-          }
-        }
-      },
-      "block_order": [
-        "heading",
-        "button"
-      ],
-      "settings": {
-        "image_overlay_opacity": 40,
-        "image_height": "large",
-        "image_behavior": "none",
-        "desktop_content_position": "bottom-center",
-        "desktop_content_alignment": "center",
-        "show_text_box": false,
-        "color_scheme": "scheme-3",
-        "stack_images_on_mobile": false,
-        "mobile_content_alignment": "center",
-        "show_text_below": false
-      }
-    },
-    "featured_collection": {
-      "type": "featured-collection",
-      "settings": {
-        "collection": "all",
-        "products_to_show": 8,
-        "title": "Featured products",
-        "heading_size": "h2",
-        "description": "",
-        "show_description": false,
-        "description_style": "body",
-        "columns_desktop": 4,
-        "enable_desktop_slider": false,
-        "full_width": false,
-        "show_view_all": true,
-        "view_all_style": "solid",
-        "color_scheme": "scheme-1",
-        "image_ratio": "adapt",
-        "image_shape": "default",
-        "show_secondary_image": true,
-        "show_vendor": false,
-        "show_rating": false,
-        "quick_add": "none",
-        "columns_mobile": "2",
-        "swipe_on_mobile": false,
-        "padding_top": 44,
-        "padding_bottom": 36
+        "desktop_image": "shopify://shop_images/ce-20261102-hp3.webp",
+        "mobile_image": "shopify://shop_images/ce-20261102-hp3-m.webp",
+        "image_alt": "",
+        "desktop_height": 900,
+        "mobile_height": 640,
+        "overlay": 0,
+        "heading": "Get ahead on gifting.",
+        "heading_font": "garamond",
+        "heading_size": 36,
+        "heading_size_mobile": 24,
+        "heading_color": "#ffffff",
+        "text": "Find something for everyone on your list.",
+        "text_font": "helvetica",
+        "text_size": 16,
+        "text_size_mobile": 14,
+        "text_color": "#ffffff",
+        "text_width": 560,
+        "button_text": "Shop Gifts",
+        "button_link": "",
+        "button_color": "#ffffff",
+        "button_size": 14,
+        "content_vertical": "middle",
+        "content_bottom": 72,
+        "content_bottom_mobile": 48,
+        "padding_top": 0,
+        "padding_bottom": 0,
+        "padding_left": 0,
+        "padding_right": 0,
+        "padding_top_mobile": 0,
+        "padding_bottom_mobile": 0,
+        "padding_left_mobile": 0,
+        "padding_right_mobile": 0
       }
     }
   },
   "order": [
-    "coach_gift_banner",
     "coach_home_banner",
-    "coach_home_categories",
-    "image_banner",
-    "featured_collection"
+    "coach_gift_banner_qRR4xk"
   ]
 }
