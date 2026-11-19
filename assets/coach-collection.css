@@ -1539,7 +1539,7 @@ button.coach-sort-btn {
 
 .coach-card__title {
   font-family: var(--coach-font, HelveticaLTPro-Roman, "Helvetica Neue", Helvetica, Arial, sans-serif);
-  font-size: var(--coach-card-title-size, 16px) !important;
+  font-size: var(--coach-card-title-size, 14px) !important;
   color: var(--coach-card-title-color, #000000);
   font-weight: 400;
   line-height: 1.3;
