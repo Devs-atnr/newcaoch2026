@@ -9,6 +9,50 @@
  */
 {
   "sections": {
+    "coach_collection_men": {
+      "type": "coach-collection-nav",
+      "name": "Men collection",
+      "blocks": {
+        "card_1": { "type": "card", "settings": { "title": "Messenger Bags" } },
+        "card_2": { "type": "card", "settings": { "title": "Totes & Duffles" } },
+        "card_3": { "type": "card", "settings": { "title": "Backpacks" } },
+        "card_4": { "type": "card", "settings": { "title": "Briefcases" } }
+      },
+      "block_order": ["card_1", "card_2", "card_3", "card_4"],
+      "settings": {
+        "heading": "Men's Bags",
+        "show_heading": true,
+        "layout": "icons",
+        "gap": 36,
+        "label_color": "#6a6a6a",
+        "background": "#f0f0f0"
+      }
+    },
+    "coach_collection_women": {
+      "type": "coach-collection-nav",
+      "name": "Women collection",
+      "blocks": {
+        "card_1": { "type": "card", "settings": { "title": "Tabby" } },
+        "card_2": { "type": "card", "settings": { "title": "Shoulder Bags" } },
+        "card_3": { "type": "card", "settings": { "title": "Bag Charms" } },
+        "card_4": { "type": "card", "settings": { "title": "Shoes" } }
+      },
+      "block_order": ["card_1", "card_2", "card_3", "card_4"],
+      "settings": {
+        "heading": "",
+        "show_heading": false,
+        "layout": "photos",
+        "gap": 8,
+        "gap_mobile": 8,
+        "image_fit": "cover",
+        "label_size": 14,
+        "label_color": "#111111",
+        "padding_top": 0,
+        "padding_left": 0,
+        "padding_right": 0,
+        "background": "#f0f0f0"
+      }
+    },
     "coach-collection": {
       "type": "coach-collection",
       "settings": {
@@ -40,6 +84,8 @@
     }
   },
   "order": [
+    "coach_collection_men",
+    "coach_collection_women",
     "coach-collection",
     "coach-collection-faq"
   ]

@@ -1,0 +1,141 @@
+{{ 'coach-collection-nav.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign show_section = true
+  if section.settings.collections != blank and section.settings.collections.size > 0
+    assign show_section = false
+    for nav_collection in section.settings.collections
+      if nav_collection.id == collection.id
+        assign show_section = true
+      endif
+    endfor
+  endif
+-%}
+
+{%- if show_section -%}
+  <section
+    class="coach-colnav{% if section.settings.layout == 'photos' %} is-photos{% else %} is-icons{% endif %}"
+    style="--cn-bg: {{ section.settings.background }}; --cn-img: {{ section.settings.image_background }}; --cn-cols: {{ section.settings.columns }}; --cn-gap: {{ section.settings.gap }}px; --cn-gap-m: {{ section.settings.gap_mobile }}px; --cn-pt: {{ section.settings.padding_top }}px; --cn-pr: {{ section.settings.padding_right }}px; --cn-pb: {{ section.settings.padding_bottom }}px; --cn-pl: {{ section.settings.padding_left }}px; --cn-heading: {{ section.settings.heading_size }}px; --cn-heading-color: {{ section.settings.heading_color }}; --cn-icon-h: {{ section.settings.icon_height }}px; --cn-icon-w: {{ section.settings.icon_width }}px; --cn-photo-h: {{ section.settings.photo_height }}px; --cn-fit: {{ section.settings.image_fit }}; --cn-label: {{ section.settings.label_size }}px; --cn-label-color: {{ section.settings.label_color }}; --cn-label-weight: {{ section.settings.label_weight }}; --cn-label-space: {{ section.settings.label_space }}px;"
+  >
+    {%- if section.settings.show_heading and section.settings.heading != blank -%}
+      <h2 class="coach-colnav__heading">{{ section.settings.heading | escape }}</h2>
+    {%- endif -%}
+    <div class="coach-colnav__grid">
+      {%- for block in section.blocks -%}
+        <a
+          class="coach-colnav__card{% if block.settings.link == collection.url %} is-current{% endif %}"
+          href="{{ block.settings.link | default: '#' }}"
+          {{ block.shopify_attributes }}
+        >
+          <span class="coach-colnav__media">
+            {%- if block.settings.image != blank -%}
+              {{ block.settings.image | image_url: width: 900 | image_tag: alt: block.settings.title, loading: 'lazy' }}
+            {%- else -%}
+              {{ 'product-apparel-1' | placeholder_svg_tag }}
+            {%- endif -%}
+          </span>
+          {%- if block.settings.title != blank -%}
+            <span class="coach-colnav__title">{{ block.settings.title | escape }}</span>
+          {%- endif -%}
+        </a>
+      {%- endfor -%}
+    </div>
+  </section>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Collection links",
+  "tag": "section",
+  "class": "coach-colnav-section",
+  "enabled_on": { "templates": ["collection"] },
+  "max_blocks": 12,
+  "settings": [
+    { "type": "paragraph", "content": "Add one section for men and one for women. Upload each image yourself. Choose collections so the men's row shows on men's pages and the women's row shows on women's pages. Leave that list empty to show the row on every collection." },
+    { "type": "collection_list", "id": "collections", "label": "Show on collections" },
+    { "type": "header", "content": "Heading" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Men's Bags" },
+    { "type": "checkbox", "id": "show_heading", "label": "Show heading", "default": true },
+    { "type": "range", "id": "heading_size", "min": 18, "max": 40, "step": 1, "unit": "px", "label": "Heading size", "default": 28 },
+    { "type": "color", "id": "heading_color", "label": "Heading color", "default": "#111111" },
+    { "type": "header", "content": "Layout" },
+    { "type": "select", "id": "layout", "label": "Layout", "default": "icons", "options": [
+      { "value": "icons", "label": "Small icons" },
+      { "value": "photos", "label": "Large photos" }
+    ] },
+    { "type": "range", "id": "columns", "min": 2, "max": 6, "step": 1, "label": "Desktop columns", "default": 4 },
+    { "type": "range", "id": "gap", "min": 0, "max": 48, "step": 4, "unit": "px", "label": "Desktop gap", "default": 36 },
+    { "type": "range", "id": "gap_mobile", "min": 0, "max": 32, "step": 2, "unit": "px", "label": "Mobile gap", "default": 16 },
+    { "type": "range", "id": "icon_height", "min": 48, "max": 160, "step": 4, "unit": "px", "label": "Icon height", "default": 72 },
+    { "type": "range", "id": "icon_width", "min": 80, "max": 200, "step": 4, "unit": "px", "label": "Icon width", "default": 140 },
+    { "type": "range", "id": "photo_height", "min": 200, "max": 520, "step": 20, "unit": "px", "label": "Photo height", "default": 340 },
+    { "type": "select", "id": "image_fit", "label": "Image fit", "default": "contain", "options": [
+      { "value": "contain", "label": "Contain" },
+      { "value": "cover", "label": "Cover" }
+    ] },
+    { "type": "color", "id": "background", "label": "Background", "default": "#f0f0f0" },
+    { "type": "color", "id": "image_background", "label": "Image background", "default": "#f0f0f0" },
+    { "type": "header", "content": "Label" },
+    { "type": "range", "id": "label_size", "min": 11, "max": 20, "step": 1, "unit": "px", "label": "Label size", "default": 13 },
+    { "type": "select", "id": "label_weight", "label": "Label weight", "default": "400", "options": [
+      { "value": "400", "label": "Regular" },
+      { "value": "700", "label": "Bold" }
+    ] },
+    { "type": "range", "id": "label_space", "min": 4, "max": 28, "step": 2, "unit": "px", "label": "Space above label", "default": 10 },
+    { "type": "color", "id": "label_color", "label": "Label color", "default": "#6a6a6a" },
+    { "type": "header", "content": "Padding" },
+    { "type": "range", "id": "padding_top", "min": 0, "max": 80, "step": 4, "unit": "px", "label": "Top", "default": 28 },
+    { "type": "range", "id": "padding_bottom", "min": 0, "max": 80, "step": 4, "unit": "px", "label": "Bottom", "default": 12 },
+    { "type": "range", "id": "padding_left", "min": 0, "max": 80, "step": 4, "unit": "px", "label": "Left", "default": 20 },
+    { "type": "range", "id": "padding_right", "min": 0, "max": 80, "step": 4, "unit": "px", "label": "Right", "default": 20 }
+  ],
+  "blocks": [
+    {
+      "type": "card",
+      "name": "Link",
+      "settings": [
+        { "type": "image_picker", "id": "image", "label": "Image", "info": "Upload the photo for this link." },
+        { "type": "text", "id": "title", "label": "Title", "default": "Shop" },
+        { "type": "url", "id": "link", "label": "Link" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Men collection",
+      "settings": {
+        "heading": "Men's Bags",
+        "show_heading": true,
+        "layout": "icons"
+      },
+      "blocks": [
+        { "type": "card", "settings": { "title": "Messenger Bags" } },
+        { "type": "card", "settings": { "title": "Totes & Duffles" } },
+        { "type": "card", "settings": { "title": "Backpacks" } },
+        { "type": "card", "settings": { "title": "Briefcases" } }
+      ]
+    },
+    {
+      "name": "Women collection",
+      "settings": {
+        "heading": "",
+        "show_heading": false,
+        "layout": "photos",
+        "gap": 8,
+        "image_fit": "cover",
+        "label_size": 14,
+        "label_color": "#111111",
+        "padding_top": 0,
+        "padding_left": 0,
+        "padding_right": 0
+      },
+      "blocks": [
+        { "type": "card", "settings": { "title": "Tabby" } },
+        { "type": "card", "settings": { "title": "Shoulder Bags" } },
+        { "type": "card", "settings": { "title": "Bag Charms" } },
+        { "type": "card", "settings": { "title": "Shoes" } }
+      ]
+    }
+  ]
+}
+{% endschema %}
