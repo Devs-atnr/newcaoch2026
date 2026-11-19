@@ -1,14 +1,14 @@
 .coach-home-cats {
   box-sizing: border-box;
-  background: var(--cat-bg, #fff);
-  padding: var(--cat-pt, 28px) var(--cat-pr, 16px) var(--cat-pb, 28px) var(--cat-pl, 16px);
+  background: var(--cat-bg, #ead9c8);
+  padding: var(--cat-pt, 28px) var(--cat-pr, 20px) var(--cat-pb, 36px) var(--cat-pl, 20px);
 }
 .coach-home-cats__heading {
-  margin: 0 0 22px;
+  margin: 0 0 28px;
   font-family: var(--cat-heading, HelveticaLTPro-Roman, Helvetica, Arial, sans-serif);
-  font-size: var(--cat-heading-size, 14px);
-  font-weight: 700;
-  letter-spacing: 0.08em;
+  font-size: var(--cat-heading-size, 12px);
+  font-weight: var(--cat-heading-weight, 700);
+  letter-spacing: var(--cat-track, 2px);
   line-height: 1.3;
   text-align: center;
   text-transform: uppercase;
@@ -18,7 +18,7 @@
 .coach-home-cats__grid {
   display: grid;
   grid-template-columns: repeat(var(--cat-cols, 4), minmax(0, 1fr));
-  gap: var(--cat-gap, 12px);
+  gap: var(--cat-gap, 8px);
 }
 .coach-home-cats__card {
   display: block;
@@ -28,7 +28,7 @@
 .coach-home-cats__media {
   display: block;
   background: var(--cat-img, #ead9c8);
-  aspect-ratio: 1 / 1.05;
+  aspect-ratio: 1 / 1.08;
   overflow: hidden;
 }
 .coach-home-cats__media img,
@@ -36,14 +36,14 @@
   display: block;
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: var(--cat-fit, cover);
 }
 .coach-home-cats__title {
   display: block;
-  margin-top: 14px;
+  margin-top: var(--cat-label-space, 16px);
   font-family: var(--cat-label, HelveticaLTPro-Roman, Helvetica, Arial, sans-serif);
-  font-size: var(--cat-label-size, 15px);
-  font-weight: 700;
+  font-size: var(--cat-label-size, 16px);
+  font-weight: var(--cat-label-weight, 700);
   line-height: 1.3;
   text-align: center;
   color: var(--cat-label-color, #111);

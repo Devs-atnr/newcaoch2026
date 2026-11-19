@@ -71,7 +71,16 @@
       "settings": {
         "heading": "Check off your list",
         "show_heading_desktop": true,
-        "show_heading_mobile": true
+        "show_heading_mobile": true,
+        "heading_size": 12,
+        "heading_size_mobile": 12,
+        "heading_spacing": 2,
+        "background": "#ead9c8",
+        "image_background": "#ead9c8",
+        "gap": 8,
+        "gap_mobile": 8,
+        "label_size": 16,
+        "label_space": 16
       }
     },
     "image_banner": {
