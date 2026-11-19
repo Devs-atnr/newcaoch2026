@@ -121,6 +121,9 @@
   .coach-colnav.is-photos .coach-colnav__media {
     height: var(--cn-photo-h-m, 240px);
   }
+  .coach-colnav.is-photos .coach-colnav__media img {
+    object-fit: cover;
+  }
   .coach-colnav.is-photos .coach-colnav__title {
     color: var(--cn-label-color-m, #111111);
     font-size: var(--cn-label-m, 14px);
