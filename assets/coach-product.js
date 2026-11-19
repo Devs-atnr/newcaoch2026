@@ -967,6 +967,7 @@ class CoachProductPage extends HTMLElement {
       const id = button.dataset.variantId;
       if (!id || this.dataset.adding === 'true') return;
       this.dataset.adding = 'true';
+      button.classList.add('is-added');
       button.setAttribute('aria-busy', 'true');
       this.showLoader(true);
       try {
@@ -981,6 +982,7 @@ class CoachProductPage extends HTMLElement {
         this.showLoader(false);
         if (window.CoachMiniBag?.open) await window.CoachMiniBag.open();
       } catch (error) {
+        button.classList.remove('is-added');
         this.showLoader(false);
       } finally {
         this.dataset.adding = 'false';

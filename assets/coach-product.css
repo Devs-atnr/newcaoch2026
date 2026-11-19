@@ -1234,6 +1234,12 @@ html.coach-zoom-open { overflow: hidden; }
   min-height: 40px;
   margin: 14px auto 0;
 }
+.coach-rail-card__add:active,
+.coach-rail-card__add.is-added {
+  background: #000;
+  border-color: #000;
+  color: #fff;
+}
 @media screen and (min-width: 1101px) {
   .coach-product__rail[data-rail="also"][data-layout-desktop="equal-grid"] .coach-product__rail-track,
   .coach-product__rail[data-rail="also"][data-layout-desktop="fixed-grid"] .coach-product__rail-track {
