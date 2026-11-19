@@ -1937,24 +1937,40 @@ button.coach-sort-btn {
   .coach-mobile-filter-btn {
     display: inline-flex;
     align-items: center;
-    gap: 8px;
-    height: 40px;
-    padding: 0 16px;
-    border: 1px solid #e4e4e4;
+    gap: 6px;
+    height: 34px;
+    padding: 0 12px;
+    border: 1px solid #111111;
     border-radius: 999px;
     background: #ffffff;
     color: #111111;
     font-family: inherit;
-    font-size: 13px;
-    letter-spacing: 0.04em;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    line-height: 1;
     text-transform: uppercase;
     cursor: pointer;
   }
 
-  .coach-facets-bar::after,
+  .coach-mobile-filter-btn svg {
+    width: 14px;
+    height: 14px;
+    flex: 0 0 auto;
+  }
+
   .coach-facets-form,
   .coach-active-facets {
     display: none;
+  }
+
+  .coach-facets-bar {
+    padding-bottom: 14px;
+  }
+
+  .coach-facets-bar::after {
+    display: block;
+    background: #e3e3e3;
   }
 
   .coach-facets-bar.is-drawer-open {
@@ -1966,6 +1982,10 @@ button.coach-sort-btn {
     padding: 0;
     background: rgba(0, 0, 0, 0.45);
     overflow: hidden;
+  }
+
+  .coach-facets-bar.is-drawer-open::after {
+    display: none;
   }
 
   .coach-facets-bar.is-drawer-open .coach-mobile-filter-btn,
