@@ -72,9 +72,23 @@
     let startX = 0;
     let startY = 0;
     let startLeft = 0;
+    let paused = false;
+    let resumeTimer = 0;
+    const mobileQuery = window.matchMedia('(max-width: 749px)');
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    const pause = () => {
+      paused = true;
+      clearTimeout(resumeTimer);
+    };
+    const resumeLater = () => {
+      clearTimeout(resumeTimer);
+      resumeTimer = setTimeout(() => { paused = false; }, 900);
+    };
 
     grid.addEventListener('pointerdown', (event) => {
       if (event.pointerType === 'mouse' && event.button !== 0) return;
+      pause();
       if (event.pointerType === 'mouse') event.preventDefault();
       dragging = true;
       moved = false;
@@ -89,10 +103,11 @@
       const dx = event.clientX - startX;
       const dy = event.clientY - startY;
       if (!axis) {
-        if (Math.abs(dx) < 8 && Math.abs(dy) < 8) return;
+        if (Math.abs(dx) < 6 && Math.abs(dy) < 6) return;
         axis = Math.abs(dx) >= Math.abs(dy) ? 'x' : 'y';
         if (axis === 'y') {
           dragging = false;
+          resumeLater();
           return;
         }
         grid.classList.add('is-dragging');
@@ -108,9 +123,12 @@
       dragging = false;
       axis = '';
       grid.classList.remove('is-dragging');
+      resumeLater();
     };
     grid.addEventListener('pointerup', stopDrag);
     grid.addEventListener('pointercancel', stopDrag);
+    grid.addEventListener('touchstart', pause, { passive: true });
+    grid.addEventListener('touchend', resumeLater, { passive: true });
 
     grid.addEventListener('click', (event) => {
       if (!moved) return;
@@ -119,13 +137,30 @@
       moved = false;
     }, true);
 
-    grid.addEventListener('wheel', (event) => {
+    const onWheel = (event) => {
+      if (!section.contains(event.target)) return;
       const delta = Math.abs(event.deltaX) > Math.abs(event.deltaY) ? event.deltaX : event.deltaY;
       if (!delta) return;
       event.preventDefault();
+      pause();
+      resumeLater();
       const scale = event.deltaMode === 1 ? 16 : event.deltaMode === 2 ? grid.clientWidth : 1;
       grid.scrollLeft += delta * scale;
-    }, { passive: false });
+    };
+    section.addEventListener('wheel', onWheel, { passive: false, capture: true });
+
+    if (!reduceMotion) {
+      let last = 0;
+      const glide = (now) => {
+        if (!paused && mobileQuery.matches && !dragging) {
+          const step = Math.min(32, last ? now - last : 16);
+          grid.scrollLeft += step * 0.045;
+        }
+        last = now;
+        requestAnimationFrame(glide);
+      };
+      requestAnimationFrame(glide);
+    }
 
     window.addEventListener('resize', () => {
       const width = setWidth();

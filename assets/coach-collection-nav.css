@@ -45,7 +45,7 @@
   gap: var(--cn-gap, 8px);
   scrollbar-width: none;
   -webkit-overflow-scrolling: touch;
-  touch-action: pan-y;
+  touch-action: pan-y pinch-zoom;
   overscroll-behavior-x: contain;
   cursor: grab;
 }
@@ -185,7 +185,7 @@
     padding: 0 0 10px;
     scroll-padding-left: 0;
     scroll-snap-type: none;
-    touch-action: pan-y;
+    touch-action: pan-y pinch-zoom;
     overflow-x: auto;
   }
   .coach-colnav.is-photos .coach-colnav__card {
