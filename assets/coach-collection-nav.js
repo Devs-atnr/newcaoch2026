@@ -117,9 +117,9 @@
     });
   };
 
-  const bindIconBar = (grid) => {
+  const bindScrollBar = (grid) => {
     if (!grid || grid.dataset.barReady === 'true') return;
-    const section = grid.closest('.coach-colnav.is-icons');
+    const section = grid.closest('.coach-colnav');
     if (!section) return;
     grid.dataset.barReady = 'true';
 
@@ -131,29 +131,60 @@
     bar.appendChild(thumb);
     grid.insertAdjacentElement('afterend', bar);
 
-    const update = () => {
+    let hovering = false;
+    let hideTimer = 0;
+
+    const paint = () => {
       const max = grid.scrollWidth - grid.clientWidth;
-      const mobile = window.matchMedia('(max-width: 749px)').matches;
-      if (!mobile || max < 8) {
+      if (max < 8) {
         bar.hidden = true;
-        return;
+        bar.classList.remove('is-on');
+        return false;
       }
       bar.hidden = false;
-      const width = Math.max(18, (grid.clientWidth / grid.scrollWidth) * 100);
-      const left = max > 0 ? (grid.scrollLeft / max) * (100 - width) : 0;
+      const width = Math.max(16, (grid.clientWidth / grid.scrollWidth) * 100);
+      const left = (grid.scrollLeft / max) * (100 - width);
       thumb.style.width = width + '%';
       thumb.style.left = left + '%';
+      return true;
     };
 
-    grid.addEventListener('scroll', update, { passive: true });
-    window.addEventListener('resize', update);
-    if (window.ResizeObserver) new ResizeObserver(update).observe(grid);
-    update();
+    const show = () => {
+      if (!paint()) return;
+      bar.classList.add('is-on');
+      clearTimeout(hideTimer);
+    };
+
+    const hideLater = () => {
+      clearTimeout(hideTimer);
+      hideTimer = setTimeout(() => {
+        if (!hovering) bar.classList.remove('is-on');
+      }, 800);
+    };
+
+    section.addEventListener('mouseenter', () => {
+      hovering = true;
+      show();
+    });
+    section.addEventListener('mouseleave', () => {
+      hovering = false;
+      hideLater();
+    });
+    grid.addEventListener('pointerdown', () => {
+      show();
+    });
+    grid.addEventListener('scroll', () => {
+      show();
+      hideLater();
+    }, { passive: true });
+    window.addEventListener('resize', paint);
+    if (window.ResizeObserver) new ResizeObserver(paint).observe(grid);
+    paint();
   };
 
   const init = () => {
     document.querySelectorAll('.coach-colnav.is-photos .coach-colnav__grid').forEach(bindGrid);
-    document.querySelectorAll('.coach-colnav.is-icons .coach-colnav__grid').forEach(bindIconBar);
+    document.querySelectorAll('.coach-colnav__grid').forEach(bindScrollBar);
   };
 
   if (document.readyState === 'loading') {

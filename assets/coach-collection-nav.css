@@ -27,7 +27,29 @@
 }
 .coach-colnav.is-icons .coach-colnav__grid::-webkit-scrollbar { display: none; }
 .coach-colnav__bar {
-  display: none;
+  display: block;
+  position: relative;
+  height: 0;
+  margin: 0;
+  background: #efefef;
+  overflow: hidden;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease, height 0.2s ease, margin 0.2s ease;
+}
+.coach-colnav__bar.is-on {
+  height: 6px;
+  margin: 14px 16px 8px;
+  opacity: 1;
+}
+.coach-colnav__bar[hidden] { display: none; }
+.coach-colnav__bar-thumb {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 30%;
+  background: #8a8a8a;
 }
 .coach-colnav-section {
   display: block;
@@ -164,25 +186,6 @@
   .coach-colnav.is-icons .coach-colnav__title {
     font-size: var(--cn-label-m, 12px);
     color: var(--cn-label-color-m, #6a6a6a);
-  }
-  .coach-colnav.is-icons .coach-colnav__bar {
-    display: block;
-    position: relative;
-    height: 5px;
-    margin: 16px 16px 8px;
-    background: #e4e4e4;
-    border-radius: 3px;
-    overflow: hidden;
-  }
-  .coach-colnav.is-icons .coach-colnav__bar[hidden] { display: none; }
-  .coach-colnav__bar-thumb {
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 100%;
-    width: 30%;
-    background: #9a9a9a;
-    border-radius: 3px;
   }
   .coach-colnav.is-photos {
     padding-top: 0;
