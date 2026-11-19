@@ -1225,7 +1225,8 @@ html.coach-zoom-open { overflow: hidden; }
   text-decoration: none;
   cursor: pointer;
 }
-.coach-product__rail[data-rail="also"] .coach-rail-card__add {
+.coach-product__rail[data-rail="also"] .coach-rail-card__add,
+.coach-product__rail[data-rail="recent"] .coach-rail-card__add {
   display: flex;
   align-items: center;
   justify-content: center;
