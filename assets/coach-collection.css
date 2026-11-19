@@ -1618,10 +1618,10 @@ button.coach-sort-btn {
 }
 
 .coach-card__swatch-dot {
-  width: calc(var(--coach-swatch-size, 28px) + 4px);
-  height: calc(var(--coach-swatch-size, 28px) + 4px);
+  width: var(--coach-swatch-size, 28px);
+  height: var(--coach-swatch-size, 28px);
   border-radius: 50%;
-  border: none !important;
+  border: 1px solid transparent !important;
   background: transparent !important;
   cursor: pointer;
   position: relative;
@@ -1631,6 +1631,7 @@ button.coach-sort-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  box-sizing: border-box;
   box-shadow: none !important;
 }
 
@@ -1644,8 +1645,8 @@ button.coach-sort-btn {
 }
 
 .coach-card__swatch-fill {
-  width: var(--coach-swatch-size, 28px);
-  height: var(--coach-swatch-size, 28px);
+  width: 100%;
+  height: 100%;
   border-radius: 50%;
   display: block;
   pointer-events: none;
@@ -1661,25 +1662,37 @@ button.coach-sort-btn {
   transform: scale(1.06);
 }
 
-.coach-card__swatch-dot--active .coach-card__swatch-fill {
-  border: 1.5px solid #111111 !important;
-  box-shadow: none !important;
-  outline: none !important;
-}
-
 .coach-card__swatch-dot--active,
 .coach-card__swatch-dot--active:hover,
 .coach-card__swatch-dot--active:focus,
 .coach-card__swatch-dot--active:focus-visible,
 .coach-card__swatch-dot--active:active {
+  border: 1px solid #111111 !important;
+  padding: 3px;
   outline: none !important;
   box-shadow: none !important;
+  background: transparent !important;
+}
+
+.coach-card__swatch-dot--active .coach-card__swatch-fill,
+.coach-card__swatch-dot--active:hover .coach-card__swatch-fill {
+  width: 100%;
+  height: 100%;
+  transform: none;
+  border: 0 !important;
+  box-shadow: none !important;
+  outline: none !important;
 }
 
 .coach-card__swatch-dot--sold-out {
   opacity: 1;
   overflow: hidden;
   border-radius: 50%;
+}
+
+.coach-card__swatch-dot--active.coach-card__swatch-dot--sold-out .coach-card__swatch-slash {
+  width: calc(100% - 6px);
+  height: calc(100% - 6px);
 }
 
 .coach-card__swatch-slash {
