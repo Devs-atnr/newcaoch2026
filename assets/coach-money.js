@@ -7,17 +7,16 @@
     '.ymal__price',
     '.cart-item__price-wrapper',
     '[data-bag-total]',
+    '.coach-product__price',
     '.price'
   ].join(',');
 
   const strip = (root) => {
-    if (!root || (root.closest && root.closest('.coach-product__price'))) return;
+    if (!root) return;
     const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
     const nodes = [];
     while (walker.nextNode()) nodes.push(walker.currentNode);
     nodes.forEach((node) => {
-      const parent = node.parentElement;
-      if (parent && parent.closest('.coach-product__price')) return;
       const next = node.nodeValue.replace(/[.,]00(?!\d)/g, '');
       if (next !== node.nodeValue) node.nodeValue = next;
     });
@@ -33,7 +32,6 @@
     scan(document);
     const observer = new MutationObserver((records) => {
       records.forEach((record) => {
-        if (record.target && record.target.closest && record.target.closest('.coach-product__price')) return;
         if (record.type === 'characterData') {
           const parent = record.target.parentElement;
           const price = parent && parent.closest(selector);

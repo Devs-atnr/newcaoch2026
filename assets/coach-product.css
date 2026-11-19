@@ -369,7 +369,7 @@ html.coach-zoom-open { overflow: hidden; }
 .coach-product__price {
   margin: 6px 0 14px;
   font-family: var(--pdp-title-font, GaramondMTProRegular);
-  font-size: var(--pdp-price-size, 22px);
+  font-size: 14px !important;
   font-weight: 400;
   line-height: 1.2;
   color: #000;
@@ -384,11 +384,12 @@ html.coach-zoom-open { overflow: hidden; }
   line-height: 1.4;
 }
 
-.coach-product__price svg { width: 18px; height: 18px; vertical-align: -3px; }
+.coach-product__price svg,
+.coach-product__price img { width: 14px !important; height: 14px !important; vertical-align: -2px; }
 .coach-product__price s {
   margin-left: 8px;
   color: #8a8a8a;
-  font-size: 18px;
+  font-size: 14px;
   text-decoration: line-through;
 }
 

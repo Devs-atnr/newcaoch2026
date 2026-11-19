@@ -233,8 +233,8 @@
             "id": {{ variant.id }},
             "available": {{ variant.available }},
             "options": {{ variant.options | json }},
-            "price": {{ variant.price | money | json }},
-            "compare": {% if variant.compare_at_price > variant.price %}{{ variant.compare_at_price | money | json }}{% else %}null{% endif %},
+            "price": {{ variant.price | money_without_trailing_zeros | json }},
+            "compare": {% if variant.compare_at_price > variant.price %}{{ variant.compare_at_price | money_without_trailing_zeros | json }}{% else %}null{% endif %},
             "sku": {{ variant.sku | json }},
             "inventory": {{ variant.inventory_quantity | default: 0 }},
             "tracked": {% if variant.inventory_management %}true{% else %}false{% endif %},
@@ -265,7 +265,7 @@
     { "type": "range", "id": "title_line", "min": 20, "max": 48, "step": 1, "unit": "px", "label": "Title line height", "default": 28 },
     { "type": "text", "id": "title_weight", "label": "Title weight", "default": "400" },
     { "type": "text", "id": "title_spacing", "label": "Title letter spacing", "default": "0.4px" },
-    { "type": "range", "id": "price_size", "min": 16, "max": 40, "step": 1, "unit": "px", "label": "Price size", "default": 22 },
+    { "type": "range", "id": "price_size", "min": 14, "max": 40, "step": 1, "unit": "px", "label": "Price size", "default": 14 },
     { "type": "color", "id": "text_color", "label": "Text color", "default": "#111111" },
     { "type": "color", "id": "background", "label": "Section background color", "default": "#F0F0F0" },
     { "type": "header", "content": "Mobile product" },
@@ -331,7 +331,7 @@
       "limit": 1,
       "settings": [
         { "type": "checkbox", "id": "show_compare", "label": "Show compare-at price", "default": true },
-        { "type": "range", "id": "font_size", "min": 16, "max": 48, "step": 1, "unit": "px", "label": "Font size", "default": 28 },
+        { "type": "range", "id": "font_size", "min": 14, "max": 48, "step": 1, "unit": "px", "label": "Font size", "default": 14 },
         { "type": "color", "id": "color", "label": "Color", "default": "#000000" },
         { "type": "range", "id": "space_top", "min": 0, "max": 40, "step": 1, "unit": "px", "label": "Space above", "default": 6 },
         { "type": "range", "id": "space_bottom", "min": 0, "max": 40, "step": 1, "unit": "px", "label": "Space below", "default": 6 }
