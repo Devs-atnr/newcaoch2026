@@ -15,7 +15,7 @@
 {%- if show_section -%}
   <section
     class="coach-colnav{% if section.settings.layout == 'photos' %} is-photos{% else %} is-icons{% endif %}"
-    style="--cn-bg: {{ section.settings.background }}; --cn-img: {{ section.settings.image_background }}; --cn-cols: {{ section.settings.columns }}; --cn-gap: {{ section.settings.gap }}px; --cn-gap-m: {{ section.settings.gap_mobile }}px; --cn-pt: {{ section.settings.padding_top }}px; --cn-pr: {{ section.settings.padding_right }}px; --cn-pb: {{ section.settings.padding_bottom }}px; --cn-pl: {{ section.settings.padding_left }}px; --cn-heading: {{ section.settings.heading_size }}px; --cn-heading-color: {{ section.settings.heading_color }}; --cn-icon-h: {{ section.settings.icon_height }}px; --cn-icon-w: {{ section.settings.icon_width }}px; --cn-photo-h: {{ section.settings.photo_height }}px; --cn-fit: {{ section.settings.image_fit }}; --cn-label: {{ section.settings.label_size }}px; --cn-label-color: {{ section.settings.label_color }}; --cn-label-weight: {{ section.settings.label_weight }}; --cn-label-space: {{ section.settings.label_space }}px;"
+    style="--cn-bg: {{ section.settings.background }}; --cn-img: {{ section.settings.image_background }}; --cn-cols: {{ section.settings.columns }}; --cn-gap: {{ section.settings.gap }}px; --cn-gap-m: {{ section.settings.gap_mobile }}px; --cn-pt: {{ section.settings.padding_top }}px; --cn-pr: {{ section.settings.padding_right }}px; --cn-pb: {{ section.settings.padding_bottom }}px; --cn-pl: {{ section.settings.padding_left }}px; --cn-heading: {{ section.settings.heading_size }}px; --cn-heading-m: {{ section.settings.heading_size_mobile }}px; --cn-heading-color: {{ section.settings.heading_color }}; --cn-heading-color-m: {{ section.settings.heading_color_mobile }}; --cn-icon-h: {{ section.settings.icon_height }}px; --cn-icon-w: {{ section.settings.icon_width }}px; --cn-icon-h-m: {{ section.settings.icon_height_mobile }}px; --cn-icon-w-m: {{ section.settings.icon_width_mobile }}px; --cn-photo-h: {{ section.settings.photo_height }}px; --cn-photo-h-m: {{ section.settings.photo_height_mobile }}px; --cn-fit: {{ section.settings.image_fit }}; --cn-label: {{ section.settings.label_size }}px; --cn-label-m: {{ section.settings.label_size_mobile }}px; --cn-label-color: {{ section.settings.label_color }}; --cn-label-color-m: {{ section.settings.label_color_mobile }}; --cn-label-weight: {{ section.settings.label_weight }}; --cn-label-space: {{ section.settings.label_space }}px;"
   >
     {%- if section.settings.show_heading and section.settings.heading != blank -%}
       <h2 class="coach-colnav__heading">{{ section.settings.heading | escape }}</h2>
@@ -83,6 +83,14 @@
     ] },
     { "type": "range", "id": "label_space", "min": 4, "max": 28, "step": 2, "unit": "px", "label": "Space above label", "default": 10 },
     { "type": "color", "id": "label_color", "label": "Label color", "default": "#6a6a6a" },
+    { "type": "header", "content": "Mobile" },
+    { "type": "range", "id": "icon_height_mobile", "min": 40, "max": 120, "step": 4, "unit": "px", "label": "Icon image height", "default": 64 },
+    { "type": "range", "id": "icon_width_mobile", "min": 64, "max": 140, "step": 4, "unit": "px", "label": "Icon image width", "default": 88 },
+    { "type": "range", "id": "photo_height_mobile", "min": 180, "max": 420, "step": 20, "unit": "px", "label": "Photo image height", "default": 280 },
+    { "type": "range", "id": "heading_size_mobile", "min": 16, "max": 36, "step": 1, "unit": "px", "label": "Heading size", "default": 24 },
+    { "type": "color", "id": "heading_color_mobile", "label": "Heading color", "default": "#111111" },
+    { "type": "range", "id": "label_size_mobile", "min": 10, "max": 18, "step": 1, "unit": "px", "label": "Label size", "default": 12 },
+    { "type": "color", "id": "label_color_mobile", "label": "Label color", "default": "#6a6a6a" },
     { "type": "header", "content": "Padding" },
     { "type": "range", "id": "padding_top", "min": 0, "max": 80, "step": 4, "unit": "px", "label": "Top", "default": 28 },
     { "type": "range", "id": "padding_bottom", "min": 0, "max": 80, "step": 4, "unit": "px", "label": "Bottom", "default": 12 },

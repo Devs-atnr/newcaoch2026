@@ -70,7 +70,8 @@
   }
   .coach-colnav__heading {
     margin-bottom: 16px;
-    font-size: calc(var(--cn-heading, 28px) * 0.86);
+    font-size: var(--cn-heading-m, 24px);
+    color: var(--cn-heading-color-m, #111111);
     padding: 0 16px;
   }
   .coach-colnav__grid {
@@ -85,9 +86,14 @@
   }
   .coach-colnav__grid::-webkit-scrollbar { display: none; }
   .coach-colnav__card { scroll-snap-align: start; }
-  .coach-colnav.is-icons .coach-colnav__card { width: 92px; }
+  .coach-colnav.is-icons .coach-colnav__card { width: var(--cn-icon-w-m, 88px); }
+  .coach-colnav.is-icons .coach-colnav__media { height: var(--cn-icon-h-m, 64px); }
   .coach-colnav.is-photos .coach-colnav__card { width: 78%; }
-  .coach-colnav.is-photos .coach-colnav__media { height: 280px; }
+  .coach-colnav.is-photos .coach-colnav__media { height: var(--cn-photo-h-m, 280px); }
+  .coach-colnav__title {
+    font-size: var(--cn-label-m, 12px);
+    color: var(--cn-label-color-m, #6a6a6a);
+  }
   .coach-colnav.is-icons {
     border-bottom: 1px solid #d8d8d8;
   }
