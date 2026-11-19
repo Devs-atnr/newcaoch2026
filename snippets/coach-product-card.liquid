@@ -343,8 +343,18 @@
               >
                 <span
                   class="coach-card__swatch-fill"
-                  style="{% if value.swatch.color %}background-color: rgb({{ value.swatch.color.rgb }});{% elsif named_color != blank %}background-color: {{ named_color }};{% elsif fallback_img != blank %}background-image: url('{{ fallback_img | replace: '&', '&amp;' }}');{% endif %}"
-                ></span>
+                  {% if value.swatch.color != blank and value.swatch.color.rgb != blank %}
+                    style="background-color: rgb({{ value.swatch.color.rgb }});"
+                  {% elsif named_color != blank %}
+                    style="background-color: {{ named_color }};"
+                  {% endif %}
+                >
+                  {%- if value.swatch.color == blank or value.swatch.color.rgb == blank -%}
+                    {%- if named_color == blank and fallback_img != blank -%}
+                      <img src="{{ fallback_img }}" alt="{{ color_val | escape }}" width="80" height="80" loading="lazy">
+                    {%- endif -%}
+                  {%- endif -%}
+                </span>
                 {%- unless matched.available -%}
                   <span class="coach-card__swatch-slash"></span>
                 {%- endunless -%}
@@ -361,7 +371,9 @@
               data-variant-price="{{ current_variant.price | money_without_trailing_zeros | escape }}"
               data-variant-image-src="{{ card_product.featured_image | image_url: width: 800 | escape }}"
             >
-              <span class="coach-card__swatch-fill" style="background-image: url('{{ card_product.featured_image | image_url: width: 160 | replace: '&', '&amp;' }}');"></span>
+              <span class="coach-card__swatch-fill">
+                <img src="{{ card_product.featured_image | image_url: width: 160 }}" alt="{{ card_product.title | escape }}" width="80" height="80" loading="lazy">
+              </span>
             </button>
           {%- endif -%}
         </div>
