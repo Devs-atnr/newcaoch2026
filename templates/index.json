@@ -97,8 +97,9 @@
         "padding_right_mobile": 0
       }
     },
-    "coach_home_categories": {
-      "type": "coach-home-categories",
+    "coach_shoulder": {
+      "type": "coach-shoulder",
+      "name": "Shoulder section",
       "blocks": {
         "card_1": { "type": "card", "settings": { "title": "New Arrivals" } },
         "card_2": { "type": "card", "settings": { "title": "Shoulder Bags" } },
@@ -195,7 +196,7 @@
   "order": [
     "coach_home_banner",
     "coach_gift_banner_qRR4xk",
-    "coach_home_categories",
+    "coach_shoulder",
     "image_banner",
     "featured_collection"
   ]

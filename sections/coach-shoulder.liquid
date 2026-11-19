@@ -1,0 +1,120 @@
+{{ 'coach-home-categories.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign heading_font = 'HelveticaLTPro-Roman, Helvetica, Arial, sans-serif'
+  if section.settings.heading_font == 'garamond'
+    assign heading_font = 'GaramondMTProRegular, Times New Roman, Times, serif'
+  endif
+  assign label_font = 'HelveticaLTPro-Roman, Helvetica, Arial, sans-serif'
+  if section.settings.label_font == 'garamond'
+    assign label_font = 'GaramondMTProRegular, Times New Roman, Times, serif'
+  endif
+-%}
+
+<section
+  class="coach-home-cats"
+  style="--cat-bg: {{ section.settings.background | default: '#ead9c8' }}; --cat-img: {{ section.settings.image_background | default: '#ead9c8' }}; --cat-cols: {{ section.settings.columns_desktop | default: 4 }}; --cat-cols-m: {{ section.settings.columns_mobile | default: 2 }}; --cat-gap: {{ section.settings.gap | default: 12 }}px; --cat-gap-m: {{ section.settings.gap_mobile | default: 12 }}px; --cat-pt: {{ section.settings.padding_top | default: 36 }}px; --cat-pr: {{ section.settings.padding_right | default: 28 }}px; --cat-pb: {{ section.settings.padding_bottom | default: 48 }}px; --cat-pl: {{ section.settings.padding_left | default: 28 }}px; --cat-pt-m: {{ section.settings.padding_top_mobile | default: 28 }}px; --cat-pr-m: {{ section.settings.padding_right_mobile | default: 12 }}px; --cat-pb-m: {{ section.settings.padding_bottom_mobile | default: 32 }}px; --cat-pl-m: {{ section.settings.padding_left_mobile | default: 12 }}px; --cat-heading: {{ heading_font }}; --cat-heading-size: {{ section.settings.heading_size | default: 11 }}px; --cat-heading-size-m: {{ section.settings.heading_size_mobile | default: 11 }}px; --cat-heading-color: {{ section.settings.heading_color | default: '#111111' }}; --cat-heading-weight: {{ section.settings.heading_weight | default: '400' }}; --cat-track: {{ section.settings.heading_spacing | default: 3 }}px; --cat-label: {{ label_font }}; --cat-label-size: {{ section.settings.label_size | default: 18 }}px; --cat-label-size-m: {{ section.settings.label_size_mobile | default: 14 }}px; --cat-label-color: {{ section.settings.label_color | default: '#111111' }}; --cat-label-weight: {{ section.settings.label_weight | default: '700' }}; --cat-label-space: {{ section.settings.label_space | default: 20 }}px; --cat-fit: {{ section.settings.image_fit | default: 'contain' }};"
+>
+  {%- if section.settings.heading != blank -%}
+    <h2 class="coach-home-cats__heading{% if section.settings.show_heading_desktop == false %} is-desk-hide{% endif %}{% if section.settings.show_heading_mobile == false %} is-mob-hide{% endif %}">{{ section.settings.heading | escape }}</h2>
+  {%- endif -%}
+  <div class="coach-home-cats__grid">
+    {%- for block in section.blocks -%}
+      <a class="coach-home-cats__card" href="{{ block.settings.link | default: '#' }}" {{ block.shopify_attributes }}>
+        <span class="coach-home-cats__media">
+          {%- if block.settings.image != blank -%}
+            {{ block.settings.image | image_url: width: 900 | image_tag: alt: block.settings.title, loading: 'lazy' }}
+          {%- else -%}
+            {{ 'product-1' | placeholder_svg_tag }}
+          {%- endif -%}
+        </span>
+        {%- if block.settings.title != blank -%}
+          <span class="coach-home-cats__title">{{ block.settings.title | escape }}</span>
+        {%- endif -%}
+      </a>
+    {%- endfor -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Shoulder section",
+  "tag": "section",
+  "class": "coach-shoulder-section",
+  "max_blocks": 12,
+  "settings": [
+    { "type": "header", "content": "Heading" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Check off your list" },
+    { "type": "checkbox", "id": "show_heading_desktop", "label": "Show heading on desktop", "default": true },
+    { "type": "checkbox", "id": "show_heading_mobile", "label": "Show heading on mobile", "default": true },
+    { "type": "select", "id": "heading_font", "label": "Font", "default": "helvetica", "options": [
+      { "value": "helvetica", "label": "Helvetica" },
+      { "value": "garamond", "label": "Garamond" }
+    ] },
+    { "type": "range", "id": "heading_size", "min": 10, "max": 32, "step": 1, "unit": "px", "label": "Desktop size", "default": 11 },
+    { "type": "range", "id": "heading_size_mobile", "min": 10, "max": 24, "step": 1, "unit": "px", "label": "Mobile size", "default": 11 },
+    { "type": "select", "id": "heading_weight", "label": "Weight", "default": "400", "options": [
+      { "value": "400", "label": "Regular" },
+      { "value": "700", "label": "Bold" }
+    ] },
+    { "type": "range", "id": "heading_spacing", "min": 0, "max": 8, "step": 1, "unit": "px", "label": "Letter spacing", "default": 3 },
+    { "type": "color", "id": "heading_color", "label": "Color", "default": "#111111" },
+    { "type": "header", "content": "Layout" },
+    { "type": "range", "id": "columns_desktop", "min": 2, "max": 6, "step": 1, "label": "Desktop columns", "default": 4 },
+    { "type": "range", "id": "columns_mobile", "min": 1, "max": 2, "step": 1, "label": "Mobile columns", "default": 2 },
+    { "type": "range", "id": "gap", "min": 0, "max": 40, "step": 2, "unit": "px", "label": "Desktop gap", "default": 12 },
+    { "type": "range", "id": "gap_mobile", "min": 0, "max": 32, "step": 2, "unit": "px", "label": "Mobile gap", "default": 12 },
+    { "type": "color", "id": "background", "label": "Section background", "default": "#ead9c8" },
+    { "type": "color", "id": "image_background", "label": "Image background", "default": "#ead9c8" },
+    { "type": "select", "id": "image_fit", "label": "Image fit", "default": "contain", "options": [
+      { "value": "cover", "label": "Cover" },
+      { "value": "contain", "label": "Contain" }
+    ] },
+    { "type": "header", "content": "Label" },
+    { "type": "select", "id": "label_font", "label": "Font", "default": "helvetica", "options": [
+      { "value": "helvetica", "label": "Helvetica" },
+      { "value": "garamond", "label": "Garamond" }
+    ] },
+    { "type": "range", "id": "label_size", "min": 12, "max": 24, "step": 1, "unit": "px", "label": "Desktop size", "default": 18 },
+    { "type": "range", "id": "label_size_mobile", "min": 12, "max": 20, "step": 1, "unit": "px", "label": "Mobile size", "default": 14 },
+    { "type": "select", "id": "label_weight", "label": "Weight", "default": "700", "options": [
+      { "value": "400", "label": "Regular" },
+      { "value": "700", "label": "Bold" }
+    ] },
+    { "type": "range", "id": "label_space", "min": 8, "max": 40, "step": 2, "unit": "px", "label": "Space above label", "default": 20 },
+    { "type": "color", "id": "label_color", "label": "Color", "default": "#111111" },
+    { "type": "header", "content": "Desktop padding" },
+    { "type": "range", "id": "padding_top", "min": 0, "max": 80, "step": 4, "unit": "px", "label": "Top", "default": 36 },
+    { "type": "range", "id": "padding_bottom", "min": 0, "max": 80, "step": 4, "unit": "px", "label": "Bottom", "default": 48 },
+    { "type": "range", "id": "padding_left", "min": 0, "max": 80, "step": 4, "unit": "px", "label": "Left", "default": 28 },
+    { "type": "range", "id": "padding_right", "min": 0, "max": 80, "step": 4, "unit": "px", "label": "Right", "default": 28 },
+    { "type": "header", "content": "Mobile padding" },
+    { "type": "range", "id": "padding_top_mobile", "min": 0, "max": 64, "step": 4, "unit": "px", "label": "Top", "default": 28 },
+    { "type": "range", "id": "padding_bottom_mobile", "min": 0, "max": 64, "step": 4, "unit": "px", "label": "Bottom", "default": 28 },
+    { "type": "range", "id": "padding_left_mobile", "min": 0, "max": 40, "step": 4, "unit": "px", "label": "Left", "default": 16 },
+    { "type": "range", "id": "padding_right_mobile", "min": 0, "max": 40, "step": 4, "unit": "px", "label": "Right", "default": 16 }
+  ],
+  "blocks": [
+    {
+      "type": "card",
+      "name": "Title",
+      "settings": [
+        { "type": "image_picker", "id": "image", "label": "Image", "info": "Upload the photo for this tile. The title stays underneath." },
+        { "type": "text", "id": "title", "label": "Title", "default": "Shoulder Bags" },
+        { "type": "url", "id": "link", "label": "Link" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Shoulder section",
+      "blocks": [
+        { "type": "card", "settings": { "title": "New Arrivals" } },
+        { "type": "card", "settings": { "title": "Shoulder Bags" } },
+        { "type": "card", "settings": { "title": "Wallets & Wristlets" } },
+        { "type": "card", "settings": { "title": "Men's" } }
+      ]
+    }
+  ]
+}
+{% endschema %}
