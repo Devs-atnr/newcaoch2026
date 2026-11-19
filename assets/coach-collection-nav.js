@@ -66,69 +66,28 @@
     }
     grid.addEventListener('scroll', normalize, { passive: true });
 
-    let dragging = false;
     let moved = false;
-    let axis = '';
-    let startX = 0;
-    let startY = 0;
-    let startLeft = 0;
-    let paused = false;
-    let resumeTimer = 0;
-    const mobileQuery = window.matchMedia('(max-width: 749px)');
-    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let drag = null;
 
-    const pause = () => {
-      paused = true;
-      clearTimeout(resumeTimer);
-    };
-    const resumeLater = () => {
-      clearTimeout(resumeTimer);
-      resumeTimer = setTimeout(() => { paused = false; }, 900);
-    };
-
-    grid.addEventListener('pointerdown', (event) => {
-      if (event.pointerType === 'mouse' && event.button !== 0) return;
-      pause();
-      if (event.pointerType === 'mouse') event.preventDefault();
-      dragging = true;
+    grid.addEventListener('mousedown', (event) => {
+      if (event.button !== 0) return;
+      event.preventDefault();
       moved = false;
-      axis = '';
-      startX = event.clientX;
-      startY = event.clientY;
-      startLeft = grid.scrollLeft;
+      drag = { x: event.clientX, left: grid.scrollLeft };
+      grid.classList.add('is-dragging');
     });
 
-    grid.addEventListener('pointermove', (event) => {
-      if (!dragging) return;
-      const dx = event.clientX - startX;
-      const dy = event.clientY - startY;
-      if (!axis) {
-        if (Math.abs(dx) < 6 && Math.abs(dy) < 6) return;
-        axis = Math.abs(dx) >= Math.abs(dy) ? 'x' : 'y';
-        if (axis === 'y') {
-          dragging = false;
-          resumeLater();
-          return;
-        }
-        grid.classList.add('is-dragging');
-        if (grid.setPointerCapture) grid.setPointerCapture(event.pointerId);
-      }
-      if (axis !== 'x') return;
-      moved = true;
-      grid.scrollLeft = startLeft - dx;
-      if (event.cancelable) event.preventDefault();
+    window.addEventListener('mousemove', (event) => {
+      if (!drag) return;
+      const dx = event.clientX - drag.x;
+      if (Math.abs(dx) > 4) moved = true;
+      grid.scrollLeft = drag.left - dx;
     });
 
-    const stopDrag = () => {
-      dragging = false;
-      axis = '';
+    window.addEventListener('mouseup', () => {
+      drag = null;
       grid.classList.remove('is-dragging');
-      resumeLater();
-    };
-    grid.addEventListener('pointerup', stopDrag);
-    grid.addEventListener('pointercancel', stopDrag);
-    grid.addEventListener('touchstart', pause, { passive: true });
-    grid.addEventListener('touchend', resumeLater, { passive: true });
+    });
 
     grid.addEventListener('click', (event) => {
       if (!moved) return;
@@ -141,26 +100,11 @@
       if (!section.contains(event.target)) return;
       const delta = Math.abs(event.deltaX) > Math.abs(event.deltaY) ? event.deltaX : event.deltaY;
       if (!delta) return;
-      event.preventDefault();
-      pause();
-      resumeLater();
       const scale = event.deltaMode === 1 ? 16 : event.deltaMode === 2 ? grid.clientWidth : 1;
       grid.scrollLeft += delta * scale;
+      if (event.cancelable) event.preventDefault();
     };
-    section.addEventListener('wheel', onWheel, { passive: false, capture: true });
-
-    if (!reduceMotion) {
-      let last = 0;
-      const glide = (now) => {
-        if (!paused && mobileQuery.matches && !dragging) {
-          const step = Math.min(32, last ? now - last : 16);
-          grid.scrollLeft += step * 0.045;
-        }
-        last = now;
-        requestAnimationFrame(glide);
-      };
-      requestAnimationFrame(glide);
-    }
+    window.addEventListener('wheel', onWheel, { passive: false, capture: true });
 
     window.addEventListener('resize', () => {
       const width = setWidth();

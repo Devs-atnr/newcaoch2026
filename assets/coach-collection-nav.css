@@ -29,8 +29,15 @@
 .coach-colnav__bar {
   display: none;
 }
+.coach-colnav-section {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+}
 .coach-colnav.is-photos {
   max-width: 100%;
+  min-width: 0;
   overflow: hidden;
 }
 .coach-colnav.is-photos .coach-colnav__grid {
@@ -45,7 +52,7 @@
   gap: var(--cn-gap, 8px);
   scrollbar-width: none;
   -webkit-overflow-scrolling: touch;
-  touch-action: pan-y pinch-zoom;
+  touch-action: pan-x pan-y;
   overscroll-behavior-x: contain;
   cursor: grab;
 }
@@ -53,6 +60,7 @@
 .coach-colnav.is-photos .coach-colnav__card {
   flex: 0 0 min(82vw, 460px);
   width: min(82vw, 460px);
+  max-width: none;
 }
 .coach-colnav__grid.is-loop {
   scroll-snap-type: none;
@@ -185,11 +193,14 @@
     padding: 0 0 10px;
     scroll-padding-left: 0;
     scroll-snap-type: none;
-    touch-action: pan-y pinch-zoom;
+    touch-action: pan-x pan-y;
     overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
   }
   .coach-colnav.is-photos .coach-colnav__card {
+    flex: 0 0 82%;
     width: 82%;
+    max-width: none;
     scroll-snap-align: none;
   }
   .coach-colnav.is-photos .coach-colnav__media {
