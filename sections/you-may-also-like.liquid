@@ -66,9 +66,9 @@
                 {%- endif -%}
                 {%- if section.settings.show_price -%}
                   <span class="ymal__price">
-                    {{ item.price | money }}
+                    {{ item.price | money_without_trailing_zeros }}
                     {%- if item.compare_at_price > item.price -%}
-                      <s>{{ item.compare_at_price | money }}</s>
+                      <s>{{ item.compare_at_price | money_without_trailing_zeros }}</s>
                     {%- endif -%}
                   </span>
                 {%- endif -%}
@@ -194,7 +194,7 @@
     display: block;
     margin-top: 4px;
     text-align: center;
-    font-size: 13px;
+    font-size: 14px;
     color: #444;
   }
   #shopify-section-{{ section.id }} .ymal__price s { margin-left: 6px; color: #888; }

@@ -19,9 +19,10 @@
     const format = root.dataset.moneyFormat || '{{amount}}';
 
     const money = (cents) => {
-      const amount = (Number(cents) / 100).toFixed(2);
+      const whole = Number(cents) % 100 === 0;
+      const amount = whole ? String(Math.round(Number(cents) / 100)) : (Number(cents) / 100).toFixed(2);
       return format
-        .replace(/\{\{\s*amount_with_comma_separator\s*\}\}/g, amount.replace('.', ','))
+        .replace(/\{\{\s*amount_with_comma_separator\s*\}\}/g, whole ? amount : amount.replace('.', ','))
         .replace(/\{\{\s*amount_no_decimals\s*\}\}/g, String(Math.round(Number(cents) / 100)))
         .replace(/\{\{\s*amount\s*\}\}/g, amount);
     };

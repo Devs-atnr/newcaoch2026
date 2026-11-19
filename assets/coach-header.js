@@ -279,10 +279,15 @@
 
     formatMoney(cents) {
       const format = this.dataset.moneyFormat || '{{amount}}';
+      const whole = (Number(cents) || 0) % 100 === 0;
       const value = (Number(cents) || 0) / 100;
-      const amount = value.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+      const amount = whole
+        ? Math.round(value).toLocaleString('en-US')
+        : value.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
       const noDecimals = Math.round(value).toLocaleString('en-US');
-      const comma = value.toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+      const comma = whole
+        ? Math.round(value).toLocaleString('de-DE')
+        : value.toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
       const commaNoDecimals = Math.round(value).toLocaleString('de-DE');
       return format
         .replace(/\{\{\s*amount_no_decimals_with_comma_separator\s*\}\}/, commaNoDecimals)
@@ -685,11 +690,12 @@
           return parts[1] ? whole + decimal + parts[1] : whole;
         };
         const token = (moneyFormat.match(placeholder) || [])[1];
-        let value = withDelimiters(cents, 2, ',', '.');
+        const whole = cents % 100 === 0;
+        let value = withDelimiters(cents, whole ? 0 : 2, ',', '.');
         if (token === 'amount_no_decimals') value = withDelimiters(cents, 0, ',', '.');
-        if (token === 'amount_with_comma_separator') value = withDelimiters(cents, 2, '.', ',');
+        if (token === 'amount_with_comma_separator') value = withDelimiters(cents, whole ? 0 : 2, '.', ',');
         if (token === 'amount_no_decimals_with_comma_separator') value = withDelimiters(cents, 0, '.', ',');
-        if (token === 'amount_with_apostrophe_separator') value = withDelimiters(cents, 2, "'", '.');
+        if (token === 'amount_with_apostrophe_separator') value = withDelimiters(cents, whole ? 0 : 2, "'", '.');
         return moneyFormat.replace(placeholder, value);
       };
 

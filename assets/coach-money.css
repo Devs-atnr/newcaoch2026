@@ -1,0 +1,34 @@
+.coach-card__price,
+.coach-search-card__price,
+.coach-bag-item__price,
+.coach-bag-panel__title [data-bag-total],
+.coach-wish-card__price,
+.ymal__price,
+.cart-item__price-wrapper,
+.price {
+  font-size: 14px !important;
+  font-weight: 400 !important;
+  font-synthesis: none;
+}
+
+.coach-card__price svg,
+.coach-card__price img,
+.coach-search-card__price svg,
+.coach-search-card__price img,
+.coach-bag-item__price svg,
+.coach-bag-item__price img,
+.coach-bag-panel__title [data-bag-total] svg,
+.coach-bag-panel__title [data-bag-total] img,
+.coach-wish-card__price svg,
+.coach-wish-card__price img,
+.ymal__price svg,
+.ymal__price img,
+.cart-item__price-wrapper svg,
+.cart-item__price-wrapper img,
+.price svg,
+.price img {
+  display: inline-block;
+  width: 14px !important;
+  height: 14px !important;
+  vertical-align: -2px;
+}
