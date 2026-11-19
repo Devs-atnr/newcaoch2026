@@ -937,13 +937,17 @@ class CoachProductPage extends HTMLElement {
     const price = typeof product.price === 'number' ? '' : (product.price || '');
     const variants = Array.isArray(product.variants) ? product.variants : [];
     const available = variants.filter((item) => item && item.available !== false && item.id);
-    const variantId = available.length === 1 ? available[0].id : '';
+    const shown = String(src || '').split('?')[0];
+    const matched = available.find((item) => {
+      const image = item.featured_image || item.image || '';
+      const imageSrc = typeof image === 'string' ? image : (image.src || '');
+      return shown && imageSrc && String(imageSrc).split('?')[0] === shown;
+    });
+    const variantId = (matched || available[0] || {}).id || '';
     const label = this.escape(options.addLabel || 'Add To Bag');
     const add = options.add === false
       ? ''
-      : (variantId
-        ? `<button type="button" class="coach-rail-card__add" data-variant-id="${this.escape(variantId)}">${label}</button>`
-        : `<a class="coach-rail-card__add" href="${this.escape(url)}">${label}</a>`);
+      : `<button type="button" class="coach-rail-card__add"${variantId ? ` data-variant-id="${this.escape(variantId)}"` : ' disabled'}><span class="coach-rail-card__add-label">${label}</span></button>`;
     return `<article class="coach-rail-card">
       <a class="coach-rail-card__link" href="${this.escape(url)}">
         <span class="coach-rail-card__media">
@@ -964,12 +968,14 @@ class CoachProductPage extends HTMLElement {
       const button = event.target.closest('.coach-rail-card__add');
       if (!button || button.tagName !== 'BUTTON') return;
       event.preventDefault();
+      event.stopPropagation();
       const id = button.dataset.variantId;
-      if (!id || this.dataset.adding === 'true') return;
-      this.dataset.adding = 'true';
-      button.classList.add('is-added');
+      if (!id || button.dataset.adding === 'true') return;
+      button.dataset.adding = 'true';
+      button.classList.add('is-anim');
       button.setAttribute('aria-busy', 'true');
-      this.showLoader(true);
+      const started = Date.now();
+      let added = false;
       try {
         const response = await fetch((window.routes && window.routes.cart_add_url) || '/cart/add.js', {
           method: 'POST',
@@ -978,16 +984,18 @@ class CoachProductPage extends HTMLElement {
         });
         const data = await response.json().catch(() => ({}));
         if (!response.ok) throw new Error(data.description || data.message || 'Could not add this product to your bag.');
+        added = true;
         await this.updateCount();
-        this.showLoader(false);
         if (window.CoachMiniBag?.open) await window.CoachMiniBag.open();
       } catch (error) {
-        button.classList.remove('is-added');
-        this.showLoader(false);
+        button.classList.remove('is-anim');
       } finally {
-        this.dataset.adding = 'false';
-        button.removeAttribute('aria-busy');
-        this.showLoader(false);
+        const wait = Math.max(0, 700 - (Date.now() - started));
+        window.setTimeout(() => {
+          if (added) button.classList.remove('is-anim');
+          button.dataset.adding = 'false';
+          button.removeAttribute('aria-busy');
+        }, added ? wait : 0);
       }
     });
   }
