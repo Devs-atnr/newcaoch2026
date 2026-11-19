@@ -140,7 +140,7 @@
         "heading_color": "#111111",
         "layout": "photos",
         "columns": 4,
-        "gap": 8,
+        "gap": 16,
         "gap_mobile": 8,
         "icon_height": 72,
         "icon_width": 140,
@@ -159,10 +159,10 @@
         "heading_color_mobile": "#111111",
         "label_size_mobile": 14,
         "label_color_mobile": "#111111",
-        "padding_top": 0,
-        "padding_bottom": 12,
-        "padding_left": 0,
-        "padding_right": 0
+        "padding_top": 20,
+        "padding_bottom": 20,
+        "padding_left": 12,
+        "padding_right": 12
       }
     },
     "coach-collection": {
