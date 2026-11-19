@@ -180,6 +180,31 @@ class CoachProductPage extends HTMLElement {
     list.scrollTo({ top: list.scrollTop + delta, behavior: 'smooth' });
   }
 
+  updateStock(variant) {
+    let qty = 0;
+    if (variant && variant.tracked && variant.policy !== 'continue') {
+      qty = Math.max(0, Number(variant.inventory) || 0);
+    } else if (!variant) {
+      const colorIndex = this.data.colorIndex;
+      const color = colorIndex >= 0 ? this.selected[colorIndex] : null;
+      const quantities = this.data.variants
+        .filter((item) => item.available && item.tracked && item.policy !== 'continue' && (!color || item.options[colorIndex] === color))
+        .map((item) => Number(item.inventory) || 0)
+        .filter((count) => count > 0);
+      qty = quantities.length ? Math.min(...quantities) : 0;
+    }
+    const message = qty > 0 && qty <= 5 ? `Only ${qty} item(s) left!` : '';
+    this.querySelectorAll('.js-stock').forEach((stock) => {
+      if (!stock.classList.contains('coach-product__left')) {
+        stock.hidden = true;
+        stock.textContent = '';
+        return;
+      }
+      stock.hidden = !message;
+      stock.textContent = message;
+    });
+  }
+
   maxQuantity(variant) {
     const fallback = Math.max(1, Number(this.dataset.qtyMax || 10));
     if (!variant || !variant.available) return variant && variant.tracked && variant.policy !== 'continue' ? 0 : fallback;
@@ -248,6 +273,7 @@ class CoachProductPage extends HTMLElement {
     this.refreshAvailability();
     const initial = this.findVariant();
     if (initial) this.updateQuantity(initial);
+    this.updateStock(initial || null);
   }
 
   optionAvailable(index, value) {
@@ -297,6 +323,7 @@ class CoachProductPage extends HTMLElement {
       if (idInput) idInput.value = '';
       this.querySelectorAll('.js-add, .js-buy-now').forEach((button) => { button.disabled = false; });
       this.updateQuantity(null);
+      this.updateStock(null);
       this.showColorImage();
       return;
     }
@@ -312,10 +339,7 @@ class CoachProductPage extends HTMLElement {
       button.disabled = !variant.available || this.maxQuantity(variant) < 1;
     });
     this.updateQuantity(variant);
-    this.querySelectorAll('.js-stock').forEach((stock) => {
-      stock.hidden = true;
-      stock.textContent = '';
-    });
+    this.updateStock(variant);
     this.syncWishlist();
     if (variant.image) {
       const thumb = [...this.querySelectorAll('.coach-product__thumb')].find((button) => button.dataset.src === variant.image);

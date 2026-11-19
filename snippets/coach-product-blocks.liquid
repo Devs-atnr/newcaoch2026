@@ -1,4 +1,5 @@
 <div class="coach-product__info">
+  <p class="coach-product__left js-stock" hidden></p>
   <form class="coach-product__form js-product-form" action="{{ routes.cart_add_url }}" method="post">
     <input type="hidden" name="id" class="js-variant-id" value="{% unless has_size %}{{ current.id }}{% endunless %}">
     {%- assign faq_open = false -%}
@@ -96,13 +97,16 @@
                         {%- endif -%}
                       {%- endfor -%}
                       <button type="button" class="coach-product__swatch{% if option.selected_value == value %} is-active{% endif %}{% unless color_available %} is-unavailable{% endunless %}" data-option-index="{{ color_index }}" data-value="{{ value | escape }}" aria-label="{{ value | escape }}"{% unless color_available %} disabled{% endunless %}>
-                        {%- if swatch_variant.featured_media -%}
-                          {{ swatch_variant.featured_media | image_url: width: 160 | image_tag: alt: value }}
-                        {%- elsif swatch_variant.image -%}
-                          {{ swatch_variant.image | image_url: width: 160 | image_tag: alt: value }}
-                        {%- else -%}
-                          <span>{{ value | escape }}</span>
-                        {%- endif -%}
+                        <span class="coach-product__swatch-media">
+                          {%- if swatch_variant.featured_media -%}
+                            {{ swatch_variant.featured_media | image_url: width: 200 | image_tag: alt: value }}
+                          {%- elsif swatch_variant.image -%}
+                            {{ swatch_variant.image | image_url: width: 200 | image_tag: alt: value }}
+                          {%- else -%}
+                            <span class="coach-product__swatch-fallback">{{ value | escape }}</span>
+                          {%- endif -%}
+                        </span>
+                        <span class="coach-product__swatch-name">{{ value | escape }}</span>
                       </button>
                     {%- endfor -%}
                   </div>
