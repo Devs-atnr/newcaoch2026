@@ -807,6 +807,7 @@
         }
         event.preventDefault();
         event.stopPropagation();
+        open();
       };
       document.querySelectorAll('#cart-icon-bubble, [data-cart-mirror]').forEach((link) => {
         link.addEventListener('click', openFromIcon, true);
