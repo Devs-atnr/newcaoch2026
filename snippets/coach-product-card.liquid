@@ -293,37 +293,50 @@
                   assign var_img_src = card_product.featured_image | image_url: width: 800
                 endif
                 assign named_color = ''
-                case color_slug
-                  when 'black', 'noir'
-                    assign named_color = '#111111'
-                  when 'white', 'blanc'
-                    assign named_color = '#ffffff'
-                  when 'red', 'rouge'
-                    assign named_color = '#d91b24'
-                  when 'blue', 'navy', 'bleu'
-                    assign named_color = '#163b82'
-                  when 'brown', 'chocolat', 'tan', 'saddle'
-                    assign named_color = '#6f3f20'
-                  when 'green', 'vert', 'sage', 'olive'
-                    assign named_color = '#6f8f62'
-                  when 'grey', 'gray', 'gris'
-                    assign named_color = '#9e9e9e'
-                  when 'beige', 'sand', 'nude'
-                    assign named_color = '#e6d7c3'
-                  when 'pink', 'rose'
-                    assign named_color = '#e7a3b0'
-                  when 'orange'
-                    assign named_color = '#e07a2f'
-                  when 'purple', 'violet'
-                    assign named_color = '#7b4bb7'
-                  when 'yellow', 'gold'
-                    assign named_color = '#d4af37'
-                endcase
+                if value.swatch.color != blank and value.swatch.color.rgb != blank
+                  assign named_color = 'rgb(' | append: value.swatch.color.rgb | append: ')'
+                elsif color_slug contains 'black' or color_slug contains 'noir' or color_slug contains 'ebony'
+                  assign named_color = '#111111'
+                elsif color_slug contains 'ivory' or color_slug contains 'cream' or color_slug contains 'chalk'
+                  assign named_color = '#f4f1ec'
+                elsif color_slug contains 'white' or color_slug contains 'blanc'
+                  assign named_color = '#ffffff'
+                elsif color_slug contains 'navy'
+                  assign named_color = '#1c2d4f'
+                elsif color_slug contains 'blue' or color_slug contains 'bleu'
+                  assign named_color = '#2f5f9a'
+                elsif color_slug contains 'burgundy' or color_slug contains 'wine' or color_slug contains 'maroon'
+                  assign named_color = '#6e2430'
+                elsif color_slug contains 'red' or color_slug contains 'rouge'
+                  assign named_color = '#b4232a'
+                elsif color_slug contains 'cognac' or color_slug contains 'mahogany' or color_slug contains 'chocolate' or color_slug contains 'chocolat' or color_slug contains 'maple' or color_slug contains 'saddle' or color_slug contains 'tan' or color_slug contains 'brown' or color_slug contains 'brass'
+                  assign named_color = '#7a4a2a'
+                elsif color_slug contains 'olive' or color_slug contains 'sage'
+                  assign named_color = '#7d8b62'
+                elsif color_slug contains 'green' or color_slug contains 'vert'
+                  assign named_color = '#2f6b45'
+                elsif color_slug contains 'silver' or color_slug contains 'pewter' or color_slug contains 'grey' or color_slug contains 'gray' or color_slug contains 'gris'
+                  assign named_color = '#9a9a9a'
+                elsif color_slug contains 'camel' or color_slug contains 'khaki' or color_slug contains 'taupe' or color_slug contains 'beige' or color_slug contains 'sand' or color_slug contains 'nude'
+                  assign named_color = '#d8c3a5'
+                elsif color_slug contains 'blush' or color_slug contains 'pink' or color_slug contains 'rose'
+                  assign named_color = '#e7a3b0'
+                elsif color_slug contains 'coral' or color_slug contains 'orange'
+                  assign named_color = '#e07a2f'
+                elsif color_slug contains 'purple' or color_slug contains 'violet'
+                  assign named_color = '#7b4bb7'
+                elsif color_slug contains 'gold' or color_slug contains 'yellow'
+                  assign named_color = '#c6a15b'
+                endif
                 assign fallback_img = ''
-                if value.swatch.image
-                  assign fallback_img = value.swatch.image | image_url: width: 80
-                elsif var_img_src != blank
-                  assign fallback_img = matched.featured_image | default: matched.image | default: card_product.featured_image | image_url: width: 160
+                if named_color == blank
+                  if matched.featured_image
+                    assign fallback_img = matched.featured_image | image_url: width: 160
+                  elsif matched.image
+                    assign fallback_img = matched.image | image_url: width: 160
+                  elsif card_product.featured_image
+                    assign fallback_img = card_product.featured_image | image_url: width: 160
+                  endif
                 endif
               -%}
               <button
@@ -343,16 +356,12 @@
               >
                 <span
                   class="coach-card__swatch-fill"
-                  {% if value.swatch.color != blank and value.swatch.color.rgb != blank %}
-                    style="background-color: rgb({{ value.swatch.color.rgb }});"
-                  {% elsif named_color != blank %}
+                  {% if named_color != blank %}
                     style="background-color: {{ named_color }};"
                   {% endif %}
                 >
-                  {%- if value.swatch.color == blank or value.swatch.color.rgb == blank -%}
-                    {%- if named_color == blank and fallback_img != blank -%}
-                      <img src="{{ fallback_img }}" alt="{{ color_val | escape }}" width="80" height="80" loading="lazy">
-                    {%- endif -%}
+                  {%- if named_color == blank and fallback_img != blank -%}
+                    <img src="{{ fallback_img }}" alt="{{ color_val | escape }}" width="80" height="80" loading="lazy">
                   {%- endif -%}
                 </span>
                 {%- unless matched.available -%}
