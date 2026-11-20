@@ -279,18 +279,7 @@ coach-header {
 }
 
 .coach-header__wish .coach-wish__count {
-  position: absolute;
-  top: 0.2rem;
-  right: 0.1rem;
-  min-width: 1.4rem;
-  height: 1.4rem;
-  padding: 0 0.2rem;
-  border-radius: 50%;
-  background: #111;
-  color: #fff;
-  font-size: 0.9rem;
-  line-height: 1.4rem;
-  text-align: center;
+  display: none !important;
 }
 
 /* Bag with count inside */
@@ -301,16 +290,15 @@ coach-header {
 
 .coach-bag__count {
   position: absolute;
-  top: -3px;
-  right: -6px;
+  top: 1px;
+  right: -2px;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 15px;
-  min-width: 15px;
-  height: 15px;
-  padding: 0;
-  border-radius: 50%;
+  min-width: 16px;
+  height: 16px;
+  padding: 0 3px;
+  border-radius: 999px;
   background: #111;
   color: #fff;
   font-family: var(--ch-nav-font);

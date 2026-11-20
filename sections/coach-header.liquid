@@ -239,7 +239,6 @@
         {%- if section.settings.show_wishlist -%}
           <a href="{{ wishlist_url }}" class="coach-icon-btn coach-header__wish">
             {%- render 'coach-icon', icon: 'heart' -%}
-            <span class="coach-wish__count" data-wishlist-count hidden>0</span>
             <span class="visually-hidden">{{ 'sections.coach_header.wishlist' | t }}</span>
           </a>
         {%- endif -%}
