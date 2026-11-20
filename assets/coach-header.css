@@ -278,7 +278,8 @@ coach-header {
   height: 2.2rem;
 }
 
-.coach-header__wish .coach-wish__count {
+.coach-header__wish .coach-wish__count,
+.coach-header__wish [data-wishlist-count] {
   display: none !important;
 }
 
@@ -290,15 +291,17 @@ coach-header {
 
 .coach-bag__count {
   position: absolute;
-  top: 1px;
-  right: -2px;
+  top: 4px;
+  right: -1px;
+  z-index: 2;
   display: flex;
   align-items: center;
   justify-content: center;
+  width: 16px;
   min-width: 16px;
   height: 16px;
-  padding: 0 3px;
-  border-radius: 999px;
+  padding: 0;
+  border-radius: 50%;
   background: #111;
   color: #fff;
   font-family: var(--ch-nav-font);

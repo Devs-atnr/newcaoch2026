@@ -382,6 +382,7 @@
       this.onBlockSelect = this.onBlockSelect.bind(this);
       this.onBlockDeselect = this.onBlockDeselect.bind(this);
 
+      this.querySelectorAll('.coach-header__wish .coach-wish__count, .coach-header__wish [data-wishlist-count]').forEach((node) => node.remove());
       this.initMegaMenu();
       this.initDrawer();
       this.initCartMirror();

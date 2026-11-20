@@ -17,10 +17,9 @@
   }
 
   function updateHeader() {
-    const count = read().length;
     document.querySelectorAll('[data-wishlist-count]').forEach((node) => {
-      node.textContent = count > 99 ? '99+' : String(count);
-      node.hidden = count === 0;
+      node.hidden = true;
+      node.textContent = '';
     });
   }
 
