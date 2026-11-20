@@ -305,19 +305,22 @@ coach-header {
 
 .coach-bag__count {
   position: absolute;
-  top: calc(26% - 4px);
-  right: calc(12% - 4px);
-  display: block;
-  width: 9px;
-  height: 9px;
-  min-width: 9px;
-  padding: 0;
-  overflow: hidden;
+  top: -5px;
+  right: -7px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 16px;
+  height: 16px;
+  padding: 0 3px;
   border-radius: 50%;
-  background: #3dce4a;
-  color: transparent;
-  font-size: 0;
-  line-height: 0;
+  background: #111;
+  color: #fff;
+  font-family: var(--ch-nav-font);
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: 0;
   box-sizing: border-box;
 }
 
