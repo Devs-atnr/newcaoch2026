@@ -108,7 +108,7 @@
         "show_heading_mobile": true,
         "heading_font": "helvetica",
         "heading_size": 11,
-        "heading_size_mobile": 11,
+        "heading_size_mobile": 10,
         "heading_weight": "400",
         "heading_spacing": 2,
         "heading_space": 22,
