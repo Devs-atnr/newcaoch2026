@@ -12,8 +12,8 @@
 -%}
 
 <section
-  class="coach-check-list"
-  style="--cl-bg: {{ section.settings.background | default: '#ffffff' }}; --cl-img: {{ section.settings.image_background | default: '#e8d4be' }}; --cl-cols: {{ section.settings.columns_desktop | default: 4 }}; --cl-cols-m: {{ section.settings.columns_mobile | default: 2 }}; --cl-gap: {{ section.settings.gap | default: 4 }}px; --cl-gap-m: {{ section.settings.gap_mobile | default: 4 }}px; --cl-h: {{ section.settings.image_height | default: 140 }}; --cl-h-m: {{ section.settings.image_height_mobile | default: 140 }}; --cl-pt: {{ section.settings.padding_top | default: 28 }}px; --cl-pr: {{ section.settings.padding_right | default: 0 }}px; --cl-pb: {{ section.settings.padding_bottom | default: 36 }}px; --cl-pl: {{ section.settings.padding_left | default: 0 }}px; --cl-pt-m: {{ section.settings.padding_top_mobile | default: 24 }}px; --cl-pb-m: {{ section.settings.padding_bottom_mobile | default: 28 }}px; --cl-heading-font: {{ heading_font }}; --cl-heading-size: {{ section.settings.heading_size | default: 11 }}px; --cl-heading-size-m: {{ section.settings.heading_size_mobile | default: 11 }}px; --cl-heading-color: {{ section.settings.heading_color | default: '#111111' }}; --cl-heading-weight: {{ section.settings.heading_weight | default: '400' }}; --cl-heading-space: {{ section.settings.heading_space | default: 22 }}px; --cl-track: {{ section.settings.heading_spacing | default: 2 }}px; --cl-label-font: {{ label_font }}; --cl-label-size: {{ section.settings.label_size | default: 16 }}px; --cl-label-size-m: {{ section.settings.label_size_mobile | default: 14 }}px; --cl-text-size: {{ section.settings.text_size | default: 13 }}px; --cl-text-size-m: {{ section.settings.text_size_mobile | default: 12 }}px; --cl-label-color: {{ section.settings.label_color | default: '#111111' }}; --cl-label-weight: {{ section.settings.label_weight | default: '700' }}; --cl-label-space: {{ section.settings.label_space | default: 18 }}px; --cl-fit: {{ section.settings.image_fit | default: 'cover' }};"
+  class="coach-check-list{% if section.settings.content_position == 'outside' %} is-outside{% endif %}"
+  style="--cl-bg: {{ section.settings.background | default: '#ffffff' }}; --cl-img: {{ section.settings.image_background | default: '#e8d4be' }}; --cl-cols: {{ section.settings.columns_desktop | default: 4 }}; --cl-cols-m: {{ section.settings.columns_mobile | default: 2 }}; --cl-gap: {{ section.settings.gap | default: 4 }}px; --cl-gap-m: {{ section.settings.gap_mobile | default: 4 }}px; --cl-h: {{ section.settings.image_height | default: 140 }}; --cl-h-m: {{ section.settings.image_height_mobile | default: 140 }}; --cl-pt: {{ section.settings.padding_top | default: 28 }}px; --cl-pr: {{ section.settings.padding_right | default: 0 }}px; --cl-pb: {{ section.settings.padding_bottom | default: 36 }}px; --cl-pl: {{ section.settings.padding_left | default: 0 }}px; --cl-pt-m: {{ section.settings.padding_top_mobile | default: 24 }}px; --cl-pr-m: {{ section.settings.padding_right_mobile | default: 12 }}px; --cl-pb-m: {{ section.settings.padding_bottom_mobile | default: 28 }}px; --cl-pl-m: {{ section.settings.padding_left_mobile | default: 12 }}px; --cl-heading-font: {{ heading_font }}; --cl-heading-size: {{ section.settings.heading_size | default: 11 }}px; --cl-heading-size-m: {{ section.settings.heading_size_mobile | default: 11 }}px; --cl-heading-color: {{ section.settings.heading_color | default: '#111111' }}; --cl-heading-weight: {{ section.settings.heading_weight | default: '400' }}; --cl-heading-space: {{ section.settings.heading_space | default: 22 }}px; --cl-track: {{ section.settings.heading_spacing | default: 2 }}px; --cl-label-font: {{ label_font }}; --cl-label-size: {{ section.settings.label_size | default: 16 }}px; --cl-label-size-m: {{ section.settings.label_size_mobile | default: 16 }}px; --cl-text-size: {{ section.settings.text_size | default: 13 }}px; --cl-text-size-m: {{ section.settings.text_size_mobile | default: 13 }}px; --cl-label-color: {{ section.settings.label_color | default: '#111111' }}; --cl-label-weight: {{ section.settings.label_weight | default: '700' }}; --cl-label-space: {{ section.settings.label_space | default: 18 }}px; --cl-label-space-m: {{ section.settings.label_space_mobile | default: 18 }}px; --cl-title-pad: {{ section.settings.title_padding | default: 8 }}px; --cl-align: {{ section.settings.content_align | default: 'center' }}; --cl-fit: {{ section.settings.image_fit | default: 'cover' }};"
 >
   {%- if section.settings.heading != blank -%}
     <h2 class="coach-check-list__heading{% if section.settings.show_heading_desktop == false %} is-desk-hide{% endif %}{% if section.settings.show_heading_mobile == false %} is-mob-hide{% endif %}">{{ section.settings.heading | escape }}</h2>
@@ -72,21 +72,31 @@
       { "value": "helvetica", "label": "Helvetica" },
       { "value": "garamond", "label": "Garamond" }
     ] },
-    { "type": "range", "id": "heading_size", "min": 10, "max": 28, "step": 1, "unit": "px", "label": "Desktop size", "default": 11 },
-    { "type": "range", "id": "heading_size_mobile", "min": 10, "max": 24, "step": 1, "unit": "px", "label": "Mobile size", "default": 11 },
+    { "type": "range", "id": "heading_size", "min": 0, "max": 40, "step": 1, "unit": "px", "label": "Desktop size", "default": 11 },
+    { "type": "range", "id": "heading_size_mobile", "min": 0, "max": 40, "step": 1, "unit": "px", "label": "Mobile size", "default": 11 },
     { "type": "select", "id": "heading_weight", "label": "Weight", "default": "400", "options": [
       { "value": "400", "label": "Regular" },
       { "value": "700", "label": "Bold" }
     ] },
-    { "type": "range", "id": "heading_spacing", "min": 0, "max": 6, "step": 1, "unit": "px", "label": "Letter spacing", "default": 2 },
-    { "type": "range", "id": "heading_space", "min": 8, "max": 48, "step": 2, "unit": "px", "label": "Space below heading", "default": 22 },
+    { "type": "range", "id": "heading_spacing", "min": 0, "max": 20, "step": 1, "unit": "px", "label": "Letter spacing", "default": 2 },
+    { "type": "range", "id": "heading_space", "min": 0, "max": 80, "step": 2, "unit": "px", "label": "Space below heading", "default": 22 },
     { "type": "color", "id": "heading_color", "label": "Color", "default": "#111111" },
     { "type": "header", "content": "Layout" },
-    { "type": "range", "id": "columns_desktop", "min": 2, "max": 6, "step": 1, "label": "Desktop columns", "default": 4 },
-    { "type": "range", "id": "columns_mobile", "min": 1, "max": 2, "step": 1, "label": "Mobile columns", "default": 2 },
-    { "type": "range", "id": "gap", "min": 0, "max": 24, "step": 2, "unit": "px", "label": "Desktop gap", "default": 4 },
-    { "type": "range", "id": "gap_mobile", "min": 0, "max": 24, "step": 2, "unit": "px", "label": "Mobile gap", "default": 4 },
-    { "type": "range", "id": "image_height", "min": 100, "max": 180, "step": 5, "unit": "%", "label": "Card height", "info": "140 matches the reference on desktop and mobile. A higher number makes every card taller.", "default": 140 },
+    { "type": "select", "id": "content_position", "label": "Content position", "default": "inside", "options": [
+      { "value": "inside", "label": "Inside card" },
+      { "value": "outside", "label": "Outside card" }
+    ] },
+    { "type": "select", "id": "content_align", "label": "Content alignment", "default": "center", "options": [
+      { "value": "left", "label": "Left" },
+      { "value": "center", "label": "Center" },
+      { "value": "right", "label": "Right" }
+    ] },
+    { "type": "range", "id": "columns_desktop", "min": 0, "max": 6, "step": 1, "label": "Desktop columns", "default": 4 },
+    { "type": "range", "id": "columns_mobile", "min": 0, "max": 4, "step": 1, "label": "Mobile columns", "default": 2 },
+    { "type": "range", "id": "gap", "min": 0, "max": 80, "step": 2, "unit": "px", "label": "Desktop gap", "default": 4 },
+    { "type": "range", "id": "gap_mobile", "min": 0, "max": 80, "step": 2, "unit": "px", "label": "Mobile gap", "default": 4 },
+    { "type": "range", "id": "image_height", "min": 0, "max": 200, "step": 5, "unit": "%", "label": "Desktop card height", "default": 140 },
+    { "type": "range", "id": "image_height_mobile", "min": 0, "max": 200, "step": 5, "unit": "%", "label": "Mobile card height", "default": 140 },
     { "type": "color", "id": "background", "label": "Section background", "default": "#ffffff" },
     { "type": "color", "id": "image_background", "label": "Image background", "default": "#e8d4be" },
     { "type": "select", "id": "image_fit", "label": "Image fit", "default": "cover", "options": [
@@ -98,23 +108,28 @@
       { "value": "helvetica", "label": "Helvetica" },
       { "value": "garamond", "label": "Garamond" }
     ] },
-    { "type": "range", "id": "label_size", "min": 12, "max": 24, "step": 1, "unit": "px", "label": "Size", "info": "Same size on desktop and mobile.", "default": 16 },
+    { "type": "range", "id": "label_size", "min": 0, "max": 40, "step": 1, "unit": "px", "label": "Desktop size", "default": 16 },
+    { "type": "range", "id": "label_size_mobile", "min": 0, "max": 40, "step": 1, "unit": "px", "label": "Mobile size", "default": 16 },
     { "type": "select", "id": "label_weight", "label": "Weight", "default": "700", "options": [
       { "value": "400", "label": "Regular" },
       { "value": "700", "label": "Bold" }
     ] },
-    { "type": "range", "id": "label_space", "min": 8, "max": 48, "step": 2, "unit": "px", "label": "Space from image bottom", "default": 18 },
-    { "type": "range", "id": "text_size", "min": 10, "max": 20, "step": 1, "unit": "px", "label": "Text desktop size", "default": 13 },
-    { "type": "range", "id": "text_size_mobile", "min": 10, "max": 18, "step": 1, "unit": "px", "label": "Text mobile size", "default": 12 },
+    { "type": "range", "id": "label_space", "min": 0, "max": 80, "step": 2, "unit": "px", "label": "Desktop space", "default": 18 },
+    { "type": "range", "id": "label_space_mobile", "min": 0, "max": 80, "step": 2, "unit": "px", "label": "Mobile space", "default": 18 },
+    { "type": "range", "id": "title_padding", "min": 0, "max": 40, "step": 2, "unit": "px", "label": "Side space", "default": 8 },
+    { "type": "range", "id": "text_size", "min": 0, "max": 32, "step": 1, "unit": "px", "label": "Text desktop size", "default": 13 },
+    { "type": "range", "id": "text_size_mobile", "min": 0, "max": 32, "step": 1, "unit": "px", "label": "Text mobile size", "default": 13 },
     { "type": "color", "id": "label_color", "label": "Color", "default": "#111111" },
     { "type": "header", "content": "Desktop padding" },
-    { "type": "range", "id": "padding_top", "min": 0, "max": 80, "step": 4, "unit": "px", "label": "Top", "default": 28 },
-    { "type": "range", "id": "padding_bottom", "min": 0, "max": 80, "step": 4, "unit": "px", "label": "Bottom", "default": 36 },
-    { "type": "range", "id": "padding_left", "min": 0, "max": 80, "step": 4, "unit": "px", "label": "Left", "default": 0 },
-    { "type": "range", "id": "padding_right", "min": 0, "max": 80, "step": 4, "unit": "px", "label": "Right", "default": 0 },
+    { "type": "range", "id": "padding_top", "min": 0, "max": 120, "step": 4, "unit": "px", "label": "Top", "default": 28 },
+    { "type": "range", "id": "padding_bottom", "min": 0, "max": 120, "step": 4, "unit": "px", "label": "Bottom", "default": 36 },
+    { "type": "range", "id": "padding_left", "min": 0, "max": 120, "step": 4, "unit": "px", "label": "Left", "default": 0 },
+    { "type": "range", "id": "padding_right", "min": 0, "max": 120, "step": 4, "unit": "px", "label": "Right", "default": 0 },
     { "type": "header", "content": "Mobile padding" },
-    { "type": "range", "id": "padding_top_mobile", "min": 0, "max": 64, "step": 4, "unit": "px", "label": "Top", "default": 24 },
-    { "type": "range", "id": "padding_bottom_mobile", "min": 0, "max": 64, "step": 4, "unit": "px", "label": "Bottom", "default": 28 }
+    { "type": "range", "id": "padding_top_mobile", "min": 0, "max": 120, "step": 4, "unit": "px", "label": "Top", "default": 24 },
+    { "type": "range", "id": "padding_bottom_mobile", "min": 0, "max": 120, "step": 4, "unit": "px", "label": "Bottom", "default": 28 },
+    { "type": "range", "id": "padding_left_mobile", "min": 0, "max": 120, "step": 4, "unit": "px", "label": "Left", "default": 12 },
+    { "type": "range", "id": "padding_right_mobile", "min": 0, "max": 120, "step": 4, "unit": "px", "label": "Right", "default": 12 }
   ],
   "blocks": [
     {
