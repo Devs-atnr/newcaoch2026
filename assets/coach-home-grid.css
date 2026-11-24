@@ -1,0 +1,65 @@
+.coach-home-grid {
+  box-sizing: border-box;
+  background: var(--hg-bg, #ffffff);
+  padding: var(--hg-pt, 28px) var(--hg-pr, 16px) var(--hg-pb, 36px) var(--hg-pl, 16px);
+}
+.coach-home-grid__heading {
+  margin: 0 0 var(--hg-heading-space, 22px);
+  font-family: var(--hg-heading-font, HelveticaLTPro-Roman, Helvetica, Arial, sans-serif);
+  font-size: var(--hg-heading-size, 11px);
+  font-weight: var(--hg-heading-weight, 400);
+  letter-spacing: var(--hg-track, 2px);
+  line-height: 1.3;
+  text-align: center;
+  text-transform: uppercase;
+  color: var(--hg-heading-color, #111111);
+}
+.coach-home-grid__heading.is-desk-hide { display: none; }
+.coach-home-grid__grid {
+  display: grid;
+  grid-template-columns: repeat(var(--hg-cols, 4), minmax(0, 1fr));
+  gap: var(--hg-gap, 12px);
+}
+.coach-home-grid__card {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  color: inherit;
+  text-decoration: none;
+}
+.coach-home-grid__media {
+  display: block;
+  background: var(--hg-img, #e8d4be);
+  aspect-ratio: 1 / 1.08;
+  overflow: hidden;
+}
+.coach-home-grid__media img,
+.coach-home-grid__media svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: var(--hg-fit, cover);
+}
+.coach-home-grid__title {
+  display: block;
+  margin-top: var(--hg-label-space, 18px);
+  font-family: var(--hg-label-font, HelveticaLTPro-Roman, Helvetica, Arial, sans-serif);
+  font-size: var(--hg-label-size, 16px);
+  font-weight: var(--hg-label-weight, 700);
+  line-height: 1.3;
+  text-align: center;
+  color: var(--hg-label-color, #111111);
+}
+@media screen and (max-width: 749px) {
+  .coach-home-grid {
+    padding: var(--hg-pt-m, 24px) var(--hg-pr-m, 12px) var(--hg-pb-m, 28px) var(--hg-pl-m, 12px);
+  }
+  .coach-home-grid__heading { font-size: var(--hg-heading-size-m, 11px); }
+  .coach-home-grid__heading.is-desk-hide { display: block; }
+  .coach-home-grid__heading.is-mob-hide { display: none; }
+  .coach-home-grid__grid {
+    grid-template-columns: repeat(var(--hg-cols-m, 2), minmax(0, 1fr));
+    gap: var(--hg-gap-m, 12px);
+  }
+  .coach-home-grid__title { font-size: var(--hg-label-size-m, 14px); }
+}
