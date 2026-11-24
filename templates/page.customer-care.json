@@ -11,8 +11,22 @@
   "sections": {
     "customer_care": {
       "type": "customer-care",
+      "blocks": {
+        "heading_g9WfmV": {
+          "type": "heading",
+          "settings": {
+            "heading": "Heading",
+            "size": 22,
+            "page_handles": ""
+          }
+        }
+      },
+      "block_order": [
+        "heading_g9WfmV"
+      ],
       "settings": {
         "heading": "Customer Care",
+        "menu": "footer-menu-copy",
         "sidebar_width": 33,
         "sidebar_background": "#f5f5f5",
         "content_background": "#ffffff",
@@ -33,6 +47,7 @@
         "title_space": 24,
         "content_max": 760,
         "full_width": true,
+        "page_width": 1440,
         "sidebar_padding_top": 48,
         "sidebar_padding_bottom": 48,
         "sidebar_padding_left": 36,
