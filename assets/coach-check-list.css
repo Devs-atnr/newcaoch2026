@@ -1,0 +1,74 @@
+.coach-check-list {
+  box-sizing: border-box;
+  background: var(--cl-bg, #ffffff);
+  padding: var(--cl-pt, 28px) var(--cl-pr, 0px) var(--cl-pb, 36px) var(--cl-pl, 0px);
+}
+.coach-check-list__heading {
+  margin: 0 0 var(--cl-heading-space, 22px);
+  padding: 0 16px;
+  font-family: var(--cl-heading-font, HelveticaLTPro-Roman, Helvetica, Arial, sans-serif);
+  font-size: var(--cl-heading-size, 11px);
+  font-weight: var(--cl-heading-weight, 400);
+  letter-spacing: var(--cl-track, 2.4px);
+  line-height: 1.3;
+  text-align: center;
+  text-transform: uppercase;
+  color: var(--cl-heading-color, #111111);
+}
+.coach-check-list__heading.is-desk-hide { display: none; }
+.coach-check-list__row {
+  display: grid;
+  grid-template-columns: repeat(var(--cl-cols, 4), minmax(0, 1fr));
+  gap: var(--cl-gap, 0px);
+}
+.coach-check-list__card {
+  display: block;
+  min-width: 0;
+  color: inherit;
+  text-decoration: none;
+}
+.coach-check-list__media {
+  display: block;
+  background: var(--cl-img, #e8d4be);
+  aspect-ratio: var(--cl-ratio, 1 / 1.08);
+  overflow: hidden;
+}
+.coach-check-list__media img,
+.coach-check-list__media svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: var(--cl-fit, cover);
+}
+.coach-check-list__title {
+  display: block;
+  margin-top: var(--cl-label-space, 18px);
+  padding: 0 8px 8px;
+  font-family: var(--cl-label-font, HelveticaLTPro-Roman, Helvetica, Arial, sans-serif);
+  font-size: var(--cl-label-size, 16px);
+  font-weight: var(--cl-label-weight, 700);
+  line-height: 1.3;
+  text-align: center;
+  color: var(--cl-label-color, #111111);
+}
+@media screen and (max-width: 749px) {
+  .coach-check-list {
+    padding: var(--cl-pt-m, 24px) 0 var(--cl-pb-m, 28px);
+  }
+  .coach-check-list__heading { font-size: var(--cl-heading-size-m, 11px); }
+  .coach-check-list__heading.is-desk-hide { display: block; }
+  .coach-check-list__heading.is-mob-hide { display: none; }
+  .coach-check-list__row {
+    display: flex;
+    gap: var(--cl-gap-m, 0px);
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+  }
+  .coach-check-list__row::-webkit-scrollbar { display: none; }
+  .coach-check-list__card {
+    flex: 0 0 78%;
+    scroll-snap-align: start;
+  }
+  .coach-check-list__title { font-size: var(--cl-label-size-m, 14px); }
+}
