@@ -91,6 +91,7 @@
     <div class="coach-care__main">
       <div class="coach-care__inner">
         {%- assign care_contact_used = false -%}
+        {%- assign care_login_used = false -%}
         {%- for block in section.blocks -%}
           {%- liquid
             assign show_block = true
@@ -107,6 +108,96 @@
           -%}
           {%- if show_block -%}
             {%- case block.type -%}
+              {%- when 'track_signin' -%}
+                {%- liquid
+                  assign track_url = block.settings.track_link
+                  if track_url == blank
+                    assign track_url = '/pages/track-your-order'
+                  endif
+                  assign forgot_url = block.settings.forgot_link
+                  if forgot_url == blank
+                    assign forgot_url = routes.account_login_url | append: '#recover'
+                  endif
+                  assign register_url = block.settings.register_link
+                  if register_url == blank
+                    assign register_url = routes.account_register_url
+                  endif
+                -%}
+                <coach-care-login
+                  class="coach-care__account"
+                  {{ block.shopify_attributes }}
+                  style="
+                    --acc-title: {{ block.settings.heading_color }};
+                    --acc-title-size: {{ block.settings.heading_size }}px;
+                    --acc-text: {{ block.settings.text_color }};
+                    --acc-text-size: {{ block.settings.text_size }}px;
+                    --acc-link: {{ block.settings.link_color }};
+                    --acc-gap: {{ block.settings.column_gap }}px;
+                    --acc-border: {{ block.settings.input_border }};
+                    --acc-btn: {{ block.settings.button_background }};
+                    --acc-btn-text: {{ block.settings.button_text }};
+                  "
+                >
+                  <div class="coach-care__account-col">
+                    {%- if block.settings.track_heading != blank -%}
+                      <h2 class="coach-care__account-title">{{ block.settings.track_heading | escape }}</h2>
+                    {%- endif -%}
+                    {%- if block.settings.track_text != blank -%}
+                      <div class="coach-care__rte">{{ block.settings.track_text }}</div>
+                    {%- endif -%}
+                    {%- if block.settings.track_link_label != blank -%}
+                      <p class="coach-care__account-action"><a class="coach-care__account-link" href="{{ track_url }}">{{ block.settings.track_link_label | escape }}</a></p>
+                    {%- endif -%}
+                  </div>
+                  <div class="coach-care__account-col">
+                    {%- if block.settings.account_heading != blank -%}
+                      <h2 class="coach-care__account-title">{{ block.settings.account_heading | escape }}</h2>
+                    {%- endif -%}
+                    {%- if block.settings.account_text != blank -%}
+                      <div class="coach-care__rte">{{ block.settings.account_text }}</div>
+                    {%- endif -%}
+                    {%- if customer -%}
+                      <p class="coach-care__signed">{{ block.settings.signed_in_text | escape }} {{ customer.email | escape }}</p>
+                      <a class="coach-care__button coach-care__signin" href="{{ routes.account_url }}">{{ block.settings.account_button | escape }}</a>
+                    {%- elsif care_login_used -%}
+                      <p class="coach-care__signed">{{ block.settings.signed_in_text | escape }}</p>
+                    {%- else -%}
+                      {%- assign care_login_used = true -%}
+                      {%- assign care_login_id = 'CareLogin-' | append: block.id -%}
+                      {%- form 'customer_login', id: care_login_id -%}
+                        {%- if form.errors -%}
+                          <div class="coach-care__status" role="alert">{{ form.errors | default_errors }}</div>
+                        {%- endif -%}
+                        <div class="coach-care__fields">
+                          <label class="coach-care__field">
+                            <span class="visually-hidden">{{ block.settings.email_label | escape }}</span>
+                            <input type="email" name="customer[email]" autocomplete="email" required placeholder="{{ block.settings.email_label | escape }}" value="{% if form.email %}{{ form.email }}{% endif %}">
+                          </label>
+                          <label class="coach-care__field coach-care__pass">
+                            <span class="visually-hidden">{{ block.settings.password_label | escape }}</span>
+                            <input type="password" name="customer[password]" autocomplete="current-password" required placeholder="{{ block.settings.password_label | escape }}" data-care-password>
+                            <button class="coach-care__show" type="button" data-care-show data-show="{{ block.settings.show_label | escape }}" data-hide="{{ block.settings.hide_label | escape }}">{{ block.settings.show_label | escape }}</button>
+                          </label>
+                          <div class="coach-care__login-row">
+                            {%- if block.settings.show_remember -%}
+                              <label class="coach-care__remember">
+                                <input type="checkbox" name="customer[remember_me]" value="true">
+                                <span>{{ block.settings.remember_label | escape }}</span>
+                              </label>
+                            {%- else -%}
+                              <span></span>
+                            {%- endif -%}
+                            <a class="coach-care__account-link" href="{{ forgot_url }}">{{ block.settings.forgot_label | escape }}</a>
+                          </div>
+                          <button class="coach-care__button coach-care__signin" type="submit">{{ block.settings.button_label | escape }}</button>
+                        </div>
+                      {%- endform -%}
+                    {%- endif -%}
+                    {%- if block.settings.create_label != blank -%}
+                      <p class="coach-care__create"><a class="coach-care__account-link" href="{{ register_url }}">{{ block.settings.create_label | escape }}</a>{% if block.settings.create_text != blank %} {{ block.settings.create_text | escape }}{% endif %}</p>
+                    {%- endif -%}
+                  </div>
+                </coach-care-login>
               {%- when 'page_content' -%}
                 <div class="coach-care__block" {{ block.shopify_attributes }}>
                   {%- if block.settings.show_title and page.title != blank -%}
@@ -365,7 +456,87 @@
 .coach-care__rte,
 .coach-care__split,
 .coach-care__icon-row,
-.coach-care__faq { margin-top: 22px; }
+.coach-care__faq,
+.coach-care__account { margin-top: 22px; }
+.coach-care__main:has(.coach-care__account) .coach-care__inner { max-width: none; }
+.coach-care__account {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: var(--acc-gap, 48px);
+  align-items: start;
+  width: 100%;
+  color: var(--acc-text, #111);
+  font-size: var(--acc-text-size, 14px);
+}
+.coach-care__account-title {
+  margin: 0 0 12px;
+  color: var(--acc-title, #111);
+  font-size: var(--acc-title-size, 18px);
+  font-weight: 700;
+  line-height: 1.3;
+}
+.coach-care__account .coach-care__rte { font-size: inherit; color: inherit; }
+.coach-care__account-action { margin: 14px 0 0; }
+.coach-care__account-link {
+  color: var(--acc-link, #111);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.coach-care__account .coach-care__field input {
+  border-color: var(--acc-border, #cfcfcf);
+  min-height: 44px;
+}
+.coach-care__pass { position: relative; }
+.coach-care__pass input { padding-right: 72px; }
+.coach-care__show {
+  position: absolute;
+  top: 50%;
+  right: 12px;
+  transform: translateY(-50%);
+  border: 0;
+  background: transparent;
+  padding: 0;
+  color: inherit;
+  font: inherit;
+  font-size: 13px;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  cursor: pointer;
+}
+.coach-care__login-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 13px;
+}
+.coach-care__remember {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.coach-care__remember input { width: 14px; height: 14px; margin: 0; }
+.coach-care__signin {
+  width: 100%;
+  border-color: var(--acc-btn, #111);
+  background: var(--acc-btn, #111);
+  color: var(--acc-btn-text, #fff);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.coach-care__create { margin: 16px 0 0; font-size: 13px; line-height: 1.5; }
+.coach-care__signed { margin: 0 0 12px; }
+.coach-care .visually-hidden {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
 .coach-care__inner > :first-child { margin-top: 0; }
 .coach-care__block-heading {
   margin: 22px 0 8px;
@@ -429,6 +600,7 @@
   .coach-care__main { padding: var(--care-m-pad, 16px); }
   .coach-care.is-sticky .coach-care__panel { position: static; }
   .coach-care.is-collapse .coach-care__toggle { display: flex; }
+  .coach-care__account,
   .coach-care__split { grid-template-columns: minmax(0, 1fr); }
   .coach-care__split.is-reverse .coach-care__split-media { order: 0; }
   .coach-care__spacer { height: var(--care-spacer-m, 16px); }
@@ -439,6 +611,22 @@
 {% endstylesheet %}
 
 {% javascript %}
+if (!customElements.get('coach-care-login')) {
+  customElements.define('coach-care-login', class extends HTMLElement {
+    connectedCallback() {
+      if (this.dataset.bound === 'true') return;
+      this.dataset.bound = 'true';
+      const button = this.querySelector('[data-care-show]');
+      const input = this.querySelector('[data-care-password]');
+      if (!button || !input) return;
+      button.addEventListener('click', () => {
+        const shown = input.type === 'text';
+        input.type = shown ? 'password' : 'text';
+        button.textContent = shown ? button.dataset.show : button.dataset.hide;
+      });
+    }
+  });
+}
 if (!customElements.get('coach-care-nav')) {
   customElements.define('coach-care-nav', class extends HTMLElement {
     connectedCallback() {
@@ -506,6 +694,46 @@ if (!customElements.get('coach-care-nav')) {
     { "type": "range", "id": "mobile_spacing", "min": 0, "max": 40, "step": 4, "unit": "px", "label": "Mobile space between columns", "default": 0 }
   ],
   "blocks": [
+    {
+      "type": "track_signin",
+      "name": "Track and sign in",
+      "limit": 1,
+      "settings": [
+        { "type": "header", "content": "Track an order" },
+        { "type": "text", "id": "track_heading", "label": "Heading", "default": "Track an Order" },
+        { "type": "richtext", "id": "track_text", "label": "Text", "default": "<p>To track your order, please have your order number (Order ID) and email address ready.</p>" },
+        { "type": "text", "id": "track_link_label", "label": "Link label", "default": "Click here to track your order." },
+        { "type": "text", "id": "track_link", "label": "Tracking link", "default": "/pages/track-your-order", "info": "Live page: https://coach.sa/pages/track-your-order" },
+        { "type": "header", "content": "Sign in" },
+        { "type": "text", "id": "account_heading", "label": "Heading", "default": "Sign in to Your Account" },
+        { "type": "richtext", "id": "account_text", "label": "Text", "default": "<p>Sign in to see your order history and update your account. (Welcome back!)</p>" },
+        { "type": "text", "id": "email_label", "label": "Email label", "default": "Email Address" },
+        { "type": "text", "id": "password_label", "label": "Password label", "default": "Password" },
+        { "type": "text", "id": "show_label", "label": "Show password label", "default": "Show" },
+        { "type": "text", "id": "hide_label", "label": "Hide password label", "default": "Hide" },
+        { "type": "checkbox", "id": "show_remember", "label": "Show remember me", "default": true },
+        { "type": "text", "id": "remember_label", "label": "Remember me label", "default": "Remember Me" },
+        { "type": "text", "id": "forgot_label", "label": "Forgot password label", "default": "Forgot Password" },
+        { "type": "text", "id": "forgot_link", "label": "Forgot password link", "info": "Leave blank to use the Shopify account recovery page." },
+        { "type": "text", "id": "button_label", "label": "Sign in button", "default": "Sign in" },
+        { "type": "text", "id": "create_label", "label": "Create account label", "default": "Create Account" },
+        { "type": "text", "id": "create_text", "label": "Create account text", "default": "with the same email associated with your orders to view your full order history." },
+        { "type": "text", "id": "register_link", "label": "Create account link", "info": "Leave blank to use the Shopify register page." },
+        { "type": "text", "id": "signed_in_text", "label": "Signed in message", "default": "You are signed in as" },
+        { "type": "text", "id": "account_button", "label": "Account button", "default": "View account" },
+        { "type": "header", "content": "Style" },
+        { "type": "range", "id": "heading_size", "min": 12, "max": 36, "step": 1, "unit": "px", "label": "Heading size", "default": 18 },
+        { "type": "range", "id": "text_size", "min": 12, "max": 20, "step": 1, "unit": "px", "label": "Text size", "default": 14 },
+        { "type": "range", "id": "column_gap", "min": 0, "max": 80, "step": 4, "unit": "px", "label": "Space between columns", "default": 48 },
+        { "type": "color", "id": "heading_color", "label": "Heading color", "default": "#111111" },
+        { "type": "color", "id": "text_color", "label": "Text color", "default": "#111111" },
+        { "type": "color", "id": "link_color", "label": "Link color", "default": "#111111" },
+        { "type": "color", "id": "input_border", "label": "Field border", "default": "#cfcfcf" },
+        { "type": "color", "id": "button_background", "label": "Button background", "default": "#111111" },
+        { "type": "color", "id": "button_text", "label": "Button text", "default": "#ffffff" },
+        { "type": "text", "id": "page_handles", "label": "Limit to page handles", "info": "Comma-separated handles. Leave blank to show on every page using this template." }
+      ]
+    },
     {
       "type": "page_content",
       "name": "Page content",
