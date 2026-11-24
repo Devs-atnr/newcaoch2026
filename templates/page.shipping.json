@@ -1,0 +1,94 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "customer_care": {
+      "type": "customer-care",
+      "blocks": {
+        "track_signin_main": {
+          "type": "track_signin",
+          "settings": {
+            "track_heading": "Track an Order",
+            "track_text": "<p>To track your order, please have your order number (Order ID) and email address ready.</p>",
+            "track_link_label": "Click here",
+            "track_link_rest": "to track your order.",
+            "track_link": "/pages/track-your-order",
+            "account_heading": "Sign in to Your Account",
+            "account_text": "<p>Sign in to see your order history and update your account. (Welcome back!)</p>",
+            "email_label": "Email Address",
+            "email_error": "Email address is required.",
+            "password_label": "Password",
+            "password_error": "Password required.",
+            "show_label": "Show",
+            "hide_label": "Hide",
+            "show_remember": true,
+            "remember_label": "Remember Me",
+            "forgot_label": "Forgot Password",
+            "forgot_link": "",
+            "button_label": "Sign in",
+            "create_label": "Create Account",
+            "create_text": "with the same email associated with your orders to view your full order history.",
+            "register_link": "",
+            "signed_in_text": "You are signed in as",
+            "account_button": "View account",
+            "heading_size": 20,
+            "text_size": 13,
+            "column_gap": 48,
+            "heading_color": "#111111",
+            "text_color": "#111111",
+            "link_color": "#111111",
+            "input_border": "#c8c8c8",
+            "error_color": "#e10600",
+            "button_background": "#111111",
+            "button_text": "#ffffff",
+            "page_handles": ""
+          }
+        }
+      },
+      "block_order": [
+        "track_signin_main"
+      ],
+      "settings": {
+        "menu": "footer-menu-copy",
+        "sidebar_width": 33,
+        "sidebar_background": "#f5f5f5",
+        "content_background": "#ffffff",
+        "sticky_sidebar": true,
+        "sticky_top": 24,
+        "mobile_collapse": false,
+        "heading_size": 20,
+        "heading_color": "#111111",
+        "heading_weight": "700",
+        "category_size": 16,
+        "category_color": "#111111",
+        "category_weight": "700",
+        "category_uppercase": true,
+        "link_size": 14,
+        "link_color": "#111111",
+        "active_color": "#111111",
+        "underline_active": true,
+        "hover_color": "#111111",
+        "category_space": 28,
+        "link_space": 12,
+        "sidebar_padding_y": 48,
+        "sidebar_padding_x": 32,
+        "content_padding_y": 48,
+        "content_padding_x": 48,
+        "content_max": 1200,
+        "min_height": 0,
+        "mobile_padding": 16,
+        "mobile_spacing": 0
+      }
+    }
+  },
+  "order": [
+    "customer_care"
+  ]
+}
