@@ -115,7 +115,7 @@
         "heading_color": "#111111",
         "columns_desktop": 4,
         "gap": 6,
-        "gap_mobile": 0,
+        "gap_mobile": 6,
         "background": "#ffffff",
         "image_background": "#e8d4be",
         "image_fit": "cover",
