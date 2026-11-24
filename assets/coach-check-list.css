@@ -5,7 +5,7 @@
 }
 .coach-check-list__heading {
   margin: 0 0 var(--cl-heading-space, 22px);
-  padding: 0 16px;
+  padding: 0;
   font-family: var(--cl-heading-font, HelveticaLTPro-Roman, Helvetica, Arial, sans-serif);
   font-size: var(--cl-heading-size, 11px);
   font-weight: var(--cl-heading-weight, 400);
@@ -18,7 +18,7 @@
 .coach-check-list__heading.is-desk-hide { display: none; }
 .coach-check-list__row {
   display: grid;
-  grid-template-columns: repeat(var(--cl-cols, 4), minmax(0, 1fr));
+  grid-template-columns: repeat(max(var(--cl-cols, 4), 1), minmax(0, 1fr));
   gap: var(--cl-gap, 8px);
 }
 .coach-check-list__card {
@@ -37,7 +37,7 @@
   min-width: 0;
   overflow: hidden;
   background: var(--cl-img, #e8d4be);
-  aspect-ratio: 100 / var(--cl-h, 140);
+  aspect-ratio: 100 / max(var(--cl-h, 140), 1);
 }
 .coach-check-list__media picture {
   position: absolute;
@@ -52,7 +52,7 @@
   width: 100%;
   height: 100%;
   max-width: none;
-  object-fit: cover;
+  object-fit: var(--cl-fit, cover);
   object-position: center center;
 }
 .coach-check-list__title,
@@ -64,12 +64,12 @@
   width: 100%;
   max-width: 100%;
   margin: 0;
-  padding: 0 8px;
+  padding: 0 var(--cl-title-pad, 8px);
   box-sizing: border-box;
   overflow: hidden;
   font-family: var(--cl-label-font, HelveticaLTPro-Roman, Helvetica, Arial, sans-serif);
   line-height: 1.2;
-  text-align: center;
+  text-align: var(--cl-align, center);
   color: var(--cl-label-color, #111111);
 }
 .coach-check-list__title {
@@ -82,15 +82,39 @@
   font-size: var(--cl-text-size, 13px);
   font-weight: 400;
 }
+.coach-check-list.is-outside .coach-check-list__card {
+  display: flex;
+  flex-direction: column;
+  overflow: visible;
+}
+.coach-check-list.is-outside .coach-check-list__title,
+.coach-check-list.is-outside .coach-check-list__text {
+  margin-top: var(--cl-label-space, 18px);
+  margin-bottom: 0;
+}
+.coach-check-list.is-outside .coach-check-list__text {
+  margin-top: 4px;
+}
 @media screen and (max-width: 749px) {
   .coach-check-list {
-    padding: var(--cl-pt-m, 24px) 12px var(--cl-pb-m, 28px);
+    padding: var(--cl-pt-m, 24px) var(--cl-pr-m, 0px) var(--cl-pb-m, 28px) var(--cl-pl-m, 0px);
   }
   .coach-check-list__heading { font-size: var(--cl-heading-size-m, 11px); }
   .coach-check-list__heading.is-desk-hide { display: block; }
   .coach-check-list__heading.is-mob-hide { display: none; }
   .coach-check-list__row {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(max(var(--cl-cols-m, 2), 1), minmax(0, 1fr));
     gap: var(--cl-gap-m, 8px);
+  }
+  .coach-check-list__media { aspect-ratio: 100 / max(var(--cl-h-m, 140), 1); }
+  .coach-check-list__title {
+    margin-bottom: var(--cl-label-space-m, 18px);
+    font-size: var(--cl-label-size-m, 16px);
+  }
+  .coach-check-list__text { font-size: var(--cl-text-size-m, 13px); }
+  .coach-check-list.is-outside .coach-check-list__title,
+  .coach-check-list.is-outside .coach-check-list__text {
+    margin-top: var(--cl-label-space-m, 18px);
+    margin-bottom: 0;
   }
 }
