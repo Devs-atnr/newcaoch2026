@@ -1,127 +1,95 @@
 {%- liquid
-  assign side_heading = section.settings.heading | default: 'Customer Care'
   assign menu = section.settings.menu
+  assign cat_transform = 'uppercase'
+  if section.settings.category_uppercase == false
+    assign cat_transform = 'none'
+  endif
 -%}
 
 <div
   id="CoachCare-{{ section.id }}"
-  class="coach-care{% if section.settings.full_width %} is-full{% endif %}{% if section.settings.sticky_sidebar %} is-sticky{% endif %}"
+  class="coach-care{% if section.settings.sticky_sidebar %} is-sticky{% endif %}{% if section.settings.mobile_collapse %} is-collapse{% endif %}{% if section.settings.underline_active %} is-underline{% endif %}"
   style="
     --care-side: {{ section.settings.sidebar_width | default: 33 }}%;
     --care-side-bg: {{ section.settings.sidebar_background | default: '#f5f5f5' }};
     --care-main-bg: {{ section.settings.content_background | default: '#ffffff' }};
-    --care-heading-size: {{ section.settings.heading_size | default: 16 }}px;
-    --care-title-size: {{ section.settings.title_size | default: 28 }}px;
-    --care-title-color: {{ section.settings.heading_color | default: '#111111' }};
-    --care-cat-size: {{ section.settings.category_size | default: 13 }}px;
-    --care-cat-weight: {{ section.settings.category_weight | default: '700' }};
-    --care-link-size: {{ section.settings.link_size | default: 14 }}px;
-    --care-link: {{ section.settings.link_color | default: '#111111' }};
+    --care-l1-size: {{ section.settings.heading_size | default: 20 }}px;
+    --care-l1-color: {{ section.settings.heading_color | default: '#111111' }};
+    --care-l1-weight: {{ section.settings.heading_weight | default: '700' }};
+    --care-l2-size: {{ section.settings.category_size | default: 16 }}px;
+    --care-l2-color: {{ section.settings.category_color | default: '#111111' }};
+    --care-l2-weight: {{ section.settings.category_weight | default: '700' }};
+    --care-l2-case: {{ cat_transform }};
+    --care-l3-size: {{ section.settings.link_size | default: 14 }}px;
+    --care-l3-color: {{ section.settings.link_color | default: '#111111' }};
     --care-active: {{ section.settings.active_color | default: '#111111' }};
     --care-hover: {{ section.settings.hover_color | default: '#111111' }};
-    --care-text: {{ section.settings.content_color | default: '#111111' }};
-    --care-content: {{ section.settings.content_max | default: 760 }}px;
-    --care-page: {{ section.settings.page_width | default: 1440 }}px;
-    --care-s-pt: {{ section.settings.sidebar_padding_top | default: 48 }}px;
-    --care-s-pr: {{ section.settings.sidebar_padding_right | default: 32 }}px;
-    --care-s-pb: {{ section.settings.sidebar_padding_bottom | default: 48 }}px;
-    --care-s-pl: {{ section.settings.sidebar_padding_left | default: 36 }}px;
-    --care-c-pt: {{ section.settings.content_padding_top | default: 48 }}px;
-    --care-c-pr: {{ section.settings.content_padding_right | default: 48 }}px;
-    --care-c-pb: {{ section.settings.content_padding_bottom | default: 64 }}px;
-    --care-c-pl: {{ section.settings.content_padding_left | default: 56 }}px;
     --care-cat-space: {{ section.settings.category_space | default: 28 }}px;
     --care-link-space: {{ section.settings.link_space | default: 12 }}px;
-    --care-gap: {{ section.settings.column_gap | default: 0 }}px;
-    --care-sec-pt: {{ section.settings.padding_top | default: 0 }}px;
-    --care-sec-pb: {{ section.settings.padding_bottom | default: 0 }}px;
+    --care-s-py: {{ section.settings.sidebar_padding_y | default: 48 }}px;
+    --care-s-px: {{ section.settings.sidebar_padding_x | default: 32 }}px;
+    --care-c-py: {{ section.settings.content_padding_y | default: 48 }}px;
+    --care-c-px: {{ section.settings.content_padding_x | default: 48 }}px;
+    --care-content: {{ section.settings.content_max | default: 760 }}px;
+    --care-min: {{ section.settings.min_height | default: 0 }}px;
     --care-sticky: {{ section.settings.sticky_top | default: 24 }}px;
-    --care-title-space: {{ section.settings.title_space | default: 24 }}px;
-    --care-body-size: {{ section.settings.content_size | default: 14 }}px;
     --care-m-pad: {{ section.settings.mobile_padding | default: 16 }}px;
-    --care-m-space: {{ section.settings.mobile_spacing | default: 16 }}px;
+    --care-m-gap: {{ section.settings.mobile_spacing | default: 0 }}px;
   "
 >
   <div class="coach-care__frame">
     <coach-care-nav class="coach-care__side">
-      <button
-        type="button"
-        class="coach-care__toggle"
-        data-care-toggle
-        aria-expanded="false"
-        aria-controls="CoachCarePanel-{{ section.id }}"
-      >
-        <span>{{ side_heading | escape }}</span>
-        <svg class="coach-care__chevron" viewBox="0 0 20 20" aria-hidden="true" focusable="false">
-          <path d="M5 7.5 10 12.5 15 7.5" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"></path>
-        </svg>
-      </button>
-      <div class="coach-care__panel" id="CoachCarePanel-{{ section.id }}" data-care-panel hidden>
-        {%- if side_heading != blank -%}
-          <p class="coach-care__heading">{{ side_heading | escape }}</p>
-        {%- endif -%}
+      {%- if section.settings.mobile_collapse -%}
+        <button
+          type="button"
+          class="coach-care__toggle"
+          data-care-toggle
+          aria-expanded="false"
+          aria-controls="CoachCarePanel-{{ section.id }}"
+        >
+          <span>Menu</span>
+          <svg class="coach-care__chevron" viewBox="0 0 20 20" aria-hidden="true" focusable="false">
+            <path d="M5 7.5 10 12.5 15 7.5" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"></path>
+          </svg>
+        </button>
+      {%- endif -%}
+      <div class="coach-care__panel" id="CoachCarePanel-{{ section.id }}" data-care-panel{% if section.settings.mobile_collapse %} hidden{% endif %}>
         {%- if menu != blank and menu.links.size > 0 -%}
-          <nav class="coach-care__nav" aria-label="{{ side_heading | escape }}">
+          <nav class="coach-care__nav" aria-label="{{ menu.title | escape }}">
             {%- for link in menu.links -%}
-              {%- if link.links.size > 0 -%}
-                <div class="coach-care__group">
-                  <p class="coach-care__category">{{ link.title | escape }}</p>
-                  <ul class="coach-care__links">
-                    {%- for child in link.links -%}
-                      <li>
-                        <a
-                          class="coach-care__link{% if child.current or child.active %} is-active{% endif %}"
-                          href="{{ child.url }}"
-                          {% if child.current or child.active %}aria-current="page"{% endif %}
-                        >{{ child.title | escape }}</a>
-                        {%- if child.links.size > 0 -%}
-                          <ul class="coach-care__sublinks">
-                            {%- for grand in child.links -%}
-                              <li>
-                                <a
-                                  class="coach-care__link{% if grand.current or grand.active %} is-active{% endif %}"
-                                  href="{{ grand.url }}"
-                                  {% if grand.current or grand.active %}aria-current="page"{% endif %}
-                                >{{ grand.title | escape }}</a>
-                              </li>
-                            {%- endfor -%}
-                          </ul>
-                        {%- endif -%}
-                      </li>
-                    {%- endfor -%}
-                  </ul>
-                </div>
-              {%- else -%}
-                <div class="coach-care__group">
-                  <a
-                    class="coach-care__link coach-care__link--top{% if link.current or link.active %} is-active{% endif %}"
-                    href="{{ link.url }}"
-                    {% if link.current or link.active %}aria-current="page"{% endif %}
-                  >{{ link.title | escape }}</a>
-                </div>
-              {%- endif -%}
+              <div class="coach-care__level">
+                {%- if link.url != blank -%}
+                  <a class="coach-care__l1{% if link.current %} is-active{% endif %}" href="{{ link.url }}"{% if link.current %} aria-current="page"{% endif %}>{{ link.title | escape }}</a>
+                {%- else -%}
+                  <p class="coach-care__l1">{{ link.title | escape }}</p>
+                {%- endif -%}
+                {%- if link.links.size > 0 -%}
+                  {%- for child in link.links -%}
+                    <div class="coach-care__group">
+                      {%- if child.links.size > 0 -%}
+                        <p class="coach-care__l2">{{ child.title | escape }}</p>
+                        <ul class="coach-care__links">
+                          {%- for grand in child.links -%}
+                            <li>
+                              <a class="coach-care__l3{% if grand.current %} is-active{% endif %}" href="{{ grand.url }}"{% if grand.current %} aria-current="page"{% endif %}>{{ grand.title | escape }}</a>
+                            </li>
+                          {%- endfor -%}
+                        </ul>
+                      {%- else -%}
+                        <a class="coach-care__l2{% if child.current %} is-active{% endif %}" href="{{ child.url }}"{% if child.current %} aria-current="page"{% endif %}>{{ child.title | escape }}</a>
+                      {%- endif -%}
+                    </div>
+                  {%- endfor -%}
+                {%- endif -%}
+              </div>
             {%- endfor -%}
           </nav>
-        {%- elsif request.design_mode -%}
-          <p class="coach-care__empty">Select a navigation menu in this section’s settings. Parent items become headings. Child items become links.</p>
         {%- endif -%}
       </div>
     </coach-care-nav>
 
     <div class="coach-care__main">
       <div class="coach-care__inner">
-        {%- if section.settings.show_title and page.title != blank -%}
-          <h1 class="coach-care__title">{{ page.title | escape }}</h1>
-        {%- endif -%}
-
-        {%- if page.content != blank -%}
-          <div class="coach-care__rte rte">{{ page.content }}</div>
-        {%- endif -%}
-
-        {%- if page.metafields.custom.care_content != blank -%}
-          <div class="coach-care__rte rte">{{ page.metafields.custom.care_content | metafield_tag }}</div>
-        {%- endif -%}
-
         {%- assign care_contact_used = false -%}
         {%- for block in section.blocks -%}
           {%- liquid
@@ -139,10 +107,25 @@
           -%}
           {%- if show_block -%}
             {%- case block.type -%}
+              {%- when 'page_content' -%}
+                <div class="coach-care__block" {{ block.shopify_attributes }}>
+                  {%- if block.settings.show_title and page.title != blank -%}
+                    <h1 class="coach-care__page-title">{{ page.title | escape }}</h1>
+                  {%- endif -%}
+                  {%- if page.content != blank -%}
+                    <div class="coach-care__rte">{{ page.content }}</div>
+                  {%- endif -%}
+                  {%- if page.metafields.custom.care_content != blank -%}
+                    <div class="coach-care__rte">{{ page.metafields.custom.care_content | metafield_tag }}</div>
+                  {%- endif -%}
+                  {%- if block.settings.extra != blank -%}
+                    <div class="coach-care__rte">{{ block.settings.extra }}</div>
+                  {%- endif -%}
+                </div>
               {%- when 'heading' -%}
                 <h2 class="coach-care__block-heading" {{ block.shopify_attributes }} style="font-size: {{ block.settings.size }}px;">{{ block.settings.heading | escape }}</h2>
               {%- when 'richtext' -%}
-                <div class="coach-care__rte rte" {{ block.shopify_attributes }}>{{ block.settings.text }}</div>
+                <div class="coach-care__rte" {{ block.shopify_attributes }}>{{ block.settings.text }}</div>
               {%- when 'image' -%}
                 <div class="coach-care__block" {{ block.shopify_attributes }}>
                   {%- if block.settings.image != blank -%}
@@ -156,7 +139,7 @@
                       {{ block.settings.image | image_url: width: 1200 | image_tag: alt: block.settings.alt, loading: 'lazy' }}
                     {%- endif -%}
                   </div>
-                  <div class="coach-care__rte rte">{{ block.settings.text }}</div>
+                  <div class="coach-care__rte">{{ block.settings.text }}</div>
                 </div>
               {%- when 'icon_text' -%}
                 <div class="coach-care__icon-row" {{ block.shopify_attributes }}>
@@ -166,8 +149,6 @@
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="3.5" y="5.5" width="17" height="13" rx="1.5"></rect><path d="m4 7 8 6 8-6"></path></svg>
                       {%- when 'box' -%}
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M3.5 8 12 4l8.5 4L12 12 3.5 8Z"></path><path d="M3.5 8v8L12 20l8.5-4V8"></path><path d="M12 12v8"></path></svg>
-                      {%- when 'return' -%}
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M8 8H5.5A3.5 3.5 0 0 0 5.5 15H19"></path><path d="M8 5.5 5.5 8 8 10.5"></path></svg>
                       {%- else -%}
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M7 16.5c-1.8-1.2-3-2.9-3-5A6.5 6.5 0 0 1 14.2 6"></path><path d="M8 19.5 7 16.5l3 .2"></path><path d="M17 7.5c1.8 1.2 3 2.9 3 5A6.5 6.5 0 0 1 9.8 18"></path><path d="M16 4.5 17 7.5l-3-.2"></path></svg>
                     {%- endcase -%}
@@ -177,7 +158,7 @@
                       <h3 class="coach-care__block-heading">{{ block.settings.heading | escape }}</h3>
                     {%- endif -%}
                     {%- if block.settings.text != blank -%}
-                      <div class="coach-care__rte rte">{{ block.settings.text }}</div>
+                      <div class="coach-care__rte">{{ block.settings.text }}</div>
                     {%- endif -%}
                   </div>
                 </div>
@@ -190,20 +171,16 @@
               {%- when 'faq' -%}
                 <details class="coach-care__faq" {{ block.shopify_attributes }}>
                   <summary>{{ block.settings.question | escape }}</summary>
-                  <div class="coach-care__rte rte">{{ block.settings.answer }}</div>
+                  <div class="coach-care__rte">{{ block.settings.answer }}</div>
                 </details>
               {%- when 'contact_form' -%}
                 <div class="coach-care__block" {{ block.shopify_attributes }}>
-                  {%- if care_contact_used -%}
-                    {%- if request.design_mode -%}
-                      <p class="coach-care__empty">Only one contact form can be used on a page.</p>
-                    {%- endif -%}
-                  {%- else -%}
+                  {%- unless care_contact_used -%}
                     {%- assign care_contact_used = true -%}
                     {%- assign care_form_id = 'CareContact-' | append: section.id -%}
                     {%- form 'contact', id: care_form_id -%}
                       {%- if form.posted_successfully? -%}
-                        <p class="coach-care__status" tabindex="-1" autofocus>Thanks. Your message has been sent.</p>
+                        <p class="coach-care__status" tabindex="-1">Thanks. Your message has been sent.</p>
                       {%- elsif form.errors -%}
                         <p class="coach-care__status" role="alert">{{ form.errors.translated_fields.email | capitalize }} {{ form.errors.messages.email }}</p>
                       {%- endif -%}
@@ -223,44 +200,18 @@
                         <button class="coach-care__button" type="submit">{{ block.settings.label | default: 'Send' | escape }}</button>
                       </div>
                     {%- endform -%}
-                  {%- endif -%}
-                </div>
-              {%- when 'email_info' -%}
-                <div class="coach-care__icon-row" {{ block.shopify_attributes }}>
-                  <span class="coach-care__icon" aria-hidden="true">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="3.5" y="5.5" width="17" height="13" rx="1.5"></rect><path d="m4 7 8 6 8-6"></path></svg>
-                  </span>
-                  <div>
-                    {%- if block.settings.heading != blank -%}
-                      <h3 class="coach-care__block-heading">{{ block.settings.heading | escape }}</h3>
-                    {%- endif -%}
-                    {%- if block.settings.text != blank -%}
-                      <div class="coach-care__rte rte">{{ block.settings.text }}</div>
-                    {%- endif -%}
-                    {%- if block.settings.email != blank -%}
-                      <a class="coach-care__link is-active" href="mailto:{{ block.settings.email | escape }}">{{ block.settings.email | escape }}</a>
-                    {%- endif -%}
-                  </div>
-                </div>
-              {%- when 'live_chat' -%}
-                <div class="coach-care__icon-row" {{ block.shopify_attributes }}>
-                  <span class="coach-care__icon" aria-hidden="true">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M7 16.5c-1.8-1.2-3-2.9-3-5A6.5 6.5 0 0 1 14.2 6"></path><path d="M8 19.5 7 16.5l3 .2"></path><path d="M17 7.5c1.8 1.2 3 2.9 3 5A6.5 6.5 0 0 1 9.8 18"></path><path d="M16 4.5 17 7.5l-3-.2"></path></svg>
-                  </span>
-                  <div>
-                    {%- if block.settings.heading != blank -%}
-                      <h3 class="coach-care__block-heading">{{ block.settings.heading | escape }}</h3>
-                    {%- endif -%}
-                    {%- if block.settings.text != blank -%}
-                      <div class="coach-care__rte rte">{{ block.settings.text }}</div>
-                    {%- endif -%}
-                    {%- if block.settings.label != blank -%}
-                      <a class="coach-care__chat" href="{{ block.settings.link | default: '#' }}" {% if block.settings.button_id != blank %}id="{{ block.settings.button_id | escape }}"{% endif %}>{{ block.settings.label | escape }}</a>
-                    {%- endif -%}
-                  </div>
+                  {%- endunless -%}
                 </div>
               {%- when 'custom_liquid' -%}
                 <div class="coach-care__block" {{ block.shopify_attributes }}>{{ block.settings.code }}</div>
+              {%- when 'video' -%}
+                <div class="coach-care__block" {{ block.shopify_attributes }}>
+                  {%- if block.settings.video != blank -%}
+                    {{ block.settings.video | video_tag: controls: true, image_size: '1200x' }}
+                  {%- elsif block.settings.video_url != blank -%}
+                    {{ block.settings.video_url | external_video_tag }}
+                  {%- endif -%}
+                </div>
               {%- when 'divider' -%}
                 <hr class="coach-care__divider" {{ block.shopify_attributes }}>
               {%- when 'spacer' -%}
@@ -276,9 +227,9 @@
 {% stylesheet %}
 .coach-care {
   box-sizing: border-box;
-  padding: var(--care-sec-pt, 0px) 0 var(--care-sec-pb, 0px);
+  max-width: 100%;
   background: #ffffff;
-  color: var(--care-text, #111111);
+  color: #111111;
   font-family: HelveticaLTPro-Roman, Helvetica, Arial, sans-serif;
 }
 .coach-care *,
@@ -286,19 +237,16 @@
 .coach-care *::after { box-sizing: border-box; }
 .coach-care__frame {
   display: grid;
-  grid-template-columns: minmax(220px, var(--care-side, 33%)) minmax(0, 1fr);
-  gap: var(--care-gap, 0px);
+  grid-template-columns: minmax(0, var(--care-side, 33%)) minmax(0, 1fr);
   align-items: stretch;
   width: 100%;
+  min-height: var(--care-min, 0px);
 }
-.coach-care:not(.is-full) .coach-care__frame {
-  max-width: var(--care-page, 1440px);
-  margin: 0 auto;
-}
+.coach-care__side,
+.coach-care__main { min-width: 0; }
 .coach-care__side {
-  min-width: 0;
   background: var(--care-side-bg, #f5f5f5);
-  padding: var(--care-s-pt, 48px) var(--care-s-pr, 32px) var(--care-s-pb, 48px) var(--care-s-pl, 36px);
+  padding: var(--care-s-py, 48px) var(--care-s-px, 32px);
 }
 .coach-care.is-sticky .coach-care__panel {
   position: sticky;
@@ -310,91 +258,83 @@
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  margin: 0;
+  margin: 0 0 12px;
   padding: 0;
   border: 0;
   background: transparent;
-  color: var(--care-title-color, #111);
+  color: var(--care-l1-color, #111);
   font: inherit;
-  font-size: var(--care-heading-size, 16px);
-  font-weight: 700;
+  font-size: var(--care-l1-size, 20px);
+  font-weight: var(--care-l1-weight, 700);
   text-align: left;
   cursor: pointer;
 }
-.coach-care__chevron {
-  width: 18px;
-  height: 18px;
-  flex: none;
-  transition: transform 0.2s ease;
-}
+.coach-care__chevron { width: 18px; height: 18px; flex: none; transition: transform 0.2s ease; }
 .coach-care__toggle[aria-expanded="true"] .coach-care__chevron { transform: rotate(180deg); }
-.coach-care__heading {
-  margin: 0 0 28px;
-  font-size: var(--care-heading-size, 16px);
-  font-weight: 700;
+.coach-care__level + .coach-care__level { margin-top: var(--care-cat-space, 28px); }
+.coach-care__l1 {
+  display: block;
+  margin: 0 0 var(--care-cat-space, 28px);
+  color: var(--care-l1-color, #111);
+  font-size: var(--care-l1-size, 20px);
+  font-weight: var(--care-l1-weight, 700);
   line-height: 1.3;
-  color: var(--care-title-color, #111);
+  text-decoration: none;
 }
-.coach-care__group + .coach-care__group { margin-top: var(--care-cat-space, 28px); }
-.coach-care__category {
-  margin: 0 0 12px;
-  font-size: var(--care-cat-size, 13px);
-  font-weight: var(--care-cat-weight, 700);
+.coach-care__group { margin-top: var(--care-cat-space, 28px); }
+.coach-care__group:first-of-type { margin-top: 0; }
+.coach-care__l2 {
+  display: block;
+  margin: 0 0 var(--care-link-space, 12px);
+  color: var(--care-l2-color, #111);
+  font-size: var(--care-l2-size, 16px);
+  font-weight: var(--care-l2-weight, 700);
   letter-spacing: 0.04em;
   line-height: 1.3;
-  text-transform: uppercase;
-  color: var(--care-title-color, #111);
+  text-decoration: none;
+  text-transform: var(--care-l2-case, uppercase);
 }
-.coach-care__links,
-.coach-care__sublinks {
+.coach-care__links {
   margin: 0;
   padding: 0;
   list-style: none;
 }
 .coach-care__links > li + li { margin-top: var(--care-link-space, 12px); }
-.coach-care__sublinks { margin-top: 8px; padding-left: 12px; }
-.coach-care__link {
-  color: var(--care-link, #111);
-  font-size: var(--care-link-size, 14px);
+.coach-care__l3 {
+  color: var(--care-l3-color, #111);
+  font-size: var(--care-l3-size, 14px);
   font-weight: 400;
   line-height: 1.45;
   text-decoration: none;
 }
-.coach-care__link:hover,
-.coach-care__link:focus-visible { color: var(--care-hover, #111); }
-.coach-care__link.is-active {
+.coach-care__l1:hover,
+.coach-care__l2:hover,
+.coach-care__l3:hover,
+.coach-care__l1:focus-visible,
+.coach-care__l2:focus-visible,
+.coach-care__l3:focus-visible { color: var(--care-hover, #111); }
+.coach-care.is-underline .coach-care__l1.is-active,
+.coach-care.is-underline .coach-care__l2.is-active,
+.coach-care.is-underline .coach-care__l3.is-active {
   color: var(--care-active, #111);
   text-decoration: underline;
   text-underline-offset: 3px;
 }
-.coach-care__link--top {
-  font-size: var(--care-cat-size, 13px);
-  font-weight: var(--care-cat-weight, 700);
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-}
-.coach-care__empty { margin: 0; font-size: 14px; line-height: 1.5; }
 .coach-care__main {
-  min-width: 0;
   background: var(--care-main-bg, #ffffff);
-  padding: var(--care-c-pt, 48px) var(--care-c-pr, 48px) var(--care-c-pb, 64px) var(--care-c-pl, 56px);
+  padding: var(--care-c-py, 48px) var(--care-c-px, 48px);
 }
 .coach-care__inner {
   width: 100%;
   max-width: var(--care-content, 760px);
 }
-.coach-care__title {
-  margin: 0 0 var(--care-title-space, 24px);
-  font-size: var(--care-title-size, 28px);
+.coach-care__page-title {
+  margin: 0 0 20px;
+  font-size: 28px;
   font-weight: 700;
   line-height: 1.2;
-  color: var(--care-title-color, #111);
 }
-.coach-care__rte {
-  color: var(--care-text, #111);
-  font-size: var(--care-body-size, 14px);
-  line-height: 1.6;
-}
+.coach-care__rte { font-size: 14px; line-height: 1.6; }
 .coach-care__rte > *:first-child { margin-top: 0; }
 .coach-care__rte > *:last-child { margin-bottom: 0; }
 .coach-care__rte p,
@@ -405,40 +345,43 @@
 .coach-care__rte video,
 .coach-care__rte iframe,
 .coach-care__image,
-.coach-care__split img {
+.coach-care__split img,
+.coach-care__block video {
   display: block;
   max-width: 100%;
   height: auto;
 }
-.coach-care__rte iframe { width: 100%; aspect-ratio: 16 / 9; }
+.coach-care__rte iframe,
+.coach-care__block iframe { width: 100%; max-width: 100%; aspect-ratio: 16 / 9; }
 .coach-care__rte table { width: 100%; border-collapse: collapse; }
 .coach-care__rte th,
 .coach-care__rte td { padding: 8px 10px; border-bottom: 1px solid #e6e6e6; text-align: left; }
-.coach-care__block { margin-top: 22px; }
+.coach-care__block,
+.coach-care__rte,
+.coach-care__split,
+.coach-care__icon-row,
+.coach-care__faq { margin-top: 22px; }
+.coach-care__inner > :first-child { margin-top: 0; }
 .coach-care__block-heading {
   margin: 22px 0 8px;
   font-size: 16px;
   font-weight: 700;
   line-height: 1.3;
-  color: var(--care-title-color, #111);
 }
 .coach-care__split {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   gap: 24px;
   align-items: center;
-  margin-top: 22px;
 }
 .coach-care__split.is-reverse .coach-care__split-media { order: 2; }
 .coach-care__icon-row {
   display: grid;
   grid-template-columns: 28px minmax(0, 1fr);
   gap: 14px;
-  margin-top: 22px;
 }
 .coach-care__icon svg { display: block; width: 24px; height: 24px; }
-.coach-care__button,
-.coach-care__chat {
+.coach-care__button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -454,8 +397,7 @@
   text-decoration: none;
   cursor: pointer;
 }
-.coach-care__chat { background: transparent; color: #111111; }
-.coach-care__fields { display: grid; gap: 14px; margin-top: 8px; }
+.coach-care__fields { display: grid; gap: 14px; }
 .coach-care__field { display: grid; gap: 6px; font-size: 13px; }
 .coach-care__field input,
 .coach-care__field textarea {
@@ -468,30 +410,20 @@
   font-size: 14px;
 }
 .coach-care__status { margin: 0 0 12px; font-size: 14px; }
-.coach-care__faq {
-  margin-top: 12px;
-  border-bottom: 1px solid #e6e6e6;
-}
-.coach-care__faq summary {
-  padding: 14px 0;
-  font-weight: 700;
-  cursor: pointer;
-}
+.coach-care__faq { border-bottom: 1px solid #e6e6e6; }
+.coach-care__faq summary { padding: 14px 0; font-weight: 700; cursor: pointer; }
 .coach-care__faq .coach-care__rte { padding-bottom: 14px; }
-.coach-care__divider {
-  margin: 24px 0;
-  border: 0;
-  border-top: 1px solid #e6e6e6;
-}
+.coach-care__divider { margin: 24px 0; border: 0; border-top: 1px solid #e6e6e6; }
 .coach-care__spacer { height: var(--care-spacer, 24px); }
 @media screen and (max-width: 989px) {
-  .coach-care__frame { grid-template-columns: minmax(0, 1fr); }
-  .coach-care__side { padding: var(--care-m-pad, 16px); }
-  .coach-care__main { padding: var(--care-m-space, 16px); }
-  .coach-care__toggle { display: flex; }
-  .coach-care__heading { display: none; }
-  .coach-care__panel { padding-top: 18px; }
+  .coach-care__frame {
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: var(--care-m-gap, 0px);
+  }
+  .coach-care__side,
+  .coach-care__main { padding: var(--care-m-pad, 16px); }
   .coach-care.is-sticky .coach-care__panel { position: static; }
+  .coach-care.is-collapse .coach-care__toggle { display: flex; }
   .coach-care__split { grid-template-columns: minmax(0, 1fr); }
   .coach-care__split.is-reverse .coach-care__split-media { order: 0; }
   .coach-care__spacer { height: var(--care-spacer-m, 16px); }
@@ -528,68 +460,71 @@ if (!customElements.get('coach-care-nav')) {
   "enabled_on": { "templates": ["page"] },
   "max_blocks": 40,
   "settings": [
-    { "type": "header", "content": "Sidebar" },
-    { "type": "text", "id": "heading", "label": "Sidebar heading", "default": "Customer Care" },
+    { "type": "header", "content": "Navigation" },
     { "type": "link_list", "id": "menu", "label": "Navigation menu" },
     { "type": "range", "id": "sidebar_width", "min": 20, "max": 50, "step": 1, "unit": "%", "label": "Sidebar width", "default": 33 },
     { "type": "color", "id": "sidebar_background", "label": "Sidebar background", "default": "#f5f5f5" },
-    { "type": "color", "id": "content_background", "label": "Content background", "default": "#ffffff" },
+    { "type": "color", "id": "content_background", "label": "Right side background", "default": "#ffffff" },
     { "type": "checkbox", "id": "sticky_sidebar", "label": "Sticky sidebar on desktop", "default": true },
     { "type": "range", "id": "sticky_top", "min": 0, "max": 200, "step": 4, "unit": "px", "label": "Sticky top offset", "default": 24 },
-    { "type": "header", "content": "Type" },
-    { "type": "range", "id": "heading_size", "min": 0, "max": 40, "step": 1, "unit": "px", "label": "Sidebar heading size", "default": 16 },
-    { "type": "range", "id": "title_size", "min": 0, "max": 60, "step": 1, "unit": "px", "label": "Page title size", "default": 28 },
-    { "type": "color", "id": "heading_color", "label": "Heading color", "default": "#111111" },
-    { "type": "range", "id": "category_size", "min": 0, "max": 24, "step": 1, "unit": "px", "label": "Category size", "default": 13 },
+    { "type": "checkbox", "id": "mobile_collapse", "label": "Collapse navigation on mobile", "default": false },
+    { "type": "header", "content": "Menu type" },
+    { "type": "range", "id": "heading_size", "min": 10, "max": 40, "step": 1, "unit": "px", "label": "Main heading size", "default": 20 },
+    { "type": "color", "id": "heading_color", "label": "Main heading color", "default": "#111111" },
+    { "type": "select", "id": "heading_weight", "label": "Main heading weight", "default": "700", "options": [
+      { "value": "400", "label": "Regular" },
+      { "value": "700", "label": "Bold" }
+    ] },
+    { "type": "range", "id": "category_size", "min": 10, "max": 32, "step": 1, "unit": "px", "label": "Category size", "default": 16 },
+    { "type": "color", "id": "category_color", "label": "Category color", "default": "#111111" },
     { "type": "select", "id": "category_weight", "label": "Category weight", "default": "700", "options": [
       { "value": "400", "label": "Regular" },
       { "value": "700", "label": "Bold" }
     ] },
-    { "type": "range", "id": "link_size", "min": 0, "max": 24, "step": 1, "unit": "px", "label": "Link size", "default": 14 },
+    { "type": "checkbox", "id": "category_uppercase", "label": "Uppercase categories", "default": true },
+    { "type": "range", "id": "link_size", "min": 10, "max": 24, "step": 1, "unit": "px", "label": "Link size", "default": 14 },
     { "type": "color", "id": "link_color", "label": "Link color", "default": "#111111" },
     { "type": "color", "id": "active_color", "label": "Active link color", "default": "#111111" },
-    { "type": "color", "id": "hover_color", "label": "Hover color", "default": "#111111" },
-    { "type": "range", "id": "content_size", "min": 0, "max": 24, "step": 1, "unit": "px", "label": "Content text size", "default": 14 },
-    { "type": "color", "id": "content_color", "label": "Content text color", "default": "#111111" },
-    { "type": "checkbox", "id": "show_title", "label": "Show page title", "default": true },
-    { "type": "range", "id": "title_space", "min": 0, "max": 60, "step": 2, "unit": "px", "label": "Space below title", "default": 24 },
-    { "type": "range", "id": "content_max", "min": 320, "max": 1200, "step": 20, "unit": "px", "label": "Content maximum width", "default": 760 },
-    { "type": "checkbox", "id": "full_width", "label": "Full width layout", "default": true },
-    { "type": "range", "id": "page_width", "min": 1000, "max": 1600, "step": 20, "unit": "px", "label": "Contained width", "info": "Used when full width is off.", "default": 1440 },
+    { "type": "checkbox", "id": "underline_active", "label": "Underline active link", "default": true },
+    { "type": "color", "id": "hover_color", "label": "Link hover color", "default": "#111111" },
     { "type": "header", "content": "Spacing" },
-    { "type": "range", "id": "sidebar_padding_top", "min": 0, "max": 80, "step": 4, "unit": "px", "label": "Sidebar top", "default": 48 },
-    { "type": "range", "id": "sidebar_padding_bottom", "min": 0, "max": 80, "step": 4, "unit": "px", "label": "Sidebar bottom", "default": 48 },
-    { "type": "range", "id": "sidebar_padding_left", "min": 0, "max": 80, "step": 4, "unit": "px", "label": "Sidebar left", "default": 36 },
-    { "type": "range", "id": "sidebar_padding_right", "min": 0, "max": 80, "step": 4, "unit": "px", "label": "Sidebar right", "default": 32 },
-    { "type": "range", "id": "content_padding_top", "min": 0, "max": 80, "step": 4, "unit": "px", "label": "Content top", "default": 48 },
-    { "type": "range", "id": "content_padding_bottom", "min": 0, "max": 120, "step": 4, "unit": "px", "label": "Content bottom", "default": 64 },
-    { "type": "range", "id": "content_padding_left", "min": 0, "max": 120, "step": 4, "unit": "px", "label": "Content left", "default": 56 },
-    { "type": "range", "id": "content_padding_right", "min": 0, "max": 80, "step": 4, "unit": "px", "label": "Content right", "default": 48 },
-    { "type": "range", "id": "category_space", "min": 0, "max": 48, "step": 2, "unit": "px", "label": "Category spacing", "default": 28 },
-    { "type": "range", "id": "link_space", "min": 0, "max": 40, "step": 2, "unit": "px", "label": "Link spacing", "default": 12 },
-    { "type": "range", "id": "column_gap", "min": 0, "max": 80, "step": 4, "unit": "px", "label": "Column gap", "default": 0 },
-    { "type": "range", "id": "padding_top", "min": 0, "max": 100, "step": 4, "unit": "px", "label": "Section top", "default": 0 },
-    { "type": "range", "id": "padding_bottom", "min": 0, "max": 100, "step": 4, "unit": "px", "label": "Section bottom", "default": 0 },
+    { "type": "range", "id": "category_space", "min": 0, "max": 60, "step": 2, "unit": "px", "label": "Space between categories", "default": 28 },
+    { "type": "range", "id": "link_space", "min": 0, "max": 40, "step": 2, "unit": "px", "label": "Space between links", "default": 12 },
+    { "type": "range", "id": "sidebar_padding_y", "min": 0, "max": 80, "step": 4, "unit": "px", "label": "Sidebar vertical padding", "default": 48 },
+    { "type": "range", "id": "sidebar_padding_x", "min": 0, "max": 80, "step": 4, "unit": "px", "label": "Sidebar horizontal padding", "default": 32 },
+    { "type": "range", "id": "content_padding_y", "min": 0, "max": 80, "step": 4, "unit": "px", "label": "Content vertical padding", "default": 48 },
+    { "type": "range", "id": "content_padding_x", "min": 0, "max": 80, "step": 4, "unit": "px", "label": "Content horizontal padding", "default": 48 },
+    { "type": "range", "id": "content_max", "min": 320, "max": 1200, "step": 20, "unit": "px", "label": "Content maximum width", "default": 760 },
+    { "type": "range", "id": "min_height", "min": 0, "max": 800, "step": 20, "unit": "px", "label": "Section minimum height", "default": 0 },
     { "type": "header", "content": "Mobile" },
-    { "type": "range", "id": "mobile_padding", "min": 0, "max": 40, "step": 4, "unit": "px", "label": "Sidebar padding", "default": 16 },
-    { "type": "range", "id": "mobile_spacing", "min": 0, "max": 40, "step": 4, "unit": "px", "label": "Content padding", "default": 16 }
+    { "type": "range", "id": "mobile_padding", "min": 0, "max": 40, "step": 4, "unit": "px", "label": "Mobile padding", "default": 16 },
+    { "type": "range", "id": "mobile_spacing", "min": 0, "max": 40, "step": 4, "unit": "px", "label": "Mobile space between columns", "default": 0 }
   ],
   "blocks": [
+    {
+      "type": "page_content",
+      "name": "Page content",
+      "settings": [
+        { "type": "checkbox", "id": "show_title", "label": "Show page title", "default": true },
+        { "type": "richtext", "id": "extra", "label": "Extra content", "info": "Optional. Use the dynamic source control to connect a page metafield." },
+        { "type": "text", "id": "page_handles", "label": "Limit to page handles", "info": "Comma-separated handles. Leave blank to show on every page using this template." }
+      ]
+    },
     {
       "type": "heading",
       "name": "Heading",
       "settings": [
-        { "type": "text", "id": "heading", "label": "Heading", "default": "Heading" },
-        { "type": "range", "id": "size", "min": 0, "max": 48, "step": 1, "unit": "px", "label": "Size", "default": 22 },
-        { "type": "text", "id": "page_handles", "label": "Limit to page handles", "info": "Comma-separated handles. Leave blank to show on every page that uses this template." }
+        { "type": "text", "id": "heading", "label": "Heading" },
+        { "type": "range", "id": "size", "min": 10, "max": 48, "step": 1, "unit": "px", "label": "Size", "default": 22 },
+        { "type": "text", "id": "page_handles", "label": "Limit to page handles", "info": "Comma-separated handles. Leave blank to show on every page using this template." }
       ]
     },
     {
       "type": "richtext",
       "name": "Rich text",
       "settings": [
-        { "type": "richtext", "id": "text", "label": "Text", "default": "<p>Add page content here.</p>" },
-        { "type": "text", "id": "page_handles", "label": "Limit to page handles", "info": "Comma-separated handles. Leave blank to show on every page that uses this template." }
+        { "type": "richtext", "id": "text", "label": "Text" },
+        { "type": "text", "id": "page_handles", "label": "Limit to page handles", "info": "Comma-separated handles. Leave blank to show on every page using this template." }
       ]
     },
     {
@@ -598,7 +533,7 @@ if (!customElements.get('coach-care-nav')) {
       "settings": [
         { "type": "image_picker", "id": "image", "label": "Image" },
         { "type": "text", "id": "alt", "label": "Alt text" },
-        { "type": "text", "id": "page_handles", "label": "Limit to page handles", "info": "Comma-separated handles. Leave blank to show on every page that uses this template." }
+        { "type": "text", "id": "page_handles", "label": "Limit to page handles", "info": "Comma-separated handles. Leave blank to show on every page using this template." }
       ]
     },
     {
@@ -611,8 +546,8 @@ if (!customElements.get('coach-care-nav')) {
           { "value": "left", "label": "Left" },
           { "value": "right", "label": "Right" }
         ] },
-        { "type": "richtext", "id": "text", "label": "Text", "default": "<p>Pair an image with text.</p>" },
-        { "type": "text", "id": "page_handles", "label": "Limit to page handles", "info": "Comma-separated handles. Leave blank to show on every page that uses this template." }
+        { "type": "richtext", "id": "text", "label": "Text" },
+        { "type": "text", "id": "page_handles", "label": "Limit to page handles", "info": "Comma-separated handles. Leave blank to show on every page using this template." }
       ]
     },
     {
@@ -622,30 +557,29 @@ if (!customElements.get('coach-care-nav')) {
         { "type": "select", "id": "icon", "label": "Icon", "default": "chat", "options": [
           { "value": "chat", "label": "Chat" },
           { "value": "email", "label": "Email" },
-          { "value": "box", "label": "Package" },
-          { "value": "return", "label": "Return" }
+          { "value": "box", "label": "Package" }
         ] },
         { "type": "text", "id": "heading", "label": "Heading" },
         { "type": "richtext", "id": "text", "label": "Text" },
-        { "type": "text", "id": "page_handles", "label": "Limit to page handles", "info": "Comma-separated handles. Leave blank to show on every page that uses this template." }
+        { "type": "text", "id": "page_handles", "label": "Limit to page handles", "info": "Comma-separated handles. Leave blank to show on every page using this template." }
       ]
     },
     {
       "type": "button",
       "name": "Button",
       "settings": [
-        { "type": "text", "id": "label", "label": "Label", "default": "Learn more" },
+        { "type": "text", "id": "label", "label": "Label" },
         { "type": "url", "id": "link", "label": "Link" },
-        { "type": "text", "id": "page_handles", "label": "Limit to page handles", "info": "Comma-separated handles. Leave blank to show on every page that uses this template." }
+        { "type": "text", "id": "page_handles", "label": "Limit to page handles", "info": "Comma-separated handles. Leave blank to show on every page using this template." }
       ]
     },
     {
       "type": "faq",
-      "name": "FAQ item",
+      "name": "FAQ accordion",
       "settings": [
-        { "type": "text", "id": "question", "label": "Question", "default": "Question" },
-        { "type": "richtext", "id": "answer", "label": "Answer", "default": "<p>Answer</p>" },
-        { "type": "text", "id": "page_handles", "label": "Limit to page handles", "info": "Comma-separated handles. Leave blank to show on every page that uses this template." }
+        { "type": "text", "id": "question", "label": "Question" },
+        { "type": "richtext", "id": "answer", "label": "Answer" },
+        { "type": "text", "id": "page_handles", "label": "Limit to page handles", "info": "Comma-separated handles. Leave blank to show on every page using this template." }
       ]
     },
     {
@@ -654,29 +588,7 @@ if (!customElements.get('coach-care-nav')) {
       "limit": 1,
       "settings": [
         { "type": "text", "id": "label", "label": "Button label", "default": "Send" },
-        { "type": "text", "id": "page_handles", "label": "Limit to page handles", "info": "Comma-separated handles. Leave blank to show on every page that uses this template." }
-      ]
-    },
-    {
-      "type": "email_info",
-      "name": "Email information",
-      "settings": [
-        { "type": "text", "id": "heading", "label": "Heading", "default": "Email" },
-        { "type": "richtext", "id": "text", "label": "Text" },
-        { "type": "text", "id": "email", "label": "Email address" },
-        { "type": "text", "id": "page_handles", "label": "Limit to page handles", "info": "Comma-separated handles. Leave blank to show on every page that uses this template." }
-      ]
-    },
-    {
-      "type": "live_chat",
-      "name": "Live chat button",
-      "settings": [
-        { "type": "text", "id": "heading", "label": "Heading", "default": "Live Chat" },
-        { "type": "richtext", "id": "text", "label": "Text" },
-        { "type": "text", "id": "label", "label": "Button label", "default": "Start chat" },
-        { "type": "url", "id": "link", "label": "Link" },
-        { "type": "text", "id": "button_id", "label": "Button ID", "info": "Optional ID a chat app can use." },
-        { "type": "text", "id": "page_handles", "label": "Limit to page handles", "info": "Comma-separated handles. Leave blank to show on every page that uses this template." }
+        { "type": "text", "id": "page_handles", "label": "Limit to page handles", "info": "Comma-separated handles. Leave blank to show on every page using this template." }
       ]
     },
     {
@@ -684,14 +596,23 @@ if (!customElements.get('coach-care-nav')) {
       "name": "Custom Liquid",
       "settings": [
         { "type": "liquid", "id": "code", "label": "Liquid" },
-        { "type": "text", "id": "page_handles", "label": "Limit to page handles", "info": "Comma-separated handles. Leave blank to show on every page that uses this template." }
+        { "type": "text", "id": "page_handles", "label": "Limit to page handles", "info": "Comma-separated handles. Leave blank to show on every page using this template." }
+      ]
+    },
+    {
+      "type": "video",
+      "name": "Video",
+      "settings": [
+        { "type": "video", "id": "video", "label": "Shopify video" },
+        { "type": "video_url", "id": "video_url", "label": "YouTube or Vimeo URL", "accept": ["youtube", "vimeo"] },
+        { "type": "text", "id": "page_handles", "label": "Limit to page handles", "info": "Comma-separated handles. Leave blank to show on every page using this template." }
       ]
     },
     {
       "type": "divider",
       "name": "Divider",
       "settings": [
-        { "type": "text", "id": "page_handles", "label": "Limit to page handles", "info": "Comma-separated handles. Leave blank to show on every page that uses this template." }
+        { "type": "text", "id": "page_handles", "label": "Limit to page handles", "info": "Comma-separated handles. Leave blank to show on every page using this template." }
       ]
     },
     {
@@ -700,7 +621,7 @@ if (!customElements.get('coach-care-nav')) {
       "settings": [
         { "type": "range", "id": "height", "min": 0, "max": 120, "step": 4, "unit": "px", "label": "Desktop height", "default": 24 },
         { "type": "range", "id": "height_mobile", "min": 0, "max": 80, "step": 4, "unit": "px", "label": "Mobile height", "default": 16 },
-        { "type": "text", "id": "page_handles", "label": "Limit to page handles", "info": "Comma-separated handles. Leave blank to show on every page that uses this template." }
+        { "type": "text", "id": "page_handles", "label": "Limit to page handles", "info": "Comma-separated handles. Leave blank to show on every page using this template." }
       ]
     }
   ],
