@@ -14,9 +14,10 @@
     "coach-header": {
       "type": "coach-header",
       "settings": {
-        "menu": "main-menu",
+        "menu": "main-menu-copy",
         "sticky": "always",
         "show_border": false,
+        "show_shadow": true,
         "max_width": 1340,
         "logo_width": 115,
         "mobile_logo_width": 95,
@@ -24,7 +25,12 @@
         "flag_country": "SA",
         "show_search": true,
         "search_products_limit": 4,
+        "search_show_bestsellers": true,
+        "search_default_heading": "Best Selling Products",
+        "search_collection": "",
+        "show_wishlist": true,
         "wishlist_url": "",
+        "show_help": true,
         "help_url": "",
         "mega_image_height": 460,
         "mega_image_fallback": true,
@@ -63,11 +69,7 @@
         "bag_count_bg": "#1f9d55",
         "bag_count_text": "#ffffff",
         "bag_overlay": "#000000",
-        "bag_overlay_opacity": 55,
-        "show_help": true,
-        "search_show_bestsellers": true,
-        "search_default_heading": "Best Selling Products",
-        "show_wishlist": true
+        "bag_overlay_opacity": 55
       }
     }
   },
