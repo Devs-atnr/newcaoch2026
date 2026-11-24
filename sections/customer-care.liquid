@@ -171,13 +171,11 @@
                         {%- endif -%}
                         <div class="coach-care__fields coach-care__fields--login">
                           <div class="coach-care__outline{% if form.email %} has-value{% endif %}">
-                            <input type="email" name="customer[email]" autocomplete="email" placeholder=" " value="{% if form.email %}{{ form.email }}{% endif %}" data-care-input data-care-email>
-                            <span class="coach-care__float">{{ block.settings.email_label | escape }}</span>
+                            <input type="email" name="customer[email]" autocomplete="email" placeholder="{{ block.settings.email_label | escape }}" value="{% if form.email %}{{ form.email }}{% endif %}" data-care-input data-care-email>
                             <p class="coach-care__error">{{ block.settings.email_error | escape }}</p>
                           </div>
                           <div class="coach-care__outline coach-care__pass">
-                            <input type="password" name="customer[password]" autocomplete="current-password" placeholder=" " data-care-password data-care-input>
-                            <span class="coach-care__float">{{ block.settings.password_label | escape }}</span>
+                            <input type="password" name="customer[password]" autocomplete="current-password" placeholder="{{ block.settings.password_label | escape }}" data-care-password data-care-input>
                             <button class="coach-care__show" type="button" data-care-show data-show="{{ block.settings.show_label | escape }}" data-hide="{{ block.settings.hide_label | escape }}">{{ block.settings.show_label | escape }}</button>
                             <p class="coach-care__error">{{ block.settings.password_error | escape }}</p>
                           </div>
@@ -462,6 +460,12 @@
 .coach-care__faq,
 .coach-care__account { margin-top: 22px; }
 .coach-care__main:has(.coach-care__account) .coach-care__inner { max-width: none; }
+.coach-care__account,
+.coach-care__account input,
+.coach-care__account button,
+.coach-care__account a {
+  font-family: HelveticaLTPro-Roman, "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
 .coach-care__account {
   display: grid;
   grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
@@ -469,7 +473,7 @@
   align-items: start;
   width: 100%;
   color: var(--acc-text, #111);
-  font-size: var(--acc-text-size, 15px);
+  font-size: var(--acc-text-size, 13px);
   line-height: 1.45;
 }
 .coach-care__account-col + .coach-care__account-col {
@@ -478,11 +482,12 @@
   padding-left: var(--acc-gap, 48px);
 }
 .coach-care__account-title {
-  margin: 0 0 18px;
+  margin: 0 0 14px;
   color: var(--acc-title, #111);
-  font-size: var(--acc-title-size, 26px);
+  font-family: HelveticaLTPro-Roman, "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: var(--acc-title-size, 20px);
   font-weight: 700;
-  line-height: 1.2;
+  line-height: 1.25;
 }
 .coach-care__account .coach-care__rte { font-size: inherit; color: inherit; }
 .coach-care__track-copy { max-width: 280px; }
@@ -493,39 +498,41 @@
   text-decoration: underline;
   text-underline-offset: 2px;
 }
-.coach-care__fields--login { gap: 18px; margin-top: 18px; }
+.coach-care__fields--login { gap: 12px; margin-top: 16px; }
 .coach-care__outline { position: relative; display: block; }
 .coach-care__outline input {
   width: 100%;
-  height: 48px;
-  padding: 0 14px;
-  border: 1px solid var(--acc-border, #222222);
+  height: 40px;
+  margin: 0;
+  padding: 0 12px;
+  border: 1px solid var(--acc-border, #c8c8c8);
   border-radius: 0;
   background: #ffffff;
+  box-shadow: none;
   color: #111111;
-  font: inherit;
-  font-size: 15px;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 40px;
+  outline: none;
+  appearance: none;
 }
-.coach-care__pass input { padding-right: 72px; }
-.coach-care__float {
-  position: absolute;
-  top: 24px;
-  left: 12px;
-  padding: 0 4px;
-  background: #ffffff;
-  color: #222222;
-  font-size: 15px;
-  line-height: 1;
-  pointer-events: none;
-  transform: translateY(-50%);
+.coach-care__outline input::placeholder {
+  color: #8d8d8d;
+  opacity: 1;
+  font-family: inherit;
 }
-.coach-care__outline.is-focus .coach-care__float,
-.coach-care__outline.has-value .coach-care__float {
-  top: 0;
-  font-size: 13px;
+.coach-care__outline input:focus,
+.coach-care__outline input:focus-visible {
+  border-color: #111111;
+  outline: none;
+  outline-offset: 0;
+  box-shadow: none;
 }
-.coach-care__outline.is-invalid input { border-color: var(--acc-error, #e10600); }
-.coach-care__outline.is-invalid .coach-care__float { color: var(--acc-error, #e10600); }
+.coach-care__pass input { padding-right: 64px; }
+.coach-care__outline.is-invalid input,
+.coach-care__outline.is-invalid input:focus,
+.coach-care__outline.is-invalid input:focus-visible { border-color: var(--acc-error, #e10600); }
 .coach-care__error {
   display: none;
   margin: 6px 0 0;
@@ -536,50 +543,84 @@
 .coach-care__outline.is-invalid .coach-care__error { display: block; }
 .coach-care__show {
   position: absolute;
-  top: 24px;
-  right: 14px;
+  top: 20px;
+  right: 12px;
   transform: translateY(-50%);
   border: 0;
-  background: #ffffff;
-  padding: 0 0 0 8px;
-  color: #8a8a8a;
-  font: inherit;
-  font-size: 14px;
+  background: transparent;
+  padding: 0;
+  color: #8d8d8d;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 1;
   text-decoration: underline;
   text-underline-offset: 2px;
   cursor: pointer;
+  box-shadow: none;
+}
+.coach-care__show:focus,
+.coach-care__show:focus-visible {
+  outline: none;
+  box-shadow: none;
 }
 .coach-care__login-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  margin-top: 4px;
-  font-size: 15px;
+  margin-top: 2px;
+  font-size: 13px;
+  line-height: 1;
 }
 .coach-care__remember {
   display: inline-flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 1;
 }
 .coach-care__remember input {
-  width: 18px;
-  height: 18px;
+  appearance: none;
+  width: 16px;
+  height: 16px;
   margin: 0;
-  accent-color: #111111;
+  flex: none;
+  border: 1px solid #b5b5b5;
+  border-radius: 0;
+  background: #ffffff;
+  box-shadow: none;
+  cursor: pointer;
+}
+.coach-care__remember input:focus,
+.coach-care__remember input:focus-visible {
+  outline: none;
+  box-shadow: none;
+}
+.coach-care__remember input:checked {
+  background: #ffffff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M3.2 8.2 6.4 11.4 12.8 4.6' fill='none' stroke='%23111111' stroke-width='1.4'/%3E%3C/svg%3E") center / 14px 14px no-repeat;
 }
 .coach-care__signin {
   width: 100%;
-  min-height: 48px;
-  margin-top: 8px;
+  min-height: 42px;
+  margin-top: 6px;
   border-color: var(--acc-btn, #111);
   background: var(--acc-btn, #111);
   color: var(--acc-btn-text, #fff);
+  font-family: inherit;
+  font-size: 13px;
   font-weight: 700;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
+  box-shadow: none;
 }
-.coach-care__create { margin: 16px 0 0; font-size: 14px; line-height: 1.45; }
+.coach-care__signin:focus,
+.coach-care__signin:focus-visible {
+  outline: none;
+  box-shadow: none;
+}
+.coach-care__create { margin: 14px 0 0; font-size: 13px; line-height: 1.45; }
 .coach-care__account .coach-care__status,
 .coach-care__account .coach-care__status ul { margin: 0 0 8px; color: var(--acc-error, #e10600); font-size: 14px; }
 .coach-care__signed { margin: 0 0 12px; }
@@ -816,13 +857,13 @@ if (!customElements.get('coach-care-nav')) {
         { "type": "text", "id": "signed_in_text", "label": "Signed in message", "default": "You are signed in as" },
         { "type": "text", "id": "account_button", "label": "Account button", "default": "View account" },
         { "type": "header", "content": "Style" },
-        { "type": "range", "id": "heading_size", "min": 12, "max": 36, "step": 1, "unit": "px", "label": "Heading size", "default": 26 },
-        { "type": "range", "id": "text_size", "min": 12, "max": 20, "step": 1, "unit": "px", "label": "Text size", "default": 15 },
+        { "type": "range", "id": "heading_size", "min": 12, "max": 36, "step": 1, "unit": "px", "label": "Heading size", "default": 20 },
+        { "type": "range", "id": "text_size", "min": 12, "max": 20, "step": 1, "unit": "px", "label": "Text size", "default": 13 },
         { "type": "range", "id": "column_gap", "min": 0, "max": 80, "step": 4, "unit": "px", "label": "Space between columns", "default": 48 },
         { "type": "color", "id": "heading_color", "label": "Heading color", "default": "#111111" },
         { "type": "color", "id": "text_color", "label": "Text color", "default": "#111111" },
         { "type": "color", "id": "link_color", "label": "Link color", "default": "#111111" },
-        { "type": "color", "id": "input_border", "label": "Field border", "default": "#222222" },
+        { "type": "color", "id": "input_border", "label": "Field border", "default": "#c8c8c8" },
         { "type": "color", "id": "error_color", "label": "Error color", "default": "#e10600" },
         { "type": "color", "id": "button_background", "label": "Button background", "default": "#111111" },
         { "type": "color", "id": "button_text", "label": "Button text", "default": "#ffffff" },
