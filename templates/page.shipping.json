@@ -12,48 +12,16 @@
     "customer_care": {
       "type": "customer-care",
       "blocks": {
-        "track_signin_main": {
-          "type": "track_signin",
+        "custom_liquid_AcVRHH": {
+          "type": "custom_liquid",
           "settings": {
-            "track_heading": "Track an Order",
-            "track_text": "<p>To track your order, please have your order number (Order ID) and email address ready.</p>",
-            "track_link_label": "Click here",
-            "track_link_rest": "to track your order.",
-            "track_link": "/pages/track-your-order",
-            "account_heading": "Sign in to Your Account",
-            "account_text": "<p>Sign in to see your order history and update your account. (Welcome back!)</p>",
-            "email_label": "Email Address",
-            "email_error": "Email address is required.",
-            "password_label": "Password",
-            "password_error": "Password required.",
-            "show_label": "Show",
-            "hide_label": "Hide",
-            "show_remember": true,
-            "remember_label": "Remember Me",
-            "forgot_label": "Forgot Password",
-            "forgot_link": "",
-            "button_label": "Sign in",
-            "create_label": "Create Account",
-            "create_text": "with the same email associated with your orders to view your full order history.",
-            "register_link": "",
-            "signed_in_text": "You are signed in as",
-            "account_button": "View account",
-            "heading_size": 20,
-            "text_size": 13,
-            "column_gap": 48,
-            "heading_color": "#111111",
-            "text_color": "#111111",
-            "link_color": "#111111",
-            "input_border": "#c8c8c8",
-            "error_color": "#e10600",
-            "button_background": "#111111",
-            "button_text": "#ffffff",
+            "code": "<div style=\"font-family: Arial, Helvetica, sans-serif; color: #111111; line-height: 1.5; max-width: 800px; margin: 0 auto; padding: 20px;\">\n  <h2 style=\"font-size: 20px; font-weight: 700; margin: 0 0 18px 0; color: #000000;\">Shipping</h2>\n\n  <p style=\"font-size: 13px; margin: 0 0 14px 0;\">\n    <strong style=\"font-weight: 700;\">Coach ships to all areas of the Kingdom of Saudi Arabia.</strong> Delivery times commence from the date of order.\n  </p>\n\n  <p style=\"font-size: 13px; margin: 0 0 16px 0;\">\n    Please see the table below on shipping times and charges:\n  </p>\n\n  <table style=\"width: 100%; max-width: 620px; border-collapse: collapse; margin: 0 0 12px 0; font-size: 13px;\">\n    <thead>\n      <tr style=\"background-color: #ececec;\">\n        <th style=\"border: 1px solid #d4d4d4; padding: 12px 14px; text-align: left; font-weight: 700; width: 34%;\">Shipping Options</th>\n        <th style=\"border: 1px solid #d4d4d4; padding: 12px 14px; text-align: left; font-weight: 700; width: 37%;\">Price</th>\n        <th style=\"border: 1px solid #d4d4d4; padding: 12px 14px; text-align: left; font-weight: 700; width: 29%;\">Delivery Time</th>\n      </tr>\n    </thead>\n    <tbody>\n      <tr>\n        <td style=\"border: 1px solid #d4d4d4; padding: 12px 14px; font-weight: 700;\">Same Day Delivery (Riyadh)*</td>\n        <td style=\"border: 1px solid #d4d4d4; padding: 12px 14px;\">Free over 500 SAR; else, 50 SAR</td>\n        <td style=\"border: 1px solid #d4d4d4; padding: 12px 14px;\">1 Business Day</td>\n      </tr>\n      <tr>\n        <td style=\"border: 1px solid #d4d4d4; padding: 12px 14px; font-weight: 700;\">Standard Delivery</td>\n        <td style=\"border: 1px solid #d4d4d4; padding: 12px 14px;\">Free over 500 SAR; else, 50 SAR</td>\n        <td style=\"border: 1px solid #d4d4d4; padding: 12px 14px;\">3–4 Business Days</td>\n      </tr>\n    </tbody>\n  </table>\n\n  <p style=\"font-size: 12px; font-style: italic; color: #222222; margin: 0 0 28px 0; max-width: 620px;\">\n    *Same Day Delivery is subject to availability and limited to Riyadh. Orders must be placed by 1:00 PM Saudi time, with all required information to shipping partner is confirmed by the customer same-day.\n  </p>\n\n  <p style=\"font-size: 13px; margin: 0 0 18px 0;\">\n    Once you complete your order, you will receive an email with all the information related to shipment. Delivery is free above 500 SAR and charged 50 SAR below that. Orders will be sent upon receipt of payment, subject to confirmation and stock availability. Stock issues may cause delays or cancellations.\n  </p>\n\n  <p style=\"font-size: 13px; margin: 0 0 18px 0;\">\n    In case of unavailability, we will respond to your inquiry within 48 hours.\n  </p>\n\n  <p style=\"font-size: 13px; margin: 0 0 18px 0;\">\n    Delivery may take longer in rural areas or during logistics delays. We appreciate your patience and will stay in contact throughout.\n  </p>\n\n  <p style=\"font-size: 13px; margin: 0 0 22px 0;\">\n    Delivery times are estimates and may vary due to courier issues or peak periods such as promotions or sales.\n  </p>\n\n  <h2 style=\"font-size: 20px; font-weight: 700; margin: 0 0 14px 0; color: #000000;\">Claims for Non-Delivery</h2>\n\n  <p style=\"font-size: 13px; margin: 0 0 22px 0;\">\n    If you do not receive your order within the expected time, please contact us at <a href=\"mailto:customercare@coach.sa\" style=\"color: #111111; text-decoration: none;\">customercare@coach.sa</a> so we can coordinate with the carrier.\n  </p>\n\n  <h2 style=\"font-size: 20px; font-weight: 700; margin: 0 0 14px 0; color: #000000;\">Damaged Deliveries</h2>\n\n  <p style=\"font-size: 13px; margin: 0 0 28px 0;\">\n    Please inspect your order upon receipt. If damaged or incorrect, email <a href=\"mailto:customercare@coach.sa\" style=\"color: #111111; text-decoration: none;\">customercare@coach.sa</a> with photos for evaluation and resolution.\n  </p>\n\n  <h2 style=\"font-size: 20px; font-weight: 700; margin: 0 0 14px 0; color: #000000;\">Important Notice Regarding Mobile Number Accuracy</h2>\n\n  <p style=\"font-size: 13px; margin: 0 0 18px 0;\">\n    The mobile number provided in the shipping and pickup details is a critical part of your order. It is used to confirm delivery, coordinate pickup, and handle any exceptions such as product unavailability or delivery issues.\n  </p>\n\n  <p style=\"font-size: 13px; margin: 0 0 18px 0;\">\n    By placing an order, the customer confirms that the mobile number entered is accurate and reachable.\n  </p>\n\n  <p style=\"font-size: 13px; margin: 0 0 18px 0;\">\n    We are not responsible for failed deliveries, delays, or delivery to the wrong recipient due to incorrect or unreachable contact information.\n  </p>\n\n  <p style=\"font-size: 13px; margin: 0 0 18px 0;\">\n    If the mobile number is incorrect, this may result in the order being delivered to the wrong person, with no way for us to confirm or reverse the delivery. In such cases, we will not be liable for any resulting loss or dissatisfaction.\n  </p>\n\n  <p style=\"font-size: 13px; margin: 0;\">\n    Please ensure your contact information is correct before completing your order.\n  </p>\n</div>",
             "page_handles": ""
           }
         }
       },
       "block_order": [
-        "track_signin_main"
+        "custom_liquid_AcVRHH"
       ],
       "settings": {
         "menu": "footer-menu-copy",
