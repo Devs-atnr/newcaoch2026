@@ -27,13 +27,13 @@
           {%- else -%}
             {{ 'collection-1' | placeholder_svg_tag }}
           {%- endif -%}
-          {%- if block.settings.text != blank -%}
-            <span class="coach-home-grid__text">{{ block.settings.text | escape }}</span>
-          {%- endif -%}
-          {%- if block.settings.title != blank -%}
-            <span class="coach-home-grid__title">{{ block.settings.title | escape }}</span>
-          {%- endif -%}
         </span>
+        {%- if block.settings.text != blank -%}
+          <span class="coach-home-grid__text">{{ block.settings.text | escape }}</span>
+        {%- endif -%}
+        {%- if block.settings.title != blank -%}
+          <span class="coach-home-grid__title">{{ block.settings.title | escape }}</span>
+        {%- endif -%}
       </a>
     {%- endfor -%}
   </div>
