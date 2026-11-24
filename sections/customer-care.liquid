@@ -183,6 +183,11 @@
                             {%- if block.settings.show_remember -%}
                               <label class="coach-care__remember">
                                 <input type="checkbox" name="customer[remember_me]" value="true">
+                                <span class="coach-care__box" aria-hidden="true">
+                                  <svg viewBox="0 0 16 16" focusable="false">
+                                    <path d="M3.2 8.3 6.4 11.4 12.8 4.7"></path>
+                                  </svg>
+                                </span>
                                 <span>{{ block.settings.remember_label | escape }}</span>
                               </label>
                             {%- else -%}
@@ -468,7 +473,7 @@
 }
 .coach-care__account {
   display: grid;
-  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   gap: 0;
   align-items: start;
   width: 100%;
@@ -476,10 +481,11 @@
   font-size: var(--acc-text-size, 13px);
   line-height: 1.45;
 }
+.coach-care__account-col:first-child { padding-right: 36px; }
 .coach-care__account-col + .coach-care__account-col {
-  border-left: 1px solid #d5d5d5;
-  margin-left: var(--acc-gap, 48px);
-  padding-left: var(--acc-gap, 48px);
+  border-left: 1px solid #e6e6e6;
+  margin-left: 0;
+  padding-left: 36px;
 }
 .coach-care__account-title {
   margin: 0 0 14px;
@@ -490,9 +496,9 @@
   line-height: 1.25;
 }
 .coach-care__account .coach-care__rte { font-size: inherit; color: inherit; }
-.coach-care__track-copy { max-width: 280px; }
+.coach-care__track-copy { max-width: 320px; }
 .coach-care__track-copy p { margin: 0; }
-.coach-care__account-action { margin: 0; max-width: 280px; }
+.coach-care__account-action { margin: 0; max-width: 320px; }
 .coach-care__account-link {
   color: var(--acc-link, #111);
   text-decoration: underline;
@@ -533,6 +539,7 @@
 .coach-care__outline.is-invalid input,
 .coach-care__outline.is-invalid input:focus,
 .coach-care__outline.is-invalid input:focus-visible { border-color: var(--acc-error, #e10600); }
+.coach-care__outline.is-invalid input::placeholder { color: var(--acc-error, #e10600); }
 .coach-care__error {
   display: none;
   margin: 6px 0 0;
@@ -574,32 +581,63 @@
   line-height: 1;
 }
 .coach-care__remember {
+  position: relative;
   display: inline-flex;
   align-items: center;
   gap: 8px;
   font-size: 13px;
   font-weight: 400;
   line-height: 1;
+  cursor: pointer;
 }
 .coach-care__remember input {
-  appearance: none;
+  position: absolute;
   width: 16px;
   height: 16px;
   margin: 0;
-  flex: none;
-  border: 1px solid #b5b5b5;
-  border-radius: 0;
-  background: #ffffff;
-  box-shadow: none;
+  opacity: 0;
   cursor: pointer;
 }
-.coach-care__remember input:focus,
-.coach-care__remember input:focus-visible {
-  outline: none;
+.coach-care__box {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  flex: none;
+  border: 1px solid #111111;
+  background: #ffffff;
   box-shadow: none;
 }
-.coach-care__remember input:checked {
-  background: #ffffff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M3.2 8.2 6.4 11.4 12.8 4.6' fill='none' stroke='%23111111' stroke-width='1.4'/%3E%3C/svg%3E") center / 14px 14px no-repeat;
+.coach-care__box svg {
+  width: 12px;
+  height: 12px;
+  overflow: visible;
+}
+.coach-care__box path {
+  fill: none;
+  stroke: #111111;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 16;
+  stroke-dashoffset: 16;
+}
+.coach-care__remember input:checked + .coach-care__box {
+  animation: coach-care-tick 0.28s ease;
+}
+.coach-care__remember input:checked + .coach-care__box path {
+  stroke-dashoffset: 0;
+  transition: stroke-dashoffset 0.22s ease 0.04s;
+}
+.coach-care__remember input:focus-visible + .coach-care__box {
+  outline: 1px solid #111111;
+  outline-offset: 2px;
+}
+@keyframes coach-care-tick {
+  0% { transform: scale(0.82); }
+  55% { transform: scale(1.08); }
+  100% { transform: scale(1); }
 }
 .coach-care__signin {
   width: 100%;
@@ -700,6 +738,7 @@
   .coach-care.is-collapse .coach-care__toggle { display: flex; }
   .coach-care__account,
   .coach-care__split { grid-template-columns: minmax(0, 1fr); }
+  .coach-care__account-col:first-child { padding-right: 0; }
   .coach-care__account-col + .coach-care__account-col {
     border-left: 0;
     margin-left: 0;
