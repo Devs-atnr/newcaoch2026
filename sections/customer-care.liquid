@@ -171,11 +171,13 @@
                         {%- endif -%}
                         <div class="coach-care__fields coach-care__fields--login">
                           <div class="coach-care__outline{% if form.email %} has-value{% endif %}">
-                            <input type="email" name="customer[email]" autocomplete="email" placeholder="{{ block.settings.email_label | escape }}" value="{% if form.email %}{{ form.email }}{% endif %}" data-care-input data-care-email>
+                            <input type="email" name="customer[email]" autocomplete="email" placeholder=" " value="{% if form.email %}{{ form.email }}{% endif %}" data-care-input data-care-email>
+                            <span class="coach-care__float">{{ block.settings.email_label | escape }}</span>
                             <p class="coach-care__error">{{ block.settings.email_error | escape }}</p>
                           </div>
                           <div class="coach-care__outline coach-care__pass">
-                            <input type="password" name="customer[password]" autocomplete="current-password" placeholder="{{ block.settings.password_label | escape }}" data-care-password data-care-input>
+                            <input type="password" name="customer[password]" autocomplete="current-password" placeholder=" " data-care-password data-care-input>
+                            <span class="coach-care__float">{{ block.settings.password_label | escape }}</span>
                             <button class="coach-care__show" type="button" data-care-show data-show="{{ block.settings.show_label | escape }}" data-hide="{{ block.settings.hide_label | escape }}">{{ block.settings.show_label | escape }}</button>
                             <p class="coach-care__error">{{ block.settings.password_error | escape }}</p>
                           </div>
@@ -524,22 +526,42 @@
   appearance: none;
 }
 .coach-care__outline input::placeholder {
-  color: #8d8d8d;
+  color: transparent;
   opacity: 1;
-  font-family: inherit;
 }
 .coach-care__outline input:focus,
 .coach-care__outline input:focus-visible {
   border-color: #111111;
-  outline: none;
+  outline: none !important;
   outline-offset: 0;
-  box-shadow: none;
+  box-shadow: none !important;
+}
+.coach-care__float {
+  position: absolute;
+  left: 12px;
+  top: 20px;
+  padding: 0 4px;
+  margin-left: -4px;
+  background: transparent;
+  color: #8d8d8d;
+  font-size: 14px;
+  line-height: 1;
+  pointer-events: none;
+  transform: translateY(-50%);
+  transition: top 0.16s ease, font-size 0.16s ease, color 0.16s ease;
+}
+.coach-care__outline.is-focus .coach-care__float,
+.coach-care__outline.has-value .coach-care__float {
+  top: 0;
+  background: #ffffff;
+  color: #4a4a4a;
+  font-size: 12px;
 }
 .coach-care__pass input { padding-right: 64px; }
 .coach-care__outline.is-invalid input,
 .coach-care__outline.is-invalid input:focus,
 .coach-care__outline.is-invalid input:focus-visible { border-color: var(--acc-error, #e10600); }
-.coach-care__outline.is-invalid input::placeholder { color: var(--acc-error, #e10600); }
+.coach-care__outline.is-invalid .coach-care__float { color: var(--acc-error, #e10600); }
 .coach-care__error {
   display: none;
   margin: 6px 0 0;
@@ -793,7 +815,6 @@ if (!customElements.get('coach-care-login')) {
         });
         if (!first) return;
         event.preventDefault();
-        first.focus();
       });
     }
   });
