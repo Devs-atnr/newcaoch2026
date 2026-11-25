@@ -469,14 +469,12 @@ h4.main-bhtarar { font-style: normal; font-size: 20px; color: #000; font-family:
     if (built.error) { hide(els.loading); return showError(built.error); }
 
     const params = new URLSearchParams(window.location.search);
-    const emailParam = (params.get('email') || '').trim();
-    const phoneParam = normalizeKsaMobile(params.get('phone') || params.get('mobile') || '');
+    const paramContact = [params.get('phone'), params.get('mobile'), params.get('email')]
+      .map(value => buildPayload(value || ''))
+      .find(item => item && item.body && (item.body.email || item.body.mobile));
     let orderName = built.orderName || orderNameOf(params.get('order_number') || '');
     let requestBody = built.body || null;
-    if (!requestBody && orderName) {
-      if (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailParam)) requestBody = { storeId:STORE_ID, email:emailParam };
-      else if (phoneParam) requestBody = { storeId:STORE_ID, mobile:phoneParam };
-    }
+    if ((!requestBody || built.orderName) && paramContact) requestBody = paramContact.body;
     if (!requestBody) {
       hide(els.loading);
       if (orderName) return showError('Enter the email or phone number used for order ' + orderName + '.');
@@ -604,9 +602,23 @@ h4.main-bhtarar { font-style: normal; font-size: 20px; color: #000; font-family:
 
   // ---- events
   els.btn.addEventListener('click', trackOrder, { passive:true });
-  
+
+  let autoTimer;
+  els.search.addEventListener('input', () => {
+    clearTimeout(autoTimer);
+    const typed = buildPayload(els.search.value);
+    if (!typed || !typed.body || (!typed.body.email && !typed.body.mobile)) return;
+    autoTimer = setTimeout(trackOrder, 400);
+  });
+
   const params = new URLSearchParams(window.location.search);
-  const preset = params.get('order_number') || params.get('email') || params.get('tracking') || params.get('q') || '';
+  const contact = [params.get('phone'), params.get('mobile'), params.get('email')]
+    .map(value => (value || '').trim())
+    .find(value => {
+      const typed = buildPayload(value);
+      return typed && typed.body && (typed.body.email || typed.body.mobile);
+    });
+  const preset = contact || (params.get('tracking') || '').trim() || (params.get('q') || '').trim() || (params.get('order_number') || '').trim();
   if (preset && els.search) {
     els.search.value = preset;
     trackOrder();

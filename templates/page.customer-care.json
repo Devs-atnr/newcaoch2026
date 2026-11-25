@@ -20,7 +20,7 @@
             "order_label": "Order Number",
             "order_error": "Order Number is required",
             "details_text": "Enter your information to view full order details.",
-            "track_email_label": "Email Address (Optional)",
+            "track_email_label": "Email or phone (Optional)",
             "postal_label": "Billing Postal Code (Optional)",
             "track_button": "Track your order",
             "track_link": "/pages/track-your-order",

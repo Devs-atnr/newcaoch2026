@@ -163,7 +163,7 @@
                           <p class="coach-care__track-note">{{ block.settings.details_text | escape }}</p>
                         {%- endif -%}
                         <div class="coach-care__outline">
-                          <input type="email" name="email" autocomplete="email" placeholder=" " data-care-input data-care-email>
+                          <input type="text" name="email" inputmode="text" autocomplete="on" placeholder=" " data-care-input data-care-contact>
                           <span class="coach-care__float">{{ block.settings.track_email_label | escape }}</span>
                         </div>
                         <div class="coach-care__outline">
@@ -1132,7 +1132,9 @@ if (!customElements.get('coach-care-login')) {
             const value = field.value.trim();
             const missing = field.hasAttribute('data-care-required') && value === '';
             const badEmail = field.hasAttribute('data-care-email') && value !== '' && !field.checkValidity();
-            const invalid = missing || badEmail;
+            const digits = value.replace(/\D/g, '');
+            const badContact = field.hasAttribute('data-care-contact') && value !== '' && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value) && !/^0?5\d{8}$/.test(digits) && !/^9665\d{8}$/.test(digits);
+            const invalid = missing || badEmail || badContact;
             box.classList.toggle('is-invalid', invalid);
             if (invalid && !first) first = field;
           });
@@ -1319,7 +1321,7 @@ if (!customElements.get('coach-care-nav')) {
         { "type": "text", "id": "order_label", "label": "Order number label", "default": "Order Number" },
         { "type": "text", "id": "order_error", "label": "Order number error", "default": "Order Number is required" },
         { "type": "text", "id": "details_text", "label": "Details text", "default": "Enter your information to view full order details." },
-        { "type": "text", "id": "track_email_label", "label": "Tracking email label", "default": "Email Address (Optional)" },
+        { "type": "text", "id": "track_email_label", "label": "Tracking email label", "default": "Email or phone (Optional)" },
         { "type": "text", "id": "postal_label", "label": "Postal code label", "default": "Billing Postal Code (Optional)" },
         { "type": "text", "id": "track_button", "label": "Track button", "default": "Track your order" },
         { "type": "text", "id": "track_link", "label": "Tracking page", "default": "/pages/track-your-order", "info": "The form opens this page with the order number, email, and postal code." },
