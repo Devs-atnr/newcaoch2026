@@ -24,7 +24,7 @@
             "signup_label": "Sign up",
             "signup_success": "You are signed up for email updates.",
             "consent": "<p>By signing up, you consent to receive emails about Coach's latest collections, offers, and news, as well as information on how to participate in Coach events, competitions or promotions. You have certain rights under applicable privacy laws, and can withdraw your consent at any time. See our <a href=\"/policies/privacy-policy\">Privacy Policy</a> for more information.</p>",
-            "form_width": 440,
+            "form_width": 280,
             "page_handles": ""
           }
         }
