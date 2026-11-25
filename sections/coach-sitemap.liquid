@@ -1,0 +1,158 @@
+{%- liquid
+  assign map_menu = section.settings.menu
+  if map_menu == blank
+    assign map_menu = linklists['main-menu-copy']
+  endif
+-%}
+
+<div
+  class="coach-map"
+  style="
+    --map-cols: {{ section.settings.columns }};
+    --map-title: {{ section.settings.heading_size }}px;
+    --map-link: {{ section.settings.link_size }}px;
+    --map-gap: {{ section.settings.column_gap }}px;
+    --map-width: {{ section.settings.content_width }}px;
+  "
+>
+  {%- if section.settings.heading != blank -%}
+    <h1 class="coach-map__title">{{ section.settings.heading | escape }}</h1>
+  {%- endif -%}
+
+  {%- if map_menu.links.size > 0 -%}
+    <div class="coach-map__grid">
+      {%- for link in map_menu.links -%}
+        <div class="coach-map__col">
+          <a class="coach-map__head" href="{{ link.url }}">
+            {%- if link.type == 'collection_link' and link.object.title != blank -%}
+              {{ link.object.title | escape }}
+            {%- else -%}
+              {{ link.title | escape }}
+            {%- endif -%}
+          </a>
+          {%- for child in link.links -%}
+            {%- if child.links.size > 0 -%}
+              <a class="coach-map__group" href="{{ child.url }}">
+                {%- if child.type == 'collection_link' and child.object.title != blank -%}
+                  {{ child.object.title | escape }}
+                {%- else -%}
+                  {{ child.title | escape }}
+                {%- endif -%}
+              </a>
+              {%- for grand in child.links -%}
+                <a class="coach-map__link" href="{{ grand.url }}">
+                  {%- if grand.type == 'collection_link' and grand.object.title != blank -%}
+                    {{ grand.object.title | escape }}
+                  {%- else -%}
+                    {{ grand.title | escape }}
+                  {%- endif -%}
+                </a>
+                {%- for item in grand.links -%}
+                  <a class="coach-map__link" href="{{ item.url }}">
+                    {%- if item.type == 'collection_link' and item.object.title != blank -%}
+                      {{ item.object.title | escape }}
+                    {%- else -%}
+                      {{ item.title | escape }}
+                    {%- endif -%}
+                  </a>
+                {%- endfor -%}
+              {%- endfor -%}
+            {%- else -%}
+              <a class="coach-map__link" href="{{ child.url }}">
+                {%- if child.type == 'collection_link' and child.object.title != blank -%}
+                  {{ child.object.title | escape }}
+                {%- else -%}
+                  {{ child.title | escape }}
+                {%- endif -%}
+              </a>
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
+      {%- endfor -%}
+    </div>
+  {%- else -%}
+    <p class="coach-map__empty">Choose a menu with your collections to build the site map.</p>
+  {%- endif -%}
+</div>
+
+{% stylesheet %}
+.coach-map {
+  box-sizing: border-box;
+  padding: 48px 28px 72px;
+  background: #fff;
+  color: #111;
+  font-family: HelveticaLTPro-Roman, Helvetica, Arial, sans-serif;
+}
+.coach-map *,
+.coach-map *::before,
+.coach-map *::after { box-sizing: border-box; }
+.coach-map__title {
+  margin: 0 0 42px;
+  text-align: center;
+  font-size: var(--map-title, 32px);
+  font-weight: 700;
+  line-height: 1.2;
+}
+.coach-map__grid {
+  display: grid;
+  grid-template-columns: repeat(var(--map-cols, 5), minmax(0, 1fr));
+  gap: 36px var(--map-gap, 28px);
+  width: min(100%, var(--map-width, 1180px));
+  margin: 0 auto;
+}
+.coach-map__head,
+.coach-map__group,
+.coach-map__link {
+  display: block;
+  color: #111;
+  text-decoration: none;
+  line-height: 1.45;
+}
+.coach-map__head,
+.coach-map__group {
+  font-size: var(--map-link, 14px);
+  font-weight: 700;
+}
+.coach-map__head { margin: 0 0 10px; }
+.coach-map__group { margin: 22px 0 8px; }
+.coach-map__link {
+  margin: 0 0 6px;
+  font-size: var(--map-link, 14px);
+  font-weight: 400;
+}
+.coach-map__head:hover,
+.coach-map__group:hover,
+.coach-map__link:hover { text-decoration: underline; }
+.coach-map__head:focus-visible,
+.coach-map__group:focus-visible,
+.coach-map__link:focus-visible { outline: none; box-shadow: none; }
+.coach-map__empty { margin: 0; text-align: center; }
+@media screen and (max-width: 989px) {
+  .coach-map__grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+@media screen and (max-width: 749px) {
+  .coach-map { padding: 32px 16px 48px; }
+  .coach-map__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 28px 16px; }
+}
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Site map",
+  "tag": "section",
+  "class": "coach-map-section",
+  "enabled_on": { "templates": ["page"] },
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Site Map" },
+    { "type": "link_list", "id": "menu", "label": "Menu", "info": "Collection links use the collection name from your store." },
+    { "type": "range", "id": "columns", "min": 2, "max": 6, "step": 1, "label": "Columns", "default": 5 },
+    { "type": "range", "id": "heading_size", "min": 20, "max": 48, "step": 2, "unit": "px", "label": "Heading size", "default": 32 },
+    { "type": "range", "id": "link_size", "min": 12, "max": 20, "step": 1, "unit": "px", "label": "Link size", "default": 14 },
+    { "type": "range", "id": "column_gap", "min": 12, "max": 60, "step": 4, "unit": "px", "label": "Column gap", "default": 28 },
+    { "type": "range", "id": "content_width", "min": 800, "max": 1600, "step": 20, "unit": "px", "label": "Content width", "default": 1180 }
+  ],
+  "presets": [
+    { "name": "Site map" }
+  ]
+}
+{% endschema %}
