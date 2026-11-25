@@ -371,6 +371,7 @@
                               "imageWidth": {{ chart.settings.image_width | default: 120 | json }},
                               "imageHeight": {{ chart.settings.image_height | default: 0 | json }},
                               "icon": {{ chart.settings.measure_icon | json }},
+                              "html": {{ chart.settings.custom_html | json }},
                               "headers": [{%- assign header_cells = chart.settings.headers | split: '|' -%}{%- for cell in header_cells -%}{{ cell | strip | json }}{%- unless forloop.last -%},{%- endunless -%}{%- endfor -%}],
                               "rows": [{%- assign row_lines = chart.settings.rows | newline_to_br | split: '<br />' -%}{%- assign row_index = 0 -%}{%- for line in row_lines -%}{%- assign clean_line = line | strip | replace: '<br>', '' -%}{%- if clean_line != blank -%}{%- if row_index > 0 -%},{%- endif -%}{%- assign row_index = row_index | plus: 1 -%}[{%- assign row_cells = clean_line | split: '|' -%}{%- for cell in row_cells -%}{{ cell | strip | json }}{%- unless forloop.last -%},{%- endunless -%}{%- endfor -%}]{%- endif -%}{%- endfor -%}]
                             }
@@ -889,7 +890,17 @@
 .coach-care__size-extra.is-fixed .coach-care__size-extra-image {
   height: var(--sg-img-h, auto);
 }
+.coach-care__size-html { margin-top: 4px; }
+.coach-care__size-html table,
 .coach-care__size-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.coach-care__size-html th,
+.coach-care__size-html td {
+  padding: 10px 8px;
+  border: 1px solid #e4e4e4;
+  text-align: center;
+  font-weight: 400;
+}
+.coach-care__size-html th { background: #f3f3f3; font-weight: 600; }
 .coach-care__size-table th,
 .coach-care__size-table td {
   padding: 10px 8px;
@@ -1055,7 +1066,10 @@ if (!customElements.get('coach-care-size')) {
         const note = chart.note ? `<p class="coach-care__size-note">${esc(chart.note)}</p>` : '';
         const imageStyle = `width:${Number(chart.imageWidth) || 120}px;${Number(chart.imageHeight) > 0 ? `height:${Number(chart.imageHeight)}px;object-fit:contain;` : ''}`;
         const image = chart.image ? `<img class="coach-care__size-image" style="${imageStyle}" src="${esc(chart.image)}" alt="">` : (chart.icon ? icon : '');
-        return `<div class="coach-care__size-chart" data-chart-key="${esc(key)}"><h3 class="coach-care__size-name">${esc(title)}</h3><table class="coach-care__size-table"><thead><tr>${head}${regionHead}</tr></thead><tbody>${body}</tbody></table>${noteHeading}${note}${image}</div>`;
+        const table = chart.html
+          ? `<div class="coach-care__size-html">${chart.html}</div>`
+          : `<table class="coach-care__size-table"><thead><tr>${head}${regionHead}</tr></thead><tbody>${body}</tbody></table>`;
+        return `<div class="coach-care__size-chart" data-chart-key="${esc(key)}"><h3 class="coach-care__size-name">${esc(title)}</h3>${table}${noteHeading}${note}${image}</div>`;
       }).join('');
       this.result.querySelectorAll('[data-size-region]').forEach((select) => {
         select.addEventListener('change', () => {
@@ -1205,7 +1219,8 @@ if (!customElements.get('coach-care-nav')) {
         { "type": "text", "id": "group", "label": "First menu option", "default": "Men" },
         { "type": "text", "id": "category", "label": "Second menu option", "default": "Bottoms", "info": "Add more Size table blocks with the same menu names to show several charts together." },
         { "type": "text", "id": "title", "label": "Chart title", "default": "Bottoms" },
-        { "type": "range", "id": "region_column", "min": 0, "max": 8, "step": 1, "label": "Region menu column", "default": 0, "info": "0 shows every column. Set 4 to turn the fourth heading, and any headings after it, into the last-column menu." },
+        { "type": "liquid", "id": "custom_html", "label": "Custom HTML", "info": "Optional. If this box has HTML, it is shown instead of the column and row fields. Add or remove a Size table block for each chart." },
+        { "type": "range", "id": "region_column", "min": 0, "max": 8, "step": 1, "label": "Region menu column", "default": 0, "info": "Used only when Custom HTML is empty. 0 shows every column." },
         { "type": "text", "id": "headers", "label": "Column headings", "default": "Size (Numeric)|Size (Letter)|Waist (in)|Waist (cm)|UK", "info": "Separate columns with |." },
         { "type": "textarea", "id": "rows", "label": "Rows", "default": "28|XS|27-29|69-84|28\n30|S|29-31|84-89|30\n32|M|31-33|79-84|32\n34|L|33-35|84-89|34\n36|XL|35-37|89-94|36\n38|XXL|37-39|94-99|38", "info": "One size per line. Separate cells with | in the same order as the headings." },
         { "type": "text", "id": "note_heading", "label": "Note heading" },
