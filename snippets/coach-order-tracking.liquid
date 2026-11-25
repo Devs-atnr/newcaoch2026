@@ -427,6 +427,16 @@ h4.main-bhtarar { font-style: normal; font-size: 20px; color: #000; font-family:
     } catch { return {}; }
   }
 
+  // Order names from this store look like 2061-50500. Those are not Aramex tracking numbers.
+  function orderNameOf(val){
+    const name = String(val || '').trim().replace(/^#/, '');
+    return /^\d{3,6}-\d{3,8}$/.test(name) ? name : '';
+  }
+  function sameOrder(order, name){
+    const current = String(order?.orderName || order?.name || order?.order_number || order?.orderNumber || '').replace(/^#/, '').trim();
+    return current === name;
+  }
+
   // ---- single input → payload
   function buildPayload(valRaw){
     const val = (valRaw||'').trim();
@@ -437,9 +447,11 @@ h4.main-bhtarar { font-style: normal; font-size: 20px; color: #000; font-family:
     }
     const mobile = normalizeKsaMobile(val);
     if (mobile) return { body:{ storeId:STORE_ID, mobile } };
+    const orderName = orderNameOf(val);
+    if (orderName) return { orderName };
     const digits = val.replace(/\D/g,'');
     if (digits.length >= 6) return { body:{ storeId:STORE_ID, trackingNumber:val } };
-    return { error:'Enter a valid KSA mobile, email, or tracking number.' };
+    return { error:'Enter a valid phone number, email, or tracking number.' };
   }
 
   // ---- request abort (optional, safe)
@@ -453,7 +465,23 @@ h4.main-bhtarar { font-style: normal; font-size: 20px; color: #000; font-family:
     inflight = new AbortController();
 
     const built = buildPayload(els.search.value);
-    if (!built || built.error) { hide(els.loading); return showError(built?.error || 'Enter details to continue.'); }
+    if (!built) { hide(els.loading); return showError('Enter details to continue.'); }
+    if (built.error) { hide(els.loading); return showError(built.error); }
+
+    const params = new URLSearchParams(window.location.search);
+    const emailParam = (params.get('email') || '').trim();
+    const phoneParam = normalizeKsaMobile(params.get('phone') || params.get('mobile') || '');
+    let orderName = built.orderName || orderNameOf(params.get('order_number') || '');
+    let requestBody = built.body || null;
+    if (!requestBody && orderName) {
+      if (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailParam)) requestBody = { storeId:STORE_ID, email:emailParam };
+      else if (phoneParam) requestBody = { storeId:STORE_ID, mobile:phoneParam };
+    }
+    if (!requestBody) {
+      hide(els.loading);
+      if (orderName) return showError('Enter the email or phone number used for order ' + orderName + '.');
+      return showError('Enter details to continue.');
+    }
 
     try{
       const urls = [TRACKING_3001, API_URL].filter((url, index, list) => url && list.indexOf(url) === index);
@@ -461,7 +489,7 @@ h4.main-bhtarar { font-style: normal; font-size: 20px; color: #000; font-family:
       let lastError = null;
       for (const url of urls) {
         try {
-          const attempt = await postTracking(url, built.body, inflight.signal);
+          const attempt = await postTracking(url, requestBody, inflight.signal);
           if (attempt.ok) { res = attempt; break; }
           lastError = new Error('Error (' + attempt.status + ')');
         } catch (netErr) {
@@ -477,7 +505,12 @@ h4.main-bhtarar { font-style: normal; font-size: 20px; color: #000; font-family:
           : (lastError?.message && lastError.message.indexOf('Error (') === 0 ? lastError.message : 'Unable to reach the tracking service. Please try again.'));
       }
       const root = await res.json();
-      const order = root?.orderStatus?.[0];
+      let orders = root?.orderStatus || [];
+      if (orderName) {
+        orders = orders.filter(order => sameOrder(order, orderName));
+        if (!orders.length) { hide(els.loading); return showError('No order ' + orderName + ' was found for those details.'); }
+      }
+      const order = orders[0];
       if (!order) { hide(els.loading); return showError('No order found for the provided details.'); }
 
       show(els.body);
@@ -573,7 +606,7 @@ h4.main-bhtarar { font-style: normal; font-size: 20px; color: #000; font-family:
   els.btn.addEventListener('click', trackOrder, { passive:true });
   
   const params = new URLSearchParams(window.location.search);
-  const preset = params.get('email') || params.get('order_number') || params.get('tracking') || params.get('q') || '';
+  const preset = params.get('order_number') || params.get('email') || params.get('tracking') || params.get('q') || '';
   if (preset && els.search) {
     els.search.value = preset;
     trackOrder();
