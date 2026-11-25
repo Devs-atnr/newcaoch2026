@@ -1,0 +1,64 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "customer_care": {
+      "type": "customer-care",
+      "blocks": {
+        "custom_liquid_AcVRHH": {
+          "type": "custom_liquid",
+          "settings": {
+            "code": "```html\n<div id=\"coach-cares-custom-html\" class=\"coach-cares-wrapper\">\n  <section class=\"coach-cares-intro\">\n    <h1>Coach Cares</h1>\n    <p>\n      We believe that better-made things create a better future for all. Why? Because keeping and wearing what you buy for longer (even a few months) decreases the impact it has on the planet.\n    </p>\n    <p>\n      Today, we stand by a promise that everything we make is crafted to last. As part of this promise, we offer services to help keep your Coach in play (and looking beautiful) for longer. Which is good news for you and the planet, too.\n    </p>\n    <p>Wear it, love it, pass it on.</p>\n  </section>\n\n  <section class=\"coach-cares-explore\">\n    <h2>Explore More</h2>\n    <div class=\"explore-grid\">\n      <a href=\"/pages/product-care\" class=\"explore-card\">\n        <div class=\"explore-card-media\">\n          <img\n            src=\"https://cdn.shopify.com/s/files/1/0360/3746/0012/files/product-care.jpg?v=1746702112\"\n            alt=\"Your bag wants self-care, too.\"\n          />\n          <div class=\"explore-card-overlay\">\n            <span class=\"overlay-frame\">\n              <span class=\"overlay-caption\">Your bag wants self-care, too.</span>\n            </span>\n          </div>\n        </div>\n        <span class=\"explore-card-label\">PRODUCT CARE</span>\n      </a>\n    </div>\n  </section>\n</div>\n\n<style>\n  #coach-cares-custom-html.coach-cares-wrapper {\n    width: 100%;\n    max-width: 1140px;\n    margin: 0 auto;\n    padding: 36px 20px;\n    color: #111111;\n    background-color: #ffffff;\n    font-family: -apple-system, BlinkMacSystemFont, \"Helvetica Neue\", Helvetica, Arial, sans-serif;\n    box-sizing: border-box;\n  }\n\n  #coach-cares-custom-html *,\n  #coach-cares-custom-html *::before,\n  #coach-cares-custom-html *::after {\n    box-sizing: border-box;\n  }\n\n  #coach-cares-custom-html .coach-cares-intro {\n    max-width: 760px;\n    margin-bottom: 48px;\n  }\n\n  #coach-cares-custom-html .coach-cares-intro h1 {\n    font-size: 20px;\n    font-weight: 700;\n    line-height: 1.3;\n    margin: 0 0 20px;\n    color: #111111;\n  }\n\n  #coach-cares-custom-html .coach-cares-intro p {\n    font-size: 14px;\n    line-height: 1.55;\n    margin: 0 0 18px;\n    color: #111111;\n  }\n\n  #coach-cares-custom-html .coach-cares-intro p:last-child {\n    margin-bottom: 0;\n  }\n\n  #coach-cares-custom-html .coach-cares-explore h2 {\n    font-size: 36px;\n    font-weight: 700;\n    line-height: 1.2;\n    text-align: center;\n    margin: 0 0 32px;\n    color: #000000;\n  }\n\n  #coach-cares-custom-html .explore-grid {\n    display: flex;\n    flex-wrap: wrap;\n    gap: 24px;\n  }\n\n  #coach-cares-custom-html .explore-card {\n    display: inline-flex;\n    flex-direction: column;\n    align-items: center;\n    text-decoration: none;\n    color: #111111;\n    width: 340px;\n    max-width: 100%;\n  }\n\n  #coach-cares-custom-html .explore-card-media {\n    position: relative;\n    width: 100%;\n    aspect-ratio: 1 / 1;\n    overflow: hidden;\n    background-color: #f3f3f3;\n  }\n\n  #coach-cares-custom-html .explore-card-media img {\n    display: block;\n    width: 100%;\n    height: 100%;\n    object-fit: cover;\n    filter: brightness(0.82);\n  }\n\n  #coach-cares-custom-html .explore-card-overlay {\n    position: absolute;\n    inset: 0;\n    padding: 20px;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n  }\n\n  #coach-cares-custom-html .overlay-frame {\n    width: 100%;\n    height: 100%;\n    border: 2px solid rgba(255, 255, 255, 0.85);\n    border-radius: 18px;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    padding: 16px;\n    text-align: center;\n  }\n\n  #coach-cares-custom-html .overlay-caption {\n    color: #ffffff;\n    font-size: 28px;\n    font-weight: 700;\n    line-height: 1.15;\n    text-shadow: 0 1px 6px rgba(0, 0, 0, 0.35);\n  }\n\n  #coach-cares-custom-html .explore-card-label {\n    margin-top: 12px;\n    font-size: 11px;\n    font-weight: 600;\n    letter-spacing: 0.06em;\n    text-transform: uppercase;\n    text-decoration: underline;\n    text-underline-offset: 3px;\n    color: #111111;\n  }\n\n  #coach-cares-custom-html .explore-card:hover .explore-card-media img {\n    transform: scale(1.02);\n    transition: transform 0.25s ease;\n  }\n\n  @media screen and (max-width: 767px) {\n    #coach-cares-custom-html.coach-cares-wrapper {\n      padding: 24px 16px;\n    }\n\n    #coach-cares-custom-html .coach-cares-explore h2 {\n      font-size: 28px;\n      margin-bottom: 24px;\n    }\n\n    #coach-cares-custom-html .explore-card {\n      width: 100%;\n    }\n\n    #coach-cares-custom-html .overlay-caption {\n      font-size: 22px;\n    }\n  }\n</style>",
+            "page_handles": ""
+          }
+        }
+      },
+      "block_order": [
+        "custom_liquid_AcVRHH"
+      ],
+      "settings": {
+        "menu": "footer-menu-copy",
+        "sidebar_width": 33,
+        "sidebar_background": "#f5f5f5",
+        "content_background": "#ffffff",
+        "sticky_sidebar": true,
+        "sticky_top": 24,
+        "mobile_collapse": false,
+        "mobile_left": "show",
+        "mobile_right": "show",
+        "heading_size": 20,
+        "heading_color": "#111111",
+        "heading_weight": "700",
+        "category_size": 16,
+        "category_color": "#111111",
+        "category_weight": "700",
+        "category_uppercase": true,
+        "link_size": 14,
+        "link_color": "#111111",
+        "active_color": "#111111",
+        "underline_active": true,
+        "hover_color": "#111111",
+        "category_space": 28,
+        "link_space": 12,
+        "sidebar_padding_y": 48,
+        "sidebar_padding_x": 32,
+        "content_padding_y": 48,
+        "content_padding_x": 48,
+        "content_max": 1200,
+        "min_height": 0,
+        "mobile_padding": 16,
+        "mobile_spacing": 0
+      }
+    }
+  },
+  "order": [
+    "customer_care"
+  ]
+}
