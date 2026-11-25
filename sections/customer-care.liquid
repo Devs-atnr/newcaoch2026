@@ -146,9 +146,36 @@
                     {%- if block.settings.track_text != blank -%}
                       <div class="coach-care__rte coach-care__track-copy">{{ block.settings.track_text }}</div>
                     {%- endif -%}
-                    {%- if block.settings.track_link_label != blank -%}
-                      <p class="coach-care__account-action"><a class="coach-care__account-link" href="{{ track_url }}">{{ block.settings.track_link_label | escape }}</a>{% if block.settings.track_link_rest != blank %} {{ block.settings.track_link_rest | escape }}{% endif %}</p>
-                    {%- endif -%}
+                    {%- liquid
+                      assign privacy_url = block.settings.privacy_link
+                      if privacy_url == blank
+                        assign privacy_url = shop.privacy_policy.url | default: '/policies/privacy-policy'
+                      endif
+                    -%}
+                    <form class="coach-care__track" action="{{ track_url }}" method="get">
+                      <div class="coach-care__fields coach-care__track-fields">
+                        <div class="coach-care__outline coach-care__outline--raise">
+                          <input type="text" name="order_number" autocomplete="off" placeholder=" " data-care-input data-care-required>
+                          <span class="coach-care__float">{{ block.settings.order_label | escape }}</span>
+                          <p class="coach-care__error">{{ block.settings.order_error | escape }}</p>
+                        </div>
+                        {%- if block.settings.details_text != blank -%}
+                          <p class="coach-care__track-note">{{ block.settings.details_text | escape }}</p>
+                        {%- endif -%}
+                        <div class="coach-care__outline">
+                          <input type="email" name="email" autocomplete="email" placeholder=" " data-care-input data-care-email>
+                          <span class="coach-care__float">{{ block.settings.track_email_label | escape }}</span>
+                        </div>
+                        <div class="coach-care__outline">
+                          <input type="text" name="postal_code" autocomplete="postal-code" placeholder=" " data-care-input>
+                          <span class="coach-care__float">{{ block.settings.postal_label | escape }}</span>
+                        </div>
+                        <button class="coach-care__button coach-care__signin" type="submit">{{ block.settings.track_button | escape }}</button>
+                      </div>
+                      {%- if block.settings.privacy_text != blank -%}
+                        <p class="coach-care__privacy">{{ block.settings.privacy_text | escape }} <a href="{{ privacy_url }}">{{ block.settings.privacy_label | escape }}</a> {{ block.settings.privacy_after | escape }}</p>
+                      {%- endif -%}
+                    </form>
                   </div>
                   <div class="coach-care__account-col">
                     {%- if block.settings.account_heading != blank -%}
@@ -171,12 +198,12 @@
                         {%- endif -%}
                         <div class="coach-care__fields coach-care__fields--login">
                           <div class="coach-care__outline{% if form.email %} has-value{% endif %}">
-                            <input type="email" name="customer[email]" autocomplete="email" placeholder=" " value="{% if form.email %}{{ form.email }}{% endif %}" data-care-input data-care-email>
+                            <input type="email" name="customer[email]" autocomplete="email" placeholder=" " value="{% if form.email %}{{ form.email }}{% endif %}" data-care-input data-care-required data-care-email>
                             <span class="coach-care__float">{{ block.settings.email_label | escape }}</span>
                             <p class="coach-care__error">{{ block.settings.email_error | escape }}</p>
                           </div>
                           <div class="coach-care__outline coach-care__pass">
-                            <input type="password" name="customer[password]" autocomplete="current-password" placeholder=" " data-care-password data-care-input>
+                            <input type="password" name="customer[password]" autocomplete="current-password" placeholder=" " data-care-password data-care-input data-care-required>
                             <span class="coach-care__float">{{ block.settings.password_label | escape }}</span>
                             <button class="coach-care__show" type="button" data-care-show data-show="{{ block.settings.show_label | escape }}" data-hide="{{ block.settings.hide_label | escape }}">{{ block.settings.show_label | escape }}</button>
                             <p class="coach-care__error">{{ block.settings.password_error | escape }}</p>
@@ -652,6 +679,28 @@
 .coach-care__outline.is-invalid input:focus,
 .coach-care__outline.is-invalid input:focus-visible { border-color: var(--acc-error, #e10600); }
 .coach-care__outline.is-invalid .coach-care__float { color: var(--acc-error, #e10600); }
+.coach-care__outline--raise.is-invalid .coach-care__float {
+  top: 0;
+  background: #ffffff;
+  font-size: 12px;
+}
+.coach-care__track-fields { gap: 12px; margin-top: 14px; }
+.coach-care__track-note { margin: 2px 0 0; }
+.coach-care__privacy {
+  max-width: 280px;
+  margin: 12px 0 0;
+  color: #111111;
+  font-size: 10px;
+  font-weight: 400;
+  letter-spacing: 0.03em;
+  line-height: 1.45;
+  text-transform: uppercase;
+}
+.coach-care__privacy a {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
 .coach-care__error {
   display: none;
   margin: 6px 0 0;
@@ -1075,20 +1124,21 @@ if (!customElements.get('coach-care-login')) {
         field.addEventListener('blur', () => box.classList.remove('is-focus'));
         sync();
       });
-      const form = this.querySelector('form');
-      if (!form) return;
-      form.addEventListener('submit', (event) => {
-        let first = null;
-        this.querySelectorAll('[data-care-input]').forEach((field) => {
-          const box = field.closest('.coach-care__outline');
-          const missing = field.value.trim() === '';
-          const badEmail = field.hasAttribute('data-care-email') && !missing && !field.checkValidity();
-          const invalid = missing || badEmail;
-          box.classList.toggle('is-invalid', invalid);
-          if (invalid && !first) first = field;
+      this.querySelectorAll('form').forEach((form) => {
+        form.addEventListener('submit', (event) => {
+          let first = null;
+          form.querySelectorAll('[data-care-input]').forEach((field) => {
+            const box = field.closest('.coach-care__outline');
+            const value = field.value.trim();
+            const missing = field.hasAttribute('data-care-required') && value === '';
+            const badEmail = field.hasAttribute('data-care-email') && value !== '' && !field.checkValidity();
+            const invalid = missing || badEmail;
+            box.classList.toggle('is-invalid', invalid);
+            if (invalid && !first) first = field;
+          });
+          if (!first) return;
+          event.preventDefault();
         });
-        if (!first) return;
-        event.preventDefault();
       });
     }
   });
@@ -1265,10 +1315,18 @@ if (!customElements.get('coach-care-nav')) {
       "settings": [
         { "type": "header", "content": "Track an order" },
         { "type": "text", "id": "track_heading", "label": "Heading", "default": "Track an Order" },
-        { "type": "richtext", "id": "track_text", "label": "Text", "default": "<p>To track your order, please have your order number (Order ID) and email address ready.</p>" },
-        { "type": "text", "id": "track_link_label", "label": "Link label", "default": "Click here" },
-        { "type": "text", "id": "track_link_rest", "label": "Text after link", "default": "to track your order." },
-        { "type": "text", "id": "track_link", "label": "Tracking link", "default": "/pages/track-your-order", "info": "Live page: https://coach.sa/pages/track-your-order" },
+        { "type": "richtext", "id": "track_text", "label": "Text", "default": "<p>Enter your order number to check its status.</p>" },
+        { "type": "text", "id": "order_label", "label": "Order number label", "default": "Order Number" },
+        { "type": "text", "id": "order_error", "label": "Order number error", "default": "Order Number is required" },
+        { "type": "text", "id": "details_text", "label": "Details text", "default": "Enter your information to view full order details." },
+        { "type": "text", "id": "track_email_label", "label": "Tracking email label", "default": "Email Address (Optional)" },
+        { "type": "text", "id": "postal_label", "label": "Postal code label", "default": "Billing Postal Code (Optional)" },
+        { "type": "text", "id": "track_button", "label": "Track button", "default": "Track your order" },
+        { "type": "text", "id": "track_link", "label": "Tracking page", "default": "/pages/track-your-order", "info": "The form opens this page with the order number, email, and postal code." },
+        { "type": "text", "id": "privacy_text", "label": "Privacy text", "default": "We use your information to locate your order. Read our" },
+        { "type": "text", "id": "privacy_label", "label": "Privacy link label", "default": "privacy policy" },
+        { "type": "text", "id": "privacy_after", "label": "Privacy text after link", "default": "for more details." },
+        { "type": "text", "id": "privacy_link", "label": "Privacy link", "info": "Leave blank to use the store privacy policy." },
         { "type": "header", "content": "Sign in" },
         { "type": "text", "id": "account_heading", "label": "Heading", "default": "Sign in to Your Account" },
         { "type": "richtext", "id": "account_text", "label": "Text", "default": "<p>Sign in to see your order history and update your account. (Welcome back!)</p>" },
