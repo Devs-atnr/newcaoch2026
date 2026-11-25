@@ -150,14 +150,243 @@
   </div>
 </coach-store-locator>
 
+<script>
+(function () {
+  var root = document.getElementById('CoachLocator-{{ section.id }}');
+  if (!root || root.getAttribute('data-bound') === 'true') return;
+  root.setAttribute('data-bound', 'true');
+
+  var searchInput = root.querySelector('.store-search');
+  var regionCountsContainer = root.querySelector('.region-counts');
+  var clearFiltersButton = root.querySelector('.clear-filters');
+  var noResultsMessage = root.querySelector('.no-results');
+
+  function cards() {
+    return Array.prototype.slice.call(root.querySelectorAll('.store-card'));
+  }
+
+  function boxes() {
+    return root.querySelectorAll('.region-checkboxes input[type="checkbox"]');
+  }
+
+  function selectedRegions() {
+    return Array.prototype.slice.call(boxes()).filter(function (box) {
+      return box.checked;
+    }).map(function (box) {
+      return (box.getAttribute('data-region-key') || box.value || '').trim().toLowerCase();
+    });
+  }
+
+  function regionLabel(value) {
+    var box = root.querySelector('.region-checkboxes input[value="' + value + '"]');
+    var label = box && box.closest('label');
+    return label ? label.textContent.replace(/\s+/g, ' ').trim() : value;
+  }
+
+  function updateRegionCounts(visibleStores) {
+    if (!regionCountsContainer) return;
+    var counts = {};
+    Array.prototype.forEach.call(boxes(), function (box) { counts[box.value] = 0; });
+    visibleStores.forEach(function (store) {
+      var region = store.getAttribute('data-region');
+      if (Object.prototype.hasOwnProperty.call(counts, region)) counts[region] += 1;
+    });
+    regionCountsContainer.innerHTML = '';
+    Object.keys(counts).forEach(function (region) {
+      if (counts[region] < 1) return;
+      var button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'region-badge';
+      button.textContent = regionLabel(region) + ' (' + counts[region] + ')';
+      button.addEventListener('click', function () {
+        Array.prototype.forEach.call(boxes(), function (box) { box.checked = false; });
+        var checkbox = root.querySelector('.region-checkboxes input[value="' + region + '"]');
+        if (checkbox) checkbox.checked = true;
+        filterStores();
+      });
+      regionCountsContainer.appendChild(button);
+    });
+  }
+
+  function filterStores() {
+    var checked = Array.prototype.slice.call(boxes()).filter(function (box) { return box.checked; });
+    if (checked.length > 1) checked.slice(1).forEach(function (box) { box.checked = false; });
+    var regions = selectedRegions();
+    var query = (searchInput ? searchInput.value : '').toLowerCase().trim();
+    var visible = [];
+    cards().forEach(function (store) {
+      var region = (store.getAttribute('data-region') || '').toLowerCase();
+      var name = (store.getAttribute('data-name') || '').toLowerCase().replace(/-/g, ' ');
+      var text = (store.textContent || '').toLowerCase();
+      var matchesRegion = regions.length === 0 || regions.indexOf(region) !== -1;
+      var matchesSearch = query === '' || name.indexOf(query) !== -1 || region.replace(/-/g, ' ').indexOf(query) !== -1 || text.indexOf(query) !== -1;
+      var show = matchesRegion && matchesSearch;
+      store.style.display = show ? '' : 'none';
+      if (show) visible.push(store);
+    });
+    updateRegionCounts(visible);
+    if (noResultsMessage) noResultsMessage.style.display = visible.length === 0 ? 'block' : 'none';
+    var regionBar = clearFiltersButton ? clearFiltersButton.closest('.region-counts-bar') : null;
+    if (regionBar) regionBar.classList.toggle('has-selection', window.matchMedia('(max-width: 749px)').matches && regions.length > 0);
+  }
+
+  function onRegionChoice(input) {
+    if (!input || !input.closest('.region-checkboxes')) return;
+    if (input.checked) {
+      Array.prototype.forEach.call(boxes(), function (box) {
+        if (box !== input) box.checked = false;
+      });
+    }
+    filterStores();
+  }
+
+  function parseTime(timeStr) {
+    if (!timeStr) return null;
+    var parts = timeStr.trim().split(' ');
+    var clock = parts[0].split(':');
+    var hours = Number(clock[0]);
+    var minutes = Number(clock[1] || 0);
+    var modifier = (parts[1] || '').toUpperCase();
+    if (modifier === 'PM' && hours !== 12) hours += 12;
+    if (modifier === 'AM' && hours === 12) hours = 0;
+    return { hours: hours, minutes: minutes };
+  }
+
+  function updateStoreStatuses() {
+    var dayNames = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
+    cards().forEach(function (card) {
+      var statusEl = card.querySelector('.store-status');
+      if (!statusEl) return;
+      if (card.getAttribute('data-renovation') === '1' || statusEl.getAttribute('data-renovation') === '1') {
+        statusEl.classList.add('temporarily-closed');
+        statusEl.classList.remove('open', 'closed');
+        statusEl.textContent = root.getAttribute('data-renovation') || 'Temporarily closed for renovation';
+        return;
+      }
+      var times = null;
+      try { times = JSON.parse(card.getAttribute('data-times') || ''); } catch (error) { times = null; }
+      var timezone = card.getAttribute('data-timezone') || 'Asia/Riyadh';
+      var storeNow = new Date(new Date().toLocaleString('en-US', { timeZone: timezone }));
+      var pair = times && times[dayNames[storeNow.getDay()]];
+      if (!pair || pair.indexOf('|') === -1) {
+        statusEl.textContent = root.getAttribute('data-hours-missing') || 'Hours not set';
+        statusEl.classList.remove('open', 'closed', 'temporarily-closed');
+        return;
+      }
+      var halves = pair.split('|');
+      var openStr = halves[0].trim();
+      var closeStr = halves[1].trim();
+      var openParts = parseTime(openStr);
+      var closeParts = parseTime(closeStr);
+      if (!openParts || !closeParts) {
+        statusEl.textContent = root.getAttribute('data-hours-missing') || 'Hours not set';
+        return;
+      }
+      var openTime = new Date(storeNow);
+      openTime.setHours(openParts.hours, openParts.minutes, 0, 0);
+      var closeTime = new Date(storeNow);
+      closeTime.setHours(closeParts.hours, closeParts.minutes, 0, 0);
+      if (closeTime <= openTime) closeTime.setDate(closeTime.getDate() + 1);
+      if (storeNow >= openTime && storeNow <= closeTime) {
+        statusEl.textContent = root.getAttribute('data-open') || 'Open Now';
+        statusEl.classList.add('open');
+        statusEl.classList.remove('closed', 'temporarily-closed');
+        return;
+      }
+      var nextOpenStr = openStr;
+      if (storeNow > closeTime) {
+        for (var i = 1; i <= 7; i += 1) {
+          var nextPair = times[dayNames[(storeNow.getDay() + i) % 7]];
+          if (nextPair && nextPair.indexOf('|') !== -1) {
+            nextOpenStr = nextPair.split('|')[0].trim();
+            break;
+          }
+        }
+      }
+      statusEl.textContent = (root.getAttribute('data-closed') || 'Closed — Opens at') + ' ' + nextOpenStr;
+      statusEl.classList.add('closed');
+      statusEl.classList.remove('open', 'temporarily-closed');
+    });
+  }
+
+  if (searchInput) {
+    searchInput.addEventListener('input', filterStores);
+    searchInput.addEventListener('keyup', filterStores);
+    searchInput.addEventListener('search', filterStores);
+  }
+  if (clearFiltersButton) {
+    clearFiltersButton.addEventListener('click', function () {
+      if (searchInput) searchInput.value = '';
+      Array.prototype.forEach.call(boxes(), function (box) { box.checked = false; });
+      filterStores();
+    });
+  }
+  root.addEventListener('change', function (event) {
+    var target = event.target;
+    if (target && target.matches && target.matches('.region-checkboxes input[type="checkbox"]')) onRegionChoice(target);
+  });
+  root.addEventListener('click', function (event) {
+    var regionInput = event.target.closest('.region-checkboxes input[type="checkbox"]');
+    var regionLabelNode = event.target.closest('.region-checkboxes label');
+    if (regionInput || regionLabelNode) {
+      var input = regionInput || regionLabelNode.querySelector('input[type="checkbox"]');
+      setTimeout(function () { onRegionChoice(input); }, 0);
+      return;
+    }
+    var toggle = event.target.closest('.store-sidebar .accordion-toggle');
+    if (!toggle || !root.contains(toggle)) return;
+    event.preventDefault();
+    var content = toggle.parentElement && toggle.parentElement.querySelector('.accordion-content');
+    if (!content) return;
+    var willOpen = toggle.getAttribute('aria-expanded') !== 'true';
+    toggle.setAttribute('aria-expanded', willOpen ? 'true' : 'false');
+    content.classList.toggle('collapsed', !willOpen);
+  });
+  Array.prototype.forEach.call(root.querySelectorAll('.store-sidebar .accordion-toggle'), function (toggle) {
+    var content = toggle.parentElement && toggle.parentElement.querySelector('.accordion-content');
+    if (!content) return;
+    if (window.matchMedia('(max-width: 749px)').matches) {
+      toggle.setAttribute('aria-expanded', 'false');
+      content.classList.add('collapsed');
+    }
+  });
+  updateStoreStatuses();
+  setInterval(updateStoreStatuses, 60000);
+  filterStores();
+})();
+</script>
+
 {% stylesheet %}
+@font-face {
+  font-family: HelveticaLTPro-Roman;
+  src: url("https://cdn.shopify.com/s/files/1/0360/3746/0012/files/Helvetica-Roman_1.woff2?v=1753201381") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+.coach-locator,
+.coach-locator button,
+.coach-locator input,
+.coach-locator label,
+.coach-locator p,
+.coach-locator a,
+.coach-locator li,
+.coach-locator h1,
+.coach-locator h3,
+.coach-locator h4,
+.coach-locator span,
+.coach-locator div {
+  font-family: HelveticaLTPro-Roman, Helvetica, Arial, sans-serif !important;
+  letter-spacing: 0.06rem;
+  font-weight: 400;
+}
 .coach-locator {
-  font-family: HelveticaLTPro-Roman, "Helvetica Neue", Helvetica, Arial, sans-serif;
   color: #000;
+  font-size: 14px !important;
 }
 .coach-locator button,
 .coach-locator input {
-  font-family: inherit;
+  font-family: HelveticaLTPro-Roman, Helvetica, Arial, sans-serif !important;
 }
 .coach-locator button:focus-visible,
 .coach-locator input:focus-visible,
@@ -166,10 +395,10 @@
   box-shadow: none;
 }
 .coach-locator a.explore-shop-btn {
-  font-weight: 600;
+  font-weight: 600 !important;
   border-bottom: 1px solid;
   padding-bottom: 2px;
-  font-size: 12px;
+  font-size: 12px !important;
   color: #000;
   text-decoration: none;
 }
@@ -187,8 +416,9 @@
   padding: 7%;
   background: #000;
   color: #fff;
-  font-size: 2rem;
+  font-size: 20px !important;
   font-weight: 400;
+  line-height: 1.3;
 }
 .coach-locator .store-locator-container {
   display: flex;
@@ -204,7 +434,7 @@
   border-bottom: 1px solid rgb(229, 231, 235);
   padding-bottom: 10px;
 }
-.coach-locator .store-card-right .day { font-size: 1.4rem; }
+.coach-locator .store-card-right .day { font-size: 14px !important; }
 .coach-locator .accordion h3,
 .coach-locator .accordion-toggle,
 .coach-locator .region-checkboxes label,
@@ -219,7 +449,7 @@
 }
 .coach-locator .accordion-toggle {
   padding: 1rem 0;
-  font-size: 1.6rem;
+  font-size: 16px !important;
   width: 100%;
   text-align: left;
   border: none;
@@ -232,12 +462,12 @@
 }
 .coach-locator .accordion h3 {
   text-transform: uppercase;
-  font-size: 1.4rem;
+  font-size: 14px !important;
   margin: 0;
 }
 .coach-locator .accordion-arrow {
   transition: transform 0.3s ease;
-  font-size: 1.2rem;
+  font-size: 12px !important;
 }
 .coach-locator .accordion-toggle[aria-expanded="true"] .accordion-arrow { transform: rotate(90deg); }
 .coach-locator .accordion-content {
@@ -266,11 +496,12 @@
   width: 100%;
   max-width: 500px;
   padding: 1rem;
-  font-size: 1rem;
+  font-size: 10px !important;
   border: 1px solid #ccc;
   border-radius: 5px;
   background: #fff;
   color: #000;
+  letter-spacing: 0.06rem;
 }
 .coach-locator .region-counts-bar {
   display: flex;
@@ -291,7 +522,7 @@
   padding: 0.4rem 0.8rem;
   border-radius: 20px;
   cursor: pointer;
-  font-size: 0.95rem;
+  font-size: 10px !important;
   color: #000;
 }
 .coach-locator .region-badge:hover { background-color: #ddd; }
@@ -302,11 +533,11 @@
   padding: 0.4rem 1rem;
   border-radius: 20px;
   cursor: pointer;
-  font-size: 0.95rem;
+  font-size: 10px !important;
 }
 .coach-locator .clear-filters:hover { background-color: #e14c4c; }
 .coach-locator .region-checkboxes label {
-  font-size: 1.2rem;
+  font-size: 12px !important;
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -330,18 +561,27 @@
 .coach-locator .store-card-left { flex: 1 1 50%; }
 .coach-locator .store-card-right { flex: 1 1 40%; }
 .coach-locator .store-card h3 {
-  margin: 0 0 8px;
-  font-size: 24px;
+  margin: 0;
+  font-size: 24px !important;
   font-weight: 400;
+  line-height: 1.3;
 }
-.coach-locator .store-card-left p {
+.coach-locator .store-card-left p,
+.coach-locator .time,
+.coach-locator .icon-inlineText {
   margin: 12px 0 0;
+  font-size: 14px !important;
   text-transform: uppercase;
+}
+.coach-locator .time,
+.coach-locator .icon-inlineText {
+  margin: 0;
+  text-transform: none;
 }
 .coach-locator .no-results {
   text-align: center;
   font-weight: bold;
-  font-size: 1.2rem;
+  font-size: 14px !important;
   padding: 2rem;
   color: #777;
 }
@@ -357,7 +597,7 @@
 }
 .coach-locator .store-hours h4 {
   text-transform: uppercase;
-  font-size: 14px;
+  font-size: 14px !important;
   margin: 0 0 0.5rem;
   font-weight: 400;
 }
@@ -390,9 +630,9 @@
   display: inline-block;
   padding: 0;
   border-radius: 0;
-  font-size: 12px;
+  font-size: 12px !important;
   margin: 8px 0 0;
-  font-weight: 600;
+  font-weight: 600 !important;
 }
 .coach-locator .store-status.temporarily-closed {
   color: #fff;
@@ -433,230 +673,12 @@ html[lang="ar"] .coach-locator li,
 html[lang="ar"] .coach-locator a,
 html[lang="ar"] .coach-locator span,
 html[lang="ar"] .coach-locator div {
-  font-family: "Noto Kufi Arabic", sans-serif;
+  font-family: "Noto Kufi Arabic", sans-serif !important;
   letter-spacing: 0;
 }
 {% endstylesheet %}
 
-{% javascript %}
-if (!customElements.get('coach-store-locator')) {
-  customElements.define('coach-store-locator', class extends HTMLElement {
-    connectedCallback() {
-      if (this.dataset.bound === 'true') return;
-      this.dataset.bound = 'true';
-      this.searchInput = this.querySelector('.store-search');
-      this.stores = Array.from(this.querySelectorAll('.store-card'));
-      this.regionCountsContainer = this.querySelector('.region-counts');
-      this.clearFiltersButton = this.querySelector('.clear-filters');
-      this.noResultsMessage = this.querySelector('.no-results');
-      this.onChange = this.onChange.bind(this);
-      this.onClick = this.onClick.bind(this);
-      this.onSearch = this.filterStores.bind(this);
-      this.addEventListener('change', this.onChange);
-      this.addEventListener('click', this.onClick);
-      if (this.searchInput) this.searchInput.addEventListener('input', this.onSearch);
-      if (this.clearFiltersButton) {
-        this.clearFiltersButton.addEventListener('click', () => {
-          if (this.searchInput) this.searchInput.value = '';
-          this.clearAllCheckboxes();
-          this.filterStores();
-        });
-      }
-      this.querySelectorAll('.store-sidebar .accordion-toggle').forEach((toggle) => {
-        const content = toggle.parentElement && toggle.parentElement.querySelector('.accordion-content');
-        if (!content) return;
-        if (window.matchMedia('(max-width: 749px)').matches) {
-          toggle.setAttribute('aria-expanded', 'false');
-          content.classList.add('collapsed');
-        }
-      });
-      this.updateStoreStatuses();
-      this.timer = setInterval(() => this.updateStoreStatuses(), 60000);
-      this.filterStores();
-    }
 
-    disconnectedCallback() {
-      if (this.timer) clearInterval(this.timer);
-    }
-
-    getRegionCheckboxes() {
-      return this.querySelectorAll('.region-checkboxes input[type="checkbox"]');
-    }
-
-    getSelectedRegions() {
-      return Array.from(this.getRegionCheckboxes())
-        .filter((checkbox) => checkbox.checked)
-        .map((checkbox) => (checkbox.getAttribute('data-region-key') || checkbox.value || '').trim().toLowerCase());
-    }
-
-    clearAllCheckboxes() {
-      this.getRegionCheckboxes().forEach((checkbox) => { checkbox.checked = false; });
-    }
-
-    regionLabel(value) {
-      const box = this.querySelector('.region-checkboxes input[value="' + value + '"]');
-      const label = box && box.closest('label');
-      return label ? label.textContent.replace(/\s+/g, ' ').trim() : value;
-    }
-
-    updateRegionCounts(visibleStores) {
-      if (!this.regionCountsContainer) return;
-      const counts = {};
-      this.getRegionCheckboxes().forEach((checkbox) => { counts[checkbox.value] = 0; });
-      visibleStores.forEach((store) => {
-        const region = store.getAttribute('data-region');
-        if (Object.prototype.hasOwnProperty.call(counts, region)) counts[region] += 1;
-      });
-      this.regionCountsContainer.innerHTML = '';
-      Object.keys(counts).forEach((region) => {
-        if (counts[region] < 1) return;
-        const button = document.createElement('button');
-        button.type = 'button';
-        button.className = 'region-badge';
-        button.textContent = this.regionLabel(region) + ' (' + counts[region] + ')';
-        button.dataset.region = region;
-        button.addEventListener('click', () => {
-          this.clearAllCheckboxes();
-          const checkbox = this.querySelector('.region-checkboxes input[value="' + region + '"]');
-          if (checkbox) checkbox.checked = true;
-          this.filterStores();
-        });
-        this.regionCountsContainer.appendChild(button);
-      });
-    }
-
-    filterStores() {
-      const checked = Array.from(this.getRegionCheckboxes()).filter((checkbox) => checkbox.checked);
-      if (checked.length > 1) checked.slice(1).forEach((checkbox) => { checkbox.checked = false; });
-      const selectedRegions = this.getSelectedRegions();
-      const searchQuery = (this.searchInput ? this.searchInput.value : '').toLowerCase();
-      const visibleStores = [];
-      this.stores.forEach((store) => {
-        const storeRegion = (store.getAttribute('data-region') || '').toLowerCase();
-        const storeName = (store.getAttribute('data-name') || '').toLowerCase();
-        const text = store.textContent.toLowerCase();
-        const matchesRegion = selectedRegions.length === 0 || selectedRegions.indexOf(storeRegion) !== -1;
-        const matchesSearch = searchQuery === '' || storeName.indexOf(searchQuery) !== -1 || storeRegion.indexOf(searchQuery) !== -1 || text.indexOf(searchQuery) !== -1;
-        store.style.display = matchesRegion && matchesSearch ? 'block' : 'none';
-        if (matchesRegion && matchesSearch) visibleStores.push(store);
-      });
-      this.updateRegionCounts(visibleStores);
-      if (this.noResultsMessage) this.noResultsMessage.style.display = visibleStores.length === 0 ? 'block' : 'none';
-      const regionBar = this.clearFiltersButton ? this.clearFiltersButton.closest('.region-counts-bar') : null;
-      const mobileLocator = window.matchMedia('(max-width: 749px)').matches;
-      if (regionBar) regionBar.classList.toggle('has-selection', mobileLocator && selectedRegions.length > 0);
-    }
-
-    onRegionChoice(input) {
-      if (!input || !input.closest('.region-checkboxes')) return;
-      if (input.checked) {
-        this.getRegionCheckboxes().forEach((checkbox) => {
-          if (checkbox !== input) checkbox.checked = false;
-        });
-      }
-      this.filterStores();
-    }
-
-    onChange(event) {
-      const target = event.target;
-      if (target && target.matches && target.matches('.region-checkboxes input[type="checkbox"]')) this.onRegionChoice(target);
-    }
-
-    onClick(event) {
-      const regionInput = event.target.closest('.region-checkboxes input[type="checkbox"]');
-      const regionLabel = event.target.closest('.region-checkboxes label');
-      if (regionInput || regionLabel) {
-        const input = regionInput || regionLabel.querySelector('input[type="checkbox"]');
-        setTimeout(() => this.onRegionChoice(input), 0);
-        return;
-      }
-      const toggle = event.target.closest('.store-sidebar .accordion-toggle');
-      if (!toggle || !this.contains(toggle)) return;
-      event.preventDefault();
-      const content = toggle.parentElement && toggle.parentElement.querySelector('.accordion-content');
-      if (!content) return;
-      const willOpen = toggle.getAttribute('aria-expanded') !== 'true';
-      toggle.setAttribute('aria-expanded', willOpen ? 'true' : 'false');
-      content.classList.toggle('collapsed', !willOpen);
-    }
-
-    parseTime(timeStr) {
-      if (!timeStr) return null;
-      const parts = timeStr.trim().split(' ');
-      const clock = parts[0].split(':');
-      let hours = Number(clock[0]);
-      const minutes = Number(clock[1] || 0);
-      const modifier = (parts[1] || '').toUpperCase();
-      if (modifier === 'PM' && hours !== 12) hours += 12;
-      if (modifier === 'AM' && hours === 12) hours = 0;
-      return { hours: hours, minutes: minutes };
-    }
-
-    updateStoreStatuses() {
-      const dayNames = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
-      const openLabel = this.dataset.open || 'Open Now';
-      const closedLabel = this.dataset.closed || 'Closed — Opens at';
-      const renovationLabel = this.dataset.renovation || 'Temporarily closed for renovation';
-      const missingLabel = this.dataset.hoursMissing || 'Hours not set';
-      this.stores.forEach((card) => {
-        const statusEl = card.querySelector('.store-status');
-        if (!statusEl) return;
-        if (card.dataset.renovation === '1' || statusEl.dataset.renovation === '1') {
-          statusEl.classList.add('temporarily-closed');
-          statusEl.classList.remove('open', 'closed');
-          statusEl.textContent = renovationLabel;
-          return;
-        }
-        let times = null;
-        try { times = JSON.parse(card.dataset.times || ''); } catch (error) { times = null; }
-        const timezone = card.dataset.timezone || 'Asia/Riyadh';
-        const storeNow = new Date(new Date().toLocaleString('en-US', { timeZone: timezone }));
-        const todayKey = dayNames[storeNow.getDay()];
-        const pair = times && times[todayKey];
-        if (!pair || pair.indexOf('|') === -1) {
-          statusEl.textContent = missingLabel;
-          statusEl.classList.remove('open', 'closed', 'temporarily-closed');
-          return;
-        }
-        const halves = pair.split('|');
-        const openStr = halves[0].trim();
-        const closeStr = halves[1].trim();
-        const openParts = this.parseTime(openStr);
-        const closeParts = this.parseTime(closeStr);
-        if (!openParts || !closeParts) {
-          statusEl.textContent = missingLabel;
-          return;
-        }
-        const openTime = new Date(storeNow);
-        openTime.setHours(openParts.hours, openParts.minutes, 0, 0);
-        const closeTime = new Date(storeNow);
-        closeTime.setHours(closeParts.hours, closeParts.minutes, 0, 0);
-        if (closeTime <= openTime) closeTime.setDate(closeTime.getDate() + 1);
-        if (storeNow >= openTime && storeNow <= closeTime) {
-          statusEl.textContent = openLabel;
-          statusEl.classList.add('open');
-          statusEl.classList.remove('closed', 'temporarily-closed');
-          return;
-        }
-        let nextOpenStr = openStr;
-        if (storeNow > closeTime) {
-          for (let i = 1; i <= 7; i += 1) {
-            const key = dayNames[(storeNow.getDay() + i) % 7];
-            const nextPair = times[key];
-            if (nextPair && nextPair.indexOf('|') !== -1) {
-              nextOpenStr = nextPair.split('|')[0].trim();
-              break;
-            }
-          }
-        }
-        statusEl.textContent = closedLabel + ' ' + nextOpenStr;
-        statusEl.classList.add('closed');
-        statusEl.classList.remove('open', 'temporarily-closed');
-      });
-    }
-  });
-}
-{% endjavascript %}
 
 {% schema %}
 {
