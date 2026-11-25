@@ -15,6 +15,9 @@
           <input id="ot-search" class="track-search__input" type="text" inputmode="text" autocomplete="off" placeholder="Phone / Email / Tracking #">
           <button id="ot-submit" class="track-search__btn">Track</button>
         </div>
+        <div id="ot-order-extra" class="track-order-extra" hidden>
+          <input id="ot-contact" class="track-search__input" type="text" inputmode="text" autocomplete="on" placeholder="Email or phone number for this order">
+        </div>
 
         <div id="ot-loading" class="ot-loading" hidden>Loading…</div>
         <div id="ot-error" class="ot-error" hidden></div>
@@ -175,6 +178,9 @@
 .track-search__input{flex:1;padding:20px 14px 20px 36px;border-radius:5px;border:0;background:#fff;color:#111;min-width:0;font-size:15px;}
 .track-search__btn{padding:20px;border-radius:5px;border:0;background:#111;color:#fff;cursor:pointer;font-size:16px;transition:0.3s;}
 .track-search__btn:hover{opacity:.95}
+.track-order-extra{display:flex}
+.track-order-extra[hidden]{display:none}
+.track-order-extra .track-search__input{width:100%;padding-left:14px}
 
 .track-container{max-width:1100px;margin:0 auto;padding:0 16px 24px}
 .ot-loading{margin-top:8px;color:#fff}
@@ -286,6 +292,8 @@ h4.main-bhtarar { font-style: normal; font-size: 20px; color: #000; font-family:
   const els = {
     body: document.getElementById('ot-body'),
     search: document.getElementById('ot-search'),
+    contact: document.getElementById('ot-contact'),
+    orderExtra: document.getElementById('ot-order-extra'),
     btn: document.getElementById('ot-submit'),
     loading: document.getElementById('ot-loading'),
     error: document.getElementById('ot-error'),
@@ -473,13 +481,27 @@ h4.main-bhtarar { font-style: normal; font-size: 20px; color: #000; font-family:
     const phoneParam = normalizeKsaMobile(params.get('phone') || params.get('mobile') || '');
     let orderName = built.orderName || orderNameOf(params.get('order_number') || '');
     let requestBody = built.body || null;
+    const contactRaw = (els.contact && els.contact.value || '').trim();
+    if (!requestBody && orderName && contactRaw) {
+      const contact = buildPayload(contactRaw);
+      if (contact?.body && (contact.body.email || contact.body.mobile)) requestBody = contact.body;
+      else {
+        hide(els.loading);
+        show(els.orderExtra);
+        return showError(contact?.error || 'Enter the email or phone number used for this order.');
+      }
+    }
     if (!requestBody && orderName) {
       if (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailParam)) requestBody = { storeId:STORE_ID, email:emailParam };
       else if (phoneParam) requestBody = { storeId:STORE_ID, mobile:phoneParam };
     }
     if (!requestBody) {
       hide(els.loading);
-      if (orderName) return showError('Enter the email or phone number used for order ' + orderName + '.');
+      if (orderName) {
+        show(els.orderExtra);
+        if (els.contact) els.contact.focus();
+        return showError('Enter the email or phone number used for order ' + orderName + '.');
+      }
       return showError('Enter details to continue.');
     }
 
@@ -605,10 +627,23 @@ h4.main-bhtarar { font-style: normal; font-size: 20px; color: #000; font-family:
   // ---- events
   els.btn.addEventListener('click', trackOrder, { passive:true });
   
+  function syncOrderField(){
+    if (!els.orderExtra) return;
+    if (orderNameOf(els.search && els.search.value)) show(els.orderExtra);
+    else hide(els.orderExtra);
+  }
+  els.search.addEventListener('input', syncOrderField);
+  if (els.contact) {
+    els.contact.addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); trackOrder(); }}, { passive:false });
+  }
+
   const params = new URLSearchParams(window.location.search);
   const preset = params.get('order_number') || params.get('email') || params.get('tracking') || params.get('q') || '';
+  const presetEmail = (params.get('email') || '').trim();
   if (preset && els.search) {
     els.search.value = preset;
+    if (els.contact && presetEmail && orderNameOf(preset)) els.contact.value = presetEmail;
+    syncOrderField();
     trackOrder();
   }
   els.search.addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); trackOrder(); }}, { passive:false });
