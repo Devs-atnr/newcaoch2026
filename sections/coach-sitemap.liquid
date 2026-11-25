@@ -22,14 +22,18 @@
   {%- if map_menu.links.size > 0 -%}
     <div class="coach-map__grid">
       {%- for link in map_menu.links -%}
+        {%- liquid
+          assign link_title = link.title
+          if link.type == 'collection_link' and link.object.title != blank
+            assign link_title = link.object.title
+          endif
+          assign link_title = link_title | strip
+        -%}
+        {%- if link_title != blank or link.links.size > 0 -%}
         <div class="coach-map__col">
-          <a class="coach-map__head" href="{{ link.url }}">
-            {%- if link.type == 'collection_link' and link.object.title != blank -%}
-              {{ link.object.title | escape }}
-            {%- else -%}
-              {{ link.title | escape }}
-            {%- endif -%}
-          </a>
+          {%- if link_title != blank -%}
+            <a class="coach-map__head" href="{{ link.url }}">{{ link_title | escape }}</a>
+          {%- endif -%}
           {%- for child in link.links -%}
             {%- if child.links.size > 0 -%}
               <a class="coach-map__group" href="{{ child.url }}">
@@ -68,6 +72,7 @@
             {%- endif -%}
           {%- endfor -%}
         </div>
+        {%- endif -%}
       {%- endfor -%}
     </div>
   {%- else -%}
@@ -94,11 +99,16 @@
   line-height: 1.2;
 }
 .coach-map__grid {
-  display: grid;
-  grid-template-columns: repeat(var(--map-cols, 5), minmax(0, 1fr));
-  gap: 36px var(--map-gap, 28px);
+  column-count: var(--map-cols, 5);
+  column-gap: var(--map-gap, 28px);
   width: min(100%, var(--map-width, 1180px));
   margin: 0 auto;
+}
+.coach-map__col {
+  break-inside: avoid;
+  display: inline-block;
+  width: 100%;
+  margin: 0 0 16px;
 }
 .coach-map__head,
 .coach-map__group,
@@ -113,8 +123,8 @@
   font-size: var(--map-link, 14px);
   font-weight: 700;
 }
-.coach-map__head { margin: 0 0 10px; }
-.coach-map__group { margin: 22px 0 8px; }
+.coach-map__head { margin: 0 0 8px; }
+.coach-map__group { margin: 14px 0 6px; }
 .coach-map__link {
   margin: 0 0 6px;
   font-size: var(--map-link, 14px);
@@ -128,11 +138,11 @@
 .coach-map__link:focus-visible { outline: none; box-shadow: none; }
 .coach-map__empty { margin: 0; text-align: center; }
 @media screen and (max-width: 989px) {
-  .coach-map__grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .coach-map__grid { column-count: 3; }
 }
 @media screen and (max-width: 749px) {
   .coach-map { padding: 32px 16px 48px; }
-  .coach-map__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 28px 16px; }
+  .coach-map__grid { column-count: 2; }
 }
 {% endstylesheet %}
 
