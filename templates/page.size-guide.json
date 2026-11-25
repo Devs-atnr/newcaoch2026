@@ -48,8 +48,26 @@
         "size_table_FTR4Ke": {
           "type": "size_table",
           "settings": {
-            "group": "Men",
+            "group": "Women",
             "category": "Bottoms",
+            "title": "Bottoms",
+            "custom_html": "",
+            "region_column": 0,
+            "headers": "Size (Numeric)|Size (Letter)|Waist (in)|Waist (cm)|UK",
+            "rows": "28|XS|27-29|69-84|28\n30|S|29-31|84-89|30\n32|M|31-33|79-84|32\n34|L|33-35|84-89|34\n36|XL|35-37|89-94|36\n38|XXL|37-39|94-99|38",
+            "note_heading": "",
+            "note": "",
+            "image_width": 120,
+            "image_height": 0,
+            "measure_icon": false,
+            "page_handles": ""
+          }
+        },
+        "size_table_cb8fQU": {
+          "type": "size_table",
+          "settings": {
+            "group": "Women",
+            "category": "abc",
             "title": "Bottoms",
             "custom_html": "",
             "region_column": 0,
@@ -86,6 +104,7 @@
         "size_guide_jLRTzi",
         "size_table_AzPGd8",
         "size_table_FTR4Ke",
+        "size_table_cb8fQU",
         "size_table_pYrwTF"
       ],
       "settings": {
