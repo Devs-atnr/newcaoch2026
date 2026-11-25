@@ -341,10 +341,12 @@
                       {%- if block.settings.whatsapp_text != blank -%}
                         <div class="coach-desk__rte">{{ block.settings.whatsapp_text }}</div>
                       {%- endif -%}
-                      {%- if block.settings.qr != blank -%}
-                        {{ block.settings.qr | image_url: width: 320 | image_tag: class: 'coach-desk__qr', alt: 'WhatsApp code' }}
-                      {%- else -%}
-                        <img class="coach-desk__qr" alt="WhatsApp code" width="150" height="150" src="https://api.qrserver.com/v1/create-qr-code/?size=300x300&data={{ desk_whatsapp | url_encode }}">
+                      {%- if block.settings.show_qr != 'hide' -%}
+                        {%- if block.settings.qr != blank -%}
+                          {{ block.settings.qr | image_url: width: 320 | image_tag: class: 'coach-desk__qr', alt: 'WhatsApp code' }}
+                        {%- else -%}
+                          <img class="coach-desk__qr" alt="WhatsApp code" width="150" height="150" src="https://api.qrserver.com/v1/create-qr-code/?size=300x300&data={{ desk_whatsapp | url_encode }}">
+                        {%- endif -%}
                       {%- endif -%}
                     </div>
                     <div class="coach-desk__channel">
@@ -1773,6 +1775,10 @@ if (!customElements.get('coach-care-nav')) {
         { "type": "text", "id": "whatsapp_link", "label": "WhatsApp link", "default": "https://wa.me/966501995607" },
         { "type": "richtext", "id": "whatsapp_text", "label": "WhatsApp text", "default": "<p>Click <a href=\"https://wa.me/966501995607\" target=\"_blank\">here</a> or scan the code below to chat to us.</p>" },
         { "type": "image_picker", "id": "qr", "label": "WhatsApp code" },
+        { "type": "select", "id": "show_qr", "label": "QR code", "default": "show", "options": [
+          { "value": "show", "label": "Show" },
+          { "value": "hide", "label": "Hide" }
+        ] },
         { "type": "text", "id": "call_heading", "label": "Call heading", "default": "Call Us" },
         { "type": "text", "id": "call_icon", "label": "Call icon", "default": "https://coach.sa/cdn/shop/files/ce-callus-icon1_200x.png?v=1746175270" },
         { "type": "richtext", "id": "call_text", "label": "Call text", "default": "<p>For general inquiries, shopping advice and questions about your order status, give us a ring. We're always happy to hear from you.</p>" },
