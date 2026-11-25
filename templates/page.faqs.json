@@ -1,0 +1,62 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "customer_care": {
+      "type": "customer-care",
+      "blocks": {
+        "custom_liquid_AcVRHH": {
+          "type": "custom_liquid",
+          "settings": {
+            "code": "<div style=\"font-family: Arial, Helvetica, sans-serif; color: #111111; line-height: 1.5; max-width: 800px; margin: 0 auto; padding: 20px;\">\n  <h2 style=\"font-size: 26px; font-weight: 700; margin: 0 0 18px 0; color: #000000;\">Shipping</h2>\n\n  <p style=\"font-size: 13px; margin: 0 0 14px 0;\">\n    <strong style=\"font-weight: 700;\">Coach ships to all areas of the Kingdom of Saudi Arabia.</strong> Delivery times commence from the date of order.\n  </p>\n\n  <p style=\"font-size: 13px; margin: 0 0 16px 0;\">\n    Please see the table below on shipping times and charges:\n  </p>\n\n  <table style=\"width: 100%; max-width: 620px; border-collapse: collapse; margin: 0 0 12px 0; font-size: 13px;\">\n    <thead>\n      <tr style=\"background-color: #ececec;\">\n        <th style=\"border: 1px solid #d4d4d4; padding: 12px 14px; text-align: left; font-weight: 700; width: 34%;\">Shipping Options</th>\n        <th style=\"border: 1px solid #d4d4d4; padding: 12px 14px; text-align: left; font-weight: 700; width: 37%;\">Price</th>\n        <th style=\"border: 1px solid #d4d4d4; padding: 12px 14px; text-align: left; font-weight: 700; width: 29%;\">Delivery Time</th>\n      </tr>\n    </thead>\n    <tbody>\n      <tr>\n        <td style=\"border: 1px solid #d4d4d4; padding: 12px 14px; font-weight: 700;\">Same Day Delivery (Riyadh)*</td>\n        <td style=\"border: 1px solid #d4d4d4; padding: 12px 14px;\">Free over 500 SAR; else, 50 SAR</td>\n        <td style=\"border: 1px solid #d4d4d4; padding: 12px 14px;\">1 Business Day</td>\n      </tr>\n      <tr>\n        <td style=\"border: 1px solid #d4d4d4; padding: 12px 14px; font-weight: 700;\">Standard Delivery</td>\n        <td style=\"border: 1px solid #d4d4d4; padding: 12px 14px;\">Free over 500 SAR; else, 50 SAR</td>\n        <td style=\"border: 1px solid #d4d4d4; padding: 12px 14px;\">3–4 Business Days</td>\n      </tr>\n    </tbody>\n  </table>\n\n  <p style=\"font-size: 12px; font-style: italic; color: #222222; margin: 0 0 28px 0; max-width: 620px;\">\n    *Same Day Delivery is subject to availability and limited to Riyadh. Orders must be placed by 1:00 PM Saudi time, with all required information to shipping partner is confirmed by the customer same-day.\n  </p>\n\n  <p style=\"font-size: 13px; margin: 0 0 18px 0;\">\n    Once you complete your order, you will receive an email with all the information related to shipment. Delivery is free above 500 SAR and charged 50 SAR below that. Orders will be sent upon receipt of payment, subject to confirmation and stock availability. Stock issues may cause delays or cancellations.\n  </p>\n\n  <p style=\"font-size: 13px; margin: 0 0 18px 0;\">\n    In case of unavailability, we will respond to your inquiry within 48 hours.\n  </p>\n\n  <p style=\"font-size: 13px; margin: 0 0 18px 0;\">\n    Delivery may take longer in rural areas or during logistics delays. We appreciate your patience and will stay in contact throughout.\n  </p>\n\n  <p style=\"font-size: 13px; margin: 0 0 22px 0;\">\n    Delivery times are estimates and may vary due to courier issues or peak periods such as promotions or sales.\n  </p>\n\n  <h2 style=\"font-size: 26px; font-weight: 700; margin: 0 0 14px 0; color: #000000;\">Claims for Non-Delivery</h2>\n\n  <p style=\"font-size: 13px; margin: 0 0 22px 0;\">\n    If you do not receive your order within the expected time, please contact us at <a href=\"mailto:customercare@coach.sa\" style=\"color: #111111; text-decoration: none;\">customercare@coach.sa</a> so we can coordinate with the carrier.\n  </p>\n\n  <h2 style=\"font-size: 26px; font-weight: 700; margin: 0 0 14px 0; color: #000000;\">Damaged Deliveries</h2>\n\n  <p style=\"font-size: 13px; margin: 0 0 28px 0;\">\n    Please inspect your order upon receipt. If damaged or incorrect, email <a href=\"mailto:customercare@coach.sa\" style=\"color: #111111; text-decoration: none;\">customercare@coach.sa</a> with photos for evaluation and resolution.\n  </p>\n\n  <h2 style=\"font-size: 26px; font-weight: 700; margin: 0 0 14px 0; color: #000000;\">Important Notice Regarding Mobile Number Accuracy</h2>\n\n  <p style=\"font-size: 13px; margin: 0 0 18px 0;\">\n    The mobile number provided in the shipping and pickup details is a critical part of your order. It is used to confirm delivery, coordinate pickup, and handle any exceptions such as product unavailability or delivery issues.\n  </p>\n\n  <p style=\"font-size: 13px; margin: 0 0 18px 0;\">\n    By placing an order, the customer confirms that the mobile number entered is accurate and reachable.\n  </p>\n\n  <p style=\"font-size: 13px; margin: 0 0 18px 0;\">\n    We are not responsible for failed deliveries, delays, or delivery to the wrong recipient due to incorrect or unreachable contact information.\n  </p>\n\n  <p style=\"font-size: 13px; margin: 0 0 18px 0;\">\n    If the mobile number is incorrect, this may result in the order being delivered to the wrong person, with no way for us to confirm or reverse the delivery. In such cases, we will not be liable for any resulting loss or dissatisfaction.\n  </p>\n\n  <p style=\"font-size: 13px; margin: 0;\">\n    Please ensure your contact information is correct before completing your order.\n  </p>\n</div>",
+            "page_handles": ""
+          }
+        }
+      },
+      "block_order": [
+        "custom_liquid_AcVRHH"
+      ],
+      "settings": {
+        "menu": "footer-menu-copy",
+        "sidebar_width": 33,
+        "sidebar_background": "#f5f5f5",
+        "content_background": "#ffffff",
+        "sticky_sidebar": true,
+        "sticky_top": 24,
+        "mobile_collapse": false,
+        "heading_size": 20,
+        "heading_color": "#111111",
+        "heading_weight": "700",
+        "category_size": 16,
+        "category_color": "#111111",
+        "category_weight": "700",
+        "category_uppercase": true,
+        "link_size": 14,
+        "link_color": "#111111",
+        "active_color": "#111111",
+        "underline_active": true,
+        "hover_color": "#111111",
+        "category_space": 28,
+        "link_space": 12,
+        "sidebar_padding_y": 48,
+        "sidebar_padding_x": 32,
+        "content_padding_y": 48,
+        "content_padding_x": 48,
+        "content_max": 1200,
+        "min_height": 0,
+        "mobile_padding": 16,
+        "mobile_spacing": 0
+      }
+    }
+  },
+  "order": [
+    "customer_care"
+  ]
+}
