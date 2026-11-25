@@ -313,6 +313,55 @@
                 </div>
               {%- when 'divider' -%}
                 <hr class="coach-care__divider" {{ block.shopify_attributes }}>
+              {%- when 'size_table' -%}
+              {%- when 'size_guide' -%}
+                <coach-care-size class="coach-care__size" {{ block.shopify_attributes }} style="--sg-max: {{ block.settings.max_width }}px; --sg-title: {{ block.settings.heading_size }}px;">
+                  {%- if block.settings.heading != blank -%}
+                    <h2 class="coach-care__size-title">{{ block.settings.heading | escape }}</h2>
+                  {%- endif -%}
+                  <label class="coach-care__select">
+                    <span class="visually-hidden">{{ block.settings.group_label | escape }}</span>
+                    <select data-size-group></select>
+                  </label>
+                  <label class="coach-care__select">
+                    <span class="visually-hidden">{{ block.settings.category_label | escape }}</span>
+                    <select data-size-category></select>
+                  </label>
+                  <button class="coach-care__button coach-care__size-btn" type="button" data-size-view>{{ block.settings.button_label | escape }}</button>
+                  <div data-size-result></div>
+                  <script type="application/json" data-size-charts>
+                    [
+                      {%- assign chart_index = 0 -%}
+                      {%- for chart in section.blocks -%}
+                        {%- if chart.type == 'size_table' -%}
+                          {%- liquid
+                            assign chart_ok = true
+                            if chart.settings.page_handles != blank
+                              assign chart_ok = false
+                              assign chart_handles = chart.settings.page_handles | split: ','
+                              for chart_handle in chart_handles
+                                assign chart_clean = chart_handle | strip | downcase
+                                if chart_clean == page.handle
+                                  assign chart_ok = true
+                                endif
+                              endfor
+                            endif
+                          -%}
+                          {%- if chart_ok -%}
+                            {%- if chart_index > 0 -%},{%- endif -%}
+                            {%- assign chart_index = chart_index | plus: 1 -%}
+                            {
+                              "group": {{ chart.settings.group | json }},
+                              "category": {{ chart.settings.category | json }},
+                              "headers": [{%- assign header_cells = chart.settings.headers | split: '|' -%}{%- for cell in header_cells -%}{{ cell | strip | json }}{%- unless forloop.last -%},{%- endunless -%}{%- endfor -%}],
+                              "rows": [{%- assign row_lines = chart.settings.rows | newline_to_br | split: '<br />' -%}{%- assign row_index = 0 -%}{%- for line in row_lines -%}{%- assign clean_line = line | strip | replace: '<br>', '' -%}{%- if clean_line != blank -%}{%- if row_index > 0 -%},{%- endif -%}{%- assign row_index = row_index | plus: 1 -%}[{%- assign row_cells = clean_line | split: '|' -%}{%- for cell in row_cells -%}{{ cell | strip | json }}{%- unless forloop.last -%},{%- endunless -%}{%- endfor -%}]{%- endif -%}{%- endfor -%}]
+                            }
+                          {%- endif -%}
+                        {%- endif -%}
+                      {%- endfor -%}
+                    ]
+                  </script>
+                </coach-care-size>
               {%- when 'spacer' -%}
                 <div class="coach-care__spacer" style="--care-spacer: {{ block.settings.height }}px; --care-spacer-m: {{ block.settings.height_mobile }}px;" {{ block.shopify_attributes }}></div>
             {%- endcase -%}
@@ -759,6 +808,62 @@
 .coach-care__faq .coach-care__rte { padding-bottom: 14px; }
 .coach-care__divider { margin: 24px 0; border: 0; border-top: 1px solid #e6e6e6; }
 .coach-care__spacer { height: var(--care-spacer, 24px); }
+.coach-care__size { width: min(100%, var(--sg-max, 640px)); }
+.coach-care__size-title {
+  margin: 0 0 18px;
+  font-size: var(--sg-title, 22px);
+  font-weight: 700;
+  line-height: 1.2;
+}
+.coach-care__select { display: block; margin: 0 0 12px; }
+.coach-care__select select {
+  width: 100%;
+  height: 44px;
+  padding: 0 36px 0 12px;
+  border: 1px solid #c8c8c8;
+  border-radius: 0;
+  background: #ffffff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5 6 6.5 11 1.5' fill='none' stroke='%23111' stroke-width='1.2'/%3E%3C/svg%3E") right 12px center / 12px 8px no-repeat;
+  box-shadow: none;
+  color: #111111;
+  font-family: inherit;
+  font-size: 14px;
+  appearance: none;
+}
+.coach-care__select select:focus,
+.coach-care__select select:focus-visible {
+  border-color: #111111;
+  outline: none;
+  box-shadow: none;
+}
+.coach-care__size-btn {
+  width: 100%;
+  margin-top: 4px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.coach-care__size-chart { margin-top: 28px; }
+.coach-care__size-name { margin: 0 0 12px; font-size: 18px; font-weight: 700; }
+.coach-care__size-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.coach-care__size-table th,
+.coach-care__size-table td {
+  padding: 10px 8px;
+  border: 1px solid #e4e4e4;
+  text-align: center;
+  font-weight: 400;
+}
+.coach-care__size-table th { background: #f3f3f3; font-weight: 600; }
+.coach-care__region {
+  max-width: 100%;
+  border: 0;
+  background: transparent url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5 6 6.5 11 1.5' fill='none' stroke='%23111' stroke-width='1.2'/%3E%3C/svg%3E") right center / 10px 7px no-repeat;
+  color: inherit;
+  font: inherit;
+  font-weight: 600;
+  text-align: center;
+  appearance: none;
+  padding: 0 14px 0 0;
+  cursor: pointer;
+}
 @media screen and (max-width: 989px) {
   .coach-care__frame {
     grid-template-columns: minmax(0, 1fr);
@@ -827,6 +932,81 @@ if (!customElements.get('coach-care-login')) {
         if (!first) return;
         event.preventDefault();
       });
+    }
+  });
+}
+if (!customElements.get('coach-care-size')) {
+  customElements.define('coach-care-size', class extends HTMLElement {
+    connectedCallback() {
+      if (this.dataset.bound === 'true') return;
+      this.dataset.bound = 'true';
+      const source = this.querySelector('[data-size-charts]');
+      let charts = [];
+      try { charts = JSON.parse(source ? source.textContent : '[]'); } catch (error) { charts = []; }
+      this.charts = charts.filter((chart) => chart && chart.group && chart.category);
+      this.groupSelect = this.querySelector('[data-size-group]');
+      this.categorySelect = this.querySelector('[data-size-category]');
+      this.result = this.querySelector('[data-size-result]');
+      this.regionIndex = 0;
+      const groups = [...new Set(this.charts.map((chart) => chart.group))];
+      groups.forEach((group) => {
+        const option = document.createElement('option');
+        option.value = group;
+        option.textContent = group;
+        this.groupSelect.appendChild(option);
+      });
+      this.groupSelect.addEventListener('change', () => {
+        this.fillCategories();
+        this.render();
+      });
+      this.categorySelect.addEventListener('change', () => this.render());
+      const button = this.querySelector('[data-size-view]');
+      if (button) button.addEventListener('click', () => this.render());
+      this.fillCategories();
+      this.render();
+    }
+    fillCategories() {
+      const categories = [...new Set(this.charts.filter((chart) => chart.group === this.groupSelect.value).map((chart) => chart.category))];
+      const current = this.categorySelect.value;
+      this.categorySelect.innerHTML = '';
+      categories.forEach((category) => {
+        const option = document.createElement('option');
+        option.value = category;
+        option.textContent = category;
+        this.categorySelect.appendChild(option);
+      });
+      if (categories.includes(current)) this.categorySelect.value = current;
+    }
+    render() {
+      const chart = this.charts.find((item) => item.group === this.groupSelect.value && item.category === this.categorySelect.value);
+      if (!chart) {
+        this.result.innerHTML = '';
+        return;
+      }
+      const headers = chart.headers || [];
+      const rows = chart.rows || [];
+      const splitAt = headers.length > 4 ? 4 : headers.length;
+      const fixed = headers.slice(0, splitAt);
+      const regions = headers.slice(splitAt);
+      if (this.regionIndex >= regions.length) this.regionIndex = 0;
+      const esc = (value) => String(value == null ? '' : value).replace(/[&<>"']/g, (char) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[char]));
+      const head = fixed.map((cell) => `<th>${esc(cell)}</th>`).join('');
+      const regionHead = regions.length
+        ? `<th><select class="coach-care__region" data-size-region>${regions.map((cell, index) => `<option value="${index}"${index === this.regionIndex ? ' selected' : ''}>${esc(cell)}</option>`).join('')}</select></th>`
+        : '';
+      const body = rows.map((row) => {
+        const base = fixed.map((_, index) => `<td>${esc(row[index] || '')}</td>`).join('');
+        const region = regions.length ? `<td>${esc(row[splitAt + this.regionIndex] || '')}</td>` : '';
+        return `<tr>${base}${region}</tr>`;
+      }).join('');
+      this.result.innerHTML = `<div class="coach-care__size-chart"><h3 class="coach-care__size-name">${esc(chart.category)}</h3><table class="coach-care__size-table"><thead><tr>${head}${regionHead}</tr></thead><tbody>${body}</tbody></table></div>`;
+      const regionSelect = this.result.querySelector('[data-size-region]');
+      if (regionSelect) {
+        regionSelect.addEventListener('change', () => {
+          this.regionIndex = Number(regionSelect.value) || 0;
+          this.render();
+        });
+      }
     }
   });
 }
@@ -939,6 +1119,31 @@ if (!customElements.get('coach-care-nav')) {
         { "type": "color", "id": "button_background", "label": "Button background", "default": "#111111" },
         { "type": "color", "id": "button_text", "label": "Button text", "default": "#ffffff" },
         { "type": "text", "id": "page_handles", "label": "Limit to page handles", "info": "Comma-separated handles. Leave blank to show on every page using this template." }
+      ]
+    },
+    {
+      "type": "size_guide",
+      "name": "Size guide",
+      "limit": 1,
+      "settings": [
+        { "type": "text", "id": "heading", "label": "Heading", "default": "Size Guide" },
+        { "type": "text", "id": "button_label", "label": "Button label", "default": "View size guide" },
+        { "type": "text", "id": "group_label", "label": "First menu label", "default": "Department" },
+        { "type": "text", "id": "category_label", "label": "Second menu label", "default": "Category" },
+        { "type": "range", "id": "heading_size", "min": 14, "max": 40, "step": 1, "unit": "px", "label": "Heading size", "default": 22 },
+        { "type": "range", "id": "max_width", "min": 320, "max": 1000, "step": 20, "unit": "px", "label": "Chart width", "default": 640 },
+        { "type": "text", "id": "page_handles", "label": "Limit to page handles", "info": "Comma-separated handles, for example size-guide. Leave blank to show on every page using this template." }
+      ]
+    },
+    {
+      "type": "size_table",
+      "name": "Size table",
+      "settings": [
+        { "type": "text", "id": "group", "label": "First menu option", "default": "Men" },
+        { "type": "text", "id": "category", "label": "Second menu option", "default": "Bottoms" },
+        { "type": "text", "id": "headers", "label": "Column headings", "default": "Size (Numeric)|Size (Letter)|Waist (in)|Waist (cm)|UK", "info": "Separate columns with |. The first four stay visible. Every heading after the fourth becomes a choice in the last column." },
+        { "type": "textarea", "id": "rows", "label": "Rows", "default": "28|XS|27-29|69-84|28\n30|S|29-31|84-89|30\n32|M|31-33|79-84|32\n34|L|33-35|84-89|34\n36|XL|35-37|89-94|36\n38|XXL|37-39|94-99|38", "info": "One size per line. Separate cells with | in the same order as the headings." },
+        { "type": "text", "id": "page_handles", "label": "Limit to page handles", "info": "Comma-separated handles. Leave blank to show with the Size guide block." }
       ]
     },
     {
