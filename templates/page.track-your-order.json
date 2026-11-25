@@ -1,0 +1,9 @@
+{
+  "sections": {
+    "tracking": {
+      "type": "coach-order-tracking",
+      "settings": {}
+    }
+  },
+  "order": ["tracking"]
+}

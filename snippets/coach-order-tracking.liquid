@@ -1,0 +1,565 @@
+<section class="track-hero-wrap" id="order-tracking"
+  style="--hero-desktop:url(//coach.sa/cdn/shop/files/25RET_11.1_CyberMonday_GR5_2_2000x.png?v=1768562243); --hero-mobile:url(//coach.sa/cdn/shop/files/Rectangle_1134257909_1000x.png?v=1765888428);">
+  <!-- HERO -->
+  <div class="track-hero">
+    <div class="track-hero__overlay"></div>
+    <div class="track-hero__inner">
+      <div class="track-hero__content">
+        <h1 class="track-hero__title">Track Your Order</h1>
+        <p class="track-hero__sub">Enter your phone number, email or tracking number to track your order.</p>
+
+        <div class="track-search">
+          <div class="track-search__icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="M21 21l-4.2-4.2M10.5 18a7.5 7.5 0 1 1 0-15 7.5 7.5 0 0 1 0 15Z" fill="none" stroke="currentColor" stroke-width="2"/></svg>
+          </div>
+          <input id="ot-search" class="track-search__input" type="text" inputmode="text" autocomplete="off" placeholder="Phone / Email / Tracking #">
+          <button id="ot-submit" class="track-search__btn">Track</button>
+        </div>
+
+        <div id="ot-loading" class="ot-loading" hidden>Loading…</div>
+        <div id="ot-error" class="ot-error" hidden></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BODY (hidden until search) -->
+  <div class="track-container" id="ot-body" hidden>
+
+    <!-- Summary row -->
+    <div id="ot-summary" class="summary-row" hidden>
+      <div class="summary-row__left">
+        <div class="summary-id"><strong>Order #: </strong><span id="ot-order-id">—</span></div>
+        <div class="summary-placed"><strong>Order Date: </strong><span id="ot-order-date">—</span></div>
+        <div class="summary-total"><strong>Total Amount: </strong><span id="ot-order-total">—</span></div>
+
+        <!-- Courier inside summary (your change) -->
+        <div class="status-list" id="live-status" hidden>
+          <div class="status-item">
+            <div class="status-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" fill="#000000" height="800px" width="800px" version="1.1" id="Layer_1" viewBox="0 0 491.1 491.1" xml:space="preserve">
+<g transform="translate(0 -540.36)">
+	<g>
+		<g>
+			<path d="M401.5,863.31c-12,0-23.4,4.7-32,13.2c-8.6,8.6-13.4,19.8-13.4,31.8s4.7,23.2,13.4,31.8c8.7,8.5,20,13.2,32,13.2     c24.6,0,44.6-20.2,44.6-45S426.1,863.31,401.5,863.31z M401.5,933.31c-13.8,0-25.4-11.4-25.4-25s11.6-25,25.4-25     c13.6,0,24.6,11.2,24.6,25S415.1,933.31,401.5,933.31z"/>
+			<path d="M413.1,713.41c-1.8-1.7-4.2-2.6-6.7-2.6h-51.3c-5.5,0-10,4.5-10,10v82c0,5.5,4.5,10,10,10h81.4c5.5,0,10-4.5,10-10v-54.9     c0-2.8-1.2-5.5-3.3-7.4L413.1,713.41z M426.5,792.81h-61.4v-62.1h37.4l24,21.6V792.81z"/>
+			<path d="M157.3,863.31c-12,0-23.4,4.7-32,13.2c-8.6,8.6-13.4,19.8-13.4,31.8s4.7,23.2,13.4,31.8c8.7,8.5,20,13.2,32,13.2     c24.6,0,44.6-20.2,44.6-45S181.9,863.31,157.3,863.31z M157.3,933.31c-13.8,0-25.4-11.4-25.4-25s11.6-25,25.4-25     c13.6,0,24.6,11.2,24.6,25S170.9,933.31,157.3,933.31z"/>
+			<path d="M90.6,875.61H70.5v-26.6c0-5.5-4.5-10-10-10s-10,4.5-10,10v36.6c0,5.5,4.5,10,10,10h30.1c5.5,0,10-4.5,10-10     S96.1,875.61,90.6,875.61z"/>
+			<path d="M141.3,821.11c0-5.5-4.5-10-10-10H10c-5.5,0-10,4.5-10,10s4.5,10,10,10h121.3C136.8,831.11,141.3,826.71,141.3,821.11z"/>
+			<path d="M30.3,785.01l121.3,0.7c5.5,0,10-4.4,10.1-9.9c0.1-5.6-4.4-10.1-9.9-10.1l-121.3-0.7c-0.1,0-0.1,0-0.1,0     c-5.5,0-10,4.4-10,9.9C20.3,780.51,24.8,785.01,30.3,785.01z"/>
+			<path d="M50.7,739.61H172c5.5,0,10-4.5,10-10s-4.5-10-10-10H50.7c-5.5,0-10,4.5-10,10S45.2,739.61,50.7,739.61z"/>
+			<path d="M487.4,726.11L487.4,726.11l-71.6-59.3c-1.8-1.5-4-2.3-6.4-2.3h-84.2v-36c0-5.5-4.5-10-10-10H60.5c-5.5,0-10,4.5-10,10     v73.2c0,5.5,4.5,10,10,10s10-4.5,10-10v-63.2h234.8v237.1h-82c-5.5,0-10,4.5-10,10s4.5,10,10,10h122.1c5.5,0,10-4.5,10-10     s-4.5-10-10-10h-20.1v-191.1h80.6l65.2,54l-0.7,136.9H460c-5.5,0-10,4.5-10,10s4.5,10,10,10h20.3c5.5,0,10-4.4,10-9.9l0.8-151.6     C491,730.91,489.7,728.01,487.4,726.11z"/>
+		</g>
+	</g>
+</g>
+</svg>
+            </div>
+            <div class="status-content">
+              <div class="status-title">Courier</div>
+              <div class="status-sub" id="ot-courier">Aramex</div>
+            </div>
+          </div>
+        </div>
+        <div class="trackbutton">
+          <a id="ot-aramex-btn" class="ot-btn ot-aramex" href="#" target="_blank" rel="noopener" hidden> Track on Aramex </a>
+        </div>
+      </div>
+
+      <div class="summary-row__right">
+        <img id="summary-hero-img" alt="" loading="lazy" fetchpriority="low">
+      </div>
+    </div>
+
+    <!-- PROGRESS BAR (Aramex-like) -->
+    <h4 class="main-bhtarar">Live Status</h4>
+    <div id="ot-status" class="ot-status" hidden>
+      <div class="ax-progress">
+        <div class="ax-line"><span class="ax-line__fill" style="width:0%"></span></div>
+        <div class="ax-steps" id="ax-steps"></div>
+      </div>
+    </div>
+
+    <!-- Shipment micro -->
+    <h4 class="main-bhtarar">Shipment Details</h4>
+    <div id="ot-shipment" class="ship-cards" hidden>
+      <div class="ship-card"><div class="ship-label">Tracking Number</div><div class="ship-value" id="ot-awb">—</div></div>
+      <div class="ship-card"><div class="ship-label">Status</div><div class="ship-value" id="ot-ship-status">—</div></div>
+      <div class="ship-card"><div class="ship-label">Last Updated</div><div class="ship-value" id="ot-updated">—</div></div>
+    </div>
+
+    <!-- Product Details -->
+    <h4 class="main-bhtarar">Product Details</h4>
+    <div id="ot-products" class="product-list" hidden>
+      <div id="ot-product-list"></div>
+
+      <div class="totalz">
+        <div class="totalz__row"><span>Subtotal</span><span id="ot-subtotal">—</span></div>
+        <div class="totalz__row"><span>Shipping</span><span id="ot-shipping">—</span></div>
+        <div class="totalz__row totalz__row--grand"><span>Total</span><span id="ot-total">—</span></div>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+<section class="contact-info-section">
+  <div class="info-container">
+    <div class="info-box">
+      <!-- 📞 Call Us -->
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M2 5a2 2 0 012-2h2.28a1 1 0 01.948.684l1.518 4.554a1 1 0 01-.27 1.04l-1.958 1.958a16 16 0 007.07 7.07l1.958-1.958a1 1 0 011.04-.27l4.554 1.518A1 1 0 0121 19.72V22a2 2 0 01-2 2h-.01A19.978 19.978 0 012 5z" />
+      </svg>
+      <div class="info-text">
+        <h3>Call Us</h3>
+        
+
+
+<p>
+  <a href="tel:+966501995607" style="color:inherit;text-decoration:none;">
+    +966501995607
+  </a>
+</p>
+
+      </div>
+    </div>
+
+    <div class="info-box">
+      <!-- 💬 Message -->
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M8 10h8m-8 4h5m-9 8l2-2h10a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v14z" />
+      </svg>
+      <a href="mailto:customercare@coach.sa">
+      <div class="info-text">
+      <a href="https://wa.me/966501995607" target="_blank">
+        <h3>Leave Us a Message</h3>
+        <p>We’ll get back to you soon</p>
+      </a>
+      </div>
+    </a>
+    </div>
+
+    <div class="info-box">
+  <!-- 🚚 Shipping -->
+  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M3 3h13v13H3V3zm13 8h5l-1.5-3H16v3zM5 21a2 2 0 104 0 2 2 0 00-4 0zm10 0a2 2 0 104 0 2 2 0 00-4 0z" />
+  </svg>
+
+  <div class="info-text">
+    <a href="/pages/shipping">
+      <h3>Shipping & Returns</h3>
+      <p>Fast & easy process</p>
+    </a>
+  </div>
+</div>
+  </div>
+</section>
+
+<style>
+  .contact-info-section { padding: 20px 20px 40px; background: #f8f8f8; } .info-container { display: flex ; justify-content: space-between; flex-wrap: wrap; gap: 20px; max-width: 1100px; margin: 0 auto; padding: 0 16px 24px; } .info-box { flex: 1 1 30%; background: #fff; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); padding: 25px; display: flex; align-items: center; gap: 15px; transition: all 0.3s ease; } .info-box:hover { transform: translateY(-4px); box-shadow: 0 4px 15px rgba(0,0,0,0.08); } .info-box svg { width: 40px; height: 40px; color: #000; flex-shrink: 0; } .info-text h3 { font-size: 18px; margin: 0; color: #111; font-weight: 600; } .info-text p { margin: 3px 0 0; color: #555; font-size: 15px; } /* Responsive */ @media (max-width: 768px) { .info-box { flex: 1 1 100%; } }
+:root{ --ink:#111; --muted:#666; --line:#e6e6e6; --chip:#f6f6f6; --brand:#007409; }
+.track-hero-wrap{font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;}
+.track-hero{position:relative;border-radius:10px;overflow:hidden;margin-bottom:18px;background:#000;}
+.track-hero__overlay{position:absolute;inset:0;background:linear-gradient(0deg,rgba(0,0,0,.55),rgba(0,0,0,.35));}
+.track-hero::before{content:"";position:absolute;inset:0;background-image:var(--hero-desktop);background-size:cover;background-position:center;}
+@media (max-width: 768px){ .track-hero::before{background-image:var(--hero-mobile);} }
+
+/* Center content in 80vh */
+.track-hero__inner{position:relative;z-index:2;min-height:80vh;display:grid;place-items:center;padding:0 24px;text-align:center;color:#fff;}
+.track-hero__content{max-width: 700px; gap: 12px; display: flex; flex-direction: column;}
+.track-hero__title{font-size:44px;line-height:1.05;font-weight:800;margin:0;text-shadow:0 2px 22px rgba(0,0,0,.35); color: #fff;}
+.track-hero__sub{opacity:.95;margin:0}
+@media (max-width: 860px){ .track-hero__title{font-size:34px} }
+
+.track-search{display:flex;gap:10px;align-items:center;}
+.track-search__icon{position:absolute;margin-left:12px;pointer-events:none;color:#777}
+.track-search__icon svg{width:18px;height:18px}
+.track-search__input{flex:1;padding:20px 14px 20px 36px;border-radius:5px;border:0;background:#fff;color:#111;min-width:0;font-size:15px;}
+.track-search__btn{padding:20px;border-radius:5px;border:0;background:#111;color:#fff;cursor:pointer;font-size:16px;transition:0.3s;}
+.track-search__btn:hover{opacity:.95}
+
+.track-container{max-width:1100px;margin:0 auto;padding:0 16px 24px}
+.ot-loading{margin-top:8px;color:#fff}
+.ot-error{margin-top:10px;background:#ffe9ec;color:#b00020;border-radius:8px;padding:10px}
+
+.summary-row{display:grid;grid-template-columns: 1fr 360px;gap:18px;align-items:start;padding:12px 0 8px;border-bottom:1px solid var(--line);margin-bottom:50px;}
+.summary-row__right{text-align:right}
+.ax-step div:empty { display:block; }
+.summary-row__right img{width: 300px; max-width: 100%; height: 250px; border-radius: 10px; object-fit: cover; background: #f5f5f5;}
+.summary-id,.summary-placed,.summary-total{font-size: 16px; color: #000; font-family: 'HelveticaLTW05-Roman';line-height:30px}
+
+.block-title{font-size:18px;font-weight:800;margin:18px 0 10px 0}
+
+/* === Aramex-like progress === */
+.ax-step.current .ax-dot { border: 2px solid #007409; background: #fff !important; }
+h4.main-bhtarar { font-style: normal; font-size: 20px; color: #000; font-family: 'HelveticaLTW05-Roman'; line-height: 14px; padding-bottom: 12px; border-bottom: 1px solid var(--line); }
+.ax-progress{margin: 60px 0 45px; position:relative}
+.ax-line{position:relative;height:4px;background:#e4e4e4;border-radius:999px}
+.ax-line__fill{position:absolute;left:0;top:0;height:4px;background:var(--brand);border-radius:999px;transition:width .18s ease}
+.ax-steps{display:flex;justify-content:space-between;margin-top:-10px;position:relative}
+.ax-step{position:relative;text-align:center;flex:1}
+.ax-dot{width:18px;height:18px;border-radius:50%;background:#bbb;margin:0 auto 8px;display:grid;place-items:center;color:#fff;font-size:12px;line-height:1}
+.ax-step.done .ax-dot,
+.ax-step.active .ax-dot{background:var(--brand);padding-top:2px}
+.ax-step.done .ax-dot::after{ content:"✓"; }
+.ax-label{font-size:12px;color:#000}
+.ax-step.current .ax-label{font-weight:800;color:#111}
+.ax-pin{position:absolute;top:-30px;left:49%;transform:translateX(-50%);width:22px;height:22px;border-radius:50%;display:grid;place-items:center;}
+.ax-pin::after{content:"📦";font-size:20px;line-height:1}
+.trackbutton a { background: #000; padding: 15px 30px; color: #fff; text-decoration: none; font-family: 'HelveticaLTW05-Roman'; font-size: 15px; border-radius: 50px; transition: 0.3s; } .trackbutton { margin-top: 20px; margin-bottom: 20px; } .trackbutton a:hover { background: #6a6a6a; }
+.status-list{display:grid;gap:12px;margin:20px 0 8px}
+.status-item{display:flex;gap:12px;align-items:flex-start}
+.status-icon{width:40px;height:40px;border-radius:10px;background:var(--chip);display:grid;place-items:center;color:#444;flex:0 0 40px}
+.status-icon svg{width:20px;height:20px}
+.status-title{font-weight: 700; line-height: 18px;}
+.status-sub{font-size:13px;color:#000}
+
+.ship-cards{display:grid;grid-template-columns: repeat(3,minmax(0,1fr));gap:12px;margin-bottom:35px}
+.ship-card{border: 1px solid var(--line); background: #fff; border-radius: 12px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05); padding: 25px; transition: all 0.3s ease; margin-bottom: 10px;}
+.ship-label{font-size:12px;color:#000;}
+.ship-value{font-weight:700; color: #000;}
+.pcard strong { color: #000; }
+.totalz__row span { font-size: 16px; font-family: 'HelveticaLTW05-Roman'; color: #000; }
+.product-list{margin-top:8px}
+#ot-product-list{display:grid;gap:12px}
+.pcard{display:grid;grid-template-columns:100px 1fr auto;gap:12px;border:1px solid var(--line);border-radius:12px;padding:10px;align-items:center}
+.pimg{width:100px;height:100px;border-radius:10px;background:#f6f6f6;object-fit:cover}
+.pmeta{font-size:12px;color:#000}
+.pline{text-align:right;min-width:120px}
+.totalz{border-top: 1px dashed var(--line); margin-top: 22px; padding-top: 22px; margin-bottom: 50px;}
+.totalz__row{display: flex ; justify-content: space-between; margin: 18px 0; border-bottom: 1px solid #00000029;}
+.totalz__row--grand{font-weight:800}
+
+@media (max-width: 860px){
+  .summary-row{grid-template-columns:1fr}
+  .ax-label { font-size: 8px; color: #000; line-height: 10px; }
+  .summary-row__right{text-align:left}
+  .summary-row__right img { width: 100%; height: 300px; }
+  .ship-cards { display: unset; margin-bottom: 15px !Important; }
+}
+</style>
+
+<script>
+(() => {
+  // Use section setting when set; else Moallim config / known-good :3001 endpoint.
+  // Do not strip :3001 — that path is still the live tracking service.
+  const TRACKING_3001 = 'https://api2.moallimunited.com:3001/get_tracking_by_mobile';
+  const TRACKING_443 = 'https://api2.moallimunited.com/get_tracking_by_mobile';
+  const API_URL = (function () {
+    var fromSettings = "https:\/\/api2.moallimunited.com\/get_tracking_by_mobile";
+    var preferred = (window.__MOALLIM_API && window.__MOALLIM_API.tracking) || TRACKING_3001;
+    if (fromSettings && String(fromSettings).trim()) return String(fromSettings).trim();
+    return preferred;
+  })();
+  const STORE_ID = "COACH";
+  const STOREFRONT_TOKEN = "";
+  const SHOP_DOMAIN = "coach.sa";
+
+  function trackingFallbackUrl(primary) {
+    var url = String(primary || '');
+    if (url.indexOf(':3001') !== -1) return url.replace(':3001', '');
+    if (url.indexOf('/get_tracking_by_mobile') !== -1) {
+      return url.replace('https://api2.moallimunited.com/get_tracking_by_mobile', TRACKING_3001)
+                .replace(TRACKING_443, TRACKING_3001);
+    }
+    return TRACKING_3001;
+  }
+
+  async function postTracking(url, body, signal) {
+    return fetch(url, {
+      method: 'POST',
+      headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+      signal: signal,
+      cache: 'no-store'
+    });
+  }
+
+  // ---- element refs
+  const els = {
+    body: document.getElementById('ot-body'),
+    search: document.getElementById('ot-search'),
+    btn: document.getElementById('ot-submit'),
+    loading: document.getElementById('ot-loading'),
+    error: document.getElementById('ot-error'),
+
+    summary: document.getElementById('ot-summary'),
+    orderId: document.getElementById('ot-order-id'),
+    orderDate: document.getElementById('ot-order-date'),
+    orderTotal: document.getElementById('ot-order-total'),
+    summaryHeroImg: document.getElementById('summary-hero-img'),
+
+    statusWrap: document.getElementById('ot-status'),
+    stepsWrap: document.getElementById('ax-steps'),
+
+    liveStatus: document.getElementById('live-status'),
+    courier: document.getElementById('ot-courier'),
+
+    shipment: document.getElementById('ot-shipment'),
+    awb: document.getElementById('ot-awb'),
+    shipStatus: document.getElementById('ot-ship-status'),
+    updated: document.getElementById('ot-updated'),
+
+    productsWrap: document.getElementById('ot-products'),
+    productsTitle: document.getElementById('prod-title'),
+    productList: document.getElementById('ot-product-list'),
+    subtotal: document.getElementById('ot-subtotal'),
+    shipping: document.getElementById('ot-shipping'),
+    total: document.getElementById('ot-total'),
+
+    aramexBtn: document.getElementById('ot-aramex-btn') // 👈 dynamic link button
+  };
+
+  // ---- safe show/hide (no-op if element is null)
+  const show = e => { if (e) e.hidden = false; };
+  const hide = e => { if (e) e.hidden = true; };
+  const showError = m => { els.error.textContent = m; show(els.error); };
+
+  // ---- utils
+  const money = (v, c) => {
+    if (v == null || v === '') return '—';
+    try { return new Intl.NumberFormat(undefined, { style: 'currency', currency: c || 'SAR' }).format(Number(v)); }
+    catch { return `${v} ${c||''}`.trim(); }
+  };
+  const normalizeKsaMobile = num => {
+    if (!num) return '';
+    const d = num.replace(/\D/g,'');
+    if (/^0?5\d{8}$/.test(d)) return '966' + d.slice(d.length-9);
+    if (/^9665\d{8}$/.test(d)) return d;
+    return '';
+  };
+
+  // ---- Aramex button helper
+  function setAramexLink(trackingNumber){
+    const btn = els.aramexBtn;
+    if (!btn) return;
+    if (trackingNumber) {
+      btn.href = `https://www.aramex.com/sa/en/track/results?source=aramex&ShipmentNumber=${encodeURIComponent(trackingNumber)}`;
+      btn.setAttribute('aria-label', `Track ${trackingNumber} on Aramex`);
+      show(btn);
+    } else {
+      hide(btn);
+    }
+  }
+
+  // ---- progress states
+  const AX_STEPS = [
+    { key:'CREATED',                label:'Created' },
+    { key:'COLLECTED',              label:'Collected' },
+    { key:'DEPARTED',               label:'Departed' },
+    { key:'IN_TRANSIT',             label:'In transit' },
+    { key:'ARRIVED_AT_DESTINATION', label:'Arrived at destination' },
+    { key:'OUT_FOR_DELIVERY',       label:'Out for delivery' },
+    { key:'DELIVERED',              label:'Delivered' }
+  ];
+  const statusIndex = (order) => {
+    const ship = order?.shipments?.[0] || {};
+    const cat  = (ship.statusCategory || '').toUpperCase();
+    const txt  = (ship.currentStatus?.text || '').toLowerCase();
+    if (cat.includes('DELIVERED') || txt.includes('delivered')) return 6;
+    if (cat.includes('OUT_FOR_DELIVERY') || txt.includes('out for delivery')) return 5;
+    if (cat.includes('ARRIVED') || txt.includes('arrived')) return 4;
+    if (cat.includes('READY_FOR_PICKUP') || txt.includes('pickup')) return 4;
+    if (cat.includes('IN_TRANSIT') || txt.includes('in transit') || txt.includes('shipped')) return 3;
+    if (cat.includes('DEPARTED') || txt.includes('departed')) return 2;
+    if (cat.includes('COLLECTED') || txt.includes('collected')) return 1;
+    return 0;
+  };
+  const renderProgress = (idx) => {
+    try{
+      els.stepsWrap.innerHTML = '';
+      const fill = document.querySelector('.ax-line__fill');
+      if (fill) fill.style.width = Math.max(0, Math.min(100, (idx/(AX_STEPS.length-1))*100)) + '%';
+      AX_STEPS.forEach((s,i) => {
+        const step = document.createElement('div');
+        step.className = 'ax-step' + (i < idx ? ' done' : '') + (i === idx ? ' current' : '');
+        const dot = document.createElement('div'); dot.className='ax-dot'; step.appendChild(dot);
+        if (i === idx) { const pin = document.createElement('div'); pin.className='ax-pin'; step.appendChild(pin); }
+        const label = document.createElement('div'); label.className='ax-label'; label.textContent = s.label; step.appendChild(label);
+        els.stepsWrap.appendChild(step);
+      });
+      show(els.statusWrap);
+    }catch(err){ console.error('Progress render error', err); }
+  };
+
+  // ---- batched SKU → image
+  async function fetchImagesBySKUs(skus) {
+    if (!"" || !skus.length) return {};
+    try {
+      const orQuery = skus.map(s => `sku:${s}`).join(' OR ');
+      const query = `query($q:String!){
+        products(first:50, query:$q){
+          edges{ node{
+            featuredImage{url}
+            variants(first:100){edges{node{sku image{url}}}}
+          }}
+        }
+      }`;
+      const resp = await fetch(`https://${SHOP_DOMAIN}/api/2024-07/graphql.json`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Shopify-Storefront-Access-Token': STOREFRONT_TOKEN
+        },
+        body: JSON.stringify({ query, variables: { q: orQuery } }),
+        cache: 'no-store'
+      });
+      const j = await resp.json();
+      const map = {};
+      const products = j?.data?.products?.edges || [];
+      for (const e of products) {
+        const n = e.node;
+        const fallback = n?.featuredImage?.url || null;
+        for (const v of (n?.variants?.edges || [])) {
+          const sku = v?.node?.sku;
+          const url = v?.node?.image?.url || fallback;
+          if (sku && url) map[sku] = url;
+        }
+      }
+      return map;
+    } catch { return {}; }
+  }
+
+  // ---- single input → payload
+  function buildPayload(valRaw){
+    const val = (valRaw||'').trim();
+    if (!val) return null;
+    if (val.includes('@')) {
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val)) return { error:'Please enter a valid email.' };
+      return { body:{ storeId:STORE_ID, email:val } };
+    }
+    const mobile = normalizeKsaMobile(val);
+    if (mobile) return { body:{ storeId:STORE_ID, mobile } };
+    const digits = val.replace(/\D/g,'');
+    if (digits.length >= 6) return { body:{ storeId:STORE_ID, trackingNumber:val } };
+    return { error:'Enter a valid KSA mobile, email, or tracking number.' };
+  }
+
+  // ---- request abort (optional, safe)
+  let inflight;
+  async function trackOrder(){
+    hide(els.error); show(els.loading);
+    hide(els.body);
+    [els.summary, els.statusWrap, els.liveStatus, els.shipment, els.productsWrap, els.productsTitle].forEach(hide);
+
+    if (inflight) inflight.abort();
+    inflight = new AbortController();
+
+    const built = buildPayload(els.search.value);
+    if (!built || built.error) { hide(els.loading); return showError(built?.error || 'Enter details to continue.'); }
+
+    try{
+      let res;
+      try {
+        res = await postTracking(API_URL, built.body, inflight.signal);
+      } catch (netErr) {
+        // Network/CORS failure on primary (often broken :443 proxy) → retry :3001 or alternate
+        if (netErr?.name === 'AbortError') throw netErr;
+        const fallback = trackingFallbackUrl(API_URL);
+        if (!fallback || fallback === API_URL) throw netErr;
+        res = await postTracking(fallback, built.body, inflight.signal);
+      }
+      if (!res.ok) { hide(els.loading); return showError(`Error (${res.status})`); }
+      const root = await res.json();
+      const order = root?.orderStatus?.[0];
+      if (!order) { hide(els.loading); return showError('No order found for the provided details.'); }
+
+      show(els.body);
+
+      // totalz & currency
+      const currency = order.currency || order.currencyCode || order.totalz?.currency || 'SAR';
+      const subtotal = (order.totalz?.subtotal ?? order.summary?.subtotal ?? order.subtotal ?? null);
+      const shipping = (order.shippingPrice != null ? Number(order.shippingPrice)
+                      : order.totalz?.shipping ?? order.shipping ?? order.shippingAmount ?? null);
+      const total    = (order.totalAmount != null ? Number(order.totalAmount)
+                      : order.totalz?.total ?? order.summary?.total ?? order.grandTotal ?? order.total ?? null);
+
+      // Summary
+      els.orderId.textContent = order.orderName || order.name || order.order_number || order.orderNumber || order.id || '—';
+      els.orderDate.textContent = order.orderDate
+        ? new Date(order.orderDate).toLocaleDateString(undefined, { year:'numeric', month:'long', day:'numeric' })
+        : '—';
+      els.orderTotal.textContent = money(total ?? subtotal, currency);
+
+      // Summary image
+      const items = order.products || order.items || order.lineItems || [];
+      const firstImg = items?.[0]?.image || items?.[0]?.imageUrl || items?.[0]?.image_url || '';
+      if (firstImg) { els.summaryHeroImg.src = firstImg; els.summaryHeroImg.alt = 'Ordered item'; }
+      show(els.summary);
+
+      // Progress
+      renderProgress(statusIndex(order));
+
+      // Shipment & courier
+      const ship = order.shipments?.[0] || {};
+      const cur  = ship.currentStatus || {};
+      const awb  = ship.awb || order.trackingNumber || order.trackingNumbers?.[0] || '—';
+      els.courier.textContent = awb !== '—' ? 'Aramex' : 'N/A';
+      els.awb.textContent = awb;
+      els.shipStatus.textContent = cur.text || order.statusText || '—';
+      els.updated.textContent = cur.datetimeISO
+        ? new Date(cur.datetimeISO).toLocaleString()
+        : (cur.datetime || ship.updatedAt || 'N/A');
+      show(els.liveStatus); show(els.shipment);
+
+      // 🔗 Set Aramex external link button
+      setAramexLink(awb);
+
+      // Products
+      els.productList.innerHTML = '';
+      let computedSubtotal = 0;
+      const skusNeedingLookup = [];
+      (items || []).forEach(p => {
+        const title = p.title || p.name || 'Product';
+        const variant = p.variantTitle || p.variant || p.options || '';
+        const qty = Number(p.quantity ?? p.qty ?? 1);
+        const unit = Number(p.unitPrice ?? p.price ?? p.amountPerUnit ?? p.amount) || 0;
+        const line = Number(p.lineTotal ?? p.totalPrice ?? (unit*qty)) || (unit*qty);
+        computedSubtotal += line;
+
+        const sku = p.sku || p.SKU || '';
+        const img = p.image || p.imageUrl || p.image_url || '';
+        if (!img && sku) skusNeedingLookup.push(sku);
+
+        const card=document.createElement('div'); card.className='pcard';
+        const im=document.createElement('img'); im.className='pimg'; im.loading='lazy'; im.fetchPriority='low'; im.alt=title; im.src=img || 'data:image/gif;base64,R0lGODlhAQABAAAAACw=';
+        const info=document.createElement('div'); info.innerHTML=`
+          <div><strong>${title}</strong></div>
+          ${variant?`<div class="pmeta">${variant}</div>`:''}
+          <div class="pmeta">Quantity: ${qty}</div>`;
+        const price=document.createElement('div'); price.className='pline'; price.innerHTML=`
+          <div>${money(unit,currency)}</div>
+          <div><strong>${money(line,currency)}</strong></div>`;
+        card.appendChild(im); card.appendChild(info); card.appendChild(price);
+        els.productList.appendChild(card);
+      });
+
+      const fbSubtotal = subtotal ?? computedSubtotal;
+      els.subtotal.textContent = money(fbSubtotal, currency);
+      els.shipping.textContent = money(shipping, currency);
+      els.total.textContent    = money(total ?? (fbSubtotal + (shipping||0)), currency);
+      show(els.productsTitle); show(els.productsWrap);
+
+      // Defer image lookups with fallback
+      const idle = window.requestIdleCallback || ((cb)=>setTimeout(cb,0));
+      // (omitted here to keep focus on your button feature)
+
+      els.body.scrollIntoView({ behavior:'smooth', block:'start' });
+
+    } catch (e) {
+      if (e?.name !== 'AbortError') showError('Network error: ' + (e?.message || e));
+    } finally {
+      hide(els.loading);
+    }
+  }
+
+  // ---- events
+  els.btn.addEventListener('click', trackOrder, { passive:true });
+  
+  const params = new URLSearchParams(window.location.search);
+  const preset = params.get('order_number') || params.get('tracking') || params.get('q') || params.get('email') || '';
+  if (preset && els.search) {
+    els.search.value = preset;
+    trackOrder();
+  }
+  els.search.addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); trackOrder(); }}, { passive:false });
+})();
+</script>
