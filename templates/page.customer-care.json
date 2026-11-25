@@ -22,7 +22,7 @@
             "track_link": "/pages/track-your-order",
             "account_heading": "Sign in to Your Account",
             "account_text": "<p>Sign in to see your order history and update your account. (Welcome back!)</p>",
-            "email_label": "Email Address",
+            "email_label": "email",
             "email_error": "Email address is required.",
             "password_label": "Password",
             "password_error": "Password required.",
