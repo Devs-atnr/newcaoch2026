@@ -8,7 +8,7 @@
 
 <div
   id="CoachCare-{{ section.id }}"
-  class="coach-care{% if section.settings.sticky_sidebar %} is-sticky{% endif %}{% if section.settings.mobile_collapse %} is-collapse{% endif %}{% if section.settings.underline_active %} is-underline{% endif %}"
+  class="coach-care{% if section.settings.sticky_sidebar %} is-sticky{% endif %}{% if section.settings.mobile_collapse %} is-collapse{% endif %}{% if section.settings.underline_active %} is-underline{% endif %}{% if section.settings.mobile_left == 'hide' %} is-hide-left{% endif %}{% if section.settings.mobile_right == 'hide' %} is-hide-right{% endif %}"
   style="
     --care-side: {{ section.settings.sidebar_width | default: 33 }}%;
     --care-side-bg: {{ section.settings.sidebar_background | default: '#f5f5f5' }};
@@ -976,8 +976,10 @@
   .coach-care__spacer { height: var(--care-spacer-m, 16px); }
 }
 @media screen and (max-width: 749px) {
-  .coach-care__main { display: none; }
-  .coach-care__side { width: 100%; }
+  .coach-care.is-hide-left .coach-care__side { display: none; }
+  .coach-care.is-hide-right .coach-care__main { display: none; }
+  .coach-care.is-hide-left .coach-care__main,
+  .coach-care.is-hide-right .coach-care__side { width: 100%; }
 }
 @media screen and (min-width: 990px) {
   .coach-care__panel[hidden] { display: block !important; }
@@ -1151,6 +1153,15 @@ if (!customElements.get('coach-care-nav')) {
     { "type": "checkbox", "id": "sticky_sidebar", "label": "Sticky sidebar on desktop", "default": true },
     { "type": "range", "id": "sticky_top", "min": 0, "max": 200, "step": 4, "unit": "px", "label": "Sticky top offset", "default": 24 },
     { "type": "checkbox", "id": "mobile_collapse", "label": "Collapse navigation on mobile", "default": false },
+    { "type": "header", "content": "Mobile columns" },
+    { "type": "select", "id": "mobile_left", "label": "Left side on mobile", "default": "show", "options": [
+      { "value": "show", "label": "Show" },
+      { "value": "hide", "label": "Hide" }
+    ] },
+    { "type": "select", "id": "mobile_right", "label": "Right side on mobile", "default": "show", "options": [
+      { "value": "show", "label": "Show" },
+      { "value": "hide", "label": "Hide" }
+    ] },
     { "type": "header", "content": "Menu type" },
     { "type": "range", "id": "heading_size", "min": 10, "max": 40, "step": 1, "unit": "px", "label": "Main heading size", "default": 20 },
     { "type": "color", "id": "heading_color", "label": "Main heading color", "default": "#111111" },
