@@ -150,6 +150,7 @@
                       <p class="coach-care__account-action"><a class="coach-care__account-link" href="{{ track_url }}">{{ block.settings.track_link_label | escape }}</a>{% if block.settings.track_link_rest != blank %} {{ block.settings.track_link_rest | escape }}{% endif %}</p>
                     {%- endif -%}
                   </div>
+                  <span class="coach-care__rule" aria-hidden="true"></span>
                   <div class="coach-care__account-col">
                     {%- if block.settings.account_heading != blank -%}
                       <h2 class="coach-care__account-title">{{ block.settings.account_heading | escape }}</h2>
@@ -475,19 +476,19 @@
 }
 .coach-care__account {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  gap: 0;
-  align-items: start;
+  grid-template-columns: minmax(0, 1fr) 1px minmax(0, 1fr);
+  column-gap: var(--acc-gap, 36px);
+  align-items: stretch;
   width: 100%;
   color: var(--acc-text, #111);
   font-size: var(--acc-text-size, 13px);
   line-height: 1.45;
 }
-.coach-care__account-col:first-child { padding-right: 36px; }
-.coach-care__account-col + .coach-care__account-col {
-  border-left: 1px solid #e6e6e6;
-  margin-left: 0;
-  padding-left: 36px;
+.coach-care__rule {
+  display: block;
+  width: 1px;
+  min-height: 100%;
+  background: #c8c8c8;
 }
 .coach-care__account-title {
   margin: 0 0 14px;
@@ -760,13 +761,8 @@
   .coach-care.is-collapse .coach-care__toggle { display: flex; }
   .coach-care__account,
   .coach-care__split { grid-template-columns: minmax(0, 1fr); }
-  .coach-care__account-col:first-child { padding-right: 0; }
-  .coach-care__account-col + .coach-care__account-col {
-    border-left: 0;
-    margin-left: 0;
-    padding-left: 0;
-    margin-top: 28px;
-  }
+  .coach-care__rule { display: none; }
+  .coach-care__account-col + .coach-care__account-col { margin-top: 28px; }
   .coach-care__split.is-reverse .coach-care__split-media { order: 0; }
   .coach-care__spacer { height: var(--care-spacer-m, 16px); }
 }
