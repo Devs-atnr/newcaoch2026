@@ -12,11 +12,18 @@
     "customer_care": {
       "type": "customer-care",
       "blocks": {
+        "faq_group_BDXwbY": {
+          "type": "faq_group",
+          "settings": {
+            "heading": "FAQ",
+            "page_handles": ""
+          }
+        },
         "faq_mKytzA": {
           "type": "faq",
           "settings": {
-            "question": "",
-            "answer": "",
+            "question": "sdasddsdf",
+            "answer": "<p>dfsdfsdf</p>",
             "page_handles": ""
           }
         },
@@ -30,6 +37,7 @@
         }
       },
       "block_order": [
+        "faq_group_BDXwbY",
         "faq_mKytzA",
         "faq_9zWczb"
       ],
