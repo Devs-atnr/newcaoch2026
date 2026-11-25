@@ -264,13 +264,22 @@ h4.main-bhtarar { font-style: normal; font-size: 20px; color: #000; font-family:
   }
 
   async function postTracking(url, body, signal) {
-    return fetch(url, {
-      method: 'POST',
-      headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
-      body: JSON.stringify(body),
-      signal: signal,
-      cache: 'no-store'
-    });
+    const timer = new AbortController();
+    const timeout = setTimeout(() => timer.abort(), 12000);
+    const onAbort = () => timer.abort();
+    if (signal) signal.addEventListener('abort', onAbort);
+    try {
+      return await fetch(url, {
+        method: 'POST',
+        headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
+        body: JSON.stringify(body),
+        signal: timer.signal,
+        cache: 'no-store'
+      });
+    } finally {
+      clearTimeout(timeout);
+      if (signal) signal.removeEventListener('abort', onAbort);
+    }
   }
 
   // ---- element refs
@@ -447,17 +456,26 @@ h4.main-bhtarar { font-style: normal; font-size: 20px; color: #000; font-family:
     if (!built || built.error) { hide(els.loading); return showError(built?.error || 'Enter details to continue.'); }
 
     try{
-      let res;
-      try {
-        res = await postTracking(API_URL, built.body, inflight.signal);
-      } catch (netErr) {
-        // Network/CORS failure on primary (often broken :443 proxy) → retry :3001 or alternate
-        if (netErr?.name === 'AbortError') throw netErr;
-        const fallback = trackingFallbackUrl(API_URL);
-        if (!fallback || fallback === API_URL) throw netErr;
-        res = await postTracking(fallback, built.body, inflight.signal);
+      const urls = [TRACKING_3001, API_URL].filter((url, index, list) => url && list.indexOf(url) === index);
+      let res = null;
+      let lastError = null;
+      for (const url of urls) {
+        try {
+          const attempt = await postTracking(url, built.body, inflight.signal);
+          if (attempt.ok) { res = attempt; break; }
+          lastError = new Error('Error (' + attempt.status + ')');
+        } catch (netErr) {
+          if (netErr?.name === 'AbortError' && inflight.signal.aborted) throw netErr;
+          lastError = netErr;
+        }
       }
-      if (!res.ok) { hide(els.loading); return showError(`Error (${res.status})`); }
+      if (!res) {
+        hide(els.loading);
+        const timedOut = lastError?.name === 'AbortError';
+        return showError(timedOut
+          ? 'Tracking is taking too long. Please try again with your phone number, email, or tracking number.'
+          : (lastError?.message && lastError.message.indexOf('Error (') === 0 ? lastError.message : 'Unable to reach the tracking service. Please try again.'));
+      }
       const root = await res.json();
       const order = root?.orderStatus?.[0];
       if (!order) { hide(els.loading); return showError('No order found for the provided details.'); }
@@ -555,7 +573,7 @@ h4.main-bhtarar { font-style: normal; font-size: 20px; color: #000; font-family:
   els.btn.addEventListener('click', trackOrder, { passive:true });
   
   const params = new URLSearchParams(window.location.search);
-  const preset = params.get('order_number') || params.get('tracking') || params.get('q') || params.get('email') || '';
+  const preset = params.get('email') || params.get('order_number') || params.get('tracking') || params.get('q') || '';
   if (preset && els.search) {
     els.search.value = preset;
     trackOrder();
