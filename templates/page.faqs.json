@@ -1,0 +1,94 @@
+{
+  "sections": {
+    "faqs": {
+      "type": "coach-faqs",
+      "blocks": {
+        "group_account": {
+          "type": "group",
+          "settings": { "heading": "General / My Account:" }
+        },
+        "q_contact": {
+          "type": "question",
+          "settings": { "question": "How can I contact Coach.sa?", "answer": "" }
+        },
+        "q_who": {
+          "type": "question",
+          "settings": { "question": "Who can buy from Coach.sa?", "answer": "" }
+        },
+        "q_account": {
+          "type": "question",
+          "settings": { "question": "Do I need to have a Coach account to make an order?", "answer": "" }
+        },
+        "q_login": {
+          "type": "question",
+          "settings": { "question": "I can't log into my account. What's next?", "answer": "" }
+        },
+        "q_unsubscribe": {
+          "type": "question",
+          "settings": { "question": "I want to unsubscribe from your website. How do I do that?", "answer": "" }
+        },
+        "group_orders": {
+          "type": "group",
+          "settings": { "heading": "Online Shopping / Orders:" }
+        },
+        "q_buy": {
+          "type": "question",
+          "settings": { "question": "How can I buy online?", "answer": "" }
+        },
+        "q_track": {
+          "type": "question",
+          "settings": { "question": "How do I track my orders?", "answer": "" }
+        },
+        "q_pickup": {
+          "type": "question",
+          "settings": { "question": "What if I want to pick up my order/package myself?", "answer": "" }
+        },
+        "q_where": {
+          "type": "question",
+          "settings": { "question": "Where can I buy Coach products besides the Online Store?", "answer": "" }
+        },
+        "q_stock": {
+          "type": "question",
+          "settings": { "question": "The item I'm looking for is not available, is it still possible to get it?", "answer": "" }
+        },
+        "q_cancel": {
+          "type": "question",
+          "settings": { "question": "Can I cancel an order or a merchandise?", "answer": "" }
+        },
+        "q_address": {
+          "type": "question",
+          "settings": { "question": "Can I change shipping address of the order?", "answer": "" }
+        }
+      },
+      "block_order": [
+        "group_account",
+        "q_contact",
+        "q_who",
+        "q_account",
+        "q_login",
+        "q_unsubscribe",
+        "group_orders",
+        "q_buy",
+        "q_track",
+        "q_pickup",
+        "q_where",
+        "q_stock",
+        "q_cancel",
+        "q_address"
+      ],
+      "settings": {
+        "heading": "FAQs",
+        "heading_size": 24,
+        "group_size": 16,
+        "question_size": 14,
+        "plus_color": "#65559D",
+        "line_color": "#E4E4E4",
+        "content_width": 820,
+        "side_padding": 20,
+        "padding_top": 36,
+        "padding_bottom": 48
+      }
+    }
+  },
+  "order": ["faqs"]
+}
