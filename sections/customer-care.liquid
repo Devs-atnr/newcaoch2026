@@ -485,9 +485,19 @@
 }
 .coach-care__account-col:first-child { padding-right: 36px; }
 .coach-care__account-col + .coach-care__account-col {
-  border-left: 1px solid #e6e6e6;
+  position: relative;
+  border-left: 0;
   margin-left: 0;
   padding-left: 36px;
+}
+.coach-care__account-col + .coach-care__account-col::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 1px;
+  height: 50%;
+  background: #d5d5d5;
 }
 .coach-care__account-title {
   margin: 0 0 14px;
@@ -767,6 +777,7 @@
     padding-left: 0;
     margin-top: 28px;
   }
+  .coach-care__account-col + .coach-care__account-col::before { display: none; }
   .coach-care__split.is-reverse .coach-care__split-media { order: 0; }
   .coach-care__spacer { height: var(--care-spacer-m, 16px); }
 }

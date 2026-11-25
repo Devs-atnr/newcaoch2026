@@ -1,0 +1,211 @@
+<div class="coach-access" id="CoachAccess-{{ section.id }}">
+  {%- if section.settings.form == 'register' -%}
+    <div class="coach-access__panel is-open">
+      <h1 class="coach-access__title">{{ section.settings.register_heading | escape }}</h1>
+      {%- assign register_id = 'Create-' | append: section.id -%}
+      {%- form 'create_customer', id: register_id, novalidate: 'novalidate' -%}
+        {%- if form.errors -%}
+          <div class="coach-access__status" role="alert">{{ form.errors | default_errors }}</div>
+        {%- endif -%}
+        <div class="coach-access__fields">
+          <input type="text" name="customer[first_name]" autocomplete="given-name" placeholder="{{ section.settings.first_name_label | escape }}" {% if form.first_name %}value="{{ form.first_name }}"{% endif %}>
+          <input type="text" name="customer[last_name]" autocomplete="family-name" placeholder="{{ section.settings.last_name_label | escape }}" {% if form.last_name %}value="{{ form.last_name }}"{% endif %}>
+          <input type="email" name="customer[email]" autocomplete="email" placeholder="{{ section.settings.email_label | escape }}" {% if form.email %}value="{{ form.email }}"{% endif %}>
+          <input type="password" name="customer[password]" autocomplete="new-password" placeholder="{{ section.settings.password_label | escape }}">
+          <button class="coach-access__button" type="submit">{{ section.settings.register_button | escape }}</button>
+        </div>
+      {%- endform -%}
+      <p class="coach-access__note">{{ section.settings.register_note }} <a href="{{ routes.account_login_url }}">{{ section.settings.sign_in_label | escape }}</a>.</p>
+    </div>
+  {%- elsif section.settings.form == 'reset' -%}
+    <div class="coach-access__panel is-open">
+      <h1 class="coach-access__title">{{ section.settings.reset_heading | escape }}</h1>
+      <p class="coach-access__text">{{ section.settings.reset_text | escape }}</p>
+      {%- assign reset_id = 'Reset-' | append: section.id -%}
+      {%- form 'reset_customer_password', id: reset_id -%}
+        {%- if form.errors -%}
+          <div class="coach-access__status" role="alert">{{ form.errors | default_errors }}</div>
+        {%- endif -%}
+        <div class="coach-access__fields">
+          <input type="password" name="customer[password]" autocomplete="new-password" placeholder="{{ section.settings.password_label | escape }}">
+          <input type="password" name="customer[password_confirmation]" autocomplete="new-password" placeholder="{{ section.settings.confirm_label | escape }}">
+          <button class="coach-access__button" type="submit">{{ section.settings.reset_button | escape }}</button>
+        </div>
+      {%- endform -%}
+    </div>
+  {%- else -%}
+    <div id="recover" class="coach-access__panel">
+      <h1 class="coach-access__title">{{ section.settings.recover_heading | escape }}</h1>
+      <p class="coach-access__text">{{ section.settings.recover_text | escape }}</p>
+      {%- assign recover_id = 'Recover-' | append: section.id -%}
+      {%- form 'recover_customer_password', id: recover_id -%}
+        {%- if form.posted_successfully? -%}
+          {%- assign recover_success = true -%}
+          <p class="coach-access__status">{{ section.settings.recover_success | escape }}</p>
+        {%- else -%}
+          {%- if form.errors -%}
+            <div class="coach-access__status" role="alert">{{ form.errors | default_errors }}</div>
+          {%- endif -%}
+          <div class="coach-access__fields">
+            <input type="email" name="email" autocomplete="email" placeholder="{{ section.settings.email_label | escape }}" {% if form.email %}value="{{ form.email }}"{% endif %} required>
+            <button class="coach-access__button" type="submit">{{ section.settings.recover_button | escape }}</button>
+          </div>
+        {%- endif -%}
+      {%- endform -%}
+      <p class="coach-access__note">{{ section.settings.recover_note }} <a href="#login">{{ section.settings.sign_in_label | escape }}</a> {{ section.settings.recover_or }} <a href="{{ routes.account_register_url }}">{{ section.settings.create_label | escape }}</a>.</p>
+    </div>
+
+    <div id="login" class="coach-access__panel is-open">
+      <h1 class="coach-access__title">{{ section.settings.login_heading | escape }}</h1>
+      {%- if recover_success -%}
+        <p class="coach-access__status">{{ section.settings.recover_success | escape }}</p>
+      {%- endif -%}
+      <p class="coach-access__text">{{ section.settings.login_text | escape }}</p>
+      {%- assign login_id = 'Login-' | append: section.id -%}
+      {%- form 'customer_login', id: login_id, novalidate: 'novalidate' -%}
+        {%- if form.errors -%}
+          <div class="coach-access__status" role="alert">{{ form.errors | default_errors }}</div>
+        {%- endif -%}
+        <div class="coach-access__fields">
+          <input type="email" name="customer[email]" autocomplete="email" placeholder="{{ section.settings.email_label | escape }}" {% if form.email %}value="{{ form.email }}"{% endif %}>
+          <input type="password" name="customer[password]" autocomplete="current-password" placeholder="{{ section.settings.password_label | escape }}">
+          <button class="coach-access__button" type="submit">{{ section.settings.login_button | escape }}</button>
+        </div>
+      {%- endform -%}
+      <p class="coach-access__note"><a href="#recover">{{ section.settings.forgot_label | escape }}</a></p>
+    </div>
+  {%- endif -%}
+</div>
+
+{% stylesheet %}
+.coach-access {
+  box-sizing: border-box;
+  padding: 88px 20px 96px;
+  background: #ffffff;
+  color: #111111;
+  font-family: HelveticaLTPro-Roman, "Helvetica Neue", Helvetica, Arial, sans-serif;
+  text-align: center;
+}
+.coach-access *,
+.coach-access *::before,
+.coach-access *::after { box-sizing: border-box; }
+.coach-access__panel { display: none; width: min(100%, 460px); margin: 0 auto; }
+.coach-access__panel.is-open,
+#recover:target { display: block; }
+#recover:target ~ #login { display: none; }
+.coach-access__title {
+  margin: 0 0 16px;
+  font-family: inherit;
+  font-size: 26px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+.coach-access__text {
+  max-width: 390px;
+  margin: 0 auto 22px;
+  font-size: 14px;
+  line-height: 1.45;
+}
+.coach-access__fields { display: grid; gap: 14px; }
+.coach-access__fields input {
+  width: 100%;
+  height: 44px;
+  margin: 0;
+  padding: 0 12px;
+  border: 1px solid #c8c8c8;
+  border-radius: 0;
+  background: #ffffff;
+  box-shadow: none;
+  color: #111111;
+  font-family: inherit;
+  font-size: 14px;
+  outline: none;
+  appearance: none;
+}
+.coach-access__fields input::placeholder { color: #8d8d8d; opacity: 1; }
+.coach-access__fields input:focus,
+.coach-access__fields input:focus-visible {
+  border-color: #111111;
+  outline: none !important;
+  box-shadow: none !important;
+}
+.coach-access__button {
+  width: 100%;
+  min-height: 46px;
+  margin-top: 4px;
+  border: 1px solid #111111;
+  background: #111111;
+  color: #ffffff;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+.coach-access__note {
+  margin: 18px 0 0;
+  font-size: 14px;
+  line-height: 1.45;
+}
+.coach-access__note a { color: inherit; text-underline-offset: 2px; }
+.coach-access__status,
+.coach-access__status ul {
+  margin: 0 0 14px;
+  color: #e10600;
+  font-size: 14px;
+  line-height: 1.4;
+  text-align: center;
+}
+.coach-access__status a { color: inherit; }
+@media screen and (max-width: 749px) {
+  .coach-access { padding: 48px 16px 64px; }
+  .coach-access__title { font-size: 22px; }
+}
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Account access",
+  "settings": [
+    {
+      "type": "select",
+      "id": "form",
+      "label": "Form",
+      "default": "login",
+      "options": [
+        { "value": "login", "label": "Sign in and reset" },
+        { "value": "register", "label": "Create account" },
+        { "value": "reset", "label": "New password" }
+      ]
+    },
+    { "type": "header", "content": "Reset password" },
+    { "type": "text", "id": "recover_heading", "label": "Reset heading", "default": "Forgot Your Password?" },
+    { "type": "text", "id": "recover_text", "label": "Reset text", "default": "No worries. Enter your email address below and we'll send you a reset link for your password." },
+    { "type": "text", "id": "recover_button", "label": "Reset button", "default": "Send email" },
+    { "type": "text", "id": "recover_success", "label": "Success message", "default": "We have sent you an email with a link to update your password." },
+    { "type": "text", "id": "recover_note", "label": "Note before links", "default": "You can" },
+    { "type": "text", "id": "recover_or", "label": "Text between links", "default": "or" },
+    { "type": "text", "id": "sign_in_label", "label": "Sign in label", "default": "Sign In" },
+    { "type": "text", "id": "create_label", "label": "Create account label", "default": "Create An Account" },
+    { "type": "header", "content": "Sign in" },
+    { "type": "text", "id": "login_heading", "label": "Sign in heading", "default": "Sign In" },
+    { "type": "text", "id": "login_text", "label": "Sign in text", "default": "Sign in to see your order history and update your account." },
+    { "type": "text", "id": "login_button", "label": "Sign in button", "default": "Sign in" },
+    { "type": "text", "id": "forgot_label", "label": "Forgot password label", "default": "Forgot Password" },
+    { "type": "header", "content": "Create account" },
+    { "type": "text", "id": "register_heading", "label": "Create heading", "default": "Create An Account" },
+    { "type": "text", "id": "register_button", "label": "Create button", "default": "Create account" },
+    { "type": "text", "id": "register_note", "label": "Create note", "default": "Already have an account?" },
+    { "type": "text", "id": "first_name_label", "label": "First name label", "default": "First Name" },
+    { "type": "text", "id": "last_name_label", "label": "Last name label", "default": "Last Name" },
+    { "type": "header", "content": "Fields" },
+    { "type": "text", "id": "email_label", "label": "Email label", "default": "Email Address" },
+    { "type": "text", "id": "password_label", "label": "Password label", "default": "Password" },
+    { "type": "text", "id": "confirm_label", "label": "Confirm password label", "default": "Confirm Password" },
+    { "type": "text", "id": "reset_heading", "label": "New password heading", "default": "Reset Your Password" },
+    { "type": "text", "id": "reset_text", "label": "New password text", "default": "Enter a new password for your account." },
+    { "type": "text", "id": "reset_button", "label": "New password button", "default": "Reset password" }
+  ]
+}
+{% endschema %}
