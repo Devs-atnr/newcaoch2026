@@ -15,10 +15,10 @@
         "heading": "Site Map",
         "menu": "main-menu-copy",
         "columns": 5,
-        "heading_size": 32,
-        "link_size": 14,
-        "column_gap": 28,
-        "content_width": 1180
+        "heading_size": 30,
+        "link_size": 13,
+        "column_gap": 36,
+        "content_width": 1080
       }
     }
   },

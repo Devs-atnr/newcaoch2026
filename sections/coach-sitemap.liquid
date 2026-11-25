@@ -30,48 +30,65 @@
           assign link_title = link_title | strip
         -%}
         {%- if link_title != blank or link.links.size > 0 -%}
-        <div class="coach-map__col">
-          {%- if link_title != blank -%}
-            <a class="coach-map__head" href="{{ link.url }}">{{ link_title | escape }}</a>
-          {%- endif -%}
+          <div class="coach-map__col">
+            {%- if link_title != blank -%}
+              <a class="coach-map__head" href="{{ link.url }}">{{ link_title | escape }}</a>
+            {%- endif -%}
+            {%- for child in link.links -%}
+              {%- if child.links.size == 0 -%}
+                {%- liquid
+                  assign child_title = child.title
+                  if child.type == 'collection_link' and child.object.title != blank
+                    assign child_title = child.object.title
+                  endif
+                  assign child_title = child_title | strip
+                -%}
+                {%- unless child_title == blank or child_title == link_title -%}
+                  <a class="coach-map__link" href="{{ child.url }}">{{ child_title | escape }}</a>
+                {%- endunless -%}
+              {%- endif -%}
+            {%- endfor -%}
+          </div>
           {%- for child in link.links -%}
             {%- if child.links.size > 0 -%}
-              <a class="coach-map__group" href="{{ child.url }}">
-                {%- if child.type == 'collection_link' and child.object.title != blank -%}
-                  {{ child.object.title | escape }}
-                {%- else -%}
-                  {{ child.title | escape }}
+              {%- liquid
+                assign child_title = child.title
+                if child.type == 'collection_link' and child.object.title != blank
+                  assign child_title = child.object.title
+                endif
+                assign child_title = child_title | strip
+              -%}
+              <div class="coach-map__col">
+                {%- if child_title != blank -%}
+                  <a class="coach-map__group" href="{{ child.url }}">{{ child_title | escape }}</a>
                 {%- endif -%}
-              </a>
-              {%- for grand in child.links -%}
-                <a class="coach-map__link" href="{{ grand.url }}">
-                  {%- if grand.type == 'collection_link' and grand.object.title != blank -%}
-                    {{ grand.object.title | escape }}
-                  {%- else -%}
-                    {{ grand.title | escape }}
-                  {%- endif -%}
-                </a>
-                {%- for item in grand.links -%}
-                  <a class="coach-map__link" href="{{ item.url }}">
-                    {%- if item.type == 'collection_link' and item.object.title != blank -%}
-                      {{ item.object.title | escape }}
-                    {%- else -%}
-                      {{ item.title | escape }}
+                {%- for grand in child.links -%}
+                  {%- liquid
+                    assign grand_title = grand.title
+                    if grand.type == 'collection_link' and grand.object.title != blank
+                      assign grand_title = grand.object.title
+                    endif
+                    assign grand_title = grand_title | strip
+                  -%}
+                  {%- unless grand_title == blank or grand_title == child_title -%}
+                    <a class="coach-map__link" href="{{ grand.url }}">{{ grand_title | escape }}</a>
+                  {%- endunless -%}
+                  {%- for item in grand.links -%}
+                    {%- liquid
+                      assign item_title = item.title
+                      if item.type == 'collection_link' and item.object.title != blank
+                        assign item_title = item.object.title
+                      endif
+                      assign item_title = item_title | strip
+                    -%}
+                    {%- if item_title != blank -%}
+                      <a class="coach-map__link" href="{{ item.url }}">{{ item_title | escape }}</a>
                     {%- endif -%}
-                  </a>
+                  {%- endfor -%}
                 {%- endfor -%}
-              {%- endfor -%}
-            {%- else -%}
-              <a class="coach-map__link" href="{{ child.url }}">
-                {%- if child.type == 'collection_link' and child.object.title != blank -%}
-                  {{ child.object.title | escape }}
-                {%- else -%}
-                  {{ child.title | escape }}
-                {%- endif -%}
-              </a>
+              </div>
             {%- endif -%}
           {%- endfor -%}
-        </div>
         {%- endif -%}
       {%- endfor -%}
     </div>
@@ -83,52 +100,58 @@
 {% stylesheet %}
 .coach-map {
   box-sizing: border-box;
-  padding: 48px 28px 72px;
+  padding: 56px 24px 80px;
   background: #fff;
-  color: #111;
-  font-family: HelveticaLTPro-Roman, Helvetica, Arial, sans-serif;
+  color: #111111;
+  font-family: HelveticaLTPro-Roman, "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 .coach-map *,
 .coach-map *::before,
 .coach-map *::after { box-sizing: border-box; }
 .coach-map__title {
-  margin: 0 0 42px;
+  margin: 0 auto 48px;
+  max-width: var(--map-width, 1080px);
   text-align: center;
-  font-size: var(--map-title, 32px);
+  font-family: HelveticaLTPro-Roman, "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: var(--map-title, 30px);
   font-weight: 700;
-  line-height: 1.2;
+  line-height: 1.15;
+  letter-spacing: 0;
 }
 .coach-map__grid {
   column-count: var(--map-cols, 5);
-  column-gap: var(--map-gap, 28px);
-  width: min(100%, var(--map-width, 1180px));
+  column-gap: var(--map-gap, 36px);
+  column-fill: balance;
+  width: min(100%, var(--map-width, 1080px));
   margin: 0 auto;
 }
 .coach-map__col {
   break-inside: avoid;
   display: inline-block;
   width: 100%;
-  margin: 0 0 16px;
+  margin: 0 0 22px;
 }
 .coach-map__head,
 .coach-map__group,
 .coach-map__link {
   display: block;
-  color: #111;
+  color: #111111;
   text-decoration: none;
-  line-height: 1.45;
+  font-family: HelveticaLTPro-Roman, "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 .coach-map__head,
 .coach-map__group {
-  font-size: var(--map-link, 14px);
+  margin: 0 0 8px;
+  font-size: 14px;
   font-weight: 700;
+  line-height: 1.35;
 }
-.coach-map__head { margin: 0 0 8px; }
-.coach-map__group { margin: 14px 0 6px; }
 .coach-map__link {
-  margin: 0 0 6px;
-  font-size: var(--map-link, 14px);
+  margin: 0;
+  padding: 2px 0;
+  font-size: var(--map-link, 13px);
   font-weight: 400;
+  line-height: 1.45;
 }
 .coach-map__head:hover,
 .coach-map__group:hover,
@@ -141,8 +164,8 @@
   .coach-map__grid { column-count: 3; }
 }
 @media screen and (max-width: 749px) {
-  .coach-map { padding: 32px 16px 48px; }
-  .coach-map__grid { column-count: 2; }
+  .coach-map { padding: 36px 16px 56px; }
+  .coach-map__grid { column-count: 2; column-gap: 20px; }
 }
 {% endstylesheet %}
 
@@ -156,10 +179,10 @@
     { "type": "text", "id": "heading", "label": "Heading", "default": "Site Map" },
     { "type": "link_list", "id": "menu", "label": "Menu", "info": "Collection links use the collection name from your store." },
     { "type": "range", "id": "columns", "min": 2, "max": 6, "step": 1, "label": "Columns", "default": 5 },
-    { "type": "range", "id": "heading_size", "min": 20, "max": 48, "step": 2, "unit": "px", "label": "Heading size", "default": 32 },
-    { "type": "range", "id": "link_size", "min": 12, "max": 20, "step": 1, "unit": "px", "label": "Link size", "default": 14 },
-    { "type": "range", "id": "column_gap", "min": 12, "max": 60, "step": 4, "unit": "px", "label": "Column gap", "default": 28 },
-    { "type": "range", "id": "content_width", "min": 800, "max": 1600, "step": 20, "unit": "px", "label": "Content width", "default": 1180 }
+    { "type": "range", "id": "heading_size", "min": 20, "max": 48, "step": 2, "unit": "px", "label": "Heading size", "default": 30 },
+    { "type": "range", "id": "link_size", "min": 12, "max": 20, "step": 1, "unit": "px", "label": "Link size", "default": 13 },
+    { "type": "range", "id": "column_gap", "min": 12, "max": 60, "step": 4, "unit": "px", "label": "Column gap", "default": 36 },
+    { "type": "range", "id": "content_width", "min": 800, "max": 1600, "step": 20, "unit": "px", "label": "Content width", "default": 1080 }
   ],
   "presets": [
     { "name": "Site map" }
