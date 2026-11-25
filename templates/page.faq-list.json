@@ -12,89 +12,43 @@
     "faqs": {
       "type": "coach-faqs",
       "blocks": {
-        "group_account": {
-          "type": "group",
-          "settings": { "heading": "General / My Account:" }
-        },
-        "q_contact": {
-          "type": "question",
-          "settings": { "question": "How can I contact Coach.sa?", "answer": "" }
-        },
-        "q_who": {
-          "type": "question",
-          "settings": { "question": "Who can buy from Coach.sa?", "answer": "" }
-        },
-        "q_account": {
-          "type": "question",
-          "settings": { "question": "Do I need to have a Coach account to make an order?", "answer": "" }
-        },
-        "q_login": {
-          "type": "question",
-          "settings": { "question": "I can't log into my account. What's next?", "answer": "" }
-        },
-        "q_unsubscribe": {
-          "type": "question",
-          "settings": { "question": "I want to unsubscribe from your website. How do I do that?", "answer": "" }
-        },
-        "group_orders": {
-          "type": "group",
-          "settings": { "heading": "Online Shopping / Orders:" }
-        },
-        "q_buy": {
-          "type": "question",
-          "settings": { "question": "How can I buy online?", "answer": "" }
-        },
-        "q_track": {
-          "type": "question",
-          "settings": { "question": "How do I track my orders?", "answer": "" }
-        },
-        "q_pickup": {
-          "type": "question",
-          "settings": { "question": "What if I want to pick up my order/package myself?", "answer": "" }
-        },
-        "q_where": {
-          "type": "question",
-          "settings": { "question": "Where can I buy Coach products besides the Online Store?", "answer": "" }
-        },
-        "q_stock": {
-          "type": "question",
-          "settings": { "question": "The item I'm looking for is not available, is it still possible to get it?", "answer": "" }
-        },
-        "q_cancel": {
-          "type": "question",
-          "settings": { "question": "Can I cancel an order or a merchandise?", "answer": "" }
-        },
-        "q_address": {
-          "type": "question",
-          "settings": { "question": "Can I change shipping address of the order?", "answer": "" }
-        }
+        "q_payment": { "type": "question", "settings": { "question": "Payment", "answer": "" } },
+        "q_clearpay": { "type": "question", "settings": { "question": "Clearpay", "answer": "" } },
+        "q_shop_pay": { "type": "question", "settings": { "question": "Shop Pay", "answer": "" } },
+        "q_account": { "type": "question", "settings": { "question": "My Account", "answer": "" } },
+        "q_returns": { "type": "question", "settings": { "question": "Returns", "answer": "" } },
+        "q_exchanges": { "type": "question", "settings": { "question": "Exchanges", "answer": "" } },
+        "q_delivery": { "type": "question", "settings": { "question": "Delivery", "answer": "" } },
+        "q_placing": { "type": "question", "settings": { "question": "Placing an order", "answer": "" } },
+        "q_warranties": { "type": "question", "settings": { "question": "Warranties", "answer": "" } },
+        "q_products": { "type": "question", "settings": { "question": "Products & availability", "answer": "" } },
+        "q_others": { "type": "question", "settings": { "question": "Others", "answer": "" } },
+        "q_about": { "type": "question", "settings": { "question": "About us", "answer": "" } }
       },
       "block_order": [
-        "group_account",
-        "q_contact",
-        "q_who",
+        "q_payment",
+        "q_clearpay",
+        "q_shop_pay",
         "q_account",
-        "q_login",
-        "q_unsubscribe",
-        "group_orders",
-        "q_buy",
-        "q_track",
-        "q_pickup",
-        "q_where",
-        "q_stock",
-        "q_cancel",
-        "q_address"
+        "q_returns",
+        "q_exchanges",
+        "q_delivery",
+        "q_placing",
+        "q_warranties",
+        "q_products",
+        "q_others",
+        "q_about"
       ],
       "settings": {
-        "heading": "FAQs",
-        "heading_size": 24,
+        "heading": "FAQ",
+        "heading_size": 22,
         "group_size": 16,
-        "question_size": 14,
-        "plus_color": "#65559D",
-        "line_color": "#E4E4E4",
-        "content_width": 820,
+        "question_size": 13,
+        "plus_color": "#111111",
+        "line_color": "#E6E6E6",
+        "content_width": 1000,
         "side_padding": 20,
-        "padding_top": 36,
+        "padding_top": 48,
         "padding_bottom": 48
       }
     }
