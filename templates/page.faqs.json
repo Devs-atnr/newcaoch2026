@@ -11,6 +11,19 @@
   "sections": {
     "customer_care": {
       "type": "customer-care",
+      "blocks": {
+        "faq_9zWczb": {
+          "type": "faq",
+          "settings": {
+            "question": "yrwetwdsfg",
+            "answer": "<p>sfdgsdfsd</p>",
+            "page_handles": ""
+          }
+        }
+      },
+      "block_order": [
+        "faq_9zWczb"
+      ],
       "settings": {
         "menu": "footer-menu-copy",
         "sidebar_width": 33,
