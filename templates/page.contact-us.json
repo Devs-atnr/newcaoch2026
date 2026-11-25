@@ -1,0 +1,62 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "customer_care": {
+      "type": "customer-care",
+      "blocks": {
+        "custom_liquid_AcVRHH": {
+          "type": "custom_liquid",
+          "settings": {
+            "code": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\" />\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" />\n  <title>Contact Us</title>\n  <style>\n    * {\n      box-sizing: border-box;\n      margin: 0;\n      padding: 0;\n    }\n\n    body {\n      font-family: -apple-system, BlinkMacSystemFont, \"Helvetica Neue\", Helvetica, Arial, sans-serif;\n      color: #111111;\n      background-color: #ffffff;\n      line-height: 1.5;\n      font-size: 14px;\n      padding: 40px 24px;\n    }\n\n    .contact-container {\n      max-width: 780px;\n      margin: 0 auto;\n    }\n\n    h1 {\n      font-size: 22px;\n      font-weight: 700;\n      margin-bottom: 22px;\n      letter-spacing: -0.01em;\n    }\n\n    p {\n      margin-bottom: 18px;\n    }\n\n    a {\n      color: #111111;\n      text-decoration: underline;\n    }\n\n    a:hover {\n      opacity: 0.75;\n    }\n\n    .contact-channel {\n      margin-top: 26px;\n      max-width: 340px;\n    }\n\n    .channel-header {\n      display: flex;\n      align-items: center;\n      gap: 10px;\n      margin-bottom: 8px;\n    }\n\n    .channel-icon {\n      width: 24px;\n      height: 24px;\n      object-fit: contain;\n      flex-shrink: 0;\n    }\n\n    .channel-header h2 {\n      font-size: 16px;\n      font-weight: 700;\n      line-height: 1.2;\n    }\n\n    .channel-desc {\n      font-size: 13.5px;\n      line-height: 1.45;\n      color: #222222;\n      margin-bottom: 0;\n    }\n\n    @media (max-width: 600px) {\n      body {\n        padding: 24px 16px;\n      }\n    }\n  </style>\n</head>\n<body>\n  <main class=\"contact-container\">\n    <h1>Contact Us</h1>\n\n    <p>\n      Have you checked our Frequently Asked Questions? You may find instant answers to most questions about shopping with us here. If your enquiry is related to returns/exchanges/refunds, please visit the Returns and Exchanges page.\n    </p>\n\n    <p>\n      If you have an enquiry about your in-store purchase, please contact the original place of purchase (click here for store location). If unable to contact/visit the store, please feel free to contact our Customer Care team.\n    </p>\n\n    <section class=\"contact-channel\">\n      <div class=\"channel-header\">\n        <img\n          src=\"https://coach.sa/cdn/shop/files/ce-whatsapp-icon1_200x.png?v=1746175270\"\n          alt=\"Whatsapp Chat icon\"\n          class=\"channel-icon\"\n        />\n        <h2>Whatsapp Chat</h2>\n      </div>\n      <p class=\"channel-desc\">\n        Click <a href=\"https://api.whatsapp.com/send/?phone=966501995607&text&type=phone_number&app_absent=0\" target=\"_blank\" rel=\"noopener noreferrer\">here</a> to chat on whatsapp.\n      </p>\n    </section>\n\n    <section class=\"contact-channel\">\n      <div class=\"channel-header\">\n        <img\n          src=\"https://coach.sa/cdn/shop/files/ce-callus-icon1_200x.png?v=1746175270\"\n          alt=\"Call Us icon\"\n          class=\"channel-icon\"\n        />\n        <h2>Call Us</h2>\n      </div>\n      <p class=\"channel-desc\">\n        For general inquiries, shopping advice and questions about your order status, give us a ring. We’re always happy to hear from you. Monday to Friday 9am – 5pm GMT\n      </p>\n    </section>\n\n    <section class=\"contact-channel\">\n      <div class=\"channel-header\">\n        <img\n          src=\"https://coach.sa/cdn/shop/files/icon-chat_200x.png?v=1746175270\"\n          alt=\"Live Chat icon\"\n          class=\"channel-icon\"\n        />\n        <h2>Live Chat</h2>\n      </div>\n      <p class=\"channel-desc\">Chat to our Customer Care team</p>\n    </section>\n  </main>\n</body>\n</html>",
+            "page_handles": ""
+          }
+        }
+      },
+      "block_order": [
+        "custom_liquid_AcVRHH"
+      ],
+      "settings": {
+        "menu": "footer-menu-copy",
+        "sidebar_width": 33,
+        "sidebar_background": "#f5f5f5",
+        "content_background": "#ffffff",
+        "sticky_sidebar": true,
+        "sticky_top": 24,
+        "mobile_collapse": false,
+        "heading_size": 20,
+        "heading_color": "#111111",
+        "heading_weight": "700",
+        "category_size": 16,
+        "category_color": "#111111",
+        "category_weight": "700",
+        "category_uppercase": true,
+        "link_size": 14,
+        "link_color": "#111111",
+        "active_color": "#111111",
+        "underline_active": true,
+        "hover_color": "#111111",
+        "category_space": 28,
+        "link_space": 12,
+        "sidebar_padding_y": 48,
+        "sidebar_padding_x": 32,
+        "content_padding_y": 48,
+        "content_padding_x": 48,
+        "content_max": 1200,
+        "min_height": 0,
+        "mobile_padding": 16,
+        "mobile_spacing": 0
+      }
+    }
+  },
+  "order": [
+    "customer_care"
+  ]
+}
