@@ -91,6 +91,7 @@
     <div class="coach-care__main">
       <div class="coach-care__inner">
         {%- assign care_contact_used = false -%}
+        {%- assign care_signup_used = false -%}
         {%- assign care_login_used = false -%}
         {%- for block in section.blocks -%}
           {%- liquid
@@ -308,6 +309,48 @@
                     <div class="coach-care__rte">{{ block.settings.answer }}</div>
                   {%- endif -%}
                 </details>
+              {%- when 'email_prefs' -%}
+                {%- liquid
+                  assign unsub_id = 'CareUnsub-' | append: block.id
+                  assign signup_id = 'CareSignup-' | append: block.id
+                -%}
+                <coach-care-email class="coach-email" {{ block.shopify_attributes }} style="--email-width: {{ block.settings.form_width }}px;">
+                  {%- if block.settings.heading != blank -%}
+                    <h2>{{ block.settings.heading | escape }}</h2>
+                  {%- endif -%}
+                  <label class="coach-email__field">
+                    <span class="visually-hidden">{{ block.settings.email_label | escape }}</span>
+                    <input class="coach-email__input" type="email" autocomplete="email" placeholder="{{ block.settings.email_label | escape }}" data-email-source>
+                    <p class="coach-email__error" data-email-error hidden>{{ block.settings.email_error | escape }}</p>
+                  </label>
+                  {%- unless care_contact_used -%}
+                    {%- assign care_contact_used = true -%}
+                    {%- form 'contact', id: unsub_id, class: 'coach-email__form' -%}
+                      {%- if form.posted_successfully? -%}
+                        <p class="coach-email__status" tabindex="-1">{{ block.settings.unsub_success | escape }}</p>
+                      {%- endif -%}
+                      <input type="hidden" name="contact[email]" data-email-target>
+                      <input type="hidden" name="contact[body]" value="Please unsubscribe this email address from marketing emails.">
+                      <button class="coach-email__button" type="submit">{{ block.settings.unsub_label | escape }}</button>
+                    {%- endform -%}
+                  {%- endunless -%}
+                  <p class="coach-email__or">{{ block.settings.or_label | escape }}</p>
+                  {%- unless care_signup_used -%}
+                    {%- assign care_signup_used = true -%}
+                    {%- form 'customer', id: signup_id, class: 'coach-email__form' -%}
+                      {%- if form.posted_successfully? -%}
+                        <p class="coach-email__status" tabindex="-1">{{ block.settings.signup_success | escape }}</p>
+                      {%- endif -%}
+                      <input type="hidden" name="contact[tags]" value="newsletter">
+                      <input type="hidden" name="contact[accepts_marketing]" value="true">
+                      <input type="hidden" name="contact[email]" data-email-target>
+                      <button class="coach-email__button" type="submit">{{ block.settings.signup_label | escape }}</button>
+                    {%- endform -%}
+                  {%- endunless -%}
+                  {%- if block.settings.consent != blank -%}
+                    <div class="coach-email__note">{{ block.settings.consent }}</div>
+                  {%- endif -%}
+                </coach-care-email>
               {%- when 'contact_desk' -%}
                 {%- liquid
                   assign desk_whatsapp = block.settings.whatsapp_link
@@ -1340,6 +1383,55 @@
 @media screen and (max-width: 749px) {
   .coach-desk { grid-template-columns: 1fr; gap: 32px; }
 }
+.coach-email { width: min(100%, var(--email-width, 440px)); color: #111; font-family: HelveticaLTPro-Roman, Helvetica, Arial, sans-serif; }
+.coach-email h2 { margin: 0 0 28px; font-size: 26px; font-weight: 700; line-height: 1.2; }
+.coach-email__field { display: block; }
+.coach-email__input {
+  width: 100%;
+  border: 1px solid #d5d5d5;
+  background: #fff;
+  color: #111;
+  padding: 14px 12px;
+  font: inherit;
+  font-size: 15px;
+  outline: none;
+  box-shadow: none;
+}
+.coach-email__input::placeholder { color: #9a9a9a; }
+.coach-email__input:focus-visible,
+.coach-email__button:focus-visible { outline: none !important; box-shadow: none !important; }
+.coach-email__input.is-invalid { border-color: #d0121a; }
+.coach-email__error { margin: 6px 0 0; color: #d0121a; font-size: 13px; }
+.coach-email__form { margin: 0; }
+.coach-email__button {
+  width: 100%;
+  margin-top: 18px;
+  border: 1px solid #111;
+  background: #fff;
+  color: #111;
+  padding: 14px 16px;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+.coach-email__or {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin: 18px 0 0;
+  color: #8a8a8a;
+  font-size: 13px;
+  letter-spacing: 0.08em;
+}
+.coach-email__or::before,
+.coach-email__or::after { content: ""; flex: 1; height: 1px; background: #d9d9d9; }
+.coach-email__note { margin-top: 16px; color: #9a9a9a; font-size: 12px; line-height: 1.5; }
+.coach-email__note p { margin: 0; }
+.coach-email__note a { color: #111; text-decoration: underline; }
+.coach-email__status { margin: 0 0 12px; font-size: 14px; }
 {% endstylesheet %}
 
 {% javascript %}
@@ -1384,6 +1476,31 @@ if (!customElements.get('coach-care-login')) {
           });
           if (!first) return;
           event.preventDefault();
+        });
+      });
+    }
+  });
+}
+if (!customElements.get('coach-care-email')) {
+  customElements.define('coach-care-email', class extends HTMLElement {
+    connectedCallback() {
+      if (this.dataset.bound === 'true') return;
+      this.dataset.bound = 'true';
+      const source = this.querySelector('[data-email-source]');
+      const error = this.querySelector('[data-email-error]');
+      this.querySelectorAll('form').forEach((form) => {
+        form.addEventListener('submit', (event) => {
+          const value = source ? source.value.trim() : '';
+          const valid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+          if (source) source.classList.toggle('is-invalid', !valid);
+          if (error) error.hidden = valid;
+          if (!valid) {
+            event.preventDefault();
+            if (source) source.focus();
+            return;
+          }
+          const target = form.querySelector('[data-email-target]');
+          if (target) target.value = value;
         });
       });
     }
@@ -1759,6 +1876,24 @@ if (!customElements.get('coach-care-nav')) {
       "settings": [
         { "type": "text", "id": "question", "label": "Question" },
         { "type": "richtext", "id": "answer", "label": "Answer" },
+        { "type": "text", "id": "page_handles", "label": "Limit to page handles", "info": "Comma-separated handles. Leave blank to show on every page using this template." }
+      ]
+    },
+    {
+      "type": "email_prefs",
+      "name": "Email preferences",
+      "limit": 1,
+      "settings": [
+        { "type": "text", "id": "heading", "label": "Heading", "default": "Email Preferences" },
+        { "type": "text", "id": "email_label", "label": "Email label", "default": "Email Address" },
+        { "type": "text", "id": "email_error", "label": "Email error", "default": "Email address is required." },
+        { "type": "text", "id": "unsub_label", "label": "Unsubscribe label", "default": "Unsubscribe" },
+        { "type": "text", "id": "unsub_success", "label": "Unsubscribe message", "default": "Your unsubscribe request has been sent." },
+        { "type": "text", "id": "or_label", "label": "Divider label", "default": "OR" },
+        { "type": "text", "id": "signup_label", "label": "Sign up label", "default": "Sign up" },
+        { "type": "text", "id": "signup_success", "label": "Sign up message", "default": "You are signed up for email updates." },
+        { "type": "richtext", "id": "consent", "label": "Consent text", "default": "<p>By signing up, you consent to receive emails about Coach's latest collections, offers, and news, as well as information on how to participate in Coach events, competitions or promotions. You have certain rights under applicable privacy laws, and can withdraw your consent at any time. See our <a href=\"/policies/privacy-policy\">Privacy Policy</a> for more information.</p>" },
+        { "type": "range", "id": "form_width", "min": 280, "max": 640, "step": 8, "unit": "px", "label": "Form width", "default": 440 },
         { "type": "text", "id": "page_handles", "label": "Limit to page handles", "info": "Comma-separated handles. Leave blank to show on every page using this template." }
       ]
     },

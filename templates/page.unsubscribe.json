@@ -1,0 +1,73 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "customer_care": {
+      "type": "customer-care",
+      "blocks": {
+        "email_prefs_main": {
+          "type": "email_prefs",
+          "settings": {
+            "heading": "Email Preferences",
+            "email_label": "Email Address",
+            "email_error": "Email address is required.",
+            "unsub_label": "Unsubscribe",
+            "unsub_success": "Your unsubscribe request has been sent.",
+            "or_label": "OR",
+            "signup_label": "Sign up",
+            "signup_success": "You are signed up for email updates.",
+            "consent": "<p>By signing up, you consent to receive emails about Coach's latest collections, offers, and news, as well as information on how to participate in Coach events, competitions or promotions. You have certain rights under applicable privacy laws, and can withdraw your consent at any time. See our <a href=\"/policies/privacy-policy\">Privacy Policy</a> for more information.</p>",
+            "form_width": 440,
+            "page_handles": ""
+          }
+        }
+      },
+      "block_order": [
+        "email_prefs_main"
+      ],
+      "settings": {
+        "menu": "footer-menu-copy",
+        "sidebar_width": 33,
+        "sidebar_background": "#f5f5f5",
+        "content_background": "#ffffff",
+        "sticky_sidebar": true,
+        "sticky_top": 24,
+        "mobile_collapse": false,
+        "mobile_left": "show",
+        "mobile_right": "show",
+        "heading_size": 20,
+        "heading_color": "#111111",
+        "heading_weight": "700",
+        "category_size": 16,
+        "category_color": "#111111",
+        "category_weight": "700",
+        "category_uppercase": true,
+        "link_size": 14,
+        "link_color": "#111111",
+        "active_color": "#111111",
+        "underline_active": true,
+        "hover_color": "#111111",
+        "category_space": 28,
+        "link_space": 12,
+        "sidebar_padding_y": 48,
+        "sidebar_padding_x": 32,
+        "content_padding_y": 48,
+        "content_padding_x": 48,
+        "content_max": 1200,
+        "min_height": 0,
+        "mobile_padding": 16,
+        "mobile_spacing": 0
+      }
+    }
+  },
+  "order": [
+    "customer_care"
+  ]
+}
