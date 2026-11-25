@@ -116,6 +116,8 @@
         "sticky_sidebar": true,
         "sticky_top": 24,
         "mobile_collapse": false,
+        "mobile_left": "hide",
+        "mobile_right": "show",
         "heading_size": 20,
         "heading_color": "#111111",
         "heading_weight": "700",
