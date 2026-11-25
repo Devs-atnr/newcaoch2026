@@ -315,19 +315,21 @@
                 <hr class="coach-care__divider" {{ block.shopify_attributes }}>
               {%- when 'size_table' -%}
               {%- when 'size_guide' -%}
-                <coach-care-size class="coach-care__size" {{ block.shopify_attributes }} style="--sg-max: {{ block.settings.max_width }}px; --sg-title: {{ block.settings.heading_size }}px;">
+                <coach-care-size class="coach-care__size" {{ block.shopify_attributes }} style="--sg-box: {{ block.settings.max_width }}px; --sg-title: {{ block.settings.heading_size }}px;">
                   {%- if block.settings.heading != blank -%}
                     <h2 class="coach-care__size-title">{{ block.settings.heading | escape }}</h2>
                   {%- endif -%}
-                  <label class="coach-care__select">
-                    <span class="visually-hidden">{{ block.settings.group_label | escape }}</span>
-                    <select data-size-group></select>
-                  </label>
-                  <label class="coach-care__select">
-                    <span class="visually-hidden">{{ block.settings.category_label | escape }}</span>
-                    <select data-size-category></select>
-                  </label>
-                  <button class="coach-care__button coach-care__size-btn" type="button" data-size-view>{{ block.settings.button_label | escape }}</button>
+                  <div class="coach-care__size-box">
+                    <label class="coach-care__select">
+                      <span class="visually-hidden">{{ block.settings.group_label | escape }}</span>
+                      <select data-size-group></select>
+                    </label>
+                    <label class="coach-care__select">
+                      <span class="visually-hidden">{{ block.settings.category_label | escape }}</span>
+                      <select data-size-category></select>
+                    </label>
+                    <button class="coach-care__button coach-care__size-btn" type="button" data-size-view>{{ block.settings.button_label | escape }}</button>
+                  </div>
                   <div data-size-result></div>
                   {%- if block.settings.extra != blank or block.settings.image != blank -%}
                     <div class="coach-care__size-extra{% if block.settings.image_height > 0 %} is-fixed{% endif %}" style="--sg-img-w: {{ block.settings.image_width }}px; --sg-img-h: {{ block.settings.image_height }}px;">
@@ -534,7 +536,8 @@
 .coach-care__icon-row,
 .coach-care__faq,
 .coach-care__account { margin-top: 22px; }
-.coach-care__main:has(.coach-care__account) .coach-care__inner { max-width: none; }
+.coach-care__main:has(.coach-care__account) .coach-care__inner,
+.coach-care__main:has(.coach-care__size) .coach-care__inner { max-width: none; }
 .coach-care__account,
 .coach-care__account input,
 .coach-care__account button,
@@ -827,41 +830,52 @@
 .coach-care__faq .coach-care__rte { padding-bottom: 14px; }
 .coach-care__divider { margin: 24px 0; border: 0; border-top: 1px solid #e6e6e6; }
 .coach-care__spacer { height: var(--care-spacer, 24px); }
-.coach-care__size { width: min(100%, var(--sg-max, 640px)); }
+.coach-care__size { width: 100%; }
 .coach-care__size-title {
-  margin: 0 0 18px;
+  margin: 0 0 16px;
   font-size: var(--sg-title, 22px);
   font-weight: 700;
   line-height: 1.2;
 }
-.coach-care__select { display: block; margin: 0 0 12px; }
+.coach-care__size-box { width: min(100%, var(--sg-box, 320px)); }
+.coach-care__select { display: block; margin: 0 0 10px; }
 .coach-care__select select {
   width: 100%;
-  height: 44px;
+  height: 42px;
   padding: 0 36px 0 12px;
-  border: 1px solid #c8c8c8;
+  border: 1px solid #cfcfcf;
   border-radius: 0;
-  background: #ffffff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5 6 6.5 11 1.5' fill='none' stroke='%23111' stroke-width='1.2'/%3E%3C/svg%3E") right 12px center / 12px 8px no-repeat;
+  background: #ffffff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5 6 6.5 11 1.5' fill='none' stroke='%23333' stroke-width='1.2'/%3E%3C/svg%3E") right 12px center / 11px 7px no-repeat;
   box-shadow: none;
-  color: #111111;
+  color: #222222;
   font-family: inherit;
-  font-size: 14px;
+  font-size: 15px;
   appearance: none;
 }
 .coach-care__select select:focus,
-.coach-care__select select:focus-visible {
+.coach-care__select select:focus-visible,
+.coach-care__size-btn:focus,
+.coach-care__size-btn:focus-visible,
+.coach-care__region:focus,
+.coach-care__region:focus-visible {
   border-color: #111111;
-  outline: none;
-  box-shadow: none;
+  outline: none !important;
+  box-shadow: none !important;
 }
 .coach-care__size-btn {
   width: 100%;
-  margin-top: 4px;
-  letter-spacing: 0.08em;
+  min-height: 42px;
+  margin-top: 2px;
+  padding: 12px 16px;
+  border-color: #000000;
+  background: #000000;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
 }
-.coach-care__size-chart { margin-top: 28px; }
-.coach-care__size-name { margin: 0 0 12px; font-size: 18px; font-weight: 700; }
+.coach-care__size-chart { margin-top: 32px; }
+.coach-care__size-name { margin: 0 0 14px; font-size: 16px; font-weight: 700; line-height: 1.3; }
 .coach-care__size-note,
 .coach-care__size-note-title {
   margin: 14px 0 0;
@@ -892,33 +906,45 @@
 }
 .coach-care__size-html { margin-top: 4px; }
 .coach-care__size-html table,
-.coach-care__size-table { width: 100%; border-collapse: collapse; font-size: 13px; }
-.coach-care__size-html th,
-.coach-care__size-html td {
-  padding: 10px 8px;
-  border: 1px solid #e4e4e4;
-  text-align: center;
-  font-weight: 400;
+.coach-care__size-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+  color: #222222;
 }
-.coach-care__size-html th { background: #f3f3f3; font-weight: 600; }
+.coach-care__size-html th,
+.coach-care__size-html td,
 .coach-care__size-table th,
 .coach-care__size-table td {
-  padding: 10px 8px;
-  border: 1px solid #e4e4e4;
+  padding: 14px 10px;
+  border: 1px solid #e6e6e6;
+  background: #ffffff;
   text-align: center;
   font-weight: 400;
+  line-height: 1.3;
+  vertical-align: middle;
 }
-.coach-care__size-table th { background: #f3f3f3; font-weight: 600; }
+.coach-care__size-html th,
+.coach-care__size-table th {
+  background: #f4f4f4;
+  font-size: 12px;
+  font-weight: 600;
+  color: #333333;
+}
 .coach-care__region {
+  display: inline-block;
+  width: auto;
   max-width: 100%;
   border: 0;
-  background: transparent url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5 6 6.5 11 1.5' fill='none' stroke='%23111' stroke-width='1.2'/%3E%3C/svg%3E") right center / 10px 7px no-repeat;
-  color: inherit;
+  background: transparent url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5 6 6.5 11 1.5' fill='none' stroke='%23333' stroke-width='1.2'/%3E%3C/svg%3E") right center / 10px 6px no-repeat;
+  color: #333333;
   font: inherit;
+  font-size: 12px;
   font-weight: 600;
+  line-height: 1.3;
   text-align: center;
   appearance: none;
-  padding: 0 14px 0 0;
+  padding: 0 16px 0 2px;
   cursor: pointer;
 }
 @media screen and (max-width: 989px) {
@@ -1202,7 +1228,7 @@ if (!customElements.get('coach-care-nav')) {
         { "type": "text", "id": "group_label", "label": "First menu label", "default": "Department" },
         { "type": "text", "id": "category_label", "label": "Second menu label", "default": "Category" },
         { "type": "range", "id": "heading_size", "min": 14, "max": 40, "step": 1, "unit": "px", "label": "Heading size", "default": 22 },
-        { "type": "range", "id": "max_width", "min": 320, "max": 1000, "step": 20, "unit": "px", "label": "Chart width", "default": 640 },
+        { "type": "range", "id": "max_width", "min": 240, "max": 640, "step": 20, "unit": "px", "label": "Menu width", "default": 320 },
         { "type": "header", "content": "Content after charts" },
         { "type": "richtext", "id": "extra", "label": "Custom content" },
         { "type": "image_picker", "id": "image", "label": "Image" },
