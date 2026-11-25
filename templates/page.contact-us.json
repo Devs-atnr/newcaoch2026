@@ -12,16 +12,47 @@
     "customer_care": {
       "type": "customer-care",
       "blocks": {
-        "custom_liquid_AcVRHH": {
-          "type": "custom_liquid",
+        "contact_desk_main": {
+          "type": "contact_desk",
           "settings": {
-            "code": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\" />\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" />\n  <title>Contact Us</title>\n  <style>\n    * {\n      box-sizing: border-box;\n      margin: 0;\n      padding: 0;\n    }\n\n    body {\n      font-family: -apple-system, BlinkMacSystemFont, \"Helvetica Neue\", Helvetica, Arial, sans-serif;\n      color: #111111;\n      background-color: #ffffff;\n      line-height: 1.5;\n      font-size: 14px;\n      padding: 40px 24px;\n    }\n\n    .contact-container {\n      max-width: 780px;\n      margin: 0 auto;\n    }\n\n    h1 {\n      font-size: 22px;\n      font-weight: 700;\n      margin-bottom: 22px;\n      letter-spacing: -0.01em;\n    }\n\n    p {\n      margin-bottom: 18px;\n    }\n\n    a {\n      color: #111111;\n      text-decoration: underline;\n    }\n\n    a:hover {\n      opacity: 0.75;\n    }\n\n    .contact-channel {\n      margin-top: 26px;\n      max-width: 340px;\n    }\n\n    .channel-header {\n      display: flex;\n      align-items: center;\n      gap: 10px;\n      margin-bottom: 8px;\n    }\n\n    .channel-icon {\n      width: 24px;\n      height: 24px;\n      object-fit: contain;\n      flex-shrink: 0;\n    }\n\n    .channel-header h2 {\n      font-size: 16px;\n      font-weight: 700;\n      line-height: 1.2;\n    }\n\n    .channel-desc {\n      font-size: 13.5px;\n      line-height: 1.45;\n      color: #222222;\n      margin-bottom: 0;\n    }\n\n    @media (max-width: 600px) {\n      body {\n        padding: 24px 16px;\n      }\n    }\n  </style>\n</head>\n<body>\n  <main class=\"contact-container\">\n    <h1>Contact Us</h1>\n\n    <p>\n      Have you checked our Frequently Asked Questions? You may find instant answers to most questions about shopping with us here. If your enquiry is related to returns/exchanges/refunds, please visit the Returns and Exchanges page.\n    </p>\n\n    <p>\n      If you have an enquiry about your in-store purchase, please contact the original place of purchase (click here for store location). If unable to contact/visit the store, please feel free to contact our Customer Care team.\n    </p>\n\n    <section class=\"contact-channel\">\n      <div class=\"channel-header\">\n        <img\n          src=\"https://coach.sa/cdn/shop/files/ce-whatsapp-icon1_200x.png?v=1746175270\"\n          alt=\"Whatsapp Chat icon\"\n          class=\"channel-icon\"\n        />\n        <h2>Whatsapp Chat</h2>\n      </div>\n      <p class=\"channel-desc\">\n        Click <a href=\"https://api.whatsapp.com/send/?phone=966501995607&text&type=phone_number&app_absent=0\" target=\"_blank\" rel=\"noopener noreferrer\">here</a> to chat on whatsapp.\n      </p>\n    </section>\n\n    <section class=\"contact-channel\">\n      <div class=\"channel-header\">\n        <img\n          src=\"https://coach.sa/cdn/shop/files/ce-callus-icon1_200x.png?v=1746175270\"\n          alt=\"Call Us icon\"\n          class=\"channel-icon\"\n        />\n        <h2>Call Us</h2>\n      </div>\n      <p class=\"channel-desc\">\n        For general inquiries, shopping advice and questions about your order status, give us a ring. We’re always happy to hear from you. Monday to Friday 9am – 5pm GMT\n      </p>\n    </section>\n\n    <section class=\"contact-channel\">\n      <div class=\"channel-header\">\n        <img\n          src=\"https://coach.sa/cdn/shop/files/icon-chat_200x.png?v=1746175270\"\n          alt=\"Live Chat icon\"\n          class=\"channel-icon\"\n        />\n        <h2>Live Chat</h2>\n      </div>\n      <p class=\"channel-desc\">Chat to our Customer Care team</p>\n    </section>\n  </main>\n</body>\n</html>",
+            "heading": "Contact Us",
+            "notice": "<p>We're currently experiencing higher than usual contact volumes, and response times may be longer than expected. Our team is working hard to respond to all enquiries as quickly as possible. To help us assist everyone faster, please avoid submitting multiple enquiries about the same issue, as this may delay response times. Please note that our stores cannot assist with online purchases, and we are unable to amend customer details or cancel orders once they have been placed. Thank you for your patience and understanding.</p>",
+            "hours": "<p>Our Customer Care team is available:</p><p>Monday-Friday 8am-8pm</p><p>Saturday 9am-5pm</p>",
+            "whatsapp_heading": "Whatsapp Chat",
+            "whatsapp_icon": "https://coach.sa/cdn/shop/files/ce-whatsapp-icon1_200x.png?v=1746175270",
+            "whatsapp_link": "https://wa.me/966501995607",
+            "whatsapp_text": "<p>Click <a href=\"https://wa.me/966501995607\" target=\"_blank\">here</a> or scan the code below to chat to us.</p>",
+            "call_heading": "Call Us",
+            "call_icon": "https://coach.sa/cdn/shop/files/ce-callus-icon1_200x.png?v=1746175270",
+            "call_text": "<p>For general inquiries, shopping advice and questions about your order status, give us a ring. We're always happy to hear from you.</p>",
+            "phone_label": "+966501995607",
+            "phone_link": "tel:+966501995607",
+            "chat_heading": "Live Chat",
+            "chat_icon": "https://coach.sa/cdn/shop/files/icon-chat_200x.png?v=1746175270",
+            "chat_text": "<p>Chat to our Customer Care team in real time.</p><p>Click on the chat icon at the bottom right corner of this page to be connected to the next available agent.</p>",
+            "extra": "<p>Have you checked our <a href=\"/pages/faqs\">Frequently Asked Questions</a>? You may find instant answers to most questions about shopping with us <a href=\"/pages/faqs\">here</a>. If your enquiry is related to returns/exchanges/refunds, please visit the <a href=\"/pages/returns-exchanges\">Returns and Exchanges</a> page.</p><p>If you have an enquiry about your in-store purchase, please contact the original place of purchase. If unable to contact or visit the store, please feel free to contact our Customer Care team.</p>",
+            "form_heading": "Email Us",
+            "topic_label": "What can we help you with?",
+            "topic_placeholder": "Choose Your Topic",
+            "topics": "Order status\nDelivery\nReturns and exchanges\nProduct enquiry\nOnline shopping\nStore enquiry\nSomething else",
+            "comments_label": "Comments",
+            "order_label": "Order Number (Optional)",
+            "contact_label": "How can we contact you?",
+            "name_label": "Full Name",
+            "email_label": "Email Address",
+            "confirm_label": "Confirm Email Address",
+            "confirm_error": "Email addresses do not match.",
+            "phone_field": "Phone Number",
+            "phone_help": "Include your country code, for example +966.",
+            "button_label": "Submit",
+            "privacy": "<p>We use your personal information to respond to your query. Read our <a href=\"/policies/privacy-policy\">Privacy Policy</a> for more details.</p>",
+            "success": "Thanks. Your message has been sent.",
             "page_handles": ""
           }
         }
       },
       "block_order": [
-        "custom_liquid_AcVRHH"
+        "contact_desk_main"
       ],
       "settings": {
         "menu": "footer-menu-copy",

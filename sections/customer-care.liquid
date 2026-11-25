@@ -308,6 +308,136 @@
                     <div class="coach-care__rte">{{ block.settings.answer }}</div>
                   {%- endif -%}
                 </details>
+              {%- when 'contact_desk' -%}
+                {%- liquid
+                  assign desk_whatsapp = block.settings.whatsapp_link
+                  if desk_whatsapp == blank
+                    assign desk_whatsapp = 'https://wa.me/966501995607'
+                  endif
+                  assign desk_phone_url = block.settings.phone_link
+                  if desk_phone_url == blank
+                    assign desk_phone_url = 'tel:+966501995607'
+                  endif
+                  assign desk_topics = block.settings.topics | newline_to_br | replace: '<br />', '|' | replace: '<br>', '|' | split: '|'
+                -%}
+                <coach-care-desk class="coach-desk" {{ block.shopify_attributes }}>
+                  <div class="coach-desk__info">
+                    {%- if block.settings.heading != blank -%}
+                      <h2>{{ block.settings.heading | escape }}</h2>
+                    {%- endif -%}
+                    {%- if block.settings.notice != blank -%}
+                      <div class="coach-desk__notice coach-desk__rte">{{ block.settings.notice }}</div>
+                    {%- endif -%}
+                    {%- if block.settings.hours != blank -%}
+                      <div class="coach-desk__hours coach-desk__rte">{{ block.settings.hours }}</div>
+                    {%- endif -%}
+                    <div class="coach-desk__channel">
+                      <div class="coach-desk__channel-head">
+                        {%- if block.settings.whatsapp_icon != blank -%}
+                          <img src="{{ block.settings.whatsapp_icon | escape }}" alt="" width="28" height="28">
+                        {%- endif -%}
+                        <h3>{{ block.settings.whatsapp_heading | escape }}</h3>
+                      </div>
+                      {%- if block.settings.whatsapp_text != blank -%}
+                        <div class="coach-desk__rte">{{ block.settings.whatsapp_text }}</div>
+                      {%- endif -%}
+                      {%- if block.settings.qr != blank -%}
+                        {{ block.settings.qr | image_url: width: 320 | image_tag: class: 'coach-desk__qr', alt: 'WhatsApp code' }}
+                      {%- else -%}
+                        <img class="coach-desk__qr" alt="WhatsApp code" width="150" height="150" src="https://api.qrserver.com/v1/create-qr-code/?size=300x300&data={{ desk_whatsapp | url_encode }}">
+                      {%- endif -%}
+                    </div>
+                    <div class="coach-desk__channel">
+                      <div class="coach-desk__channel-head">
+                        {%- if block.settings.call_icon != blank -%}
+                          <img src="{{ block.settings.call_icon | escape }}" alt="" width="28" height="28">
+                        {%- endif -%}
+                        <h3>{{ block.settings.call_heading | escape }}</h3>
+                      </div>
+                      {%- if block.settings.call_text != blank -%}
+                        <div class="coach-desk__rte">{{ block.settings.call_text }}</div>
+                      {%- endif -%}
+                      {%- if block.settings.phone_label != blank -%}
+                        <p><a class="coach-desk__phone" href="{{ desk_phone_url }}">{{ block.settings.phone_label | escape }}</a></p>
+                      {%- endif -%}
+                    </div>
+                    <div class="coach-desk__channel">
+                      <div class="coach-desk__channel-head">
+                        {%- if block.settings.chat_icon != blank -%}
+                          <img src="{{ block.settings.chat_icon | escape }}" alt="" width="28" height="28">
+                        {%- endif -%}
+                        <h3>{{ block.settings.chat_heading | escape }}</h3>
+                      </div>
+                      {%- if block.settings.chat_text != blank -%}
+                        <div class="coach-desk__rte">{{ block.settings.chat_text }}</div>
+                      {%- endif -%}
+                    </div>
+                    {%- if block.settings.extra != blank -%}
+                      <div class="coach-desk__extra coach-desk__rte">{{ block.settings.extra }}</div>
+                    {%- endif -%}
+                  </div>
+                  <div class="coach-desk__mail">
+                    {%- if block.settings.form_heading != blank -%}
+                      <h2>{{ block.settings.form_heading | escape }}</h2>
+                    {%- endif -%}
+                    {%- unless care_contact_used -%}
+                      {%- assign care_contact_used = true -%}
+                      {%- assign care_form_id = 'CareDesk-' | append: block.id -%}
+                      {%- form 'contact', id: care_form_id, class: 'coach-desk__form' -%}
+                        {%- if form.posted_successfully? -%}
+                          <p class="coach-desk__status" tabindex="-1">{{ block.settings.success | escape }}</p>
+                        {%- elsif form.errors -%}
+                          <p class="coach-desk__status" role="alert">{{ form.errors.translated_fields.email | capitalize }} {{ form.errors.messages.email }}</p>
+                        {%- endif -%}
+                        <p class="coach-desk__label">{{ block.settings.topic_label | escape }}</p>
+                        <label class="coach-desk__field">
+                          <span class="visually-hidden">{{ block.settings.topic_label | escape }}</span>
+                          <select class="coach-desk__select" name="contact[topic]" required>
+                            <option value="" selected disabled>{{ block.settings.topic_placeholder | escape }}</option>
+                            {%- for topic in desk_topics -%}
+                              {%- assign topic_clean = topic | strip -%}
+                              {%- if topic_clean != blank -%}
+                                <option value="{{ topic_clean | escape }}">{{ topic_clean | escape }}</option>
+                              {%- endif -%}
+                            {%- endfor -%}
+                          </select>
+                        </label>
+                        <label class="coach-desk__field">
+                          <span class="visually-hidden">{{ block.settings.comments_label | escape }}</span>
+                          <textarea class="coach-desk__area" name="contact[body]" rows="4" required placeholder="{{ block.settings.comments_label | escape }}"></textarea>
+                        </label>
+                        <label class="coach-desk__field">
+                          <span class="visually-hidden">{{ block.settings.order_label | escape }}</span>
+                          <input class="coach-desk__input" type="text" name="contact[order_number]" autocomplete="off" placeholder="{{ block.settings.order_label | escape }}">
+                        </label>
+                        <p class="coach-desk__label">{{ block.settings.contact_label | escape }}</p>
+                        <label class="coach-desk__field">
+                          <span class="visually-hidden">{{ block.settings.name_label | escape }}</span>
+                          <input class="coach-desk__input" type="text" name="contact[name]" autocomplete="name" required placeholder="{{ block.settings.name_label | escape }}" value="{% if form.name %}{{ form.name }}{% elsif customer %}{{ customer.name }}{% endif %}">
+                        </label>
+                        <label class="coach-desk__field">
+                          <span class="visually-hidden">{{ block.settings.email_label | escape }}</span>
+                          <input class="coach-desk__input" type="email" name="contact[email]" autocomplete="email" required placeholder="{{ block.settings.email_label | escape }}" data-desk-email value="{% if form.email %}{{ form.email }}{% elsif customer %}{{ customer.email }}{% endif %}">
+                        </label>
+                        <label class="coach-desk__field">
+                          <span class="visually-hidden">{{ block.settings.confirm_label | escape }}</span>
+                          <input class="coach-desk__input" type="email" name="confirm_email" autocomplete="email" required placeholder="{{ block.settings.confirm_label | escape }}" data-desk-confirm>
+                          <p class="coach-desk__error" data-desk-match hidden>{{ block.settings.confirm_error | escape }}</p>
+                        </label>
+                        <label class="coach-desk__field coach-desk__phone-field">
+                          <span class="visually-hidden">{{ block.settings.phone_field | escape }}</span>
+                          <input class="coach-desk__input" type="tel" name="contact[phone]" autocomplete="tel" required placeholder="{{ block.settings.phone_field | escape }}">
+                          <button class="coach-desk__tip-btn" type="button" aria-label="{{ block.settings.phone_help | escape }}">i</button>
+                          <span class="coach-desk__tip">{{ block.settings.phone_help | escape }}</span>
+                        </label>
+                        <button class="coach-desk__submit" type="submit">{{ block.settings.button_label | escape }}</button>
+                        {%- if block.settings.privacy != blank -%}
+                          <div class="coach-desk__privacy coach-desk__rte">{{ block.settings.privacy }}</div>
+                        {%- endif -%}
+                      {%- endform -%}
+                    {%- endunless -%}
+                  </div>
+                </coach-care-desk>
               {%- when 'contact_form' -%}
                 <div class="coach-care__block" {{ block.shopify_attributes }}>
                   {%- unless care_contact_used -%}
@@ -1096,6 +1226,118 @@
 @media screen and (min-width: 990px) {
   .coach-care__panel[hidden] { display: block !important; }
 }
+.coach-desk {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 36px 64px;
+  color: #111;
+  font-family: HelveticaLTPro-Roman, Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  line-height: 1.45;
+}
+.coach-desk h2 { margin: 0 0 18px; font-size: 22px; font-weight: 700; line-height: 1.2; }
+.coach-desk h3 { margin: 0; font-size: 18px; font-weight: 700; line-height: 1.2; }
+.coach-desk__rte p { margin: 0 0 14px; }
+.coach-desk__hours p,
+.coach-desk__channel .coach-desk__rte p { margin: 0 0 4px; }
+.coach-desk__rte a { color: #111; text-decoration: underline; }
+.coach-desk__notice { color: #d0121a; }
+.coach-desk__hours { margin-bottom: 28px; }
+.coach-desk__channel { margin: 0 0 26px; }
+.coach-desk__channel-head { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+.coach-desk__channel-head img { width: 28px; height: 28px; object-fit: contain; }
+.coach-desk__phone { color: #111; text-decoration: underline; }
+.coach-desk__qr { display: block; width: 150px; height: 150px; margin-top: 12px; }
+.coach-desk__extra { margin-top: 18px; }
+.coach-desk__label { margin: 0 0 8px; font-weight: 700; }
+.coach-desk__field { display: block; margin: 0 0 12px; }
+.coach-desk__input,
+.coach-desk__select,
+.coach-desk__area {
+  width: 100%;
+  border: 1px solid #d7d7d7;
+  background: #fff;
+  color: #111;
+  font: inherit;
+  padding: 12px 14px;
+  border-radius: 0;
+  outline: none;
+  box-shadow: none;
+}
+.coach-desk__input:focus-visible,
+.coach-desk__select:focus-visible,
+.coach-desk__area:focus-visible,
+.coach-desk__submit:focus-visible {
+  outline: none !important;
+  box-shadow: none !important;
+}
+.coach-desk__input::placeholder,
+.coach-desk__area::placeholder { color: #8d8d8d; }
+.coach-desk__area { min-height: 92px; resize: vertical; }
+.coach-desk__select {
+  color: #8d8d8d;
+  appearance: none;
+  background-image: linear-gradient(45deg, transparent 50%, #111 50%), linear-gradient(135deg, #111 50%, transparent 50%);
+  background-position: calc(100% - 18px) 50%, calc(100% - 12px) 50%;
+  background-size: 6px 6px, 6px 6px;
+  background-repeat: no-repeat;
+  padding-right: 32px;
+}
+.coach-desk__select.has-value { color: #111; }
+.coach-desk__input.is-invalid,
+.coach-desk__select.is-invalid,
+.coach-desk__area.is-invalid { border-color: #d0121a; }
+.coach-desk__phone-field { position: relative; }
+.coach-desk__phone-field .coach-desk__input { padding-right: 42px; }
+.coach-desk__tip-btn {
+  position: absolute;
+  right: 12px;
+  top: 13px;
+  width: 18px;
+  height: 18px;
+  border: 1px solid #222;
+  border-radius: 50%;
+  background: #fff;
+  color: #111;
+  font-size: 12px;
+  line-height: 16px;
+  padding: 0;
+  cursor: pointer;
+}
+.coach-desk__tip {
+  display: none;
+  position: absolute;
+  right: 0;
+  top: calc(100% + 6px);
+  z-index: 2;
+  width: 220px;
+  padding: 8px 10px;
+  border: 1px solid #ddd;
+  background: #fff;
+  font-size: 12px;
+}
+.coach-desk__tip-btn:hover + .coach-desk__tip,
+.coach-desk__tip-btn:focus + .coach-desk__tip { display: block; }
+.coach-desk__submit {
+  width: 100%;
+  margin-top: 8px;
+  border: 0;
+  background: #d9d9d9;
+  color: #4a4a4a;
+  padding: 16px;
+  font: inherit;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+.coach-desk__privacy { margin-top: 12px; font-size: 12px; }
+.coach-desk__privacy p { margin: 0; }
+.coach-desk__status { margin: 0 0 12px; }
+.coach-desk__error { margin: 4px 0 0; color: #d0121a; font-size: 12px; }
+@media screen and (max-width: 749px) {
+  .coach-desk { grid-template-columns: 1fr; gap: 32px; }
+}
 {% endstylesheet %}
 
 {% javascript %}
@@ -1141,6 +1383,33 @@ if (!customElements.get('coach-care-login')) {
           if (!first) return;
           event.preventDefault();
         });
+      });
+    }
+  });
+}
+if (!customElements.get('coach-care-desk')) {
+  customElements.define('coach-care-desk', class extends HTMLElement {
+    connectedCallback() {
+      if (this.dataset.bound === 'true') return;
+      this.dataset.bound = 'true';
+      const form = this.querySelector('form');
+      if (!form) return;
+      const select = form.querySelector('select');
+      if (select) select.addEventListener('change', () => select.classList.toggle('has-value', select.value !== ''));
+      form.addEventListener('submit', (event) => {
+        let invalid = false;
+        form.querySelectorAll('[required]').forEach((field) => {
+          const bad = !field.checkValidity();
+          field.classList.toggle('is-invalid', bad);
+          if (bad) invalid = true;
+        });
+        const email = form.querySelector('[data-desk-email]');
+        const confirm = form.querySelector('[data-desk-confirm]');
+        const mismatch = email && confirm && email.value.trim().toLowerCase() !== confirm.value.trim().toLowerCase();
+        if (confirm) confirm.classList.toggle('is-invalid', mismatch || !confirm.checkValidity());
+        const message = form.querySelector('[data-desk-match]');
+        if (message) message.hidden = !mismatch;
+        if (invalid || mismatch) event.preventDefault();
       });
     }
   });
@@ -1488,6 +1757,47 @@ if (!customElements.get('coach-care-nav')) {
       "settings": [
         { "type": "text", "id": "question", "label": "Question" },
         { "type": "richtext", "id": "answer", "label": "Answer" },
+        { "type": "text", "id": "page_handles", "label": "Limit to page handles", "info": "Comma-separated handles. Leave blank to show on every page using this template." }
+      ]
+    },
+    {
+      "type": "contact_desk",
+      "name": "Contact page",
+      "limit": 1,
+      "settings": [
+        { "type": "text", "id": "heading", "label": "Heading", "default": "Contact Us" },
+        { "type": "richtext", "id": "notice", "label": "Notice", "default": "<p>We're currently experiencing higher than usual contact volumes, and response times may be longer than expected. Our team is working hard to respond to all enquiries as quickly as possible. To help us assist everyone faster, please avoid submitting multiple enquiries about the same issue, as this may delay response times. Please note that our stores cannot assist with online purchases, and we are unable to amend customer details or cancel orders once they have been placed. Thank you for your patience and understanding.</p>" },
+        { "type": "richtext", "id": "hours", "label": "Hours", "default": "<p>Our Customer Care team is available: Monday-Friday 8am-8pm. Saturday 9am-5pm.</p>" },
+        { "type": "text", "id": "whatsapp_heading", "label": "WhatsApp heading", "default": "Whatsapp Chat" },
+        { "type": "text", "id": "whatsapp_icon", "label": "WhatsApp icon", "default": "https://coach.sa/cdn/shop/files/ce-whatsapp-icon1_200x.png?v=1746175270" },
+        { "type": "text", "id": "whatsapp_link", "label": "WhatsApp link", "default": "https://wa.me/966501995607" },
+        { "type": "richtext", "id": "whatsapp_text", "label": "WhatsApp text", "default": "<p>Click <a href=\"https://wa.me/966501995607\" target=\"_blank\">here</a> or scan the code below to chat to us.</p>" },
+        { "type": "image_picker", "id": "qr", "label": "WhatsApp code" },
+        { "type": "text", "id": "call_heading", "label": "Call heading", "default": "Call Us" },
+        { "type": "text", "id": "call_icon", "label": "Call icon", "default": "https://coach.sa/cdn/shop/files/ce-callus-icon1_200x.png?v=1746175270" },
+        { "type": "richtext", "id": "call_text", "label": "Call text", "default": "<p>For general inquiries, shopping advice and questions about your order status, give us a ring. We're always happy to hear from you.</p>" },
+        { "type": "text", "id": "phone_label", "label": "Phone number", "default": "+966501995607" },
+        { "type": "text", "id": "phone_link", "label": "Phone link", "default": "tel:+966501995607" },
+        { "type": "text", "id": "chat_heading", "label": "Chat heading", "default": "Live Chat" },
+        { "type": "text", "id": "chat_icon", "label": "Chat icon", "default": "https://coach.sa/cdn/shop/files/icon-chat_200x.png?v=1746175270" },
+        { "type": "richtext", "id": "chat_text", "label": "Chat text", "default": "<p>Chat to our Customer Care team in real time. Click on the chat icon at the bottom right corner of this page to be connected to the next available agent.</p>" },
+        { "type": "richtext", "id": "extra", "label": "More help", "default": "<p>Have you checked our <a href=\"/pages/faqs\">Frequently Asked Questions</a>? You may find instant answers to most questions about shopping with us <a href=\"/pages/faqs\">here</a>. If your enquiry is related to returns/exchanges/refunds, please visit the <a href=\"/pages/returns-exchanges\">Returns and Exchanges</a> page.</p><p>If you have an enquiry about your in-store purchase, please contact the original place of purchase. If unable to contact or visit the store, please feel free to contact our Customer Care team.</p>" },
+        { "type": "text", "id": "form_heading", "label": "Form heading", "default": "Email Us" },
+        { "type": "text", "id": "topic_label", "label": "Topic label", "default": "What can we help you with?" },
+        { "type": "text", "id": "topic_placeholder", "label": "Topic placeholder", "default": "Choose Your Topic" },
+        { "type": "textarea", "id": "topics", "label": "Topics", "default": "Order status\nDelivery\nReturns and exchanges\nProduct enquiry\nOnline shopping\nStore enquiry\nSomething else" },
+        { "type": "text", "id": "comments_label", "label": "Comments label", "default": "Comments" },
+        { "type": "text", "id": "order_label", "label": "Order label", "default": "Order Number (Optional)" },
+        { "type": "text", "id": "contact_label", "label": "Contact label", "default": "How can we contact you?" },
+        { "type": "text", "id": "name_label", "label": "Name label", "default": "Full Name" },
+        { "type": "text", "id": "email_label", "label": "Email label", "default": "Email Address" },
+        { "type": "text", "id": "confirm_label", "label": "Confirm email label", "default": "Confirm Email Address" },
+        { "type": "text", "id": "confirm_error", "label": "Confirm email error", "default": "Email addresses do not match." },
+        { "type": "text", "id": "phone_field", "label": "Phone field label", "default": "Phone Number" },
+        { "type": "text", "id": "phone_help", "label": "Phone help", "default": "Include your country code, for example +966." },
+        { "type": "text", "id": "button_label", "label": "Button label", "default": "Submit" },
+        { "type": "richtext", "id": "privacy", "label": "Privacy note", "default": "<p>We use your personal information to respond to your query. Read our <a href=\"/policies/privacy-policy\">Privacy Policy</a> for more details.</p>" },
+        { "type": "text", "id": "success", "label": "Success message", "default": "Thanks. Your message has been sent." },
         { "type": "text", "id": "page_handles", "label": "Limit to page handles", "info": "Comma-separated handles. Leave blank to show on every page using this template." }
       ]
     },
