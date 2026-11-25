@@ -9,49 +9,57 @@
  */
 {
   "sections": {
-    "faqs": {
-      "type": "coach-faqs",
+    "customer_care": {
+      "type": "customer-care",
       "blocks": {
-        "q_payment": { "type": "question", "settings": { "question": "Payment", "answer": "" } },
-        "q_clearpay": { "type": "question", "settings": { "question": "Clearpay", "answer": "" } },
-        "q_shop_pay": { "type": "question", "settings": { "question": "Shop Pay", "answer": "" } },
-        "q_account": { "type": "question", "settings": { "question": "My Account", "answer": "" } },
-        "q_returns": { "type": "question", "settings": { "question": "Returns", "answer": "" } },
-        "q_exchanges": { "type": "question", "settings": { "question": "Exchanges", "answer": "" } },
-        "q_delivery": { "type": "question", "settings": { "question": "Delivery", "answer": "" } },
-        "q_placing": { "type": "question", "settings": { "question": "Placing an order", "answer": "" } },
-        "q_warranties": { "type": "question", "settings": { "question": "Warranties", "answer": "" } },
-        "q_products": { "type": "question", "settings": { "question": "Products & availability", "answer": "" } },
-        "q_others": { "type": "question", "settings": { "question": "Others", "answer": "" } },
-        "q_about": { "type": "question", "settings": { "question": "About us", "answer": "" } }
+        "faq_9zWczb": {
+          "type": "faq",
+          "settings": {
+            "question": "yrwetwdsfg",
+            "answer": "<p>sfdgsdfsd</p>",
+            "page_handles": ""
+          }
+        }
       },
       "block_order": [
-        "q_payment",
-        "q_clearpay",
-        "q_shop_pay",
-        "q_account",
-        "q_returns",
-        "q_exchanges",
-        "q_delivery",
-        "q_placing",
-        "q_warranties",
-        "q_products",
-        "q_others",
-        "q_about"
+        "faq_9zWczb"
       ],
       "settings": {
-        "heading": "FAQ",
-        "heading_size": 22,
-        "group_size": 16,
-        "question_size": 13,
-        "plus_color": "#111111",
-        "line_color": "#E6E6E6",
-        "content_width": 1000,
-        "side_padding": 20,
-        "padding_top": 48,
-        "padding_bottom": 48
+        "menu": "footer-menu-copy",
+        "sidebar_width": 33,
+        "sidebar_background": "#f5f5f5",
+        "content_background": "#ffffff",
+        "sticky_sidebar": true,
+        "sticky_top": 24,
+        "mobile_collapse": false,
+        "mobile_left": "show",
+        "mobile_right": "show",
+        "heading_size": 20,
+        "heading_color": "#111111",
+        "heading_weight": "700",
+        "category_size": 16,
+        "category_color": "#111111",
+        "category_weight": "700",
+        "category_uppercase": true,
+        "link_size": 14,
+        "link_color": "#111111",
+        "active_color": "#111111",
+        "underline_active": true,
+        "hover_color": "#111111",
+        "category_space": 28,
+        "link_space": 12,
+        "sidebar_padding_y": 48,
+        "sidebar_padding_x": 32,
+        "content_padding_y": 48,
+        "content_padding_x": 48,
+        "content_max": 1200,
+        "min_height": 0,
+        "mobile_padding": 16,
+        "mobile_spacing": 0
       }
     }
   },
-  "order": ["faqs"]
+  "order": [
+    "customer_care"
+  ]
 }
