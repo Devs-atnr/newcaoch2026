@@ -1,0 +1,719 @@
+<coach-store-locator
+  class="coach-locator"
+  id="CoachLocator-{{ section.id }}"
+  data-open="{{ section.settings.open_label | escape }}"
+  data-closed="{{ section.settings.closed_label | escape }}"
+  data-renovation="{{ section.settings.renovation_label | escape }}"
+  data-hours-missing="{{ section.settings.hours_missing | escape }}"
+>
+  {%- if section.settings.heading != blank -%}
+    <h1 class="store-locator-heading">{{ section.settings.heading }}</h1>
+  {%- endif -%}
+
+  <div class="store-locator-container">
+    <aside class="store-sidebar">
+      <div class="accordion">
+        {%- if section.settings.filter_heading != blank -%}
+          <h3>{{ section.settings.filter_heading }}</h3>
+        {%- endif -%}
+        <button type="button" class="accordion-toggle" aria-expanded="true">
+          {{ section.settings.filter_toggle }}
+          <span class="accordion-arrow">&#9654;</span>
+        </button>
+        <div class="accordion-content">
+          <div class="region-checkboxes">
+            {%- assign region_keys = '' -%}
+            {%- for block in section.blocks -%}
+              {%- assign region_key = block.settings.region | handleize -%}
+              {%- if region_key != blank -%}
+                {%- assign region_token = '|' | append: region_key | append: '|' -%}
+                {%- unless region_keys contains region_token -%}
+                  {%- assign region_keys = region_keys | append: region_token -%}
+                  <label>
+                    <input type="checkbox" name="region-{{ section.id }}" value="{{ region_key }}" data-region-key="{{ region_key }}">
+                    {{ block.settings.region }}
+                  </label>
+                {%- endunless -%}
+              {%- endif -%}
+            {%- endfor -%}
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <div class="store-main">
+      <div class="store-search-bar">
+        <input type="text" id="store-search-{{ section.id }}" class="store-search" placeholder="{{ section.settings.search_placeholder | escape }}">
+      </div>
+
+      <div class="region-counts-bar">
+        <div id="region-counts-{{ section.id }}" class="region-counts"></div>
+        <button type="button" id="clear-filters-{{ section.id }}" class="clear-filters">{{ section.settings.clear_label }}</button>
+      </div>
+
+      <div id="store-list-{{ section.id }}" class="store-list">
+        {%- for block in section.blocks -%}
+          {%- liquid
+            assign region_key = block.settings.region | handleize
+            assign store_key = block.settings.name | handleize
+            assign tz = block.settings.timezone
+            if tz == blank
+              assign tz = section.settings.timezone
+            endif
+            assign monday = block.settings.monday | replace: ' - ', '|'
+            assign tuesday = block.settings.tuesday | replace: ' - ', '|'
+            assign wednesday = block.settings.wednesday | replace: ' - ', '|'
+            assign thursday = block.settings.thursday | replace: ' - ', '|'
+            assign friday = block.settings.friday | replace: ' - ', '|'
+            assign saturday = block.settings.saturday | replace: ' - ', '|'
+            assign sunday = block.settings.sunday | replace: ' - ', '|'
+            assign wa = block.settings.phone | replace: ' ', '' | replace: '-', '' | replace: '(', '' | replace: ')', '' | replace: ' ', ''
+          -%}
+          {%- capture times -%}{"monday":{{ monday | json }},"tuesday":{{ tuesday | json }},"wednesday":{{ wednesday | json }},"thursday":{{ thursday | json }},"friday":{{ friday | json }},"saturday":{{ saturday | json }},"sunday":{{ sunday | json }}}{%- endcapture -%}
+          <div
+            class="store-card"
+            data-region="{{ region_key }}"
+            data-name="{{ store_key }}"
+            data-times="{{ times | strip | escape }}"
+            data-timezone="{{ tz | escape }}"
+            {% if block.settings.renovation %}data-renovation="1"{% endif %}
+            {{ block.shopify_attributes }}
+          >
+            <div class="store-card-main">
+              <div class="store-card-left">
+                <h3>{{ block.settings.name }}</h3>
+                {%- if block.settings.page_url != blank -%}
+                  <a href="{{ block.settings.page_url }}" class="explore-shop-btn">{{ section.settings.explore_label }}</a>
+                {%- endif -%}
+                {%- if block.settings.region != blank -%}
+                  <p>{{ block.settings.region }}</p>
+                {%- endif -%}
+                <div class="store-status{% if block.settings.renovation %} temporarily-closed{% endif %}" {% if block.settings.renovation %}data-renovation="1"{% endif %} aria-live="polite">
+                  {%- if block.settings.renovation -%}
+                    {{ section.settings.renovation_label }}
+                  {%- else -%}
+                    {{ section.settings.checking_label }}
+                  {%- endif -%}
+                </div>
+                {%- if block.settings.address != blank -%}
+                  <div class="icon-inline-box">
+                    <div class="icon-inline">
+                      <svg class="h-5 w-5" viewBox="0 0 18 25" version="1.1" xmlns="http://www.w3.org/2000/svg" role="presentation" aria-hidden="true"><g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><g transform="translate(-3.000000, 0.760000)"><g><rect id="Padding" x="0" y="0" width="24" height="24"></rect></g><g transform="translate(3.000000, 0.000000)" fill="#000000"><path d="M9.1275,21.933 L9.4575,21.516 C9.7365,21.162 10.029,20.781 10.3305,20.3835 C11.283,19.1205 12.1755,17.8725 12.9735,16.677 C13.5255,15.852 14.0235,15.0675 14.4615,14.3295 C16.044,11.6685 16.8,9.7455 16.8,8.52 C16.8,4.527 13.3395,1.2 9,1.2 C4.6605,1.2 1.2,4.527 1.2,8.52 C1.2,9.7455 1.956,11.6685 3.54,14.3295 C3.978,15.0675 4.4745,15.8505 5.025,16.677 C5.826,17.8725 6.717,19.122 7.6695,20.382 C7.9695,20.781 8.2635,21.162 8.541,21.516 L8.871,21.933 L9,22.0905 L9.1275,21.933 L9.1275,21.933 Z M10.4025,22.257 L10.0605,22.6875 L9,24 C9,24 7.02,21.5145 6.7125,21.1065 C5.7555,19.8405 4.8495,18.5715 4.0275,17.343 C3.468,16.503 2.9595,15.7035 2.508,14.943 C0.849,12.153 0,10.041 0,8.52 C0,3.9195 3.939,0 9,0 C14.061,0 18,3.9195 18,8.52 C18,10.041 17.151,12.1545 15.492,14.943 C15.042,15.7035 14.532,16.503 13.9725,17.343 C13.1505,18.573 12.2445,19.8405 11.2875,21.108 C10.98,21.513 10.6815,21.9 10.4025,22.257 L10.4025,22.257 Z"></path><path d="M9,11.7145 C10.7745,11.7145 12.2145,10.2745 12.2145,8.5 C12.2145,6.7255 10.7745,5.2855 9,5.2855 C7.2255,5.2855 5.7855,6.7255 5.7855,8.5 C5.7855,10.2745 7.2255,11.7145 9,11.7145 Z M9,13 C6.5145,13 4.5,10.9855 4.5,8.5 C4.5,6.0145 6.5145,4 9,4 C11.4855,4 13.5,6.0145 13.5,8.5 C13.5,10.9855 11.4855,13 9,13 Z"></path></g></g></g></svg>
+                    </div>
+                    <div class="icon-inlineText">
+                      {%- if block.settings.map_url != blank -%}
+                        <a href="{{ block.settings.map_url }}" class="store-address-link" target="_blank" rel="noopener noreferrer">{{ block.settings.address }}</a>
+                      {%- else -%}
+                        {{ block.settings.address }}
+                      {%- endif -%}
+                    </div>
+                  </div>
+                {%- endif -%}
+              </div>
+
+              <div class="store-card-right">
+                <div class="store-hours">
+                  {%- if section.settings.hours_heading != blank -%}
+                    <h4>{{ section.settings.hours_heading }}</h4>
+                  {%- endif -%}
+                  <ul>
+                    <li><div class="day">{{ section.settings.monday_label }}</div><div class="time">{{ block.settings.monday }}</div></li>
+                    <li><div class="day">{{ section.settings.tuesday_label }}</div><div class="time">{{ block.settings.tuesday }}</div></li>
+                    <li><div class="day">{{ section.settings.wednesday_label }}</div><div class="time">{{ block.settings.wednesday }}</div></li>
+                    <li><div class="day">{{ section.settings.thursday_label }}</div><div class="time">{{ block.settings.thursday }}</div></li>
+                    <li><div class="day">{{ section.settings.friday_label }}</div><div class="time">{{ block.settings.friday }}</div></li>
+                    <li><div class="day">{{ section.settings.saturday_label }}</div><div class="time">{{ block.settings.saturday }}</div></li>
+                    <li><div class="day">{{ section.settings.sunday_label }}</div><div class="time">{{ block.settings.sunday }}</div></li>
+                  </ul>
+                </div>
+                {%- if wa != blank -%}
+                  <a href="https://wa.me/{{ wa }}" class="contact-phone" target="_blank" rel="noopener noreferrer">
+                    <div class="icon-inline-box-call">
+                      <div class="icon-inline">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true"><path d="M13.601 2.326A7.85 7.85 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.9 7.9 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.9 7.9 0 0 0 13.6 2.326zM7.994 14.521a6.6 6.6 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.56 6.56 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592m3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.197-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.088-.403.087-.088.197-.232.296-.346.1-.114.133-.198.198-.33.065-.134.034-.248-.015-.347-.05-.099-.445-1.076-.612-1.47-.16-.389-.323-.335-.445-.34-.114-.007-.247-.007-.38-.007a.73.73 0 0 0-.529.247c-.182.198-.691.677-.691 1.654s.71 1.916.81 2.049c.098.133 1.394 2.132 3.383 2.992.47.205.84.326 1.129.418.475.152.904.129 1.246.08.38-.058 1.171-.48 1.338-.943.164-.464.164-.86.114-.943-.049-.084-.182-.133-.38-.232"></path></svg>
+                      </div>
+                      <div class="icon-inlineText">
+                        <p>{{ section.settings.contact_label }}</p>
+                        {{ block.settings.phone }}
+                      </div>
+                    </div>
+                  </a>
+                {%- endif -%}
+              </div>
+            </div>
+          </div>
+        {%- endfor -%}
+      </div>
+
+      <div id="no-results-{{ section.id }}" class="no-results" style="display:none;">{{ section.settings.empty_label }}</div>
+    </div>
+  </div>
+</coach-store-locator>
+
+{% stylesheet %}
+.coach-locator {
+  font-family: HelveticaLTPro-Roman, "Helvetica Neue", Helvetica, Arial, sans-serif;
+  color: #000;
+}
+.coach-locator button,
+.coach-locator input {
+  font-family: inherit;
+}
+.coach-locator button:focus-visible,
+.coach-locator input:focus-visible,
+.coach-locator a:focus-visible {
+  outline: none;
+  box-shadow: none;
+}
+.coach-locator a.explore-shop-btn {
+  font-weight: 600;
+  border-bottom: 1px solid;
+  padding-bottom: 2px;
+  font-size: 12px;
+  color: #000;
+  text-decoration: none;
+}
+.coach-locator .store-status.open {
+  color: #fff;
+  font-size: 10px;
+  padding: 2px 8px;
+  margin: 0;
+  background: green;
+  border-radius: 0;
+}
+.coach-locator h1.store-locator-heading {
+  margin: 0;
+  text-align: center;
+  padding: 7%;
+  background: #000;
+  color: #fff;
+  font-size: 2rem;
+  font-weight: 400;
+}
+.coach-locator .store-locator-container {
+  display: flex;
+  flex-direction: row;
+  gap: 2rem;
+  margin: 0 auto;
+  padding: 2rem;
+  max-width: 1344px;
+  box-sizing: border-box;
+}
+.coach-locator .store-sidebar { flex: 0 0 20%; }
+.coach-locator .accordion {
+  border-bottom: 1px solid rgb(229, 231, 235);
+  padding-bottom: 10px;
+}
+.coach-locator .store-card-right .day { font-size: 1.4rem; }
+.coach-locator .accordion h3,
+.coach-locator .accordion-toggle,
+.coach-locator .region-checkboxes label,
+.coach-locator .icon-inlineText,
+.coach-locator .store-card h3,
+.coach-locator .store-hours h4,
+.coach-locator .store-card-right .day,
+.coach-locator .time,
+.coach-locator .store-card-left p {
+  font-family: HelveticaLTPro-Roman, "Helvetica Neue", Helvetica, Arial, sans-serif;
+  color: #000;
+}
+.coach-locator .accordion-toggle {
+  padding: 1rem 0;
+  font-size: 1.6rem;
+  width: 100%;
+  text-align: left;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: transparent;
+  color: #000;
+}
+.coach-locator .accordion h3 {
+  text-transform: uppercase;
+  font-size: 1.4rem;
+  margin: 0;
+}
+.coach-locator .accordion-arrow {
+  transition: transform 0.3s ease;
+  font-size: 1.2rem;
+}
+.coach-locator .accordion-toggle[aria-expanded="true"] .accordion-arrow { transform: rotate(90deg); }
+.coach-locator .accordion-content {
+  max-height: 1000px;
+  overflow: hidden;
+  transition: max-height 0.4s ease;
+}
+.coach-locator .accordion-content.collapsed {
+  max-height: 0;
+  overflow: hidden;
+  display: none;
+}
+.coach-locator .store-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  min-width: 0;
+}
+.coach-locator .store-search-bar {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+.coach-locator .store-search-bar input {
+  width: 100%;
+  max-width: 500px;
+  padding: 1rem;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background: #fff;
+  color: #000;
+}
+.coach-locator .region-counts-bar {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 2rem;
+  border-bottom: 1px solid #ccc;
+  padding: 20px 0;
+}
+.coach-locator .region-counts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+.coach-locator .region-badge {
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  padding: 0.4rem 0.8rem;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 0.95rem;
+  color: #000;
+}
+.coach-locator .region-badge:hover { background-color: #ddd; }
+.coach-locator .clear-filters {
+  background-color: #ff5f5f;
+  color: #fff;
+  border: none;
+  padding: 0.4rem 1rem;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 0.95rem;
+}
+.coach-locator .clear-filters:hover { background-color: #e14c4c; }
+.coach-locator .region-checkboxes label {
+  font-size: 1.2rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1rem 0;
+}
+.coach-locator input[type="checkbox"] { margin: 0; }
+.coach-locator .store-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+.coach-locator .store-card {
+  padding-bottom: 30px;
+  border-bottom: 1px solid #e5e7eb;
+}
+.coach-locator .store-card-main {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+}
+.coach-locator .store-card-left { flex: 1 1 50%; }
+.coach-locator .store-card-right { flex: 1 1 40%; }
+.coach-locator .store-card h3 {
+  margin: 0 0 8px;
+  font-size: 24px;
+  font-weight: 400;
+}
+.coach-locator .store-card-left p {
+  margin: 12px 0 0;
+  text-transform: uppercase;
+}
+.coach-locator .no-results {
+  text-align: center;
+  font-weight: bold;
+  font-size: 1.2rem;
+  padding: 2rem;
+  color: #777;
+}
+.coach-locator .store-hours ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.coach-locator .store-hours ul li {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+}
+.coach-locator .store-hours h4 {
+  text-transform: uppercase;
+  font-size: 14px;
+  margin: 0 0 0.5rem;
+  font-weight: 400;
+}
+.coach-locator .icon-inline-box {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  margin-top: 1rem;
+}
+.coach-locator .icon-inline { flex: 0 0 auto; line-height: 0; }
+.coach-locator .icon-inline svg { width: 22px; height: 25px; }
+.coach-locator .icon-inlineText { line-height: 20px; }
+.coach-locator a.store-address-link {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.coach-locator .icon-inline-box-call {
+  display: flex;
+  align-items: flex-end;
+  gap: 10px;
+  margin-top: 2rem;
+  border-top: 1px dashed #ccc;
+  padding-top: 1rem;
+  color: #000;
+  text-decoration: none;
+}
+.coach-locator .icon-inline-box-call .icon-inlineText p { margin: 0 0 2px; }
+.coach-locator .store-status {
+  display: inline-block;
+  padding: 0;
+  border-radius: 0;
+  font-size: 12px;
+  margin: 8px 0 0;
+  font-weight: 600;
+}
+.coach-locator .store-status.temporarily-closed {
+  color: #fff;
+  font-size: 10px;
+  padding: 2px 8px;
+  background: #b80000;
+}
+@media (min-width: 1024px) {
+  .coach-locator .icon-inline-box { width: 50%; }
+}
+@media (max-width: 1024px) {
+  .coach-locator .store-locator-container { flex-direction: column; }
+  .coach-locator .store-sidebar,
+  .coach-locator .store-main { width: 100%; }
+  .coach-locator .store-search-bar input { max-width: 90%; }
+  .coach-locator .store-card-main { flex-direction: column; gap: 0; }
+  .coach-locator .store-card-left,
+  .coach-locator .store-card-right { flex: 1 1 100%; }
+}
+@media (max-width: 749px) {
+  .coach-locator .region-counts { display: none; }
+  .coach-locator .region-counts-bar { display: none; }
+  .coach-locator .region-counts-bar.has-selection {
+    display: flex;
+    padding: 12px 0 20px;
+  }
+  .coach-locator .region-counts-bar.has-selection .clear-filters { display: inline-flex; }
+}
+html[lang="ar"] .coach-locator,
+html[lang="ar"] .coach-locator button,
+html[lang="ar"] .coach-locator input,
+html[lang="ar"] .coach-locator label,
+html[lang="ar"] .coach-locator p,
+html[lang="ar"] .coach-locator h1,
+html[lang="ar"] .coach-locator h3,
+html[lang="ar"] .coach-locator h4,
+html[lang="ar"] .coach-locator li,
+html[lang="ar"] .coach-locator a,
+html[lang="ar"] .coach-locator span,
+html[lang="ar"] .coach-locator div {
+  font-family: "Noto Kufi Arabic", sans-serif;
+  letter-spacing: 0;
+}
+{% endstylesheet %}
+
+{% javascript %}
+if (!customElements.get('coach-store-locator')) {
+  customElements.define('coach-store-locator', class extends HTMLElement {
+    connectedCallback() {
+      if (this.dataset.bound === 'true') return;
+      this.dataset.bound = 'true';
+      this.searchInput = this.querySelector('.store-search');
+      this.stores = Array.from(this.querySelectorAll('.store-card'));
+      this.regionCountsContainer = this.querySelector('.region-counts');
+      this.clearFiltersButton = this.querySelector('.clear-filters');
+      this.noResultsMessage = this.querySelector('.no-results');
+      this.onChange = this.onChange.bind(this);
+      this.onClick = this.onClick.bind(this);
+      this.onSearch = this.filterStores.bind(this);
+      this.addEventListener('change', this.onChange);
+      this.addEventListener('click', this.onClick);
+      if (this.searchInput) this.searchInput.addEventListener('input', this.onSearch);
+      if (this.clearFiltersButton) {
+        this.clearFiltersButton.addEventListener('click', () => {
+          if (this.searchInput) this.searchInput.value = '';
+          this.clearAllCheckboxes();
+          this.filterStores();
+        });
+      }
+      this.querySelectorAll('.store-sidebar .accordion-toggle').forEach((toggle) => {
+        const content = toggle.parentElement && toggle.parentElement.querySelector('.accordion-content');
+        if (!content) return;
+        if (window.matchMedia('(max-width: 749px)').matches) {
+          toggle.setAttribute('aria-expanded', 'false');
+          content.classList.add('collapsed');
+        }
+      });
+      this.updateStoreStatuses();
+      this.timer = setInterval(() => this.updateStoreStatuses(), 60000);
+      this.filterStores();
+    }
+
+    disconnectedCallback() {
+      if (this.timer) clearInterval(this.timer);
+    }
+
+    getRegionCheckboxes() {
+      return this.querySelectorAll('.region-checkboxes input[type="checkbox"]');
+    }
+
+    getSelectedRegions() {
+      return Array.from(this.getRegionCheckboxes())
+        .filter((checkbox) => checkbox.checked)
+        .map((checkbox) => (checkbox.getAttribute('data-region-key') || checkbox.value || '').trim().toLowerCase());
+    }
+
+    clearAllCheckboxes() {
+      this.getRegionCheckboxes().forEach((checkbox) => { checkbox.checked = false; });
+    }
+
+    regionLabel(value) {
+      const box = this.querySelector('.region-checkboxes input[value="' + value + '"]');
+      const label = box && box.closest('label');
+      return label ? label.textContent.replace(/\s+/g, ' ').trim() : value;
+    }
+
+    updateRegionCounts(visibleStores) {
+      if (!this.regionCountsContainer) return;
+      const counts = {};
+      this.getRegionCheckboxes().forEach((checkbox) => { counts[checkbox.value] = 0; });
+      visibleStores.forEach((store) => {
+        const region = store.getAttribute('data-region');
+        if (Object.prototype.hasOwnProperty.call(counts, region)) counts[region] += 1;
+      });
+      this.regionCountsContainer.innerHTML = '';
+      Object.keys(counts).forEach((region) => {
+        if (counts[region] < 1) return;
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.className = 'region-badge';
+        button.textContent = this.regionLabel(region) + ' (' + counts[region] + ')';
+        button.dataset.region = region;
+        button.addEventListener('click', () => {
+          this.clearAllCheckboxes();
+          const checkbox = this.querySelector('.region-checkboxes input[value="' + region + '"]');
+          if (checkbox) checkbox.checked = true;
+          this.filterStores();
+        });
+        this.regionCountsContainer.appendChild(button);
+      });
+    }
+
+    filterStores() {
+      const checked = Array.from(this.getRegionCheckboxes()).filter((checkbox) => checkbox.checked);
+      if (checked.length > 1) checked.slice(1).forEach((checkbox) => { checkbox.checked = false; });
+      const selectedRegions = this.getSelectedRegions();
+      const searchQuery = (this.searchInput ? this.searchInput.value : '').toLowerCase();
+      const visibleStores = [];
+      this.stores.forEach((store) => {
+        const storeRegion = (store.getAttribute('data-region') || '').toLowerCase();
+        const storeName = (store.getAttribute('data-name') || '').toLowerCase();
+        const text = store.textContent.toLowerCase();
+        const matchesRegion = selectedRegions.length === 0 || selectedRegions.indexOf(storeRegion) !== -1;
+        const matchesSearch = searchQuery === '' || storeName.indexOf(searchQuery) !== -1 || storeRegion.indexOf(searchQuery) !== -1 || text.indexOf(searchQuery) !== -1;
+        store.style.display = matchesRegion && matchesSearch ? 'block' : 'none';
+        if (matchesRegion && matchesSearch) visibleStores.push(store);
+      });
+      this.updateRegionCounts(visibleStores);
+      if (this.noResultsMessage) this.noResultsMessage.style.display = visibleStores.length === 0 ? 'block' : 'none';
+      const regionBar = this.clearFiltersButton ? this.clearFiltersButton.closest('.region-counts-bar') : null;
+      const mobileLocator = window.matchMedia('(max-width: 749px)').matches;
+      if (regionBar) regionBar.classList.toggle('has-selection', mobileLocator && selectedRegions.length > 0);
+    }
+
+    onRegionChoice(input) {
+      if (!input || !input.closest('.region-checkboxes')) return;
+      if (input.checked) {
+        this.getRegionCheckboxes().forEach((checkbox) => {
+          if (checkbox !== input) checkbox.checked = false;
+        });
+      }
+      this.filterStores();
+    }
+
+    onChange(event) {
+      const target = event.target;
+      if (target && target.matches && target.matches('.region-checkboxes input[type="checkbox"]')) this.onRegionChoice(target);
+    }
+
+    onClick(event) {
+      const regionInput = event.target.closest('.region-checkboxes input[type="checkbox"]');
+      const regionLabel = event.target.closest('.region-checkboxes label');
+      if (regionInput || regionLabel) {
+        const input = regionInput || regionLabel.querySelector('input[type="checkbox"]');
+        setTimeout(() => this.onRegionChoice(input), 0);
+        return;
+      }
+      const toggle = event.target.closest('.store-sidebar .accordion-toggle');
+      if (!toggle || !this.contains(toggle)) return;
+      event.preventDefault();
+      const content = toggle.parentElement && toggle.parentElement.querySelector('.accordion-content');
+      if (!content) return;
+      const willOpen = toggle.getAttribute('aria-expanded') !== 'true';
+      toggle.setAttribute('aria-expanded', willOpen ? 'true' : 'false');
+      content.classList.toggle('collapsed', !willOpen);
+    }
+
+    parseTime(timeStr) {
+      if (!timeStr) return null;
+      const parts = timeStr.trim().split(' ');
+      const clock = parts[0].split(':');
+      let hours = Number(clock[0]);
+      const minutes = Number(clock[1] || 0);
+      const modifier = (parts[1] || '').toUpperCase();
+      if (modifier === 'PM' && hours !== 12) hours += 12;
+      if (modifier === 'AM' && hours === 12) hours = 0;
+      return { hours: hours, minutes: minutes };
+    }
+
+    updateStoreStatuses() {
+      const dayNames = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
+      const openLabel = this.dataset.open || 'Open Now';
+      const closedLabel = this.dataset.closed || 'Closed — Opens at';
+      const renovationLabel = this.dataset.renovation || 'Temporarily closed for renovation';
+      const missingLabel = this.dataset.hoursMissing || 'Hours not set';
+      this.stores.forEach((card) => {
+        const statusEl = card.querySelector('.store-status');
+        if (!statusEl) return;
+        if (card.dataset.renovation === '1' || statusEl.dataset.renovation === '1') {
+          statusEl.classList.add('temporarily-closed');
+          statusEl.classList.remove('open', 'closed');
+          statusEl.textContent = renovationLabel;
+          return;
+        }
+        let times = null;
+        try { times = JSON.parse(card.dataset.times || ''); } catch (error) { times = null; }
+        const timezone = card.dataset.timezone || 'Asia/Riyadh';
+        const storeNow = new Date(new Date().toLocaleString('en-US', { timeZone: timezone }));
+        const todayKey = dayNames[storeNow.getDay()];
+        const pair = times && times[todayKey];
+        if (!pair || pair.indexOf('|') === -1) {
+          statusEl.textContent = missingLabel;
+          statusEl.classList.remove('open', 'closed', 'temporarily-closed');
+          return;
+        }
+        const halves = pair.split('|');
+        const openStr = halves[0].trim();
+        const closeStr = halves[1].trim();
+        const openParts = this.parseTime(openStr);
+        const closeParts = this.parseTime(closeStr);
+        if (!openParts || !closeParts) {
+          statusEl.textContent = missingLabel;
+          return;
+        }
+        const openTime = new Date(storeNow);
+        openTime.setHours(openParts.hours, openParts.minutes, 0, 0);
+        const closeTime = new Date(storeNow);
+        closeTime.setHours(closeParts.hours, closeParts.minutes, 0, 0);
+        if (closeTime <= openTime) closeTime.setDate(closeTime.getDate() + 1);
+        if (storeNow >= openTime && storeNow <= closeTime) {
+          statusEl.textContent = openLabel;
+          statusEl.classList.add('open');
+          statusEl.classList.remove('closed', 'temporarily-closed');
+          return;
+        }
+        let nextOpenStr = openStr;
+        if (storeNow > closeTime) {
+          for (let i = 1; i <= 7; i += 1) {
+            const key = dayNames[(storeNow.getDay() + i) % 7];
+            const nextPair = times[key];
+            if (nextPair && nextPair.indexOf('|') !== -1) {
+              nextOpenStr = nextPair.split('|')[0].trim();
+              break;
+            }
+          }
+        }
+        statusEl.textContent = closedLabel + ' ' + nextOpenStr;
+        statusEl.classList.add('closed');
+        statusEl.classList.remove('open', 'temporarily-closed');
+      });
+    }
+  });
+}
+{% endjavascript %}
+
+{% schema %}
+{
+  "name": "Store locator",
+  "tag": "section",
+  "class": "coach-locator-section",
+  "enabled_on": { "templates": ["page"] },
+  "max_blocks": 50,
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Find a Store Near You" },
+    { "type": "text", "id": "filter_heading", "label": "Filter heading", "default": "Filter by" },
+    { "type": "text", "id": "filter_toggle", "label": "Region label", "default": "Regions" },
+    { "type": "text", "id": "search_placeholder", "label": "Search placeholder", "default": "e.g. COACH MALL, WESTERN" },
+    { "type": "text", "id": "clear_label", "label": "Clear button", "default": "Clear Filters" },
+    { "type": "text", "id": "explore_label", "label": "Shop button", "default": "Explore this Shop" },
+    { "type": "text", "id": "hours_heading", "label": "Hours heading", "default": "Store Hours" },
+    { "type": "text", "id": "contact_label", "label": "Contact label", "default": "Whatsapp" },
+    { "type": "text", "id": "empty_label", "label": "Empty message", "default": "No stores found. Try adjusting your search or filters." },
+    { "type": "text", "id": "checking_label", "label": "Checking label", "default": "Checking..." },
+    { "type": "text", "id": "open_label", "label": "Open label", "default": "Open Now" },
+    { "type": "text", "id": "closed_label", "label": "Closed label", "default": "Closed — Opens at" },
+    { "type": "text", "id": "renovation_label", "label": "Closed notice", "default": "Temporarily closed for renovation" },
+    { "type": "text", "id": "hours_missing", "label": "Missing hours", "default": "Hours not set" },
+    { "type": "text", "id": "timezone", "label": "Timezone", "default": "Asia/Riyadh" },
+    { "type": "text", "id": "monday_label", "label": "Monday label", "default": "Monday" },
+    { "type": "text", "id": "tuesday_label", "label": "Tuesday label", "default": "Tuesday" },
+    { "type": "text", "id": "wednesday_label", "label": "Wednesday label", "default": "Wednesday" },
+    { "type": "text", "id": "thursday_label", "label": "Thursday label", "default": "Thursday" },
+    { "type": "text", "id": "friday_label", "label": "Friday label", "default": "Friday" },
+    { "type": "text", "id": "saturday_label", "label": "Saturday label", "default": "Saturday" },
+    { "type": "text", "id": "sunday_label", "label": "Sunday label", "default": "Sunday" }
+  ],
+  "blocks": [
+    {
+      "type": "store",
+      "name": "Store",
+      "settings": [
+        { "type": "text", "id": "name", "label": "Store name" },
+        { "type": "text", "id": "region", "label": "Region" },
+        { "type": "text", "id": "page_url", "label": "Shop page link" },
+        { "type": "textarea", "id": "address", "label": "Address" },
+        { "type": "text", "id": "map_url", "label": "Map link" },
+        { "type": "text", "id": "phone", "label": "WhatsApp number" },
+        { "type": "checkbox", "id": "renovation", "label": "Temporarily closed", "default": false },
+        { "type": "text", "id": "timezone", "label": "Timezone", "info": "Leave blank to use the section timezone." },
+        { "type": "text", "id": "monday", "label": "Monday", "default": "09:30 AM - 11:00 PM" },
+        { "type": "text", "id": "tuesday", "label": "Tuesday", "default": "09:30 AM - 11:00 PM" },
+        { "type": "text", "id": "wednesday", "label": "Wednesday", "default": "09:30 AM - 11:00 PM" },
+        { "type": "text", "id": "thursday", "label": "Thursday", "default": "09:30 AM - 11:00 PM" },
+        { "type": "text", "id": "friday", "label": "Friday", "default": "03:00 PM - 11:00 PM" },
+        { "type": "text", "id": "saturday", "label": "Saturday", "default": "09:30 AM - 11:00 PM" },
+        { "type": "text", "id": "sunday", "label": "Sunday", "default": "09:30 AM - 11:00 PM" }
+      ]
+    }
+  ],
+  "presets": [
+    { "name": "Store locator" }
+  ]
+}
+{% endschema %}

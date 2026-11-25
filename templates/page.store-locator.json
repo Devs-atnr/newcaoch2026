@@ -1,0 +1,367 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "store_locator": {
+      "type": "coach-store-locator",
+      "blocks": {
+        "store_mall_of_arabia": {
+          "type": "store",
+          "settings": {
+            "name": "MALL OF ARABIA",
+            "region": "Western Province",
+            "page_url": "/pages/mall-of-arabia",
+            "address": "Mall of Arabia, Al Madina Street, An Nuzhah Ground Floor, Jeddah, K.S.A.",
+            "map_url": "https://www.google.com/maps?ftid=0x15c3d7276d2562fb:0xbd8e8a0cb1fa67e7",
+            "phone": "+966-593018774",
+            "renovation": true,
+            "monday": "09:30 AM - 11:00 PM",
+            "tuesday": "09:30 AM - 11:00 PM",
+            "wednesday": "09:30 AM - 11:00 PM",
+            "thursday": "09:30 AM - 11:00 PM",
+            "friday": "03:00 PM - 11:00 PM",
+            "saturday": "09:30 AM - 11:00 PM",
+            "sunday": "09:30 AM - 11:00 PM"
+          }
+        },
+        "store_yasmin_mall": {
+          "type": "store",
+          "settings": {
+            "name": "YASMIN MALL",
+            "region": "Western Province",
+            "page_url": "/pages/yasmin-mall",
+            "address": "Yasmin Mall, Al Ajawad Street, Al Manar Ground Floor, Gate No. 4, Jeddah, K.S.A.",
+            "map_url": "https://www.google.com/maps?ftid=0x15c3d1a8e44dddf7:0x7d92cb86ce21ac48",
+            "phone": "+966-593018787",
+            "renovation": false,
+            "monday": "09:30 AM - 11:00 PM",
+            "tuesday": "09:30 AM - 11:00 PM",
+            "wednesday": "09:30 AM - 11:00 PM",
+            "thursday": "09:30 AM - 11:00 PM",
+            "friday": "03:00 PM - 11:00 PM",
+            "saturday": "09:30 AM - 11:00 PM",
+            "sunday": "09:30 AM - 11:00 PM"
+          }
+        },
+        "store_red_sea_mall": {
+          "type": "store",
+          "settings": {
+            "name": "RED SEA MALL",
+            "region": "Western Province",
+            "page_url": "/pages/red-sea-mall",
+            "address": "Red Sea Mall, King Abdulaziz Road Ground Floor, Gate No. 1, Jeddah, K.S.A.",
+            "map_url": "https://www.google.com/maps?ftid=0x15c3db5fcc4b001d:0x4b3d2e8ac2dea18b",
+            "phone": "+966-593018792",
+            "renovation": false,
+            "monday": "09:30 AM - 11:00 PM",
+            "tuesday": "09:30 AM - 11:00 PM",
+            "wednesday": "09:30 AM - 11:00 PM",
+            "thursday": "09:30 AM - 11:00 PM",
+            "friday": "03:00 PM - 11:00 PM",
+            "saturday": "09:30 AM - 11:00 PM",
+            "sunday": "09:30 AM - 11:00 PM"
+          }
+        },
+        "store_al_noor": {
+          "type": "store",
+          "settings": {
+            "name": "AL NOOR",
+            "region": "Western Province",
+            "page_url": "/pages/al-noor",
+            "address": "Al-Noor Mall, King Abdullah Ring Road, Ground Floor, Gate No. 2, Madina, K.S.A",
+            "map_url": "https://www.google.com/maps?ftid=0x15bdbeecae5a89d5:0x6013a59f0436e850",
+            "phone": "+966-593951731",
+            "renovation": false,
+            "monday": "09:30 AM - 11:00 PM",
+            "tuesday": "09:30 AM - 11:00 PM",
+            "wednesday": "09:30 AM - 11:00 PM",
+            "thursday": "09:30 AM - 11:00 PM",
+            "friday": "03:00 PM - 11:00 PM",
+            "saturday": "09:30 AM - 11:00 PM",
+            "sunday": "09:30 AM - 11:00 PM"
+          }
+        },
+        "store_the_village_mall": {
+          "type": "store",
+          "settings": {
+            "name": "THE VILLAGE MALL",
+            "region": "Western Province",
+            "page_url": "/pages/the-village-mall",
+            "address": "The Village Mall, Prince Talal Bin Mansour Rd, Al Asalah, Jeddah, K.S.A.",
+            "map_url": "https://www.google.com/maps?ftid=0x15c17d2babd62e21:0xaccc64b0da19ab1d",
+            "phone": "+966-590459362",
+            "renovation": false,
+            "monday": "09:30 AM - 11:00 PM",
+            "tuesday": "09:30 AM - 11:00 PM",
+            "wednesday": "09:30 AM - 11:00 PM",
+            "thursday": "09:30 AM - 11:00 PM",
+            "friday": "03:00 PM - 11:00 PM",
+            "saturday": "09:30 AM - 11:00 PM",
+            "sunday": "09:30 AM - 11:00 PM"
+          }
+        },
+        "store_solitaire_mall": {
+          "type": "store",
+          "settings": {
+            "name": "SOLITAIRE MALL",
+            "region": "Central Province",
+            "page_url": "/pages/solitaire-mall",
+            "address": "Solitaire Mall, Ground Floor Imam Saud Bin Faisal branch Road, As Sahafa, Riyadh",
+            "map_url": "https://www.google.com/maps?ftid=0x3e2ee383e4ff2171:0xf2680c39b5726c87",
+            "phone": "+966543566345",
+            "renovation": false,
+            "monday": "09:30 AM - 11:00 PM",
+            "tuesday": "09:30 AM - 11:00 PM",
+            "wednesday": "09:30 AM - 11:00 PM",
+            "thursday": "09:30 AM - 11:00 PM",
+            "friday": "03:00 PM - 11:00 PM",
+            "saturday": "09:30 AM - 11:00 PM",
+            "sunday": "09:30 AM - 11:00 PM"
+          }
+        },
+        "store_panorama_mall": {
+          "type": "store",
+          "settings": {
+            "name": "PANORAMA MALL",
+            "region": "Central Province",
+            "page_url": "/pages/panorama-mall",
+            "address": "Panorama Mall, Al-Takhasosi Street Ground Floor, Gate No. 2, Riyadh, K.S.A.",
+            "map_url": "https://www.google.com/maps?ftid=0x3e2f1ccd18c5037f:0x9feb8d8628556690",
+            "phone": "+966-593018812",
+            "renovation": false,
+            "monday": "09:30 AM - 11:00 PM",
+            "tuesday": "09:30 AM - 11:00 PM",
+            "wednesday": "09:30 AM - 11:00 PM",
+            "thursday": "09:30 AM - 11:00 PM",
+            "friday": "03:00 PM - 11:00 PM",
+            "saturday": "09:30 AM - 11:00 PM",
+            "sunday": "09:30 AM - 11:00 PM"
+          }
+        },
+        "store_granada_mall": {
+          "type": "store",
+          "settings": {
+            "name": "GRANADA MALL",
+            "region": "Central Province",
+            "page_url": "/pages/granada-mall",
+            "address": "Granada Mall, North Ring Road Ground Floor, Gate No. 5, Riyadh, K.S.A.",
+            "map_url": "https://www.google.com/maps?ftid=0x3e2efd14b1296ff1:0x10a966834bec550c",
+            "phone": "+966-593018776",
+            "renovation": false,
+            "monday": "09:30 AM - 11:00 PM",
+            "tuesday": "09:30 AM - 11:00 PM",
+            "wednesday": "09:30 AM - 11:00 PM",
+            "thursday": "09:30 AM - 11:00 PM",
+            "friday": "09:30 AM - 11:00 PM",
+            "saturday": "09:30 AM - 11:00 PM",
+            "sunday": "09:30 AM - 11:00 PM"
+          }
+        },
+        "store_riyadh_park": {
+          "type": "store",
+          "settings": {
+            "name": "RIYADH PARK",
+            "region": "Central Province",
+            "page_url": "/pages/riyadh-park",
+            "address": "Riyadh Park Mall, Northern Ring Branch Road Ground Floor, Riyadh, K.S.A.",
+            "map_url": "https://www.google.com/maps?ftid=0x3e2ee3cfd623f9b7:0x296b27e953360bf5",
+            "phone": "+966-500036754",
+            "renovation": false,
+            "monday": "09:30 AM - 11:00 PM",
+            "tuesday": "09:30 AM - 11:00 PM",
+            "wednesday": "09:30 AM - 11:00 PM",
+            "thursday": "09:30 AM - 11:00 PM",
+            "friday": "03:00 PM - 11:00 PM",
+            "saturday": "09:30 AM - 11:00 PM",
+            "sunday": "09:30 AM - 11:00 PM"
+          }
+        },
+        "store_al_nakheel_mall": {
+          "type": "store",
+          "settings": {
+            "name": "AL NAKHEEL MALL",
+            "region": "Central Province",
+            "page_url": "/pages/al-nakheel-mall",
+            "address": "Al Naklheel Mall, Al Imam Saud Ibn Abdul Aziz Rd, Al Mughrizat Ground Floor, Riyadh, K.S.A.",
+            "map_url": "https://www.google.com/maps?ftid=0x3e2efd43677bc00d:0xc3982bdf3f9be5f5",
+            "phone": "+966-595653881",
+            "renovation": false,
+            "monday": "09:30 AM - 11:00 PM",
+            "tuesday": "09:30 AM - 11:00 PM",
+            "wednesday": "09:30 AM - 11:00 PM",
+            "thursday": "09:30 AM - 11:00 PM",
+            "friday": "03:00 PM - 11:00 PM",
+            "saturday": "09:30 AM - 11:00 PM",
+            "sunday": "09:30 AM - 11:00 PM"
+          }
+        },
+        "store_the_zone_mall": {
+          "type": "store",
+          "settings": {
+            "name": "THE ZONE MALL",
+            "region": "Central Province",
+            "page_url": "/pages/the-zone-mall",
+            "address": "The Zone Mall, Takhassusi St, Al Mohammadiyyah, Riyadh, K.S.A.",
+            "map_url": "https://www.google.com/maps?ftid=0x3e2ee385eb146765:0x871fa7a295042c30",
+            "phone": "+966-583754428",
+            "renovation": false,
+            "monday": "09:30 AM - 11:00 PM",
+            "tuesday": "09:30 AM - 11:00 PM",
+            "wednesday": "09:30 AM - 11:00 PM",
+            "thursday": "09:30 AM - 11:00 PM",
+            "friday": "03:00 PM - 11:00 PM",
+            "saturday": "09:30 AM - 11:00 PM",
+            "sunday": "09:30 AM - 11:00 PM"
+          }
+        },
+        "store_roshn_front": {
+          "type": "store",
+          "settings": {
+            "name": "ROSHN FRONT",
+            "region": "Central Province",
+            "page_url": "/pages/roshn-front",
+            "address": "Roshn Front Mall, King Khalid International Airport Road, Riyadh, K.S.A.",
+            "map_url": "https://www.google.com/maps?ftid=0x3e2efb41dcff3c8d:0x69e4a786a5b0df1c",
+            "phone": "+966-583754479",
+            "renovation": false,
+            "monday": "09:30 AM - 11:00 PM",
+            "tuesday": "09:30 AM - 11:00 PM",
+            "wednesday": "09:30 AM - 11:00 PM",
+            "thursday": "09:30 AM - 11:00 PM",
+            "friday": "03:00 PM - 11:00 PM",
+            "saturday": "09:30 AM - 11:00 PM",
+            "sunday": "09:30 AM - 11:00 PM"
+          }
+        },
+        "store_alrashid_mall": {
+          "type": "store",
+          "settings": {
+            "name": "ALRASHID MALL",
+            "region": "Eastern Province",
+            "page_url": "/pages/alrashid-mall",
+            "address": "Rashid Mall, Dhahran Street with King Abdullah Road Ground Floor, Gate 4, Khobar, K.S.A.",
+            "map_url": "https://www.google.com/maps?ftid=0x3e49e7ee84978d8d:0x7f3d36bb0b158115",
+            "phone": "+966-593018805",
+            "renovation": false,
+            "monday": "09:30 AM - 11:00 PM",
+            "tuesday": "09:30 AM - 11:00 PM",
+            "wednesday": "09:30 AM - 11:00 PM",
+            "thursday": "09:30 AM - 11:00 PM",
+            "friday": "03:00 PM - 11:00 PM",
+            "saturday": "09:30 AM - 11:00 PM",
+            "sunday": "09:30 AM - 11:00 PM"
+          }
+        },
+        "store_alahsa_mall": {
+          "type": "store",
+          "settings": {
+            "name": "ALAHSA MALL",
+            "region": "Eastern Province",
+            "page_url": "/pages/alahsa-mall",
+            "address": "Al Ahsa Mall, King Abdullah Road, Saudi Arabia Ground Floor, Gate No. 2, Al Hofuf, K.S.A.",
+            "map_url": "https://www.google.com/maps?ftid=0x3e3791ffd3bfca43:0x3d13ad8f1ee7c730",
+            "phone": "+966-593295906",
+            "renovation": false,
+            "monday": "09:30 AM - 11:00 PM",
+            "tuesday": "09:30 AM - 11:00 PM",
+            "wednesday": "09:30 AM - 11:00 PM",
+            "thursday": "09:30 AM - 11:00 PM",
+            "friday": "03:00 PM - 11:00 PM",
+            "saturday": "09:30 AM - 11:00 PM",
+            "sunday": "09:30 AM - 11:00 PM"
+          }
+        },
+        "store_rashid_mall_abha": {
+          "type": "store",
+          "settings": {
+            "name": "RASHID MALL ABHA",
+            "region": "South Province",
+            "page_url": "/pages/rashid-mall-abha",
+            "address": "Rashid Mall, Badie Dist.,King Fahd Road Gate 6, Abha, K.S.A.",
+            "map_url": "https://www.google.com/maps?ftid=0x15fcab55c0ac5cb3:0xaaa89e980475771f",
+            "phone": "+966-500036947",
+            "renovation": false,
+            "monday": "09:30 AM - 11:00 PM",
+            "tuesday": "09:30 AM - 11:00 PM",
+            "wednesday": "09:30 AM - 11:00 PM",
+            "thursday": "09:30 AM - 11:00 PM",
+            "friday": "03:00 PM - 11:00 PM",
+            "saturday": "09:30 AM - 11:00 PM",
+            "sunday": "09:30 AM - 6:00 PM"
+          }
+        },
+        "store_nakheel_mall_al_qassim": {
+          "type": "store",
+          "settings": {
+            "name": "NAKHEEL MALL AL-QASSIM",
+            "region": "Al-Qassim Province",
+            "page_url": "/pages/nakheel-mall-al-qassim",
+            "address": "Nakheel Mall, King Khaled Ibn Abd Al Aziz, Al Safra', Buraydah 52383, K.S.A.",
+            "map_url": "https://www.google.com/maps?ftid=0x157f590064842aa9:0x34ab594bc2ec7653",
+            "phone": "+966-596579054",
+            "renovation": false,
+            "monday": "09:30 AM - 11:00 PM",
+            "tuesday": "09:30 AM - 11:00 PM",
+            "wednesday": "09:30 AM - 11:00 PM",
+            "thursday": "09:30 AM - 11:00 PM",
+            "friday": "03:00 PM - 11:00 PM",
+            "saturday": "09:30 AM - 11:00 PM",
+            "sunday": "09:30 AM - 11:00 PM"
+          }
+        }
+      },
+      "block_order": [
+        "store_mall_of_arabia",
+        "store_yasmin_mall",
+        "store_red_sea_mall",
+        "store_al_noor",
+        "store_the_village_mall",
+        "store_solitaire_mall",
+        "store_panorama_mall",
+        "store_granada_mall",
+        "store_riyadh_park",
+        "store_al_nakheel_mall",
+        "store_the_zone_mall",
+        "store_roshn_front",
+        "store_alrashid_mall",
+        "store_alahsa_mall",
+        "store_rashid_mall_abha",
+        "store_nakheel_mall_al_qassim"
+      ],
+      "settings": {
+        "heading": "Find a Store Near You",
+        "filter_heading": "Filter by",
+        "filter_toggle": "Regions",
+        "search_placeholder": "e.g. COACH MALL, WESTERN",
+        "clear_label": "Clear Filters",
+        "explore_label": "Explore this Shop",
+        "hours_heading": "Store Hours",
+        "contact_label": "Whatsapp",
+        "empty_label": "No stores found. Try adjusting your search or filters.",
+        "checking_label": "Checking...",
+        "open_label": "Open Now",
+        "closed_label": "Closed — Opens at",
+        "renovation_label": "Temporarily closed for renovation",
+        "hours_missing": "Hours not set",
+        "timezone": "Asia/Riyadh",
+        "monday_label": "Monday",
+        "tuesday_label": "Tuesday",
+        "wednesday_label": "Wednesday",
+        "thursday_label": "Thursday",
+        "friday_label": "Friday",
+        "saturday_label": "Saturday",
+        "sunday_label": "Sunday"
+      }
+    }
+  },
+  "order": [
+    "store_locator"
+  ]
+}
