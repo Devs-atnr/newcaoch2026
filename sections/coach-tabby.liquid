@@ -1,0 +1,369 @@
+<div
+  id="CoachTabby-{{ section.id }}"
+  class="coach-tabby"
+  style="--tabby-width: {{ section.settings.content_width }}px;"
+>
+  <div class="coach-tabby__wrap">
+    {%- if section.settings.show_title and section.settings.title != blank -%}
+      <h1 class="coach-tabby__title">{{ section.settings.title | escape }}</h1>
+    {%- endif -%}
+
+    <section class="coach-tabby__hero">
+      <div class="coach-tabby__hero-copy">
+        {%- liquid
+          assign logo = ''
+          if section.settings.logo != blank
+            assign logo = section.settings.logo | image_url: width: 480
+          elsif section.settings.logo_url != blank
+            assign logo = section.settings.logo_url
+          endif
+        -%}
+        {%- if logo != blank -%}
+          <a class="coach-tabby__logo" href="{{ section.settings.logo_link | default: 'https://tabby.ai' }}" target="_blank" rel="noopener">
+            <img src="{{ logo | escape }}" alt="{{ section.settings.logo_alt | escape }">
+          </a>
+        {%- endif -%}
+        {%- if section.settings.hero_heading != blank -%}
+          <h2>{{ section.settings.hero_heading | escape }}</h2>
+        {%- endif -%}
+        {%- if section.settings.hero_text != blank -%}
+          <div class="coach-tabby__rte">{{ section.settings.hero_text }}</div>
+        {%- endif -%}
+      </div>
+      {%- liquid
+        assign hero = ''
+        if section.settings.hero_image != blank
+          assign hero = section.settings.hero_image | image_url: width: 1600
+        elsif section.settings.hero_image_url != blank
+          assign hero = section.settings.hero_image_url
+        endif
+      -%}
+      {%- if hero != blank -%}
+        <div class="coach-tabby__hero-media">
+          <img src="{{ hero | escape }}" alt="{{ section.settings.hero_alt | escape }}">
+        </div>
+      {%- endif -%}
+    </section>
+
+    <section class="coach-tabby__steps">
+      {%- if section.settings.steps_heading != blank -%}
+        <h2>{{ section.settings.steps_heading | escape }}</h2>
+      {%- endif -%}
+      <div class="coach-tabby__step-grid">
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'step' -%}
+            {%- liquid
+              assign step_image = ''
+              if block.settings.image != blank
+                assign step_image = block.settings.image | image_url: width: 1000
+              elsif block.settings.image_url != blank
+                assign step_image = block.settings.image_url
+              endif
+            -%}
+            <div class="coach-tabby__step" {{ block.shopify_attributes }}>
+              <div class="coach-tabby__step-copy">
+                {%- if block.settings.label != blank -%}
+                  <p class="coach-tabby__step-label">{{ block.settings.label | escape }}</p>
+                {%- endif -%}
+                <p class="coach-tabby__step-line">
+                  {{ block.settings.text_before | escape }}
+                  {%- if block.settings.show_logo and logo != blank -%}
+                    <span class="coach-tabby__badge"><img src="{{ logo | escape }}" alt="{{ section.settings.logo_alt | escape }}"></span>
+                  {%- endif -%}
+                  {{ block.settings.text_after | escape }}
+                </p>
+              </div>
+              {%- if step_image != blank -%}
+                <img class="coach-tabby__step-image" src="{{ step_image | escape }}" alt="{{ block.settings.alt | default: block.settings.label | escape }}">
+              {%- endif -%}
+            </div>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+    </section>
+
+    <section class="coach-tabby__pay">
+      <div class="coach-tabby__pay-copy">
+        {%- if section.settings.pay_heading != blank -%}
+          <h2>{{ section.settings.pay_heading | escape }}</h2>
+        {%- endif -%}
+        {%- if section.settings.pay_intro != blank -%}
+          <div class="coach-tabby__rte">{{ section.settings.pay_intro }}</div>
+        {%- endif -%}
+        {%- if section.settings.pay_text != blank -%}
+          <div class="coach-tabby__rte">{{ section.settings.pay_text }}</div>
+        {%- endif -%}
+        <div class="coach-tabby__apps">
+          {%- liquid
+            assign ios = ''
+            if section.settings.ios_image != blank
+              assign ios = section.settings.ios_image | image_url: width: 400
+            elsif section.settings.ios_image_url != blank
+              assign ios = section.settings.ios_image_url
+            endif
+            assign android = ''
+            if section.settings.android_image != blank
+              assign android = section.settings.android_image | image_url: width: 400
+            elsif section.settings.android_image_url != blank
+              assign android = section.settings.android_image_url
+            endif
+          -%}
+          {%- if ios != blank -%}
+            <a href="{{ section.settings.ios_link }}" target="_blank" rel="noopener"><img src="{{ ios | escape }}" alt="{{ section.settings.ios_alt | escape }}"></a>
+          {%- endif -%}
+          {%- if android != blank -%}
+            <a href="{{ section.settings.android_link }}" target="_blank" rel="noopener"><img src="{{ android | escape }}" alt="{{ section.settings.android_alt | escape }}"></a>
+          {%- endif -%}
+        </div>
+      </div>
+      {%- liquid
+        assign pay_image = ''
+        if section.settings.pay_image != blank
+          assign pay_image = section.settings.pay_image | image_url: width: 1400
+        elsif section.settings.pay_image_url != blank
+          assign pay_image = section.settings.pay_image_url
+        endif
+      -%}
+      {%- if pay_image != blank -%}
+        <div class="coach-tabby__pay-media">
+          <img src="{{ pay_image | escape }}" alt="{{ section.settings.pay_alt | escape }}">
+        </div>
+      {%- endif -%}
+    </section>
+
+    <section class="coach-tabby__faq">
+      {%- if section.settings.faq_heading != blank -%}
+        <h2>{{ section.settings.faq_heading | escape }}</h2>
+      {%- endif -%}
+      {%- for block in section.blocks -%}
+        {%- if block.type == 'faq' -%}
+          <details class="coach-tabby__item" {{ block.shopify_attributes }}>
+            <summary>{{ block.settings.question | escape }}</summary>
+            <div class="coach-tabby__answer">{{ block.settings.answer }}</div>
+          </details>
+        {%- endif -%}
+      {%- endfor -%}
+      {%- if section.settings.help_label != blank -%}
+        <p class="coach-tabby__help">
+          {{ section.settings.help_before | escape }}
+          <a href="{{ section.settings.help_link }}" target="_blank" rel="noopener">{{ section.settings.help_label | escape }}</a>
+          {{ section.settings.help_after | escape }}
+        </p>
+      {%- endif -%}
+    </section>
+
+    <section class="coach-tabby__about">
+      <div class="coach-tabby__about-inner">
+        {%- if section.settings.about_heading != blank -%}
+          <h2>{{ section.settings.about_heading | escape }}</h2>
+        {%- endif -%}
+        {%- if section.settings.about_text != blank -%}
+          <div class="coach-tabby__rte">{{ section.settings.about_text }}</div>
+        {%- endif -%}
+      </div>
+    </section>
+  </div>
+</div>
+
+{% stylesheet %}
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap");
+.coach-tabby {
+  background: #ffffff;
+  color: #292929;
+  font-family: Inter, Helvetica, Arial, sans-serif;
+}
+.coach-tabby__wrap {
+  width: min(100% - 32px, var(--tabby-width, 1100px));
+  margin: 0 auto;
+  padding: 28px 0 0;
+}
+.coach-tabby__title {
+  margin: 0 0 24px;
+  color: #000000;
+  font-family: Inter, Helvetica, Arial, sans-serif !important;
+  font-size: 32px !important;
+  font-weight: 700 !important;
+  line-height: 1.2 !important;
+}
+.coach-tabby h2 {
+  margin: 0 0 16px;
+  color: #292929;
+  font-family: Inter, Helvetica, Arial, sans-serif !important;
+  font-size: 32px !important;
+  font-weight: 400 !important;
+  line-height: 46px !important;
+}
+.coach-tabby__rte,
+.coach-tabby__rte p,
+.coach-tabby__step-line,
+.coach-tabby__answer,
+.coach-tabby__answer p,
+.coach-tabby__answer li,
+.coach-tabby__help {
+  color: #292929;
+  font-family: Inter, Helvetica, Arial, sans-serif !important;
+  font-size: 16px !important;
+  font-weight: 400 !important;
+  line-height: 1.6 !important;
+}
+.coach-tabby__rte p { margin: 0 0 16px; }
+.coach-tabby__rte ol,
+.coach-tabby__rte ul,
+.coach-tabby__answer ul { margin: 0 0 16px; padding-left: 22px; }
+.coach-tabby__rte ol,
+.coach-tabby__answer ol { list-style: decimal; }
+.coach-tabby__rte ul,
+.coach-tabby__answer ul { list-style: disc; }
+.coach-tabby a { color: inherit; }
+.coach-tabby img { display: block; max-width: 100%; height: auto; }
+.coach-tabby__hero { display: flex; flex-direction: column; gap: 28px; align-items: center; }
+.coach-tabby__hero-copy,
+.coach-tabby__hero-media { width: 100%; }
+.coach-tabby__logo { display: inline-block; margin: 36px 0 16px; }
+.coach-tabby__logo img { width: 88px; height: auto; }
+.coach-tabby__steps { padding: 48px 0; }
+.coach-tabby__step-grid { display: grid; gap: 48px; }
+.coach-tabby__step-label {
+  margin: 0 0 8px;
+  color: #0e8282 !important;
+  font-size: 13px !important;
+  font-weight: 700 !important;
+  line-height: 17px !important;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+.coach-tabby__step-line { display: flex; flex-wrap: wrap; align-items: center; margin: 0; }
+.coach-tabby__badge {
+  display: inline-flex;
+  width: 58px;
+  margin: 0 8px;
+  padding: 6px;
+  border-radius: 6px;
+  background: #3eedbf;
+}
+.coach-tabby__badge img { width: 100%; }
+.coach-tabby__step-image { width: 100%; margin-top: 16px; border-radius: 6px; }
+.coach-tabby__pay { display: grid; gap: 28px; padding-bottom: 48px; }
+.coach-tabby__apps { display: flex; gap: 16px; align-items: center; }
+.coach-tabby__apps img { height: 40px; width: auto; }
+.coach-tabby__item { border-bottom: 1px solid #e6e5e9; padding: 18px 0; }
+.coach-tabby__item summary {
+  position: relative;
+  display: flex;
+  align-items: center;
+  padding: 4px 32px 4px 0;
+  cursor: pointer;
+  list-style: none;
+  font-family: Inter, Helvetica, Arial, sans-serif !important;
+  font-size: 18px !important;
+  font-weight: 600 !important;
+  line-height: 1.6 !important;
+}
+.coach-tabby__item summary::-webkit-details-marker { display: none; }
+.coach-tabby__item summary::marker { content: ""; }
+.coach-tabby__item summary::after {
+  content: "+";
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 28px;
+  font-weight: 400;
+}
+.coach-tabby__item[open] summary::after { content: "−"; }
+.coach-tabby__answer { padding: 14px 32px 4px 0; }
+.coach-tabby__help { margin: 20px 0 0; font-size: 24px !important; line-height: 32px !important; }
+.coach-tabby__help a { text-decoration: underline; }
+.coach-tabby__about { background: #fbfbfb; margin-top: 24px; padding: 54px 16px; }
+.coach-tabby__about-inner { width: min(100%, 850px); margin: 0 auto; }
+@media screen and (min-width: 1024px) {
+  .coach-tabby__hero { flex-direction: row; justify-content: space-between; padding-top: 40px; }
+  .coach-tabby__hero-copy { width: 40%; max-width: 464px; }
+  .coach-tabby__hero-media { width: 60%; display: flex; justify-content: flex-end; }
+  .coach-tabby__hero-media img { width: min(100%, 686px); }
+  .coach-tabby__hero h2 { font-size: 48px !important; line-height: 62px !important; }
+  .coach-tabby__logo img { width: 120px; }
+  .coach-tabby__step-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 54px; }
+  .coach-tabby__step { display: flex; flex-direction: column; }
+  .coach-tabby__step-image { order: -1; margin-top: 0; margin-bottom: 16px; }
+  .coach-tabby__step-copy { margin-top: 12px; }
+  .coach-tabby__badge { width: 64px; }
+  .coach-tabby__pay { grid-template-columns: 1fr 1fr; align-items: center; }
+  .coach-tabby__pay-copy { max-width: 512px; }
+  .coach-tabby__about { padding: 128px 24px; }
+}
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Tabby",
+  "max_blocks": 16,
+  "settings": [
+    { "type": "checkbox", "id": "show_title", "label": "Show page title", "default": true },
+    { "type": "text", "id": "title", "label": "Page title", "default": "TABBY" },
+    { "type": "range", "id": "content_width", "min": 720, "max": 1400, "step": 20, "unit": "px", "label": "Content width", "default": 1100 },
+    { "type": "header", "content": "Hero" },
+    { "type": "image_picker", "id": "logo", "label": "Upload logo" },
+    { "type": "text", "id": "logo_url", "label": "Logo URL", "info": "Used when no logo is uploaded." },
+    { "type": "text", "id": "logo_alt", "label": "Logo alt text", "default": "tabby" },
+    { "type": "url", "id": "logo_link", "label": "Logo link" },
+    { "type": "text", "id": "hero_heading", "label": "Hero heading", "default": "Shop now. Pay later with tabby." },
+    { "type": "richtext", "id": "hero_text", "label": "Hero text", "default": "<p>We've partnered with tabby to bring you a more rewarding way to shop. tabby lets you split your purchases into 4 interest-free payments with no fees.</p>" },
+    { "type": "image_picker", "id": "hero_image", "label": "Upload hero image" },
+    { "type": "text", "id": "hero_image_url", "label": "Hero image URL", "info": "Used when no hero image is uploaded." },
+    { "type": "text", "id": "hero_alt", "label": "Hero alt text", "default": "Shop now. Pay later with tabby." },
+    { "type": "header", "content": "How it works" },
+    { "type": "text", "id": "steps_heading", "label": "Steps heading", "default": "Here's how it works" },
+    { "type": "header", "content": "Payments" },
+    { "type": "text", "id": "pay_heading", "label": "Payments heading", "default": "Making upcoming payments" },
+    { "type": "richtext", "id": "pay_intro", "label": "Payments intro", "default": "<p>The best way to track your purchases and upcoming bills is by getting the tabby app.</p>" },
+    { "type": "richtext", "id": "pay_text", "label": "Payments text" },
+    { "type": "image_picker", "id": "pay_image", "label": "Upload payments image" },
+    { "type": "text", "id": "pay_image_url", "label": "Payments image URL", "info": "Used when no payments image is uploaded." },
+    { "type": "text", "id": "pay_alt", "label": "Payments alt text", "default": "Get tabby app" },
+    { "type": "image_picker", "id": "ios_image", "label": "Upload iOS badge" },
+    { "type": "text", "id": "ios_image_url", "label": "iOS badge URL", "info": "Used when no iOS badge is uploaded." },
+    { "type": "text", "id": "ios_alt", "label": "iOS alt text", "default": "iOS" },
+    { "type": "url", "id": "ios_link", "label": "iOS link" },
+    { "type": "image_picker", "id": "android_image", "label": "Upload Android badge" },
+    { "type": "text", "id": "android_image_url", "label": "Android badge URL", "info": "Used when no Android badge is uploaded." },
+    { "type": "text", "id": "android_alt", "label": "Android alt text", "default": "Android" },
+    { "type": "url", "id": "android_link", "label": "Android link" },
+    { "type": "header", "content": "Questions" },
+    { "type": "text", "id": "faq_heading", "label": "Questions heading", "default": "Frequently asked questions" },
+    { "type": "text", "id": "help_before", "label": "Help text before link", "default": "Visit" },
+    { "type": "text", "id": "help_label", "label": "Help link label", "default": "tabby's help center" },
+    { "type": "text", "id": "help_after", "label": "Help text after link", "default": "to find out more." },
+    { "type": "url", "id": "help_link", "label": "Help link" },
+    { "type": "header", "content": "About" },
+    { "type": "text", "id": "about_heading", "label": "About heading", "default": "About tabby" },
+    { "type": "richtext", "id": "about_text", "label": "About text" }
+  ],
+  "blocks": [
+    {
+      "type": "step",
+      "name": "Step",
+      "settings": [
+        { "type": "text", "id": "label", "label": "Step label", "default": "Step One" },
+        { "type": "text", "id": "text_before", "label": "Text before logo" },
+        { "type": "checkbox", "id": "show_logo", "label": "Show logo in the text", "default": false },
+        { "type": "text", "id": "text_after", "label": "Text after logo" },
+        { "type": "image_picker", "id": "image", "label": "Upload image" },
+        { "type": "text", "id": "image_url", "label": "Image URL", "info": "Used when no image is uploaded." },
+        { "type": "text", "id": "alt", "label": "Image alt text" }
+      ]
+    },
+    {
+      "type": "faq",
+      "name": "Question",
+      "settings": [
+        { "type": "text", "id": "question", "label": "Question" },
+        { "type": "richtext", "id": "answer", "label": "Answer" }
+      ]
+    }
+  ],
+  "presets": [
+    { "name": "Tabby" }
+  ]
+}
+{% endschema %}
