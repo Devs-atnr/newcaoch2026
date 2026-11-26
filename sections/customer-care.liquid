@@ -2052,18 +2052,8 @@ if (!customElements.get('coach-care-nav')) {
       "type": "faq_group",
       "name": "FAQ list",
       "settings": [
-        { "type": "text", "id": "heading", "label": "Heading", "default": "General / My Account:", "info": "This heading is one closed accordion. Add Question blocks inside this list." },
+        { "type": "text", "id": "heading", "label": "Heading", "default": "General / My Account:", "info": "This heading is one closed accordion. Questions saved inside this list open inside it." },
         { "type": "text", "id": "page_handles", "label": "Limit to page handles", "info": "Comma-separated handles. Leave blank to show on every page using this template." }
-      ],
-      "blocks": [
-        {
-          "type": "faq",
-          "name": "Question",
-          "settings": [
-            { "type": "text", "id": "question", "label": "Question" },
-            { "type": "richtext", "id": "answer", "label": "Answer" }
-          ]
-        }
       ]
     },
     {
