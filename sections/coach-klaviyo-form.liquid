@@ -1,0 +1,59 @@
+<div class="coach-klaviyo" id="CoachKlaviyo-{{ section.id }}" style="--klaviyo-pad: {{ section.settings.padding }}px;">
+  {%- if section.settings.show_title and section.settings.heading != blank -%}
+    <h1 class="coach-klaviyo__title">{{ section.settings.heading | escape }}</h1>
+  {%- endif -%}
+  {%- if section.settings.form_id != blank -%}
+    <div class="klaviyo-form-{{ section.settings.form_id | strip | escape }}"></div>
+  {%- endif -%}
+</div>
+
+<script>
+  (function () {
+    var company = {{ section.settings.company_id | strip | json }};
+    if (!company) return;
+    if (document.querySelector('script[data-coach-klaviyo="' + company + '"]')) return;
+    var script = document.createElement('script');
+    script.async = true;
+    script.setAttribute('data-coach-klaviyo', company);
+    script.src = 'https://static.klaviyo.com/onsite/js/' + encodeURIComponent(company) + '/klaviyo.js?company_id=' + encodeURIComponent(company);
+    document.head.appendChild(script);
+  })();
+</script>
+
+{% stylesheet %}
+.coach-klaviyo {
+  box-sizing: border-box;
+  width: min(100%, 720px);
+  margin: 0 auto;
+  padding: var(--klaviyo-pad, 48px) 20px 80px;
+  background: #ffffff;
+  text-align: center;
+}
+.coach-klaviyo__title {
+  margin: 0 0 24px;
+  font-family: HelveticaLTPro-Roman, Helvetica, Arial, sans-serif;
+  font-size: 28px;
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Klaviyo form",
+  "tag": "section",
+  "class": "coach-klaviyo-section",
+  "enabled_on": { "templates": ["page"] },
+  "settings": [
+    { "type": "text", "id": "company_id", "label": "Klaviyo company ID", "default": "RwQQ8A" },
+    { "type": "text", "id": "form_id", "label": "Klaviyo form ID", "default": "UkMETz", "info": "The form design, fields, and list are managed in Klaviyo." },
+    { "type": "checkbox", "id": "show_title", "label": "Show heading", "default": false },
+    { "type": "text", "id": "heading", "label": "Heading" },
+    { "type": "range", "id": "padding", "min": 0, "max": 120, "step": 4, "unit": "px", "label": "Top padding", "default": 48 }
+  ],
+  "presets": [
+    { "name": "Klaviyo form" }
+  ]
+}
+{% endschema %}
