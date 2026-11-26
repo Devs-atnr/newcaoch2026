@@ -35,6 +35,13 @@
     --care-sticky: {{ section.settings.sticky_top | default: 24 }}px;
     --care-m-pad: {{ section.settings.mobile_padding | default: 16 }}px;
     --care-m-gap: {{ section.settings.mobile_spacing | default: 0 }}px;
+    --faq-font: {{ section.settings.faq_font | default: 'HelveticaLTPro-Roman, Helvetica, Arial, sans-serif' }};
+    --faq-title: {{ section.settings.faq_title_size | default: 22 }}px;
+    --faq-title-weight: {{ section.settings.faq_title_weight | default: '700' }};
+    --faq-row: {{ section.settings.faq_row_size | default: 13 }}px;
+    --faq-row-weight: {{ section.settings.faq_row_weight | default: '400' }};
+    --faq-question: {{ section.settings.faq_question_size | default: 14 }}px;
+    --faq-answer: {{ section.settings.faq_answer_size | default: 14 }}px;
   "
 >
   <div class="coach-care__frame">
@@ -319,7 +326,7 @@
                     endfor
                   -%}
                   {%- if faq_has_questions -%}
-                    <details class="coach-care__faq" {{ block.shopify_attributes }}{% if request.design_mode %} open{% endif %}>
+                    <details class="coach-care__faq" {{ block.shopify_attributes }}>
                       <summary>
                         <span class="coach-care__faq-question">{{ block.settings.heading | escape }}</span>
                         <span class="coach-care__faq-chevron" aria-hidden="true"></span>
@@ -650,6 +657,13 @@
 </div>
 
 {% stylesheet %}
+@font-face {
+  font-family: HelveticaLTPro-Roman;
+  src: url("https://cdn.shopify.com/s/files/1/0360/3746/0012/files/Helvetica-Roman_1.woff2?v=1753201381") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
 .coach-care {
   box-sizing: border-box;
   max-width: 100%;
@@ -1103,6 +1117,15 @@
   font-size: 14px;
 }
 .coach-care__status { margin: 0 0 12px; font-size: 14px; }
+.coach-care__faq,
+.coach-care__faq summary,
+.coach-care__faq-group,
+.coach-care__faq-question,
+.coach-care__faq-item,
+.coach-care__faq-item h3,
+.coach-care__faq-item .coach-care__rte {
+  font-family: var(--faq-font, HelveticaLTPro-Roman, Helvetica, Arial, sans-serif) !important;
+}
 .coach-care__faq {
   margin-top: 0;
   border: 0;
@@ -1110,10 +1133,11 @@
   background: transparent;
 }
 .coach-care__faq-group {
-  margin: 0 0 36px;
-  font-size: 22px;
-  font-weight: 700;
+  margin: 0 0 28px;
+  font-size: var(--faq-title, 22px);
+  font-weight: var(--faq-title-weight, 700);
   line-height: 1.2;
+  letter-spacing: 0;
   color: #111111;
 }
 .coach-care__faq summary {
@@ -1122,15 +1146,15 @@
   justify-content: space-between;
   gap: 24px;
   padding: 18px 2px;
-  font-weight: 500;
+  font-weight: var(--faq-row-weight, 400);
   cursor: pointer;
   list-style: none;
 }
 .coach-care__faq summary::-webkit-details-marker { display: none; }
 .coach-care__faq summary::marker { content: ""; }
 .coach-care__faq-question {
-  font-size: 13px;
-  font-weight: 500;
+  font-size: var(--faq-row, 13px);
+  font-weight: var(--faq-row-weight, 400);
   line-height: 1.4;
   letter-spacing: 0.04em;
   text-transform: uppercase;
@@ -1195,8 +1219,7 @@
 .coach-care__faq-item { margin: 0 0 22px; }
 .coach-care__faq-item h3 {
   margin: 0 0 8px;
-  font-family: HelveticaLTPro-Roman, Helvetica, Arial, sans-serif;
-  font-size: 14px;
+  font-size: var(--faq-question, 14px);
   font-weight: 700;
   line-height: 1.4;
   letter-spacing: 0.02em;
@@ -1205,7 +1228,7 @@
 }
 .coach-care__faq-item .coach-care__rte {
   padding: 0;
-  font-size: 14px;
+  font-size: var(--faq-answer, 14px);
   font-weight: 400;
   line-height: 1.55;
   letter-spacing: 0;
@@ -1792,6 +1815,20 @@ if (!customElements.get('coach-care-nav')) {
     { "type": "range", "id": "content_padding_x", "min": 0, "max": 80, "step": 4, "unit": "px", "label": "Content horizontal padding", "default": 48 },
     { "type": "range", "id": "content_max", "min": 320, "max": 1200, "step": 20, "unit": "px", "label": "Content maximum width", "default": 760 },
     { "type": "range", "id": "min_height", "min": 0, "max": 800, "step": 20, "unit": "px", "label": "Section minimum height", "default": 0 },
+    { "type": "header", "content": "FAQ type" },
+    { "type": "text", "id": "faq_font", "label": "FAQ font", "default": "HelveticaLTPro-Roman, Helvetica, Arial, sans-serif" },
+    { "type": "range", "id": "faq_title_size", "min": 16, "max": 40, "step": 2, "unit": "px", "label": "FAQ title size", "default": 22 },
+    { "type": "select", "id": "faq_title_weight", "label": "FAQ title weight", "default": "700", "options": [
+      { "value": "400", "label": "Regular" },
+      { "value": "700", "label": "Bold" }
+    ] },
+    { "type": "range", "id": "faq_row_size", "min": 12, "max": 24, "step": 1, "unit": "px", "label": "Accordion row size", "default": 13 },
+    { "type": "select", "id": "faq_row_weight", "label": "Accordion row weight", "default": "400", "options": [
+      { "value": "400", "label": "Regular" },
+      { "value": "700", "label": "Bold" }
+    ] },
+    { "type": "range", "id": "faq_question_size", "min": 12, "max": 28, "step": 1, "unit": "px", "label": "Question size", "default": 14 },
+    { "type": "range", "id": "faq_answer_size", "min": 12, "max": 22, "step": 1, "unit": "px", "label": "Answer size", "default": 14 },
     { "type": "header", "content": "Mobile" },
     { "type": "range", "id": "mobile_padding", "min": 0, "max": 40, "step": 4, "unit": "px", "label": "Mobile padding", "default": 16 },
     { "type": "range", "id": "mobile_spacing", "min": 0, "max": 40, "step": 4, "unit": "px", "label": "Mobile space between columns", "default": 0 }
