@@ -262,6 +262,68 @@
             "answer": "<p>You pay 50 SR for returns unless due to damage or defect. See our Returns Policy.</p>",
             "page_handles": ""
           }
+        },
+        "faq_group_kemLYU": {
+          "type": "faq_group",
+          "settings": {
+            "heading": "Returns / Exchange:",
+            "page_handles": ""
+          }
+        },
+        "faq_gCw8ga": {
+          "type": "faq",
+          "settings": {
+            "question": "What is your Exchange policy?",
+            "answer": "<ol><li>Exchange within 2 days of delivery.</li><li>Items must be unused, with original tags and packaging.</li><li>Size change is subject to 50 SR plus shipping.</li></ol>",
+            "page_handles": ""
+          }
+        },
+        "faq_66DUnA": {
+          "type": "faq",
+          "settings": {
+            "question": "What is your return/refund/replacement policy?",
+            "answer": "<p>We offer a 14-day return policy. Items must be unworn, undamaged, and in original packaging. Refunds are processed within 15 days. COD orders require bank details.</p>",
+            "page_handles": ""
+          }
+        },
+        "faq_bdwFMb": {
+          "type": "faq",
+          "settings": {
+            "question": "I want to return a product, how can I do that?",
+            "answer": "<p>Email <a href=\"mailto:customercare@coach.sa\">customercare@coach.sa</a> and request a pickup. Item must be in original condition with invoice</p>",
+            "page_handles": ""
+          }
+        },
+        "faq_Dq8R94": {
+          "type": "faq",
+          "settings": {
+            "question": "How can I receive my money for returned/cancelled merchandise?",
+            "answer": "<p>Refunds are processed in the original payment method. COD refunds require bank account details.</p>",
+            "page_handles": ""
+          }
+        },
+        "faq_group_t9Ldtg": {
+          "type": "faq_group",
+          "settings": {
+            "heading": "Customer Information:",
+            "page_handles": ""
+          }
+        },
+        "faq_FXQLHB": {
+          "type": "faq",
+          "settings": {
+            "question": "What information do we collect?",
+            "answer": "<p>Please see our <a href=\"https://coach.sa/pages/privacy-policy\">Privacy Policy</a> for a detailed list of collected data.</p>",
+            "page_handles": ""
+          }
+        },
+        "faq_9cePLL": {
+          "type": "faq",
+          "settings": {
+            "question": "How do we use your information?",
+            "answer": "<p>We use your data to fulfill orders and enhance user experience. Review our Privacy Policy for full details.</p>",
+            "page_handles": ""
+          }
         }
       },
       "block_order": [
@@ -296,7 +358,15 @@
         "faq_4Verwb",
         "faq_PyPTQQ",
         "faq_74ByjC",
-        "faq_VFkB9C"
+        "faq_VFkB9C",
+        "faq_group_kemLYU",
+        "faq_gCw8ga",
+        "faq_66DUnA",
+        "faq_bdwFMb",
+        "faq_Dq8R94",
+        "faq_group_t9Ldtg",
+        "faq_FXQLHB",
+        "faq_9cePLL"
       ],
       "settings": {
         "menu": "footer-menu-copy",
