@@ -3,8 +3,8 @@
   if (customElements.get('coach-header')) return;
 
   const DESKTOP = window.matchMedia('(min-width: 990px)');
-  const HOVER_OPEN_DELAY = 90;
-  const HOVER_CLOSE_DELAY = 160;
+  const HOVER_OPEN_DELAY = 40;
+  const HOVER_CLOSE_DELAY = 280;
   const L2_INTENT_DELAY = 110;
 
   const debounce = (fn, wait) => {
@@ -439,8 +439,17 @@
         };
         item.querySelector('.coach-nav__link')?.addEventListener('mouseenter', openFromName);
         item.querySelector('.coach-nav__link')?.addEventListener('focus', openFromName);
-        item.addEventListener('mouseleave', () => {
+        item.addEventListener('mouseenter', () => {
           if (!DESKTOP.matches) return;
+          clearTimeout(this.closeTimer);
+        });
+        mega.addEventListener('mouseenter', () => {
+          if (!DESKTOP.matches) return;
+          clearTimeout(this.closeTimer);
+        });
+        item.addEventListener('mouseleave', (event) => {
+          if (!DESKTOP.matches) return;
+          if (event.relatedTarget && mega.contains(event.relatedTarget)) return;
           this.scheduleClose();
         });
 
@@ -501,9 +510,11 @@
     }
 
     scheduleClose() {
-      clearTimeout(this.openTimer);
       clearTimeout(this.closeTimer);
-      this.closeTimer = setTimeout(() => this.closeMega(), HOVER_CLOSE_DELAY);
+      this.closeTimer = setTimeout(() => {
+        clearTimeout(this.openTimer);
+        this.closeMega();
+      }, HOVER_CLOSE_DELAY);
     }
 
     openMega(item) {
