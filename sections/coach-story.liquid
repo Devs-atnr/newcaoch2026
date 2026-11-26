@@ -1,0 +1,366 @@
+<div
+  id="CoachStory-{{ section.id }}"
+  class="coach-story"
+  style="
+    --story-pad-top: {{ section.settings.padding_top }}px;
+    --story-pad-bottom: {{ section.settings.padding_bottom }}px;
+    --story-heading: {{ section.settings.heading_size }}px;
+    --story-heading-m: {{ section.settings.heading_size_mobile }}px;
+    --story-body: {{ section.settings.body_size }}px;
+    --story-body-m: {{ section.settings.body_size_mobile }}px;
+  "
+>
+  <div class="coach-story__inner">
+    {%- for block in section.blocks -%}
+      {%- case block.type -%}
+        {%- when 'row' -%}
+          {%- liquid
+            assign story_image = ''
+            if block.settings.image != blank
+              assign story_image = block.settings.image | image_url: width: 1600
+            elsif block.settings.image_url != blank
+              assign story_image = block.settings.image_url
+            endif
+            assign story_poster = ''
+            if block.settings.poster != blank
+              assign story_poster = block.settings.poster | image_url: width: 1200
+            elsif block.settings.poster_url != blank
+              assign story_poster = block.settings.poster_url
+            elsif story_image != blank
+              assign story_poster = story_image
+            endif
+            assign has_video = false
+            if block.settings.video != blank or block.settings.video_url != blank
+              assign has_video = true
+            endif
+          -%}
+          <div
+            class="coach-story__row coach-story__row--{{ block.settings.layout }} coach-story__row--{{ block.settings.frame }}"
+            style="--story-accent: {{ block.settings.accent }};"
+            {{ block.shopify_attributes }}
+          >
+            <div class="coach-story__text">
+              {%- if block.settings.heading != blank -%}
+                <h2 class="coach-story__heading">{{ block.settings.heading | escape }}</h2>
+              {%- endif -%}
+              {%- if block.settings.text != blank -%}
+                <div class="coach-story__description">{{ block.settings.text }}</div>
+              {%- endif -%}
+            </div>
+            <div class="coach-story__media">
+              <div class="coach-story__frame">
+                <div class="coach-story__card">
+                  {%- if has_video -%}
+                    <div class="coach-story__video">
+                      {%- if block.settings.video != blank -%}
+                        {{ block.settings.video | video_tag: image_size: '1200x', autoplay: true, loop: true, muted: true, controls: false, playsinline: true, class: 'coach-story__img' }}
+                      {%- else -%}
+                        <video class="coach-story__img" playsinline autoplay loop muted preload="metadata"{% if story_poster != blank %} poster="{{ story_poster | escape }}"{% endif %}>
+                          <source src="{{ block.settings.video_url | escape }}" type="video/mp4">
+                        </video>
+                      {%- endif -%}
+                      <button class="coach-story__control" type="button" data-story-control aria-label="{{ section.settings.pause_label | escape }}">
+                        <svg class="icon-pause" viewBox="0 0 24 24" width="14" height="14" fill="currentColor" aria-hidden="true"><rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect></svg>
+                        <svg class="icon-play" viewBox="0 0 24 24" width="14" height="14" fill="currentColor" aria-hidden="true"><polygon points="8,5 19,12 8,19"></polygon></svg>
+                      </button>
+                    </div>
+                  {%- elsif story_image != blank -%}
+                    <img class="coach-story__img" src="{{ story_image | escape }}" alt="{{ block.settings.alt | default: block.settings.heading | escape }}" loading="lazy" width="800" height="1000">
+                  {%- endif -%}
+                  {%- if block.settings.caption != blank and block.settings.caption_place == 'inside' -%}
+                    <p class="coach-story__caption is-inside">{{ block.settings.caption | escape }}</p>
+                  {%- endif -%}
+                </div>
+              </div>
+              {%- if block.settings.caption != blank and block.settings.caption_place != 'inside' -%}
+                <p class="coach-story__caption">{{ block.settings.caption | escape }}</p>
+              {%- endif -%}
+            </div>
+          </div>
+        {%- when 'quote' -%}
+          <div class="coach-story__quote" style="background: {{ block.settings.background }}; color: {{ block.settings.color }};" {{ block.shopify_attributes }}>
+            {%- if block.settings.quote != blank -%}
+              <blockquote>{{ block.settings.quote | escape | newline_to_br }}</blockquote>
+            {%- endif -%}
+            {%- if block.settings.author != blank -%}
+              <p>{{ block.settings.author | escape }}</p>
+            {%- endif -%}
+          </div>
+      {%- endcase -%}
+    {%- endfor -%}
+  </div>
+</div>
+<script>
+  (function () {
+    var root = document.getElementById('CoachStory-{{ section.id }}');
+    if (!root || root.dataset.bound === 'true') return;
+    root.dataset.bound = 'true';
+    var pauseLabel = {{ section.settings.pause_label | json }};
+    var playLabel = {{ section.settings.play_label | json }};
+    root.querySelectorAll('[data-story-control]').forEach(function (button) {
+      var video = button.parentElement.querySelector('video');
+      if (!video) return;
+      var playIcon = button.querySelector('.icon-play');
+      var pauseIcon = button.querySelector('.icon-pause');
+      function showPause() {
+        playIcon.style.display = 'none';
+        pauseIcon.style.display = 'block';
+        button.setAttribute('aria-label', pauseLabel);
+      }
+      function showPlay() {
+        playIcon.style.display = 'block';
+        pauseIcon.style.display = 'none';
+        button.setAttribute('aria-label', playLabel);
+      }
+      showPause();
+      button.addEventListener('click', function (event) {
+        event.preventDefault();
+        if (video.paused) {
+          video.play();
+          showPause();
+        } else {
+          video.pause();
+          showPlay();
+        }
+      });
+    });
+  })();
+</script>
+
+{% stylesheet %}
+@font-face {
+  font-family: HelveticaNeueLTPro-BdEx;
+  src: url("https://cdn.shopify.com/s/files/1/0360/3746/0012/files/neue_helvetica_73_extended_bold.woff2?v=1741341449") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: GaramondMTPro;
+  src: url("https://cdn.shopify.com/s/files/1/0360/3746/0012/files/Garamond-Roman_1.woff2?v=1753204274") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+.coach-story {
+  background: #ffffff;
+  padding: var(--story-pad-top, 60px) 0 var(--story-pad-bottom, 60px);
+  overflow: hidden;
+  color: #121212;
+}
+.coach-story__inner {
+  display: flex;
+  flex-direction: column;
+  gap: 80px;
+  width: min(100%, 1800px);
+  margin: 0 auto;
+  padding: 0 24px;
+}
+.coach-story__row {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  align-items: center;
+  width: 100%;
+}
+.coach-story__text,
+.coach-story__media { width: 100%; }
+.coach-story__text { display: flex; flex-direction: column; justify-content: center; }
+.coach-story__heading {
+  margin: 0 0 20px;
+  color: #121212;
+  font-family: HelveticaNeueLTPro-BdEx, Helvetica, Arial, sans-serif !important;
+  font-size: var(--story-heading-m, 28px) !important;
+  font-weight: 700 !important;
+  line-height: 1.25 !important;
+  letter-spacing: -0.02em;
+}
+.coach-story__description,
+.coach-story__description p {
+  color: #000000;
+  font-family: GaramondMTPro, Georgia, "Times New Roman", serif !important;
+  font-size: var(--story-body-m, 15px) !important;
+  font-weight: 400 !important;
+  line-height: 1.6 !important;
+}
+.coach-story__description p { margin: 0 0 16px; }
+.coach-story__description p:last-child { margin-bottom: 0; }
+.coach-story__frame { position: relative; width: 100%; }
+.coach-story__card { position: relative; z-index: 2; }
+.coach-story__img { display: block; width: 100%; height: auto; object-fit: cover; }
+.coach-story__video { position: relative; line-height: 0; overflow: hidden; }
+.coach-story__control {
+  position: absolute;
+  right: 12px;
+  bottom: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.9);
+  color: #121212;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+}
+.coach-story__control .icon-play { display: none; }
+.coach-story__caption {
+  margin: 16px 0 0;
+  color: #666666;
+  font-family: Helvetica, Arial, sans-serif;
+  font-size: 12px;
+  line-height: 1.4;
+  text-align: center;
+}
+.coach-story__caption.is-inside {
+  margin: 16px 0 0;
+  color: #444444;
+  font-family: GaramondMTPro, Georgia, serif;
+  font-size: 13px;
+  font-style: italic;
+}
+.coach-story__row--pink .coach-story__frame::before,
+.coach-story__row--yellow .coach-story__frame::before {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  border-radius: 2px;
+  background: var(--story-accent, #d11252);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+}
+.coach-story__row--pink .coach-story__frame::before {
+  top: 15px;
+  right: 15px;
+  bottom: -15px;
+  left: -15px;
+}
+.coach-story__row--yellow .coach-story__frame::before {
+  top: 15px;
+  right: -15px;
+  bottom: -15px;
+  left: 15px;
+}
+.coach-story__row--polaroid .coach-story__frame { padding: 10px; }
+.coach-story__row--polaroid .coach-story__card {
+  padding: 16px 16px 24px;
+  background: #ffffff;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+  transform: rotate(1.5deg);
+  transition: transform 0.3s ease;
+}
+.coach-story__row--polaroid .coach-story__frame::before {
+  content: "";
+  position: absolute;
+  z-index: 1;
+  top: 10px;
+  right: 10px;
+  bottom: 10px;
+  left: 10px;
+  background: var(--story-accent, #8c684d);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+  transform: rotate(-3deg);
+}
+.coach-story__row--polaroid:hover .coach-story__card { transform: rotate(0deg) translateY(-5px); }
+.coach-story__quote {
+  box-sizing: border-box;
+  width: 100%;
+  margin: 0;
+  padding: 60px 24px;
+  border-radius: 4px;
+  text-align: center;
+}
+.coach-story__quote blockquote {
+  max-width: 980px;
+  margin: 0 auto 20px;
+  font-family: GaramondMTPro, Georgia, "Times New Roman", serif !important;
+  font-size: 20px !important;
+  font-weight: 400 !important;
+  font-style: normal;
+  line-height: 1.45 !important;
+  letter-spacing: -0.01em;
+}
+.coach-story__quote p {
+  margin: 0;
+  color: rgba(18, 18, 18, 0.7);
+  font-family: Helvetica, Arial, sans-serif;
+  font-size: 13px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+@media screen and (min-width: 990px) {
+  .coach-story__inner { gap: 120px; }
+  .coach-story__row { flex-direction: row; gap: 10px; }
+  .coach-story__row--image { flex-direction: row-reverse; }
+  .coach-story__text, .coach-story__media { width: 50%; }
+  .coach-story__heading { font-size: var(--story-heading, 40px) !important; }
+  .coach-story__description, .coach-story__description p { font-size: var(--story-body, 18px) !important; }
+  .coach-story__quote { padding: 80px 60px; }
+  .coach-story__quote blockquote { font-size: 32px !important; }
+}
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Coach story",
+  "max_blocks": 12,
+  "settings": [
+    { "type": "range", "id": "heading_size", "min": 20, "max": 64, "step": 2, "unit": "px", "label": "Heading size", "default": 40 },
+    { "type": "range", "id": "heading_size_mobile", "min": 18, "max": 40, "step": 2, "unit": "px", "label": "Mobile heading size", "default": 28 },
+    { "type": "range", "id": "body_size", "min": 14, "max": 24, "step": 1, "unit": "px", "label": "Text size", "default": 18 },
+    { "type": "range", "id": "body_size_mobile", "min": 13, "max": 20, "step": 1, "unit": "px", "label": "Mobile text size", "default": 15 },
+    { "type": "text", "id": "pause_label", "label": "Pause label", "default": "Pause video" },
+    { "type": "text", "id": "play_label", "label": "Play label", "default": "Play video" },
+    { "type": "range", "id": "padding_top", "min": 0, "max": 120, "step": 4, "unit": "px", "label": "Top padding", "default": 60 },
+    { "type": "range", "id": "padding_bottom", "min": 0, "max": 120, "step": 4, "unit": "px", "label": "Bottom padding", "default": 60 }
+  ],
+  "blocks": [
+    {
+      "type": "row",
+      "name": "Story row",
+      "settings": [
+        { "type": "text", "id": "heading", "label": "Heading" },
+        { "type": "richtext", "id": "text", "label": "Text" },
+        { "type": "select", "id": "layout", "label": "Desktop layout", "default": "text", "options": [
+          { "value": "text", "label": "Text left" },
+          { "value": "image", "label": "Image left" }
+        ] },
+        { "type": "select", "id": "frame", "label": "Image frame", "default": "standard", "options": [
+          { "value": "standard", "label": "Plain" },
+          { "value": "pink", "label": "Pink offset" },
+          { "value": "yellow", "label": "Yellow offset" },
+          { "value": "polaroid", "label": "Polaroid" }
+        ] },
+        { "type": "color", "id": "accent", "label": "Frame color", "default": "#d11252" },
+        { "type": "image_picker", "id": "image", "label": "Upload image" },
+        { "type": "text", "id": "image_url", "label": "Image URL", "info": "Used when no image is uploaded." },
+        { "type": "text", "id": "alt", "label": "Image alt text" },
+        { "type": "text", "id": "caption", "label": "Caption" },
+        { "type": "select", "id": "caption_place", "label": "Caption position", "default": "outside", "options": [
+          { "value": "outside", "label": "Under the image" },
+          { "value": "inside", "label": "Inside the frame" }
+        ] },
+        { "type": "video", "id": "video", "label": "Upload video" },
+        { "type": "text", "id": "video_url", "label": "Video URL", "info": "MP4 address. Used when no video is uploaded." },
+        { "type": "image_picker", "id": "poster", "label": "Upload poster" },
+        { "type": "text", "id": "poster_url", "label": "Poster URL", "info": "Shown before the video plays. Used when no poster is uploaded." }
+      ]
+    },
+    {
+      "type": "quote",
+      "name": "Quote",
+      "settings": [
+        { "type": "textarea", "id": "quote", "label": "Quote" },
+        { "type": "text", "id": "author", "label": "Author" },
+        { "type": "color", "id": "background", "label": "Background", "default": "#fbf7f0" },
+        { "type": "color", "id": "color", "label": "Text color", "default": "#121212" }
+      ]
+    }
+  ],
+  "presets": [
+    { "name": "Coach story" }
+  ]
+}
+{% endschema %}

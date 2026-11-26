@@ -9,15 +9,120 @@
  */
 {
   "sections": {
-    "main": {
-      "type": "main-page",
+    "coach_story": {
+      "type": "coach-story",
+      "blocks": {
+        "story_who": {
+          "type": "row",
+          "settings": {
+            "heading": "Who we are.",
+            "text": "<p>Coach has always stood for the freedom to express yourself with confidence. Crafted with care, our bags, accessories, and shoes are designed to last. We're proud to support creativity and self-expression in communities around the world.</p>",
+            "layout": "text",
+            "frame": "standard",
+            "accent": "#d11252",
+            "image_url": "https://coach.sa/cdn/shop/files/20260128-rtl-coach-story-new_800x.webp?v=1785314827",
+            "alt": "Who we are.",
+            "caption": "Our iconic Tabby Bag—crafted for you to be yourself in.",
+            "caption_place": "outside",
+            "video_url": "",
+            "poster_url": ""
+          }
+        },
+        "story_believe": {
+          "type": "row",
+          "settings": {
+            "heading": "What we believe.",
+            "text": "<p>We believe in creating beautiful things that you can be yourself in. We’ve built a legacy of craft and a community that champions the courage to live authentically, so you can inspire others to do the same.</p><p>Today, the same way we care about every stitch that goes into our product, we care about the impact we have on people, communities and the planet. Everything we make, we craft to last with the belief that better-made things create a better made future for all.</p>",
+            "layout": "image",
+            "frame": "pink",
+            "accent": "#d11252",
+            "image_url": "https://coach.sa/cdn/shop/files/about2_800x.webp?v=1785314827",
+            "alt": "What we believe.",
+            "caption": "Better-made things create a better-made future for all.",
+            "caption_place": "outside",
+            "video_url": "",
+            "poster_url": ""
+          }
+        },
+        "story_history": {
+          "type": "row",
+          "settings": {
+            "heading": "Our story.",
+            "text": "<p>Coach began with a dream to hand-craft leather into beautiful, clever, practical things. Founded in New York in 1941 by six artisans, the house grew under the vision of Lillian and Miles Cahn to become the Original American House of Leather.</p><p>Then came Bonnie Cashin: hired by Miles Cahn in 1962 to be Coach’s first lead designer. With Bonnie’s fearless vision of color, proportion and quirk—and her love of doing—Coach transformed into the perfect reflection of modern freedom and equality, the attitude of 60s New York.</p><p>In the decades that followed, Coach opened its first store on Madison Avenue and transformed from a family-run leathergoods company into a fashion house known around the world for its distinct attitude and lifestyle collections inspired by New York. In 2025, Coach’s rich legacy was celebrated in BAG MAN: The Story Behind the Improbable Rise of Coach, a book written by former CEO, Lew Frankfort.</p><p>Today, as in 1941, we are shaped by our unique story—and committed, in everything we do, to celebrating craft, our hometown and the optimism of authentic American style.</p>",
+            "layout": "text",
+            "frame": "yellow",
+            "accent": "#f3a913",
+            "image_url": "https://coach.sa/cdn/shop/files/about3_800x.webp?v=1785314828",
+            "alt": "Our story.",
+            "caption": "Coach founders Lillian and Miles Cahn, 1960s",
+            "caption_place": "outside",
+            "video_url": "",
+            "poster_url": ""
+          }
+        },
+        "story_director": {
+          "type": "row",
+          "settings": {
+            "heading": "Our Creative Director.",
+            "text": "<p>Bringing an appreciation for American pop culture and a love of craftsmanship to Coach, Stuart Vevers has been reimagining the heritage of our house since 2013. Inspired by the inclusive and courageous spirit of New York, his free-spirited collections have introduced Coach to a new generation.</p><p>In 2017, Vevers was awarded the Accessory Designer of the Year award by the Council of Fashion Designers of America (CFDA) and the Designer of the Year award by the American Apparel & Footwear Association (AAFA) for his work at Coach.</p>",
+            "layout": "image",
+            "frame": "polaroid",
+            "accent": "#8c684d",
+            "image_url": "https://coach.sa/cdn/shop/files/about4_800x.webp?v=1785314826",
+            "alt": "Our Creative Director.",
+            "caption": "Coach Creative Director Stuart Vevers, 10 Hudson Yards",
+            "caption_place": "inside",
+            "video_url": "",
+            "poster_url": ""
+          }
+        },
+        "story_quote": {
+          "type": "quote",
+          "settings": {
+            "quote": "“It was only at Coach could I really accomplish something that I’ve wanted to say about fashion since I was a student: that it should be about joy, about celebration, and to paraphrase one of my heroes, Keith Haring, it should be for everyone.”",
+            "author": "— Coach Creative Director Stuart Vevers",
+            "background": "#fbf7f0",
+            "color": "#121212"
+          }
+        },
+        "story_family": {
+          "type": "row",
+          "settings": {
+            "heading": "Our Coach family.",
+            "text": "<p>From artists and musicians to designers and changemakers, our Coach family represents a diverse community united by creativity. Together, we celebrate authentic self-expression and invite everyone to join the family.</p>",
+            "layout": "text",
+            "frame": "polaroid",
+            "accent": "#8c684d",
+            "image_url": "",
+            "alt": "Our Coach family.",
+            "caption": "Together, we move the world forward.",
+            "caption_place": "inside",
+            "video_url": "https://coach.sa/cdn/shop/videos/c/vp/da1084657a414ab5b02facdb890fa126/da1084657a414ab5b02facdb890fa126.HD-720p-1.6Mbps-90628983.mp4?v=0",
+            "poster_url": "https://coach.sa/cdn/shop/files/preview_images/da1084657a414ab5b02facdb890fa126.thumbnail.0000000000_small.jpg?v=1785758709"
+          }
+        }
+      },
+      "block_order": [
+        "story_who",
+        "story_believe",
+        "story_history",
+        "story_director",
+        "story_quote",
+        "story_family"
+      ],
       "settings": {
-        "padding_top": 28,
-        "padding_bottom": 28
+        "heading_size": 40,
+        "heading_size_mobile": 28,
+        "body_size": 18,
+        "body_size_mobile": 15,
+        "pause_label": "Pause video",
+        "play_label": "Play video",
+        "padding_top": 60,
+        "padding_bottom": 60
       }
     }
   },
   "order": [
-    "main"
+    "coach_story"
   ]
 }
