@@ -776,12 +776,14 @@ coach-header {
   box-shadow: inset 0 7px 7px -7px rgba(0, 0, 0, 0.18), 0 14px 18px -14px rgba(0, 0, 0, 0.18);
   visibility: hidden;
   opacity: 0;
+  pointer-events: none;
   transition: opacity 0.18s ease, visibility 0s linear 0.18s;
 }
 
 .coach-nav__item.is-open > .coach-mega {
   visibility: visible;
   opacity: 1;
+  pointer-events: auto;
   transition: opacity 0.18s ease, visibility 0s;
 }
 

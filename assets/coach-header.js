@@ -433,10 +433,12 @@
           return;
         }
 
-        item.addEventListener('mouseenter', () => {
+        const openFromName = () => {
           if (!DESKTOP.matches) return;
           this.scheduleOpen(item);
-        });
+        };
+        item.querySelector('.coach-nav__link')?.addEventListener('mouseenter', openFromName);
+        item.querySelector('.coach-nav__link')?.addEventListener('focus', openFromName);
         item.addEventListener('mouseleave', () => {
           if (!DESKTOP.matches) return;
           this.scheduleClose();
