@@ -7,6 +7,9 @@
     {%- if section.settings.show_title and section.settings.title != blank -%}
       <h1 class="coach-tabby__title">{{ section.settings.title | escape }}</h1>
     {%- endif -%}
+    {%- if section.settings.hero_intro != blank -%}
+      <p class="coach-tabby__intro">{{ section.settings.hero_intro | escape }}</p>
+    {%- endif -%}
 
     <section class="coach-tabby__hero">
       <div class="coach-tabby__hero-copy">
@@ -178,12 +181,21 @@
   padding: 28px 0 0;
 }
 .coach-tabby__title {
-  margin: 0 0 24px;
+  margin: 8px 0 18px;
   color: #000000;
   font-family: Inter, Helvetica, Arial, sans-serif !important;
-  font-size: 32px !important;
+  font-size: 20px !important;
   font-weight: 700 !important;
   line-height: 1.2 !important;
+  letter-spacing: 0.02em;
+}
+.coach-tabby__intro {
+  margin: 0;
+  color: #6b6b6b;
+  font-family: Inter, Helvetica, Arial, sans-serif !important;
+  font-size: 14px !important;
+  font-weight: 400 !important;
+  line-height: 1.4 !important;
 }
 .coach-tabby h2 {
   margin: 0 0 16px;
@@ -216,7 +228,20 @@
 .coach-tabby__answer ul { list-style: disc; }
 .coach-tabby a { color: inherit; }
 .coach-tabby img { display: block; max-width: 100%; height: auto; }
-.coach-tabby__hero { display: flex; flex-direction: column; gap: 28px; align-items: center; }
+.coach-tabby__hero { display: flex; flex-direction: column; gap: 28px; align-items: center; padding-top: 48px; }
+.coach-tabby__hero h2 {
+  max-width: 11em;
+  font-size: 32px !important;
+  font-weight: 700 !important;
+  line-height: 1.15 !important;
+}
+.coach-tabby__hero .coach-tabby__rte,
+.coach-tabby__hero .coach-tabby__rte p {
+  max-width: 340px;
+  font-size: 14px !important;
+  line-height: 1.55 !important;
+  color: #4a4a4a;
+}
 .coach-tabby__hero-copy,
 .coach-tabby__hero-media { width: 100%; }
 .coach-tabby__logo { display: inline-block; margin: 36px 0 16px; }
@@ -277,12 +302,13 @@
 .coach-tabby__about { background: #fbfbfb; margin-top: 24px; padding: 54px 16px; }
 .coach-tabby__about-inner { width: min(100%, 850px); margin: 0 auto; }
 @media screen and (min-width: 1024px) {
-  .coach-tabby__hero { flex-direction: row; justify-content: space-between; padding-top: 40px; }
+  .coach-tabby__hero { flex-direction: row; justify-content: space-between; align-items: center; padding-top: 88px; }
   .coach-tabby__hero-copy { width: 40%; max-width: 464px; }
   .coach-tabby__hero-media { width: 60%; display: flex; justify-content: flex-end; }
-  .coach-tabby__hero-media img { width: min(100%, 686px); }
+  .coach-tabby__hero-media img { width: min(100%, 686px); border: 1px solid #e6e6e6; }
   .coach-tabby__hero h2 { font-size: 48px !important; line-height: 62px !important; }
-  .coach-tabby__logo img { width: 120px; }
+  .coach-tabby__logo { margin-top: 0; }
+  .coach-tabby__logo img { width: 120px; height: 40px; }
   .coach-tabby__step-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 54px; }
   .coach-tabby__step { display: flex; flex-direction: column; }
   .coach-tabby__step-image { order: -1; margin-top: 0; margin-bottom: 16px; }
@@ -307,6 +333,7 @@
     { "type": "text", "id": "logo_url", "label": "Logo URL", "info": "Used when no logo is uploaded." },
     { "type": "text", "id": "logo_alt", "label": "Logo alt text", "default": "tabby" },
     { "type": "url", "id": "logo_link", "label": "Logo link" },
+    { "type": "text", "id": "hero_intro", "label": "Intro line", "default": "Shop now. Pay later with tabby." },
     { "type": "text", "id": "hero_heading", "label": "Hero heading", "default": "Shop now. Pay later with tabby." },
     { "type": "richtext", "id": "hero_text", "label": "Hero text", "default": "<p>We've partnered with tabby to bring you a more rewarding way to shop. tabby lets you split your purchases into 4 interest-free payments with no fees.</p>" },
     { "type": "image_picker", "id": "hero_image", "label": "Upload hero image" },
