@@ -1,0 +1,105 @@
+<div
+  id="TamaraSteps-{{ section.id }}"
+  class="tamara-steps tamara-steps--{{ section.settings.alignment }}"
+  style="
+    --st-bg: {{ section.settings.background }};
+    --st-card: {{ section.settings.card_color }};
+    --st-text: {{ section.settings.text_color }};
+    --st-heading: {{ section.settings.heading_color }};
+    --st-mark: {{ section.settings.mark_color }};
+    --st-width: {{ section.settings.content_width }}px;
+    --st-pt: {{ section.settings.padding_top }}px;
+    --st-pb: {{ section.settings.padding_bottom }}px;
+    --st-size: {{ section.settings.heading_size }}px;
+  "
+>
+  <div class="tamara-steps__wrap">
+    {%- if section.settings.heading != blank -%}
+      <h2>{{ section.settings.heading | escape }}</h2>
+    {%- endif -%}
+    <div class="tamara-steps__grid">
+      {%- for block in section.blocks -%}
+        {%- liquid
+          assign image = ''
+          if block.settings.image != blank
+            assign image = block.settings.image | image_url: width: 800
+          elsif block.settings.image_url != blank
+            assign image = block.settings.image_url
+          endif
+        -%}
+        <article class="tamara-steps__card" {{ block.shopify_attributes }}>
+          {%- if block.settings.number != blank -%}
+            <span class="tamara-steps__number">{{ block.settings.number | escape }}</span>
+          {%- endif -%}
+          {%- if image != blank -%}
+            <img src="{{ image | escape }}" alt="{{ block.settings.image_alt | escape }}">
+          {%- endif -%}
+          {%- if block.settings.heading != blank -%}
+            <h3>{{ block.settings.heading | escape }}</h3>
+          {%- endif -%}
+          {%- if block.settings.text != blank -%}
+            <div class="tamara-steps__rte">{{ block.settings.text }}</div>
+          {%- endif -%}
+        </article>
+      {%- endfor -%}
+    </div>
+  </div>
+</div>
+
+{% stylesheet %}
+.tamara-steps { background: var(--st-bg, #fff); color: var(--st-text, #111); font-family: Arial, Helvetica, sans-serif; }
+.tamara-steps__wrap { width: min(100% - 32px, var(--st-width, 1200px)); margin: 0 auto; padding: var(--st-pt, 60px) 0 var(--st-pb, 0); }
+.tamara-steps h2 { margin: 0 0 25px; color: var(--st-heading, #111); font-family: Arial, Helvetica, sans-serif !important; font-size: 24px !important; font-weight: 700 !important; line-height: 1.4 !important; }
+.tamara-steps__grid { display: grid; grid-template-columns: 1fr; gap: 16px; }
+.tamara-steps__card { min-width: 0; padding: 22px; background: var(--st-card, #fafafa); border-radius: 8px; }
+.tamara-steps__number { display: flex; align-items: center; justify-content: center; width: 60px; height: 60px; margin-bottom: 22px; background: var(--st-mark, #ff9b87); color: #000; font-size: 25px; font-weight: 700; border-radius: 50%; }
+.tamara-steps__card img { display: block; width: 100%; height: auto; margin: 0 0 16px; border-radius: 6px; }
+.tamara-steps h3 { margin: 0 0 15px; color: var(--st-heading, #111); font-family: Arial, Helvetica, sans-serif !important; font-size: 21px !important; font-weight: 700 !important; line-height: 1.5 !important; }
+.tamara-steps__rte, .tamara-steps__rte p { margin: 0; color: var(--st-text, #111); font-size: 15px !important; line-height: 1.8 !important; }
+.tamara-steps--center .tamara-steps__card { text-align: center; }
+.tamara-steps--center .tamara-steps__number { margin-left: auto; margin-right: auto; }
+@media screen and (min-width: 768px) {
+  .tamara-steps h2 { font-size: var(--st-size, 30px) !important; margin-bottom: 30px; }
+  .tamara-steps__grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 25px; margin-top: 35px; }
+  .tamara-steps__card { padding: 28px; }
+  .tamara-steps__rte, .tamara-steps__rte p { font-size: 17px !important; line-height: 1.75 !important; }
+}
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "How Tamara works",
+  "max_blocks": 6,
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Heading", "default": "How does Tamara work?" },
+    { "type": "range", "id": "heading_size", "min": 18, "max": 48, "step": 1, "unit": "px", "label": "Heading size", "default": 30 },
+    { "type": "color", "id": "background", "label": "Background", "default": "#ffffff" },
+    { "type": "color", "id": "card_color", "label": "Card color", "default": "#fafafa" },
+    { "type": "color", "id": "heading_color", "label": "Heading color", "default": "#111111" },
+    { "type": "color", "id": "text_color", "label": "Text color", "default": "#111111" },
+    { "type": "color", "id": "mark_color", "label": "Number color", "default": "#ff9b87" },
+    { "type": "select", "id": "alignment", "label": "Alignment", "default": "left", "options": [
+      { "value": "left", "label": "Left" },
+      { "value": "center", "label": "Center" }
+    ] },
+    { "type": "range", "id": "content_width", "min": 720, "max": 1400, "step": 20, "unit": "px", "label": "Content width", "default": 1200 },
+    { "type": "range", "id": "padding_top", "min": 0, "max": 120, "step": 4, "unit": "px", "label": "Top spacing", "default": 60 },
+    { "type": "range", "id": "padding_bottom", "min": 0, "max": 120, "step": 4, "unit": "px", "label": "Bottom spacing", "default": 0 }
+  ],
+  "blocks": [
+    {
+      "type": "step",
+      "name": "Step",
+      "settings": [
+        { "type": "text", "id": "number", "label": "Number", "default": "1" },
+        { "type": "text", "id": "heading", "label": "Heading" },
+        { "type": "richtext", "id": "text", "label": "Description" },
+        { "type": "image_picker", "id": "image", "label": "Upload image" },
+        { "type": "text", "id": "image_url", "label": "Image URL", "info": "Used when no image is uploaded." },
+        { "type": "text", "id": "image_alt", "label": "Image alt text" }
+      ]
+    }
+  ],
+  "presets": [{ "name": "How Tamara works" }]
+}
+{% endschema %}

@@ -1,0 +1,78 @@
+<div
+  id="TamaraApp-{{ section.id }}"
+  class="tamara-app tamara-app--{{ section.settings.alignment }}"
+  style="
+    --ap-bg: {{ section.settings.background }};
+    --ap-panel: {{ section.settings.panel_color }};
+    --ap-text: {{ section.settings.text_color }};
+    --ap-heading: {{ section.settings.heading_color }};
+    --ap-width: {{ section.settings.content_width }}px;
+    --ap-pt: {{ section.settings.padding_top }}px;
+    --ap-pb: {{ section.settings.padding_bottom }}px;
+    --ap-size: {{ section.settings.heading_size }}px;
+  "
+>
+  <div class="tamara-app__wrap">
+    <div class="tamara-app__panel">
+      {%- if section.settings.heading != blank -%}
+        <h2>{{ section.settings.heading | escape }}</h2>
+      {%- endif -%}
+      {%- if section.settings.text != blank -%}
+        <div class="tamara-app__rte">{{ section.settings.text }}</div>
+      {%- endif -%}
+      {%- liquid
+        assign image = ''
+        if section.settings.image != blank
+          assign image = section.settings.image | image_url: width: 1200
+        elsif section.settings.image_url != blank
+          assign image = section.settings.image_url
+        endif
+      -%}
+      {%- if image != blank -%}
+        <img src="{{ image | escape }}" alt="{{ section.settings.image_alt | escape }}">
+      {%- endif -%}
+    </div>
+  </div>
+</div>
+
+{% stylesheet %}
+.tamara-app { background: var(--ap-bg, #fff); color: var(--ap-text, #111); font-family: Arial, Helvetica, sans-serif; }
+.tamara-app__wrap { width: min(100% - 32px, var(--ap-width, 1200px)); margin: 0 auto; padding: var(--ap-pt, 60px) 0 var(--ap-pb, 0); }
+.tamara-app__panel { background: var(--ap-panel, #fff5f1); border-radius: 8px; padding: 25px 20px; }
+.tamara-app h2 { margin: 0 0 16px; color: var(--ap-heading, #111); font-family: Arial, Helvetica, sans-serif !important; font-size: 24px !important; font-weight: 700 !important; line-height: 1.4 !important; }
+.tamara-app__rte, .tamara-app__rte p { margin: 0; color: var(--ap-text, #111); font-size: 15px !important; line-height: 1.8 !important; }
+.tamara-app img { display: block; width: min(100%, 520px); height: auto; margin-top: 20px; }
+.tamara-app--center { text-align: center; }
+.tamara-app--center img { margin-left: auto; margin-right: auto; }
+@media screen and (min-width: 768px) {
+  .tamara-app__panel { padding: 38px; }
+  .tamara-app h2 { font-size: var(--ap-size, 30px) !important; margin-bottom: 20px; }
+  .tamara-app__rte, .tamara-app__rte p { font-size: 17px !important; line-height: 1.75 !important; }
+}
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Stay on payments",
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Stay on top of payments" },
+    { "type": "range", "id": "heading_size", "min": 18, "max": 48, "step": 1, "unit": "px", "label": "Heading size", "default": 30 },
+    { "type": "richtext", "id": "text", "label": "Description", "default": "<p>The Tamara app provides payment reminders, your installment schedule, and special offers.</p>" },
+    { "type": "image_picker", "id": "image", "label": "Upload image" },
+    { "type": "text", "id": "image_url", "label": "Image URL", "info": "Used when no image is uploaded." },
+    { "type": "text", "id": "image_alt", "label": "Image alt text" },
+    { "type": "color", "id": "background", "label": "Background", "default": "#ffffff" },
+    { "type": "color", "id": "panel_color", "label": "Panel color", "default": "#fff5f1" },
+    { "type": "color", "id": "heading_color", "label": "Heading color", "default": "#111111" },
+    { "type": "color", "id": "text_color", "label": "Text color", "default": "#111111" },
+    { "type": "select", "id": "alignment", "label": "Alignment", "default": "left", "options": [
+      { "value": "left", "label": "Left" },
+      { "value": "center", "label": "Center" }
+    ] },
+    { "type": "range", "id": "content_width", "min": 720, "max": 1400, "step": 20, "unit": "px", "label": "Content width", "default": 1200 },
+    { "type": "range", "id": "padding_top", "min": 0, "max": 120, "step": 4, "unit": "px", "label": "Top spacing", "default": 60 },
+    { "type": "range", "id": "padding_bottom", "min": 0, "max": 120, "step": 4, "unit": "px", "label": "Bottom spacing", "default": 0 }
+  ],
+  "presets": [{ "name": "Stay on payments" }]
+}
+{% endschema %}

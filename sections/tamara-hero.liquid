@@ -1,0 +1,93 @@
+<div
+  id="TamaraHero-{{ section.id }}"
+  class="tamara-hero tamara-hero--{{ section.settings.alignment }}"
+  style="
+    --tm-bg: {{ section.settings.background }};
+    --tm-panel: {{ section.settings.panel_color }};
+    --tm-text: {{ section.settings.text_color }};
+    --tm-heading: {{ section.settings.heading_color }};
+    --tm-width: {{ section.settings.content_width }}px;
+    --tm-pt: {{ section.settings.padding_top }}px;
+    --tm-pb: {{ section.settings.padding_bottom }}px;
+    --tm-title: {{ section.settings.title_size }}px;
+    --tm-sub: {{ section.settings.subheading_size }}px;
+  "
+>
+  <div class="tamara-hero__wrap">
+    {%- if section.settings.heading != blank -%}
+      <h1>{{ section.settings.heading | escape }}</h1>
+    {%- endif -%}
+    <div class="tamara-hero__panel">
+      {%- if section.settings.subheading != blank -%}
+        <h2>{{ section.settings.subheading | escape }}</h2>
+      {%- endif -%}
+      {%- if section.settings.text != blank -%}
+        <div class="tamara-hero__rte">{{ section.settings.text }}</div>
+      {%- endif -%}
+      {%- liquid
+        assign image = ''
+        if section.settings.image != blank
+          assign image = section.settings.image | image_url: width: 1400
+        elsif section.settings.image_url != blank
+          assign image = section.settings.image_url
+        endif
+      -%}
+      {%- if image != blank -%}
+        <img src="{{ image | escape }}" alt="{{ section.settings.image_alt | escape }}">
+      {%- endif -%}
+    </div>
+  </div>
+</div>
+
+{% stylesheet %}
+@font-face {
+  font-family: HelveticaNeue73ExtendedBold;
+  src: url("https://cdn.shopify.com/s/files/1/0360/3746/0012/files/neue_helvetica_73_extended_bold.woff2?v=1741341449") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+.tamara-hero { background: var(--tm-bg, #fff); color: var(--tm-text, #111); font-family: Arial, Helvetica, sans-serif; }
+.tamara-hero__wrap { width: min(100% - 32px, var(--tm-width, 1200px)); margin: 0 auto; padding: var(--tm-pt, 30px) 0 var(--tm-pb, 0); }
+.tamara-hero h1 { margin: 0 0 45px; color: var(--tm-heading, #111); font-family: HelveticaNeue73ExtendedBold, Arial, Helvetica, sans-serif !important; font-size: 23px !important; font-weight: 700 !important; line-height: 1.5 !important; text-align: center; }
+.tamara-hero__panel { background: var(--tm-panel, #fff5f1); border-radius: 8px; padding: 32px 18px; text-align: center; }
+.tamara-hero h2 { margin: 0 0 18px; color: var(--tm-heading, #111); font-family: Arial, Helvetica, sans-serif !important; font-size: 27px !important; font-weight: 700 !important; line-height: 1.4 !important; }
+.tamara-hero__rte, .tamara-hero__rte p { max-width: 800px; margin: 0 auto; color: var(--tm-text, #111); font-size: 15px !important; font-weight: 400 !important; line-height: 1.8 !important; }
+.tamara-hero img { display: block; width: min(100%, 720px); height: auto; margin: 24px auto 0; }
+.tamara-hero--left .tamara-hero__panel, .tamara-hero--left h1 { text-align: left; }
+.tamara-hero--left .tamara-hero__rte, .tamara-hero--left .tamara-hero__rte p { margin-left: 0; }
+@media screen and (min-width: 768px) {
+  .tamara-hero h1 { font-size: var(--tm-title, 30px) !important; line-height: 1.4 !important; margin-bottom: 45px; }
+  .tamara-hero__panel { padding: 50px 25px; }
+  .tamara-hero h2 { font-size: var(--tm-sub, 36px) !important; }
+  .tamara-hero__rte, .tamara-hero__rte p { font-size: 17px !important; line-height: 1.75 !important; }
+}
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Tamara hero",
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Buy Now & Pay Later with Tamara." },
+    { "type": "range", "id": "title_size", "min": 20, "max": 48, "step": 1, "unit": "px", "label": "Heading size", "default": 30 },
+    { "type": "text", "id": "subheading", "label": "Subheading", "default": "Your favorite way to pay" },
+    { "type": "range", "id": "subheading_size", "min": 18, "max": 56, "step": 1, "unit": "px", "label": "Subheading size", "default": 36 },
+    { "type": "richtext", "id": "text", "label": "Description", "default": "<p>Divide purchases into four installments with no late charges and Sharia-compliant terms.</p>" },
+    { "type": "image_picker", "id": "image", "label": "Upload image" },
+    { "type": "text", "id": "image_url", "label": "Image URL", "info": "Used when no image is uploaded. Leave both blank to match the text-only reference." },
+    { "type": "text", "id": "image_alt", "label": "Image alt text" },
+    { "type": "color", "id": "background", "label": "Background", "default": "#ffffff" },
+    { "type": "color", "id": "panel_color", "label": "Panel color", "default": "#fff5f1" },
+    { "type": "color", "id": "heading_color", "label": "Heading color", "default": "#111111" },
+    { "type": "color", "id": "text_color", "label": "Text color", "default": "#111111" },
+    { "type": "select", "id": "alignment", "label": "Panel alignment", "default": "center", "options": [
+      { "value": "center", "label": "Center" },
+      { "value": "left", "label": "Left" }
+    ] },
+    { "type": "range", "id": "content_width", "min": 720, "max": 1400, "step": 20, "unit": "px", "label": "Content width", "default": 1200 },
+    { "type": "range", "id": "padding_top", "min": 0, "max": 120, "step": 4, "unit": "px", "label": "Top spacing", "default": 28 },
+    { "type": "range", "id": "padding_bottom", "min": 0, "max": 120, "step": 4, "unit": "px", "label": "Bottom spacing", "default": 0 }
+  ],
+  "presets": [{ "name": "Tamara hero" }]
+}
+{% endschema %}

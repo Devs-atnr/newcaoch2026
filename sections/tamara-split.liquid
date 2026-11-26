@@ -1,0 +1,74 @@
+<div
+  id="TamaraSplit-{{ section.id }}"
+  class="tamara-split tamara-split--{{ section.settings.alignment }}"
+  style="
+    --sp-bg: {{ section.settings.background }};
+    --sp-text: {{ section.settings.text_color }};
+    --sp-heading: {{ section.settings.heading_color }};
+    --sp-width: {{ section.settings.content_width }}px;
+    --sp-pt: {{ section.settings.padding_top }}px;
+    --sp-pb: {{ section.settings.padding_bottom }}px;
+    --sp-size: {{ section.settings.heading_size }}px;
+  "
+>
+  <div class="tamara-split__wrap">
+    <div class="tamara-split__copy">
+      {%- if section.settings.heading != blank -%}
+        <h2>{{ section.settings.heading | escape }}</h2>
+      {%- endif -%}
+      {%- if section.settings.text != blank -%}
+        <div class="tamara-split__rte">{{ section.settings.text }}</div>
+      {%- endif -%}
+    </div>
+    {%- liquid
+      assign image = ''
+      if section.settings.image != blank
+        assign image = section.settings.image | image_url: width: 1200
+      elsif section.settings.image_url != blank
+        assign image = section.settings.image_url
+      endif
+    -%}
+    {%- if image != blank -%}
+      <img src="{{ image | escape }}" alt="{{ section.settings.image_alt | escape }}">
+    {%- endif -%}
+  </div>
+</div>
+
+{% stylesheet %}
+.tamara-split { background: var(--sp-bg, #fff); color: var(--sp-text, #111); font-family: Arial, Helvetica, sans-serif; }
+.tamara-split__wrap { width: min(100% - 32px, var(--sp-width, 1200px)); margin: 0 auto; padding: var(--sp-pt, 60px) 0 var(--sp-pb, 0); }
+.tamara-split h2 { margin: 0 0 25px; color: var(--sp-heading, #111); font-family: Arial, Helvetica, sans-serif !important; font-size: 24px !important; font-weight: 700 !important; line-height: 1.4 !important; }
+.tamara-split__rte, .tamara-split__rte p { margin: 0; color: var(--sp-text, #111); font-size: 15px !important; line-height: 1.8 !important; }
+.tamara-split img { display: block; width: min(100%, 640px); height: auto; margin-top: 24px; }
+.tamara-split--center { text-align: center; }
+.tamara-split--center img { margin-left: auto; margin-right: auto; }
+@media screen and (min-width: 768px) {
+  .tamara-split h2 { font-size: var(--sp-size, 30px) !important; margin-bottom: 30px; }
+  .tamara-split__rte, .tamara-split__rte p { font-size: 17px !important; line-height: 1.75 !important; }
+}
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Split payments",
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Split your payments" },
+    { "type": "range", "id": "heading_size", "min": 18, "max": 48, "step": 1, "unit": "px", "label": "Heading size", "default": 30 },
+    { "type": "richtext", "id": "text", "label": "Description", "default": "<p>Choose Tamara at participating stores. Pay the first portion at checkout and the remainder according to your payment schedule.</p>" },
+    { "type": "image_picker", "id": "image", "label": "Upload image" },
+    { "type": "text", "id": "image_url", "label": "Image URL", "info": "Used when no image is uploaded." },
+    { "type": "text", "id": "image_alt", "label": "Image alt text" },
+    { "type": "color", "id": "background", "label": "Background", "default": "#ffffff" },
+    { "type": "color", "id": "heading_color", "label": "Heading color", "default": "#111111" },
+    { "type": "color", "id": "text_color", "label": "Text color", "default": "#111111" },
+    { "type": "select", "id": "alignment", "label": "Alignment", "default": "left", "options": [
+      { "value": "left", "label": "Left" },
+      { "value": "center", "label": "Center" }
+    ] },
+    { "type": "range", "id": "content_width", "min": 720, "max": 1400, "step": 20, "unit": "px", "label": "Content width", "default": 1200 },
+    { "type": "range", "id": "padding_top", "min": 0, "max": 120, "step": 4, "unit": "px", "label": "Top spacing", "default": 60 },
+    { "type": "range", "id": "padding_bottom", "min": 0, "max": 120, "step": 4, "unit": "px", "label": "Bottom spacing", "default": 0 }
+  ],
+  "presets": [{ "name": "Split payments" }]
+}
+{% endschema %}

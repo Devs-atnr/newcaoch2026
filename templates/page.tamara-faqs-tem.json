@@ -1,0 +1,275 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "tamara_hero": {
+      "type": "tamara-hero",
+      "settings": {
+        "heading": "Buy Now & Pay Later with Tamara.",
+        "title_size": 30,
+        "subheading": "Your favorite way to pay",
+        "subheading_size": 36,
+        "text": "<p>Divide purchases into four installments with no late charges and Sharia-compliant terms.</p>",
+        "image_url": "",
+        "image_alt": "",
+        "background": "#ffffff",
+        "panel_color": "#fff5f1",
+        "heading_color": "#111111",
+        "text_color": "#111111",
+        "alignment": "center",
+        "content_width": 1200,
+        "padding_top": 28,
+        "padding_bottom": 0
+      }
+    },
+    "tamara_split": {
+      "type": "tamara-split",
+      "settings": {
+        "heading": "Split your payments",
+        "heading_size": 30,
+        "text": "<p>Choose Tamara at participating stores. Pay the first portion at checkout and the remainder according to your payment schedule.</p>",
+        "image_url": "",
+        "image_alt": "",
+        "background": "#ffffff",
+        "heading_color": "#111111",
+        "text_color": "#111111",
+        "alignment": "left",
+        "content_width": 1200,
+        "padding_top": 60,
+        "padding_bottom": 0
+      }
+    },
+    "tamara_benefits": {
+      "type": "tamara-benefits",
+      "blocks": {
+        "benefit_register": {
+          "type": "benefit",
+          "settings": {
+            "heading": "Quick, straightforward registration",
+            "text": "<p>Sign up using your mobile number and ID, without lengthy approval paperwork.</p>",
+            "image_url": "",
+            "image_alt": ""
+          }
+        },
+        "benefit_sharia": {
+          "type": "benefit",
+          "settings": {
+            "heading": "No late fees and Sharia compliant",
+            "text": "<p>Tamara's payment service follows Sharia principles without late-payment charges.</p>",
+            "image_url": "",
+            "image_alt": ""
+          }
+        },
+        "benefit_returns": {
+          "type": "benefit",
+          "settings": {
+            "heading": "Convenient returns and refunds",
+            "text": "<p>Refunds and returns are handled through the retailer's applicable policies.</p>",
+            "image_url": "",
+            "image_alt": ""
+          }
+        }
+      },
+      "block_order": [
+        "benefit_register",
+        "benefit_sharia",
+        "benefit_returns"
+      ],
+      "settings": {
+        "heading": "Why choose Tamara?",
+        "heading_size": 30,
+        "background": "#ffffff",
+        "heading_color": "#111111",
+        "text_color": "#111111",
+        "mark_color": "#ff9b87",
+        "alignment": "left",
+        "content_width": 1200,
+        "padding_top": 60,
+        "padding_bottom": 0
+      }
+    },
+    "tamara_steps": {
+      "type": "tamara-steps",
+      "blocks": {
+        "step_select": {
+          "type": "step",
+          "settings": {
+            "number": "1",
+            "heading": "Select Tamara",
+            "text": "<p>Choose Tamara when checking out at a participating store.</p>",
+            "image_url": "",
+            "image_alt": ""
+          }
+        },
+        "step_pay": {
+          "type": "step",
+          "settings": {
+            "number": "2",
+            "heading": "Pay the first installment",
+            "text": "<p>Enter your mobile number, complete ID verification if required, and pay.</p>",
+            "image_url": "",
+            "image_alt": ""
+          }
+        },
+        "step_enjoy": {
+          "type": "step",
+          "settings": {
+            "number": "3",
+            "heading": "Enjoy your purchase",
+            "text": "<p>Track upcoming payments and discover stores or offers through the app.</p>",
+            "image_url": "",
+            "image_alt": ""
+          }
+        }
+      },
+      "block_order": [
+        "step_select",
+        "step_pay",
+        "step_enjoy"
+      ],
+      "settings": {
+        "heading": "How does Tamara work?",
+        "heading_size": 30,
+        "background": "#ffffff",
+        "card_color": "#fafafa",
+        "heading_color": "#111111",
+        "text_color": "#111111",
+        "mark_color": "#ff9b87",
+        "alignment": "left",
+        "content_width": 1200,
+        "padding_top": 60,
+        "padding_bottom": 0
+      }
+    },
+    "tamara_app": {
+      "type": "tamara-app",
+      "settings": {
+        "heading": "Stay on top of payments",
+        "heading_size": 30,
+        "text": "<p>The Tamara app provides payment reminders, your installment schedule, and special offers.</p>",
+        "image_url": "",
+        "image_alt": "",
+        "background": "#ffffff",
+        "panel_color": "#fff5f1",
+        "heading_color": "#111111",
+        "text_color": "#111111",
+        "alignment": "left",
+        "content_width": 1200,
+        "padding_top": 60,
+        "padding_bottom": 0
+      }
+    },
+    "tamara_faq": {
+      "type": "tamara-faq",
+      "blocks": {
+        "faq_who": {
+          "type": "question",
+          "settings": {
+            "question": "Who can pay using Tamara?",
+            "answer": "<p>Customers aged over 18 need a verifiable phone number, valid ID, and eligible payment card in Saudi Arabia, UAE, or Kuwait. Availability depends on the retailer.</p>"
+          }
+        },
+        "faq_arrive": {
+          "type": "question",
+          "settings": {
+            "question": "When will my order arrive?",
+            "answer": "<p>Delivery follows the store's normal timeline. Installments follow your payment plan. Contact Tamara support for payment concerns.</p>"
+          }
+        },
+        "faq_return": {
+          "type": "question",
+          "settings": {
+            "question": "What if I return or cancel an order?",
+            "answer": "<p>Request it through the retailer under its return policy. Once Tamara receives confirmation, the payment schedule adjusts and applicable refunds are processed.</p><p><a href=\"https://support.tamara.co/\" target=\"_blank\" rel=\"noopener\">Visit Tamara Help Center</a></p>"
+          }
+        },
+        "faq_declined": {
+          "type": "question",
+          "settings": {
+            "question": "Why might my purchase be declined?",
+            "answer": "<p>Possible reasons include:</p><ol><li>An ineligible card for online shopping.</li><li>Bank, telecom, or credit-bureau obligations or flags.</li><li>Overdue Tamara installments.</li><li>Order value triggering risk checks.</li><li>Exceeding the permitted purchase limit.</li></ol><p>Consider another card if none of these applies.</p>"
+          }
+        },
+        "faq_how": {
+          "type": "question",
+          "settings": {
+            "question": "How can I pay with Tamara?",
+            "answer": "<p>Select Tamara during online checkout. In physical stores, ask the cashier and follow the provided instructions.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "faq_who",
+        "faq_arrive",
+        "faq_return",
+        "faq_declined",
+        "faq_how"
+      ],
+      "settings": {
+        "heading": "Frequently asked questions",
+        "heading_size": 30,
+        "question_size": 19,
+        "background": "#ffffff",
+        "heading_color": "#111111",
+        "text_color": "#111111",
+        "alignment": "left",
+        "content_width": 1200,
+        "padding_top": 60,
+        "padding_bottom": 0
+      }
+    },
+    "tamara_help": {
+      "type": "tamara-help",
+      "blocks": {
+        "social_x": {
+          "type": "link",
+          "settings": {
+            "label": "X: @usetamaraen",
+            "link": "https://twitter.com/usetamaraen?s=21"
+          }
+        },
+        "social_instagram": {
+          "type": "link",
+          "settings": {
+            "label": "Instagram: @usetamaraen",
+            "link": "https://www.instagram.com/usetamaraen/"
+          }
+        }
+      },
+      "block_order": [
+        "social_x",
+        "social_instagram"
+      ],
+      "settings": {
+        "heading": "Need additional help?",
+        "heading_size": 30,
+        "text": "<p>Reach Tamara through the app or support channels daily, 9 AM–midnight Saudi time.</p>",
+        "help_label": "Help Center & FAQs",
+        "help_link": "https://support.tamara.co/",
+        "background": "#ffffff",
+        "heading_color": "#111111",
+        "text_color": "#111111",
+        "alignment": "center",
+        "content_width": 1200,
+        "padding_top": 60,
+        "padding_bottom": 60
+      }
+    }
+  },
+  "order": [
+    "tamara_hero",
+    "tamara_split",
+    "tamara_benefits",
+    "tamara_steps",
+    "tamara_app",
+    "tamara_faq",
+    "tamara_help"
+  ]
+}

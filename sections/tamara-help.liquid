@@ -1,0 +1,83 @@
+<div
+  id="TamaraHelp-{{ section.id }}"
+  class="tamara-help tamara-help--{{ section.settings.alignment }}"
+  style="
+    --hp-bg: {{ section.settings.background }};
+    --hp-text: {{ section.settings.text_color }};
+    --hp-heading: {{ section.settings.heading_color }};
+    --hp-width: {{ section.settings.content_width }}px;
+    --hp-pt: {{ section.settings.padding_top }}px;
+    --hp-pb: {{ section.settings.padding_bottom }}px;
+    --hp-size: {{ section.settings.heading_size }}px;
+  "
+>
+  <div class="tamara-help__wrap">
+    {%- if section.settings.heading != blank -%}
+      <h2>{{ section.settings.heading | escape }}</h2>
+    {%- endif -%}
+    {%- if section.settings.text != blank -%}
+      <div class="tamara-help__rte">{{ section.settings.text }}</div>
+    {%- endif -%}
+    <div class="tamara-help__links">
+      {%- if section.settings.help_label != blank -%}
+        <a href="{{ section.settings.help_link }}" target="_blank" rel="noopener">{{ section.settings.help_label | escape }}</a>
+      {%- endif -%}
+      {%- for block in section.blocks -%}
+        {%- if block.settings.label != blank -%}
+          <a href="{{ block.settings.link }}" target="_blank" rel="noopener" {{ block.shopify_attributes }}>{{ block.settings.label | escape }}</a>
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+  </div>
+</div>
+
+{% stylesheet %}
+.tamara-help { background: var(--hp-bg, #fff); color: var(--hp-text, #111); font-family: Arial, Helvetica, sans-serif; text-align: center; }
+.tamara-help__wrap { width: min(100% - 32px, var(--hp-width, 1200px)); margin: 0 auto; padding: var(--hp-pt, 60px) 0 var(--hp-pb, 60px); }
+.tamara-help h2 { margin: 0 0 16px; color: var(--hp-heading, #111); font-family: Arial, Helvetica, sans-serif !important; font-size: 24px !important; font-weight: 700 !important; line-height: 1.4 !important; }
+.tamara-help__rte, .tamara-help__rte p { margin: 0 auto; color: var(--hp-text, #111); font-size: 15px !important; line-height: 1.8 !important; }
+.tamara-help__links { display: flex; flex-direction: column; align-items: center; gap: 16px; margin-top: 28px; }
+.tamara-help__links a { color: #111; font-size: 16px; text-decoration: underline; text-underline-offset: 4px; }
+.tamara-help--left { text-align: left; }
+.tamara-help--left .tamara-help__links { align-items: flex-start; }
+@media screen and (min-width: 768px) {
+  .tamara-help h2 { font-size: var(--hp-size, 30px) !important; margin-bottom: 20px; }
+  .tamara-help__rte, .tamara-help__rte p { font-size: 17px !important; line-height: 1.75 !important; }
+  .tamara-help__links { flex-direction: row; justify-content: center; flex-wrap: wrap; gap: 18px 30px; }
+}
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Tamara help",
+  "max_blocks": 8,
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Need additional help?" },
+    { "type": "range", "id": "heading_size", "min": 18, "max": 48, "step": 1, "unit": "px", "label": "Heading size", "default": 30 },
+    { "type": "richtext", "id": "text", "label": "Description", "default": "<p>Reach Tamara through the app or support channels daily, 9 AM–midnight Saudi time.</p>" },
+    { "type": "text", "id": "help_label", "label": "Help Center label", "default": "Help Center & FAQs" },
+    { "type": "url", "id": "help_link", "label": "Help Center link" },
+    { "type": "color", "id": "background", "label": "Background", "default": "#ffffff" },
+    { "type": "color", "id": "heading_color", "label": "Heading color", "default": "#111111" },
+    { "type": "color", "id": "text_color", "label": "Text color", "default": "#111111" },
+    { "type": "select", "id": "alignment", "label": "Alignment", "default": "center", "options": [
+      { "value": "center", "label": "Center" },
+      { "value": "left", "label": "Left" }
+    ] },
+    { "type": "range", "id": "content_width", "min": 720, "max": 1400, "step": 20, "unit": "px", "label": "Content width", "default": 1200 },
+    { "type": "range", "id": "padding_top", "min": 0, "max": 120, "step": 4, "unit": "px", "label": "Top spacing", "default": 60 },
+    { "type": "range", "id": "padding_bottom", "min": 0, "max": 120, "step": 4, "unit": "px", "label": "Bottom spacing", "default": 60 }
+  ],
+  "blocks": [
+    {
+      "type": "link",
+      "name": "Social link",
+      "settings": [
+        { "type": "text", "id": "label", "label": "Label" },
+        { "type": "url", "id": "link", "label": "Link" }
+      ]
+    }
+  ],
+  "presets": [{ "name": "Tamara help" }]
+}
+{% endschema %}

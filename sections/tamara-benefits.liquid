@@ -1,0 +1,104 @@
+<div
+  id="TamaraBenefits-{{ section.id }}"
+  class="tamara-benefits tamara-benefits--{{ section.settings.alignment }}"
+  style="
+    --bn-bg: {{ section.settings.background }};
+    --bn-text: {{ section.settings.text_color }};
+    --bn-heading: {{ section.settings.heading_color }};
+    --bn-mark: {{ section.settings.mark_color }};
+    --bn-width: {{ section.settings.content_width }}px;
+    --bn-pt: {{ section.settings.padding_top }}px;
+    --bn-pb: {{ section.settings.padding_bottom }}px;
+    --bn-size: {{ section.settings.heading_size }}px;
+  "
+>
+  <div class="tamara-benefits__wrap">
+    {%- if section.settings.heading != blank -%}
+      <h2>{{ section.settings.heading | escape }}</h2>
+    {%- endif -%}
+    {%- for block in section.blocks -%}
+      {%- liquid
+        assign image = ''
+        if block.settings.image != blank
+          assign image = block.settings.image | image_url: width: 400
+        elsif block.settings.image_url != blank
+          assign image = block.settings.image_url
+        endif
+      -%}
+      <div class="tamara-benefits__item" {{ block.shopify_attributes }}>
+        {%- if image != blank -%}
+          <img src="{{ image | escape }}" alt="{{ block.settings.image_alt | escape }}">
+        {%- else -%}
+          <span class="tamara-benefits__mark" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"></path></svg>
+          </span>
+        {%- endif -%}
+        <div>
+          {%- if block.settings.heading != blank -%}
+            <h3>{{ block.settings.heading | escape }}</h3>
+          {%- endif -%}
+          {%- if block.settings.text != blank -%}
+            <div class="tamara-benefits__rte">{{ block.settings.text }}</div>
+          {%- endif -%}
+        </div>
+      </div>
+    {%- endfor -%}
+  </div>
+</div>
+
+{% stylesheet %}
+.tamara-benefits { background: var(--bn-bg, #fff); color: var(--bn-text, #111); font-family: Arial, Helvetica, sans-serif; }
+.tamara-benefits__wrap { width: min(100% - 32px, var(--bn-width, 1200px)); margin: 0 auto; padding: var(--bn-pt, 60px) 0 var(--bn-pb, 0); }
+.tamara-benefits h2 { margin: 0 0 25px; color: var(--bn-heading, #111); font-family: Arial, Helvetica, sans-serif !important; font-size: 24px !important; font-weight: 700 !important; line-height: 1.4 !important; }
+.tamara-benefits__item { display: flex; align-items: flex-start; gap: 16px; margin: 0 0 35px; }
+.tamara-benefits__item img, .tamara-benefits__mark { width: 52px; height: 52px; flex: 0 0 52px; border-radius: 50%; object-fit: cover; }
+.tamara-benefits__mark { display: flex; align-items: center; justify-content: center; background: var(--bn-mark, #ff9b87); }
+.tamara-benefits__mark svg { width: 25px; height: 25px; fill: none; stroke: #000; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+.tamara-benefits h3 { margin: 0 0 12px; color: var(--bn-heading, #111); font-family: Arial, Helvetica, sans-serif !important; font-size: 19px !important; font-weight: 700 !important; line-height: 1.6 !important; }
+.tamara-benefits__rte, .tamara-benefits__rte p { margin: 0; color: var(--bn-text, #111); font-size: 15px !important; line-height: 1.8 !important; }
+.tamara-benefits--center .tamara-benefits__item { justify-content: center; text-align: center; }
+@media screen and (min-width: 768px) {
+  .tamara-benefits h2 { font-size: var(--bn-size, 30px) !important; margin-bottom: 30px; }
+  .tamara-benefits__item { gap: 28px; margin-bottom: 45px; }
+  .tamara-benefits__item img, .tamara-benefits__mark { width: 85px; height: 85px; flex-basis: 85px; }
+  .tamara-benefits__mark svg { width: 33px; height: 33px; }
+  .tamara-benefits h3 { font-size: 25px !important; line-height: 1.5 !important; }
+  .tamara-benefits__rte, .tamara-benefits__rte p { font-size: 17px !important; line-height: 1.75 !important; }
+}
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Why choose Tamara",
+  "max_blocks": 8,
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Why choose Tamara?" },
+    { "type": "range", "id": "heading_size", "min": 18, "max": 48, "step": 1, "unit": "px", "label": "Heading size", "default": 30 },
+    { "type": "color", "id": "background", "label": "Background", "default": "#ffffff" },
+    { "type": "color", "id": "heading_color", "label": "Heading color", "default": "#111111" },
+    { "type": "color", "id": "text_color", "label": "Text color", "default": "#111111" },
+    { "type": "color", "id": "mark_color", "label": "Icon color", "default": "#ff9b87" },
+    { "type": "select", "id": "alignment", "label": "Alignment", "default": "left", "options": [
+      { "value": "left", "label": "Left" },
+      { "value": "center", "label": "Center" }
+    ] },
+    { "type": "range", "id": "content_width", "min": 720, "max": 1400, "step": 20, "unit": "px", "label": "Content width", "default": 1200 },
+    { "type": "range", "id": "padding_top", "min": 0, "max": 120, "step": 4, "unit": "px", "label": "Top spacing", "default": 60 },
+    { "type": "range", "id": "padding_bottom", "min": 0, "max": 120, "step": 4, "unit": "px", "label": "Bottom spacing", "default": 0 }
+  ],
+  "blocks": [
+    {
+      "type": "benefit",
+      "name": "Benefit",
+      "settings": [
+        { "type": "text", "id": "heading", "label": "Heading" },
+        { "type": "richtext", "id": "text", "label": "Description" },
+        { "type": "image_picker", "id": "image", "label": "Upload image" },
+        { "type": "text", "id": "image_url", "label": "Image URL", "info": "Used when no image is uploaded. A check icon shows when both are blank." },
+        { "type": "text", "id": "image_alt", "label": "Image alt text" }
+      ]
+    }
+  ],
+  "presets": [{ "name": "Why choose Tamara" }]
+}
+{% endschema %}
