@@ -19,27 +19,284 @@
             "page_handles": ""
           }
         },
+        "faq_group_ddxBqt": {
+          "type": "faq_group",
+          "settings": {
+            "heading": "General / My Account:",
+            "page_handles": ""
+          }
+        },
         "faq_mKytzA": {
           "type": "faq",
           "settings": {
-            "question": "sdasddsdf",
-            "answer": "<p>dfsdfsdf</p>",
+            "question": "How can I contact Coach.sa?",
+            "answer": "<p>You can write to us at <a href=\"mailto:customercare@coach.sa\">customercare@coach.sa</a> for any query you have about Coach.sa or your order. Our customer care team will respond within 2 business days (Sunday to Thursday, 10am–3pm). Response time may vary due to high volume<br/><br/></p>",
             "page_handles": ""
           }
         },
         "faq_9zWczb": {
           "type": "faq",
           "settings": {
-            "question": "yrwetwdsfg",
-            "answer": "<p>sfdgsdfsd</p>",
+            "question": "Who can buy from Coach.sa?",
+            "answer": "<p>Any individual aged 18+ legally allowed to shop in Saudi Arabia and in possession of a valid debit or credit card (Visa/MasterCard) can shop at Coach.sa.<br/></p>",
+            "page_handles": ""
+          }
+        },
+        "faq_Qtg3yp": {
+          "type": "faq",
+          "settings": {
+            "question": "Do I need to have a Coach account to make an order?",
+            "answer": "<p>No, you don’t need to have a Coach account to make a purchase. However, having an account gives you:</p><ul><li>Order and payment tracking</li><li>Purchase and wishlist history</li><li>Updates on new arrivals, promotions, and discounts</li><li>Saved shipping and payment info for faster checkout</li></ul>",
+            "page_handles": ""
+          }
+        },
+        "faq_4rNaAw": {
+          "type": "faq",
+          "settings": {
+            "question": "I can’t log into my account. What’s next?",
+            "answer": "<p>Please ensure your credentials are correct. If the issue persists, email <a href=\"mailto:customercare@coach.sa\">customercare@coach.sa</a> and our team will assist you</p>",
+            "page_handles": ""
+          }
+        },
+        "faq_GpgYzL": {
+          "type": "faq",
+          "settings": {
+            "question": "I want to unsubscribe from your website. How do I do that?",
+            "answer": "<p>Just send us an email at <a href=\"mailto:customercare@coach.sa\">customercare@coach.sa</a> and we will unsubscribe you.</p>",
+            "page_handles": ""
+          }
+        },
+        "faq_group_DKhMza": {
+          "type": "faq_group",
+          "settings": {
+            "heading": "Online Shopping / Orders:",
+            "page_handles": ""
+          }
+        },
+        "faq_KzC4QG": {
+          "type": "faq",
+          "settings": {
+            "question": "How can I buy online?",
+            "answer": "<p>Buying is simple! Just browse products, add them to cart, and proceed to checkout using your preferred payment method.</p>",
+            "page_handles": ""
+          }
+        },
+        "faq_hP4yAz": {
+          "type": "faq",
+          "settings": {
+            "question": "How do I track my orders?",
+            "answer": "<p>Use the “Order Status” link in the Customer Care section on our website. For more help, contact <a href=\"mailto:customercare@coach.sa\">customercare@coach.sa</a>.</p>",
+            "page_handles": ""
+          }
+        },
+        "faq_MraTtE": {
+          "type": "faq",
+          "settings": {
+            "question": "What if I want to pick up my order/package myself?",
+            "answer": "<p>Email <a href=\"mailto:customercare@coach.sa\">customercare@coach.sa</a> with your Order Ref. No. and we’ll guide you on pickup options.</p>",
+            "page_handles": ""
+          }
+        },
+        "faq_KKTqrP": {
+          "type": "faq",
+          "settings": {
+            "question": "Where can I buy Coach products besides the Online Store?",
+            "answer": "<p>You can find our products in Coach stores across KSA. Visit “Store Locator” on our website for details</p>",
+            "page_handles": ""
+          }
+        },
+        "faq_3qgQJH": {
+          "type": "faq",
+          "settings": {
+            "question": "The item I’m looking for is not available, is it still possible to get it?",
+            "answer": "<p>Yes, contact <a href=\"mailto:info@coach.sa\">info@coach.sa</a> or <a href=\"mailto:customercare@coach.sa\">customercare@coach.sa</a> or visit a store for availability.</p>",
+            "page_handles": ""
+          }
+        },
+        "faq_j7fihK": {
+          "type": "faq",
+          "settings": {
+            "question": "Can I cancel an order or a merchandise?",
+            "answer": "<p>Yes, within 24 hours of placing your order. Email <a href=\"mailto:customercare@coach.sa\">customercare@coach.sa</a> with your order details.</p>",
+            "page_handles": ""
+          }
+        },
+        "faq_nRLGnm": {
+          "type": "faq",
+          "settings": {
+            "question": "Can I change shipping address of the order?",
+            "answer": "<p>You can change the shipping address within 24 hours of placing the order by emailing <a href=\"mailto:customercare@coach.sa\">customercare@coach.sa</a>.</p>",
+            "page_handles": ""
+          }
+        },
+        "faq_jAa89K": {
+          "type": "faq",
+          "settings": {
+            "question": "What happens if merchandise ordered is out of stock?",
+            "answer": "<p>We’ll notify you at checkout or via email if an item is out of stock. We’ll try to source it, or cancel and refund if unavailable.</p>",
+            "page_handles": ""
+          }
+        },
+        "faq_group_7mVqkJ": {
+          "type": "faq_group",
+          "settings": {
+            "heading": "Payment Information:",
+            "page_handles": ""
+          }
+        },
+        "faq_tia99T": {
+          "type": "faq",
+          "settings": {
+            "question": "How do I make a payment?",
+            "answer": "<p>You can pay using any Credit/Debit Card or opt for Cash on Delivery (COD), which incurs a 25 SR fee.</p>",
+            "page_handles": ""
+          }
+        },
+        "faq_ykQmgH": {
+          "type": "faq",
+          "settings": {
+            "question": "What if my credit card was compromised?",
+            "answer": "<p>Since all transactions occur through bank gateways, please report any fraud to your bank immediately.</p>",
+            "page_handles": ""
+          }
+        },
+        "faq_yfgrix": {
+          "type": "faq",
+          "settings": {
+            "question": "Can I pay in-store for a product bought online?",
+            "answer": "<p>No, this service is currently not available.</p>",
+            "page_handles": ""
+          }
+        },
+        "faq_group_M4UBb3": {
+          "type": "faq_group",
+          "settings": {
+            "heading": "Delivery & Shipping:",
+            "page_handles": ""
+          }
+        },
+        "faq_UmGiEh": {
+          "type": "faq",
+          "settings": {
+            "question": "Where do you deliver?",
+            "answer": "<p>We deliver to all cities across KSA.</p>",
+            "page_handles": ""
+          }
+        },
+        "faq_9PhBzP": {
+          "type": "faq",
+          "settings": {
+            "question": "Are there any delivery delays?",
+            "answer": "<p>Some rural areas or towns may experience delays due to limited logistics access.</p>",
+            "page_handles": ""
+          }
+        },
+        "faq_HrRPdx": {
+          "type": "faq",
+          "settings": {
+            "question": "Can I change my delivery address after confirmation?",
+            "answer": "<p>No, address changes are only possible within 24 hours of order placement.</p>",
+            "page_handles": ""
+          }
+        },
+        "faq_dcbJek": {
+          "type": "faq",
+          "settings": {
+            "question": "What happens if I’m unavailable at the time of delivery?",
+            "answer": "<p>The courier will attempt re-delivery. Ensure someone is available to receive the package.</p>",
+            "page_handles": ""
+          }
+        },
+        "faq_CThhdw": {
+          "type": "faq",
+          "settings": {
+            "question": "Can you hold my order if I’m not available?",
+            "answer": "<p>We can hold orders for up to 9 days. Email us at <a href=\"mailto:customercare@coach.sa\">customercare@coach.sa</a> to notify us in advance</p>",
+            "page_handles": ""
+          }
+        },
+        "faq_RYtL8n": {
+          "type": "faq",
+          "settings": {
+            "question": "What if only part of my order has arrived?",
+            "answer": "<p>Email us within 24 hours of delivery with order details.</p>",
+            "page_handles": ""
+          }
+        },
+        "faq_CbUxLC": {
+          "type": "faq",
+          "settings": {
+            "question": "What should I do if my order arrives damaged?",
+            "answer": "<p>Refuse delivery if packaging is damaged. If discovered later, email us within 2 days of receipt.</p>",
+            "page_handles": ""
+          }
+        },
+        "faq_4Verwb": {
+          "type": "faq",
+          "settings": {
+            "question": "What if the merchandise is defective?",
+            "answer": "<p>Notify us within 2 days. Refunds are available within 14 days upon return of items in original condition.</p>",
+            "page_handles": ""
+          }
+        },
+        "faq_PyPTQQ": {
+          "type": "faq",
+          "settings": {
+            "question": "Are there delivery charges?",
+            "answer": "<p>Orders above 500 SR are free. Orders below that incur a 50 SR fee.</p>",
+            "page_handles": ""
+          }
+        },
+        "faq_74ByjC": {
+          "type": "faq",
+          "settings": {
+            "question": "Are shipping charges included in the product price?",
+            "answer": "<p>No. Shipping and service taxes are added on the billing page.</p>",
+            "page_handles": ""
+          }
+        },
+        "faq_VFkB9C": {
+          "type": "faq",
+          "settings": {
+            "question": "Who pays for return shipping?",
+            "answer": "<p>You pay 50 SR for returns unless due to damage or defect. See our Returns Policy.</p>",
             "page_handles": ""
           }
         }
       },
       "block_order": [
         "faq_group_BDXwbY",
+        "faq_group_ddxBqt",
         "faq_mKytzA",
-        "faq_9zWczb"
+        "faq_9zWczb",
+        "faq_Qtg3yp",
+        "faq_4rNaAw",
+        "faq_GpgYzL",
+        "faq_group_DKhMza",
+        "faq_KzC4QG",
+        "faq_hP4yAz",
+        "faq_MraTtE",
+        "faq_KKTqrP",
+        "faq_3qgQJH",
+        "faq_j7fihK",
+        "faq_nRLGnm",
+        "faq_jAa89K",
+        "faq_group_7mVqkJ",
+        "faq_tia99T",
+        "faq_ykQmgH",
+        "faq_yfgrix",
+        "faq_group_M4UBb3",
+        "faq_UmGiEh",
+        "faq_9PhBzP",
+        "faq_HrRPdx",
+        "faq_dcbJek",
+        "faq_CThhdw",
+        "faq_RYtL8n",
+        "faq_CbUxLC",
+        "faq_4Verwb",
+        "faq_PyPTQQ",
+        "faq_74ByjC",
+        "faq_VFkB9C"
       ],
       "settings": {
         "menu": "footer-menu-copy",
