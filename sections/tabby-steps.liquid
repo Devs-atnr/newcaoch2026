@@ -1,0 +1,123 @@
+<div
+  id="TabbySteps-{{ section.id }}"
+  class="tabby-steps tabby-steps--{{ section.settings.alignment }}"
+  style="
+    --ts-bg: {{ section.settings.background }};
+    --ts-text: {{ section.settings.text_color }};
+    --ts-heading: {{ section.settings.heading_color }};
+    --ts-label: {{ section.settings.label_color }};
+    --ts-badge: {{ section.settings.badge_color }};
+    --ts-width: {{ section.settings.content_width }}px;
+    --ts-pt: {{ section.settings.padding_top }}px;
+    --ts-pb: {{ section.settings.padding_bottom }}px;
+    --ts-heading-size: {{ section.settings.heading_size }}px;
+  "
+>
+  <div class="tabby-steps__wrap">
+    {%- if section.settings.heading != blank -%}
+      <h2>{{ section.settings.heading | escape }}</h2>
+    {%- endif -%}
+    {%- liquid
+      assign logo = ''
+      if section.settings.logo != blank
+        assign logo = section.settings.logo | image_url: width: 240
+      elsif section.settings.logo_url != blank
+        assign logo = section.settings.logo_url
+      endif
+    -%}
+    <div class="tabby-steps__grid">
+      {%- for block in section.blocks -%}
+        {%- liquid
+          assign step_image = ''
+          if block.settings.image != blank
+            assign step_image = block.settings.image | image_url: width: 1000
+          elsif block.settings.image_url != blank
+            assign step_image = block.settings.image_url
+          endif
+        -%}
+        <div class="tabby-steps__step" {{ block.shopify_attributes }}>
+          {%- if step_image != blank -%}
+            <img src="{{ step_image | escape }}" alt="{{ block.settings.alt | default: block.settings.label | escape }}">
+          {%- endif -%}
+          <div class="tabby-steps__copy">
+            {%- if block.settings.label != blank -%}
+              <p class="tabby-steps__label">{{ block.settings.label | escape }}</p>
+            {%- endif -%}
+            <p class="tabby-steps__line">
+              {{ block.settings.text_before | escape }}
+              {%- if block.settings.show_logo and logo != blank -%}
+                <span class="tabby-steps__badge"><img src="{{ logo | escape }}" alt="{{ section.settings.logo_alt | escape }}"></span>
+              {%- endif -%}
+              {{ block.settings.text_after | escape }}
+            </p>
+          </div>
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+</div>
+
+{% stylesheet %}
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap");
+.tabby-steps { background: var(--ts-bg, #fff); color: var(--ts-text, #292929); font-family: Inter, Helvetica, Arial, sans-serif; }
+.tabby-steps__wrap { width: min(100% - 32px, var(--ts-width, 1100px)); margin: 0 auto; padding: var(--ts-pt, 48px) 0 var(--ts-pb, 24px); }
+.tabby-steps h2 { margin: 0 0 28px; color: var(--ts-heading, #292929); font-family: Inter, Helvetica, Arial, sans-serif !important; font-size: var(--ts-heading-size, 32px) !important; font-weight: 400 !important; line-height: 46px !important; }
+.tabby-steps__grid { display: grid; gap: 48px; }
+.tabby-steps__step img { display: block; width: 100%; height: auto; margin-bottom: 16px; border-radius: 6px; }
+.tabby-steps__label { margin: 0 0 8px; color: var(--ts-label, #0e8282) !important; font-size: 13px !important; font-weight: 700 !important; line-height: 17px !important; text-transform: uppercase; }
+.tabby-steps__line { display: flex; flex-wrap: wrap; align-items: center; margin: 0; font-size: 16px; line-height: 1.6; }
+.tabby-steps__badge { display: inline-flex; width: 58px; margin: 0 8px; padding: 6px; border-radius: 6px; background: var(--ts-badge, #3eedbf); }
+.tabby-steps__badge img { width: 100%; margin: 0; border-radius: 0; }
+.tabby-steps--center { text-align: center; }
+.tabby-steps--center .tabby-steps__line { justify-content: center; }
+@media screen and (min-width: 1024px) {
+  .tabby-steps__grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 54px; }
+  .tabby-steps__step { display: flex; flex-direction: column; }
+  .tabby-steps__step > img { order: -1; margin-bottom: 16px; }
+  .tabby-steps__badge { width: 64px; }
+}
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "How it works",
+  "max_blocks": 6,
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Here's how it works" },
+    { "type": "range", "id": "heading_size", "min": 20, "max": 56, "step": 2, "unit": "px", "label": "Heading size", "default": 32 },
+    { "type": "color", "id": "background", "label": "Background", "default": "#ffffff" },
+    { "type": "color", "id": "heading_color", "label": "Heading color", "default": "#292929" },
+    { "type": "color", "id": "text_color", "label": "Text color", "default": "#292929" },
+    { "type": "color", "id": "label_color", "label": "Step label color", "default": "#0e8282" },
+    { "type": "color", "id": "badge_color", "label": "Logo badge color", "default": "#3eedbf" },
+    { "type": "select", "id": "alignment", "label": "Alignment", "default": "left", "options": [
+      { "value": "left", "label": "Left" },
+      { "value": "center", "label": "Center" }
+    ] },
+    { "type": "image_picker", "id": "logo", "label": "Upload badge logo" },
+    { "type": "text", "id": "logo_url", "label": "Badge logo URL", "info": "Used when no logo is uploaded." },
+    { "type": "text", "id": "logo_alt", "label": "Badge alt text", "default": "tabby" },
+    { "type": "range", "id": "content_width", "min": 720, "max": 1400, "step": 20, "unit": "px", "label": "Content width", "default": 1100 },
+    { "type": "range", "id": "padding_top", "min": 0, "max": 160, "step": 4, "unit": "px", "label": "Top spacing", "default": 48 },
+    { "type": "range", "id": "padding_bottom", "min": 0, "max": 160, "step": 4, "unit": "px", "label": "Bottom spacing", "default": 24 }
+  ],
+  "blocks": [
+    {
+      "type": "step",
+      "name": "Step",
+      "settings": [
+        { "type": "text", "id": "label", "label": "Step label", "default": "Step One" },
+        { "type": "text", "id": "text_before", "label": "Text before logo" },
+        { "type": "checkbox", "id": "show_logo", "label": "Show logo in the text", "default": false },
+        { "type": "text", "id": "text_after", "label": "Text after logo" },
+        { "type": "image_picker", "id": "image", "label": "Upload image" },
+        { "type": "text", "id": "image_url", "label": "Image URL", "info": "Used when no image is uploaded." },
+        { "type": "text", "id": "alt", "label": "Image alt text" }
+      ]
+    }
+  ],
+  "presets": [
+    { "name": "How it works" }
+  ]
+}
+{% endschema %}

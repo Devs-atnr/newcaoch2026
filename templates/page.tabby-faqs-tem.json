@@ -9,8 +9,33 @@
  */
 {
   "sections": {
-    "tabby": {
-      "type": "coach-tabby",
+    "tabby_hero": {
+      "type": "tabby-hero",
+      "settings": {
+        "background": "#ffffff",
+        "heading_color": "#111111",
+        "text_color": "#4a4a4a",
+        "alignment": "left",
+        "content_width": 1100,
+        "padding_top": 28,
+        "padding_bottom": 12,
+        "show_title": true,
+        "title": "TABBY",
+        "title_size": 20,
+        "intro": "Shop now. Pay later with tabby.",
+        "logo_url": "https://moallim-united.com/Rema1ncosta/Photos/TABBY_PM_IMAGES/tabby-logo-en.svg",
+        "logo_alt": "tabby",
+        "logo_link": "https://tabby.ai",
+        "heading": "Shop now. Pay later with tabby.",
+        "heading_size": 48,
+        "text": "<p>We've partnered with tabby to bring you a more rewarding way to shop. tabby lets you split your purchases into 4 interest-free payments with no fees.</p>",
+        "text_size": 14,
+        "image_url": "https://cdn.shopify.com/s/files/1/0360/3746/0012/files/Hero-Banner-EN.png?v=1698833965",
+        "image_alt": "Shop now. Pay later with tabby."
+      }
+    },
+    "tabby_steps": {
+      "type": "tabby-steps",
       "blocks": {
         "step_one": {
           "type": "step",
@@ -44,30 +69,80 @@
             "image_url": "https://moallim-united.com/Rema1ncosta/Photos/TABBY_PM_IMAGES/Howitworks-EN-3.png",
             "alt": "Step Three"
           }
-        },
+        }
+      },
+      "block_order": [
+        "step_one",
+        "step_two",
+        "step_three"
+      ],
+      "settings": {
+        "heading": "Here's how it works",
+        "heading_size": 32,
+        "background": "#ffffff",
+        "heading_color": "#292929",
+        "text_color": "#292929",
+        "label_color": "#0e8282",
+        "badge_color": "#3eedbf",
+        "alignment": "left",
+        "logo_url": "https://moallim-united.com/Rema1ncosta/Photos/TABBY_PM_IMAGES/tabby-logo-en.svg",
+        "logo_alt": "tabby",
+        "content_width": 1100,
+        "padding_top": 48,
+        "padding_bottom": 24
+      }
+    },
+    "tabby_payments": {
+      "type": "tabby-payments",
+      "settings": {
+        "heading": "Making upcoming payments",
+        "heading_size": 32,
+        "intro": "<p>The best way to track your purchases and upcoming bills is by getting the tabby app.</p>",
+        "text": "<p>When you use Visa and Mastercard cards to shop with tabby, your payments are automatically charged.</p><p>If you paid with a <strong>MADA card</strong>, please follow the steps below:</p><ol><li>Log in to the app or tabby.ai</li><li>Select the ‘My Payments’ tab</li><li>Choose the order you want to pay for and follow the steps to make your payment</li></ol>",
+        "text_size": 16,
+        "image_url": "https://cdn.shopify.com/s/files/1/0360/3746/0012/files/Upcoming-Payments-Banner-EN.png?v=1698833928",
+        "image_alt": "Get tabby app",
+        "ios_image_url": "https://moallim-united.com/Rema1ncosta/Photos/TABBY_PM_IMAGES/get-app-ios.svg",
+        "ios_alt": "iOS",
+        "ios_link": "https://tabby.onelink.me/J7ue/5b94fa1",
+        "android_image_url": "https://moallim-united.com/Rema1ncosta/Photos/TABBY_PM_IMAGES/get-app-android.svg",
+        "android_alt": "Android",
+        "android_link": "https://tabby.onelink.me/J7ue/5b94fa1",
+        "background": "#ffffff",
+        "heading_color": "#292929",
+        "text_color": "#292929",
+        "alignment": "left",
+        "content_width": 1100,
+        "padding_top": 24,
+        "padding_bottom": 48
+      }
+    },
+    "tabby_faq": {
+      "type": "tabby-faq",
+      "blocks": {
         "faq_who": {
-          "type": "faq",
+          "type": "question",
           "settings": {
             "question": "Who can use tabby?",
             "answer": "<p>Any resident of the UAE and KSA that's over the age of 18 can use tabby.</p>"
           }
         },
         "faq_spend": {
-          "type": "faq",
+          "type": "question",
           "settings": {
             "question": "How much can I spend with tabby?",
             "answer": "<p>To keep shopping safe, spending limits are based on a number of factors including the type of products you're buying, the store you're buying from and your history with tabby.</p>"
           }
         },
         "faq_free": {
-          "type": "faq",
+          "type": "question",
           "settings": {
             "question": "Is tabby free to use?",
             "answer": "<p>It is! tabby does not charge interest or fees for any payments that are made on time.</p>"
           }
         },
         "faq_refund": {
-          "type": "faq",
+          "type": "question",
           "settings": {
             "question": "How do refunds work with tabby?",
             "answer": "<p>All refunds will be issued according to the store’s policy for returns and cancellations. Once the store has registered your return or cancellation with tabby, your refund will be processed. Here’s what you can expect with your refund:</p><ul><li>If the refunded amount is less than the remaining payments, the remaining payments will be adjusted accordingly.</li><li>If the refunded amount is more than the remaining payments, the remaining payments will be cancelled and the rest will be refunded.</li></ul>"
@@ -75,49 +150,51 @@
         }
       },
       "block_order": [
-        "step_one",
-        "step_two",
-        "step_three",
         "faq_who",
         "faq_spend",
         "faq_free",
         "faq_refund"
       ],
       "settings": {
-        "show_title": true,
-        "title": "TABBY",
-        "content_width": 1100,
-        "logo_url": "https://moallim-united.com/Rema1ncosta/Photos/TABBY_PM_IMAGES/tabby-logo-en.svg",
-        "logo_alt": "tabby",
-        "logo_link": "https://tabby.ai",
-        "hero_intro": "Shop now. Pay later with tabby.",
-        "hero_heading": "Shop now. Pay later with tabby.",
-        "hero_text": "<p>We've partnered with tabby to bring you a more rewarding way to shop. tabby lets you split your purchases into 4 interest-free payments with no fees.</p>",
-        "hero_image_url": "https://cdn.shopify.com/s/files/1/0360/3746/0012/files/Hero-Banner-EN.png?v=1698833965",
-        "hero_alt": "Shop now. Pay later with tabby.",
-        "steps_heading": "Here's how it works",
-        "pay_heading": "Making upcoming payments",
-        "pay_intro": "<p>The best way to track your purchases and upcoming bills is by getting the tabby app.</p>",
-        "pay_text": "<p>When you use Visa and Mastercard cards to shop with tabby, your payments are automatically charged.</p><p>If you paid with a <strong>MADA card</strong>, please follow the steps below:</p><ol><li>Log in to the app or tabby.ai</li><li>Select the ‘My Payments’ tab</li><li>Choose the order you want to pay for and follow the steps to make your payment</li></ol>",
-        "pay_image_url": "https://cdn.shopify.com/s/files/1/0360/3746/0012/files/Upcoming-Payments-Banner-EN.png?v=1698833928",
-        "pay_alt": "Get tabby app",
-        "ios_image_url": "https://moallim-united.com/Rema1ncosta/Photos/TABBY_PM_IMAGES/get-app-ios.svg",
-        "ios_alt": "iOS",
-        "ios_link": "https://tabby.onelink.me/J7ue/5b94fa1",
-        "android_image_url": "https://moallim-united.com/Rema1ncosta/Photos/TABBY_PM_IMAGES/get-app-android.svg",
-        "android_alt": "Android",
-        "android_link": "https://tabby.onelink.me/J7ue/5b94fa1",
-        "faq_heading": "Frequently asked questions",
+        "heading": "Frequently asked questions",
+        "heading_size": 32,
+        "question_size": 18,
+        "answer_size": 16,
         "help_before": "Visit",
         "help_label": "tabby's help center",
         "help_after": "to find out more.",
         "help_link": "https://helpcenter.tabby.ai/hc/en-us/",
-        "about_heading": "About tabby",
-        "about_text": "<p>tabby empowers you with the flexibility and freedom to choose how and when to pay for the things you love. tabby lets you to shop now, pay later and earn cash – without the interest, fees or debt traps.</p><p>tabby is permitted by Saudi Central Bank, Shari’ah-compliant and PCI DSS certified. <a href=\"https://tabby.ai\" target=\"_blank\">Learn more about tabby.</a></p>"
+        "background": "#ffffff",
+        "heading_color": "#292929",
+        "text_color": "#292929",
+        "alignment": "left",
+        "content_width": 1100,
+        "padding_top": 24,
+        "padding_bottom": 32
+      }
+    },
+    "tabby_about": {
+      "type": "tabby-about",
+      "settings": {
+        "heading": "About tabby",
+        "heading_size": 32,
+        "text": "<p>tabby empowers you with the flexibility and freedom to choose how and when to pay for the things you love. tabby lets you to shop now, pay later and earn cash – without the interest, fees or debt traps.</p><p>tabby is permitted by Saudi Central Bank, Shari’ah-compliant and PCI DSS certified. <a href=\"https://tabby.ai\" target=\"_blank\">Learn more about tabby.</a></p>",
+        "text_size": 16,
+        "background": "#fbfbfb",
+        "heading_color": "#292929",
+        "text_color": "#292929",
+        "alignment": "left",
+        "content_width": 860,
+        "padding_top": 128,
+        "padding_bottom": 128
       }
     }
   },
   "order": [
-    "tabby"
+    "tabby_hero",
+    "tabby_steps",
+    "tabby_payments",
+    "tabby_faq",
+    "tabby_about"
   ]
 }

@@ -1,0 +1,123 @@
+<div
+  id="TabbyHero-{{ section.id }}"
+  class="tabby-hero tabby-hero--{{ section.settings.alignment }}"
+  style="
+    --th-bg: {{ section.settings.background }};
+    --th-text: {{ section.settings.text_color }};
+    --th-heading: {{ section.settings.heading_color }};
+    --th-width: {{ section.settings.content_width }}px;
+    --th-pt: {{ section.settings.padding_top }}px;
+    --th-pb: {{ section.settings.padding_bottom }}px;
+    --th-title: {{ section.settings.title_size }}px;
+    --th-heading-size: {{ section.settings.heading_size }}px;
+    --th-body: {{ section.settings.text_size }}px;
+  "
+>
+  <div class="tabby-hero__wrap">
+    {%- if section.settings.show_title and section.settings.title != blank -%}
+      <h1 class="tabby-hero__title">{{ section.settings.title | escape }}</h1>
+    {%- endif -%}
+    {%- if section.settings.intro != blank -%}
+      <p class="tabby-hero__intro">{{ section.settings.intro | escape }}</p>
+    {%- endif -%}
+    <div class="tabby-hero__row">
+      <div class="tabby-hero__copy">
+        {%- liquid
+          assign logo = ''
+          if section.settings.logo != blank
+            assign logo = section.settings.logo | image_url: width: 480
+          elsif section.settings.logo_url != blank
+            assign logo = section.settings.logo_url
+          endif
+        -%}
+        {%- if logo != blank -%}
+          <a class="tabby-hero__logo" href="{{ section.settings.logo_link | default: 'https://tabby.ai' }}" target="_blank" rel="noopener">
+            <img src="{{ logo | escape }}" alt="{{ section.settings.logo_alt | escape }}">
+          </a>
+        {%- endif -%}
+        {%- if section.settings.heading != blank -%}
+          <h2>{{ section.settings.heading | escape }}</h2>
+        {%- endif -%}
+        {%- if section.settings.text != blank -%}
+          <div class="tabby-hero__rte">{{ section.settings.text }}</div>
+        {%- endif -%}
+      </div>
+      {%- liquid
+        assign hero = ''
+        if section.settings.image != blank
+          assign hero = section.settings.image | image_url: width: 1600
+        elsif section.settings.image_url != blank
+          assign hero = section.settings.image_url
+        endif
+      -%}
+      {%- if hero != blank -%}
+        <div class="tabby-hero__media">
+          <img src="{{ hero | escape }}" alt="{{ section.settings.image_alt | escape }}">
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+</div>
+
+{% stylesheet %}
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap");
+.tabby-hero { background: var(--th-bg, #fff); color: var(--th-text, #292929); font-family: Inter, Helvetica, Arial, sans-serif; }
+.tabby-hero__wrap { width: min(100% - 32px, var(--th-width, 1100px)); margin: 0 auto; padding: var(--th-pt, 28px) 0 var(--th-pb, 12px); }
+.tabby-hero__title { margin: 8px 0 18px; color: var(--th-heading, #000); font-family: Inter, Helvetica, Arial, sans-serif !important; font-size: var(--th-title, 20px) !important; font-weight: 700 !important; line-height: 1.2 !important; }
+.tabby-hero__intro { margin: 0; color: #6b6b6b; font-size: 14px !important; font-weight: 400 !important; line-height: 1.4 !important; }
+.tabby-hero__row { display: flex; flex-direction: column; gap: 28px; align-items: center; padding-top: 48px; }
+.tabby-hero__copy, .tabby-hero__media { width: 100%; }
+.tabby-hero__logo { display: inline-block; margin: 0 0 16px; }
+.tabby-hero__logo img { width: 88px; height: 30px; object-fit: contain; }
+.tabby-hero h2 { max-width: 11em; margin: 0 0 16px; color: var(--th-heading, #111); font-family: Inter, Helvetica, Arial, sans-serif !important; font-size: 32px !important; font-weight: 700 !important; line-height: 1.15 !important; }
+.tabby-hero__rte, .tabby-hero__rte p { max-width: 340px; margin: 0; color: var(--th-text, #4a4a4a); font-size: var(--th-body, 14px) !important; font-weight: 400 !important; line-height: 1.55 !important; }
+.tabby-hero__rte p + p { margin-top: 12px; }
+.tabby-hero__media img { display: block; width: 100%; height: auto; border: 1px solid #e6e6e6; }
+.tabby-hero--center { text-align: center; }
+.tabby-hero--center .tabby-hero__row { align-items: center; }
+.tabby-hero--center h2, .tabby-hero--center .tabby-hero__rte, .tabby-hero--center .tabby-hero__rte p { margin-left: auto; margin-right: auto; }
+@media screen and (min-width: 1024px) {
+  .tabby-hero__row { flex-direction: row; justify-content: space-between; align-items: center; padding-top: 88px; }
+  .tabby-hero__copy { width: 40%; max-width: 464px; }
+  .tabby-hero__media { width: 60%; display: flex; justify-content: flex-end; }
+  .tabby-hero__media img { width: min(100%, 686px); }
+  .tabby-hero h2 { font-size: var(--th-heading-size, 48px) !important; line-height: 62px !important; }
+  .tabby-hero__logo img { width: 120px; height: 40px; }
+}
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Tabby hero",
+  "settings": [
+    { "type": "color", "id": "background", "label": "Background", "default": "#ffffff" },
+    { "type": "color", "id": "heading_color", "label": "Heading color", "default": "#111111" },
+    { "type": "color", "id": "text_color", "label": "Text color", "default": "#4a4a4a" },
+    { "type": "select", "id": "alignment", "label": "Alignment", "default": "left", "options": [
+      { "value": "left", "label": "Left" },
+      { "value": "center", "label": "Center" }
+    ] },
+    { "type": "range", "id": "content_width", "min": 720, "max": 1400, "step": 20, "unit": "px", "label": "Content width", "default": 1100 },
+    { "type": "range", "id": "padding_top", "min": 0, "max": 160, "step": 4, "unit": "px", "label": "Top spacing", "default": 28 },
+    { "type": "range", "id": "padding_bottom", "min": 0, "max": 160, "step": 4, "unit": "px", "label": "Bottom spacing", "default": 12 },
+    { "type": "checkbox", "id": "show_title", "label": "Show title", "default": true },
+    { "type": "text", "id": "title", "label": "Title", "default": "TABBY" },
+    { "type": "range", "id": "title_size", "min": 14, "max": 48, "step": 1, "unit": "px", "label": "Title size", "default": 20 },
+    { "type": "text", "id": "intro", "label": "Intro line", "default": "Shop now. Pay later with tabby." },
+    { "type": "image_picker", "id": "logo", "label": "Upload logo" },
+    { "type": "text", "id": "logo_url", "label": "Logo URL", "info": "Used when no logo is uploaded." },
+    { "type": "text", "id": "logo_alt", "label": "Logo alt text", "default": "tabby" },
+    { "type": "url", "id": "logo_link", "label": "Logo link" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Shop now. Pay later with tabby." },
+    { "type": "range", "id": "heading_size", "min": 24, "max": 72, "step": 2, "unit": "px", "label": "Heading size", "default": 48 },
+    { "type": "richtext", "id": "text", "label": "Description", "default": "<p>We've partnered with tabby to bring you a more rewarding way to shop. tabby lets you split your purchases into 4 interest-free payments with no fees.</p>" },
+    { "type": "range", "id": "text_size", "min": 12, "max": 24, "step": 1, "unit": "px", "label": "Description size", "default": 14 },
+    { "type": "image_picker", "id": "image", "label": "Upload image" },
+    { "type": "text", "id": "image_url", "label": "Image URL", "info": "Used when no image is uploaded." },
+    { "type": "text", "id": "image_alt", "label": "Image alt text", "default": "Shop now. Pay later with tabby." }
+  ],
+  "presets": [
+    { "name": "Tabby hero" }
+  ]
+}
+{% endschema %}

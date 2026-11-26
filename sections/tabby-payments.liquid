@@ -1,0 +1,123 @@
+<div
+  id="TabbyPay-{{ section.id }}"
+  class="tabby-pay tabby-pay--{{ section.settings.alignment }}"
+  style="
+    --tp-bg: {{ section.settings.background }};
+    --tp-text: {{ section.settings.text_color }};
+    --tp-heading: {{ section.settings.heading_color }};
+    --tp-width: {{ section.settings.content_width }}px;
+    --tp-pt: {{ section.settings.padding_top }}px;
+    --tp-pb: {{ section.settings.padding_bottom }}px;
+    --tp-heading-size: {{ section.settings.heading_size }}px;
+    --tp-body: {{ section.settings.text_size }}px;
+  "
+>
+  <div class="tabby-pay__wrap">
+    <div class="tabby-pay__copy">
+      {%- if section.settings.heading != blank -%}
+        <h2>{{ section.settings.heading | escape }}</h2>
+      {%- endif -%}
+      {%- if section.settings.intro != blank -%}
+        <div class="tabby-pay__rte">{{ section.settings.intro }}</div>
+      {%- endif -%}
+    </div>
+    {%- liquid
+      assign pay_image = ''
+      if section.settings.image != blank
+        assign pay_image = section.settings.image | image_url: width: 1400
+      elsif section.settings.image_url != blank
+        assign pay_image = section.settings.image_url
+      endif
+      assign ios = ''
+      if section.settings.ios_image != blank
+        assign ios = section.settings.ios_image | image_url: width: 400
+      elsif section.settings.ios_image_url != blank
+        assign ios = section.settings.ios_image_url
+      endif
+      assign android = ''
+      if section.settings.android_image != blank
+        assign android = section.settings.android_image | image_url: width: 400
+      elsif section.settings.android_image_url != blank
+        assign android = section.settings.android_image_url
+      endif
+    -%}
+    {%- if pay_image != blank -%}
+      <div class="tabby-pay__media">
+        <img src="{{ pay_image | escape }}" alt="{{ section.settings.image_alt | escape }}">
+      </div>
+    {%- endif -%}
+    <div class="tabby-pay__details">
+      {%- if section.settings.text != blank -%}
+        <div class="tabby-pay__rte">{{ section.settings.text }}</div>
+      {%- endif -%}
+      <div class="tabby-pay__apps">
+        {%- if ios != blank -%}
+          <a href="{{ section.settings.ios_link }}" target="_blank" rel="noopener"><img src="{{ ios | escape }}" alt="{{ section.settings.ios_alt | escape }}"></a>
+        {%- endif -%}
+        {%- if android != blank -%}
+          <a href="{{ section.settings.android_link }}" target="_blank" rel="noopener"><img src="{{ android | escape }}" alt="{{ section.settings.android_alt | escape }}"></a>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+</div>
+
+{% stylesheet %}
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap");
+.tabby-pay { background: var(--tp-bg, #fff); color: var(--tp-text, #292929); font-family: Inter, Helvetica, Arial, sans-serif; }
+.tabby-pay__wrap { width: min(100% - 32px, var(--tp-width, 1100px)); margin: 0 auto; display: grid; gap: 28px; padding: var(--tp-pt, 24px) 0 var(--tp-pb, 48px); }
+.tabby-pay h2 { margin: 0 0 16px; color: var(--tp-heading, #292929); font-family: Inter, Helvetica, Arial, sans-serif !important; font-size: var(--tp-heading-size, 32px) !important; font-weight: 400 !important; line-height: 46px !important; }
+.tabby-pay__rte, .tabby-pay__rte p, .tabby-pay__rte li { color: var(--tp-text, #292929); font-size: var(--tp-body, 16px) !important; font-weight: 400 !important; line-height: 1.6 !important; }
+.tabby-pay__rte p { margin: 0 0 16px; }
+.tabby-pay__rte ol, .tabby-pay__rte ul { margin: 0 0 16px; padding-left: 22px; }
+.tabby-pay__rte ol { list-style: decimal; }
+.tabby-pay__rte ul { list-style: disc; }
+.tabby-pay img { display: block; max-width: 100%; height: auto; }
+.tabby-pay__apps { display: flex; gap: 16px; align-items: center; }
+.tabby-pay__apps img { height: 40px; width: auto; }
+.tabby-pay--center { text-align: center; }
+.tabby-pay--center .tabby-pay__apps { justify-content: center; }
+@media screen and (min-width: 1024px) {
+  .tabby-pay__wrap { grid-template-columns: 1fr 1fr; align-items: center; }
+  .tabby-pay__copy { grid-column: 1; grid-row: 1; max-width: 512px; }
+  .tabby-pay__details { grid-column: 1; grid-row: 2; max-width: 512px; }
+  .tabby-pay__media { grid-column: 2; grid-row: 1 / span 2; }
+}
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Payment information",
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Making upcoming payments" },
+    { "type": "range", "id": "heading_size", "min": 20, "max": 56, "step": 2, "unit": "px", "label": "Heading size", "default": 32 },
+    { "type": "richtext", "id": "intro", "label": "Intro", "default": "<p>The best way to track your purchases and upcoming bills is by getting the tabby app.</p>" },
+    { "type": "richtext", "id": "text", "label": "Details" },
+    { "type": "range", "id": "text_size", "min": 12, "max": 22, "step": 1, "unit": "px", "label": "Text size", "default": 16 },
+    { "type": "image_picker", "id": "image", "label": "Upload image" },
+    { "type": "text", "id": "image_url", "label": "Image URL", "info": "Used when no image is uploaded." },
+    { "type": "text", "id": "image_alt", "label": "Image alt text", "default": "Get tabby app" },
+    { "type": "image_picker", "id": "ios_image", "label": "Upload iOS badge" },
+    { "type": "text", "id": "ios_image_url", "label": "iOS badge URL", "info": "Used when no iOS badge is uploaded." },
+    { "type": "text", "id": "ios_alt", "label": "iOS alt text", "default": "iOS" },
+    { "type": "url", "id": "ios_link", "label": "iOS link" },
+    { "type": "image_picker", "id": "android_image", "label": "Upload Android badge" },
+    { "type": "text", "id": "android_image_url", "label": "Android badge URL", "info": "Used when no Android badge is uploaded." },
+    { "type": "text", "id": "android_alt", "label": "Android alt text", "default": "Android" },
+    { "type": "url", "id": "android_link", "label": "Android link" },
+    { "type": "color", "id": "background", "label": "Background", "default": "#ffffff" },
+    { "type": "color", "id": "heading_color", "label": "Heading color", "default": "#292929" },
+    { "type": "color", "id": "text_color", "label": "Text color", "default": "#292929" },
+    { "type": "select", "id": "alignment", "label": "Alignment", "default": "left", "options": [
+      { "value": "left", "label": "Left" },
+      { "value": "center", "label": "Center" }
+    ] },
+    { "type": "range", "id": "content_width", "min": 720, "max": 1400, "step": 20, "unit": "px", "label": "Content width", "default": 1100 },
+    { "type": "range", "id": "padding_top", "min": 0, "max": 160, "step": 4, "unit": "px", "label": "Top spacing", "default": 24 },
+    { "type": "range", "id": "padding_bottom", "min": 0, "max": 160, "step": 4, "unit": "px", "label": "Bottom spacing", "default": 48 }
+  ],
+  "presets": [
+    { "name": "Payment information" }
+  ]
+}
+{% endschema %}

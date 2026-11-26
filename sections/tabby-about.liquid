@@ -1,0 +1,62 @@
+<div
+  id="TabbyAbout-{{ section.id }}"
+  class="tabby-about tabby-about--{{ section.settings.alignment }}"
+  style="
+    --ta-bg: {{ section.settings.background }};
+    --ta-text: {{ section.settings.text_color }};
+    --ta-heading: {{ section.settings.heading_color }};
+    --ta-width: {{ section.settings.content_width }}px;
+    --ta-pt: {{ section.settings.padding_top }}px;
+    --ta-pb: {{ section.settings.padding_bottom }}px;
+    --ta-heading-size: {{ section.settings.heading_size }}px;
+    --ta-body: {{ section.settings.text_size }}px;
+  "
+>
+  <div class="tabby-about__inner">
+    {%- if section.settings.heading != blank -%}
+      <h2>{{ section.settings.heading | escape }}</h2>
+    {%- endif -%}
+    {%- if section.settings.text != blank -%}
+      <div class="tabby-about__rte">{{ section.settings.text }}</div>
+    {%- endif -%}
+  </div>
+</div>
+
+{% stylesheet %}
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap");
+.tabby-about { background: var(--ta-bg, #fbfbfb); color: var(--ta-text, #292929); font-family: Inter, Helvetica, Arial, sans-serif; }
+.tabby-about__inner { width: min(100% - 32px, var(--ta-width, 850px)); margin: 0 auto; padding: 54px 0; }
+.tabby-about h2 { margin: 0 0 16px; color: var(--ta-heading, #292929); font-family: Inter, Helvetica, Arial, sans-serif !important; font-size: var(--ta-heading-size, 32px) !important; font-weight: 400 !important; line-height: 46px !important; }
+.tabby-about__rte, .tabby-about__rte p { color: var(--ta-text, #292929); font-size: var(--ta-body, 16px) !important; font-weight: 400 !important; line-height: 1.6 !important; }
+.tabby-about__rte p { margin: 0 0 16px; }
+.tabby-about__rte a { color: inherit; }
+.tabby-about--center { text-align: center; }
+@media screen and (min-width: 1024px) {
+  .tabby-about__inner { padding: var(--ta-pt, 128px) 0 var(--ta-pb, 128px); }
+}
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Additional information",
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Heading", "default": "About tabby" },
+    { "type": "range", "id": "heading_size", "min": 20, "max": 56, "step": 2, "unit": "px", "label": "Heading size", "default": 32 },
+    { "type": "richtext", "id": "text", "label": "Text" },
+    { "type": "range", "id": "text_size", "min": 12, "max": 22, "step": 1, "unit": "px", "label": "Text size", "default": 16 },
+    { "type": "color", "id": "background", "label": "Background", "default": "#fbfbfb" },
+    { "type": "color", "id": "heading_color", "label": "Heading color", "default": "#292929" },
+    { "type": "color", "id": "text_color", "label": "Text color", "default": "#292929" },
+    { "type": "select", "id": "alignment", "label": "Alignment", "default": "left", "options": [
+      { "value": "left", "label": "Left" },
+      { "value": "center", "label": "Center" }
+    ] },
+    { "type": "range", "id": "content_width", "min": 480, "max": 1200, "step": 20, "unit": "px", "label": "Content width", "default": 860 },
+    { "type": "range", "id": "padding_top", "min": 0, "max": 160, "step": 4, "unit": "px", "label": "Top spacing", "default": 128 },
+    { "type": "range", "id": "padding_bottom", "min": 0, "max": 160, "step": 4, "unit": "px", "label": "Bottom spacing", "default": 128 }
+  ],
+  "presets": [
+    { "name": "Additional information" }
+  ]
+}
+{% endschema %}
