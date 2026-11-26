@@ -306,13 +306,29 @@
                   {%- assign faq_group_open = false -%}
                 {%- endif -%}
                 {%- if block.settings.heading != blank -%}
-                  <details class="coach-care__faq" {{ block.shopify_attributes }}{% if request.design_mode %} open{% endif %}>
-                    <summary>
-                      <span class="coach-care__faq-question">{{ block.settings.heading | escape }}</span>
-                      <span class="coach-care__faq-chevron" aria-hidden="true"></span>
-                    </summary>
-                    <div class="coach-care__faq-body">
-                  {%- assign faq_group_open = true -%}
+                  {%- liquid
+                    assign faq_has_questions = false
+                    for next_block in section.blocks offset: forloop.index
+                      if next_block.type == 'faq_group'
+                        break
+                      endif
+                      if next_block.type == 'faq'
+                        assign faq_has_questions = true
+                        break
+                      endif
+                    endfor
+                  -%}
+                  {%- if faq_has_questions -%}
+                    <details class="coach-care__faq" {{ block.shopify_attributes }}{% if request.design_mode %} open{% endif %}>
+                      <summary>
+                        <span class="coach-care__faq-question">{{ block.settings.heading | escape }}</span>
+                        <span class="coach-care__faq-chevron" aria-hidden="true"></span>
+                      </summary>
+                      <div class="coach-care__faq-body">
+                    {%- assign faq_group_open = true -%}
+                  {%- else -%}
+                    <h2 class="coach-care__faq-group" {{ block.shopify_attributes }}>{{ block.settings.heading | escape }}</h2>
+                  {%- endif -%}
                 {%- endif -%}
               {%- when 'faq' -%}
                 {%- if faq_group_open -%}
