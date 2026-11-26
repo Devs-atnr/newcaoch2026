@@ -9,6 +9,7 @@
   @param {number} index - 0 for the top-level image, otherwise the position of the second-level item
   @param {string} [parent_title] - Title of the parent link when `link` is a second-level item
   @param {boolean} [use_fallback] - Use collection or product images when no block matches
+  @param {boolean} [skip_short] - Match only the full parent-and-title key, then collection or product images
 
   @example
   {% render 'coach-mega-media', link: link, blocks: section.blocks, index: 0, use_fallback: true %}
@@ -34,7 +35,7 @@
     endfor
   endif
 
-  if match == nil
+  if match == nil and skip_short != true
     for block in blocks
       if block.type == 'menu_image' and block.settings.image != blank
         assign block_key = block.settings.menu_item | handleize
@@ -64,8 +65,14 @@
         if link.url contains '/collections/'
           assign collection_handle = link.url | split: '/collections/' | last | split: '/' | first | split: '?' | first
           assign link_collection = collections[collection_handle]
+        elsif link.url contains '/products/'
+          assign product_handle = link.url | split: '/products/' | last | split: '/' | first | split: '?' | first
+          assign linked_product = all_products[product_handle]
+          if linked_product != blank
+            assign media_image = linked_product.featured_image
+          endif
         endif
-    endcase
+      endcase
 
     if link_collection != blank
       comment
@@ -81,11 +88,8 @@
 -%}
 {%- if media_image != blank -%}
   <div
-    class="coach-mega__media"
+    class="coach-mega__media{% if index == 0 %} is-active{% endif %}"
     data-media="{{ index }}"
-    {% if index != 0 %}
-      hidden
-    {% endif %}
     {% if match != nil %}
       {{ match.shopify_attributes }}
     {% endif %}

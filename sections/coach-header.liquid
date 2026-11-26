@@ -73,6 +73,16 @@
     endif
   endif
 
+  assign stores_url = section.settings.stores_url
+  if stores_url == blank
+    if routes.root_url == '/'
+      assign stores_url = '/pages/store-locator'
+    else
+      assign stores_url = routes.root_url | append: '/pages/store-locator'
+    endif
+  endif
+  assign stores_label = section.settings.stores_label | default: 'Stores'
+
   assign bestsellers_url = ''
   if section.settings.search_show_bestsellers
     assign bestsellers_url = routes.all_products_collection_url | append: '?sort_by=best-selling&section_id=coach-search-bestsellers'
@@ -141,16 +151,22 @@
 
     <div class="coach-header__row coach-header__container">
       <div class="coach-header__left">
-        {%- if section.settings.show_language_switcher -%}
-          <div class="coach-header__desktop-only">
+        <div class="coach-header__desktop-only coach-header__tools">
+          {%- if section.settings.show_language_switcher -%}
             {%- render 'coach-language-switcher',
               form_id: 'CoachLanguageDesktop',
               variant: 'dropdown',
               flag_code: section.settings.flag_country,
               flag_image: section.settings.flag_image
             -%}
-          </div>
-        {%- endif -%}
+          {%- endif -%}
+          {%- if section.settings.show_stores -%}
+            <a href="{{ stores_url }}" class="coach-header__stores">
+              {%- render 'coach-icon', icon: 'pin' -%}
+              <span>{{ stores_label | escape }}</span>
+            </a>
+          {%- endif -%}
+        </div>
       </div>
 
       {%- if request.page_type == 'index' -%}
@@ -323,10 +339,12 @@
                             {%- if child.links.size > 0 -%}
                               <ul class="coach-mega__l3" role="list">
                                 {%- for grandchild in child.links -%}
+                                  {%- assign l3_index = forloop.parentloop.index | append: '-' | append: forloop.index -%}
                                   <li>
                                     <a
                                       href="{{ grandchild.url }}"
                                       class="coach-mega__l3-link"
+                                      data-l3="{{ l3_index }}"
                                       {% if grandchild.current %}
                                         aria-current="page"
                                       {% endif %}
@@ -356,6 +374,18 @@
                           index: forloop.index,
                           use_fallback: section.settings.mega_image_fallback
                         -%}
+                        {%- for grandchild in child.links -%}
+                          {%- assign l3_index = forloop.parentloop.index | append: '-' | append: forloop.index -%}
+                          {%- assign l3_parent = link.title | append: ' ' | append: child.title -%}
+                          {%- render 'coach-mega-media',
+                            link: grandchild,
+                            parent_title: l3_parent,
+                            blocks: section.blocks,
+                            index: l3_index,
+                            use_fallback: section.settings.mega_image_fallback,
+                            skip_short: true
+                          -%}
+                        {%- endfor -%}
                       {%- endfor -%}
                     </div>
                   </div>
@@ -760,6 +790,28 @@
     },
     {
       "type": "header",
+      "content": "Stores"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_stores",
+      "label": "Show Stores link",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "stores_label",
+      "label": "Stores label",
+      "default": "Stores"
+    },
+    {
+      "type": "url",
+      "id": "stores_url",
+      "label": "Stores link",
+      "info": "Leave empty to open the store locator page."
+    },
+    {
+      "type": "header",
       "content": "Search"
     },
     {
@@ -845,7 +897,7 @@
     },
     {
       "type": "paragraph",
-      "content": "Add \"Menu image\" blocks to choose the picture for a menu item. Type the item title (New) or Parent > Child (New > Men's New Arrivals)."
+      "content": "Hovering a second-column link shows that product's image, or the collection image, or the first product in the collection. Add a Menu image block to replace one: Parent > Child, or Parent > Child > Link."
     },
     {
       "type": "header",

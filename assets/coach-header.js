@@ -456,14 +456,33 @@
         });
 
         mega.querySelectorAll('.coach-mega__l2-item').forEach((l2) => {
-          l2.addEventListener('mouseenter', () => {
+          const l2Link = l2.querySelector('.coach-mega__l2-link');
+          l2Link?.addEventListener('mouseenter', () => {
+            clearTimeout(this.l3Timer);
             clearTimeout(this.l2Timer);
-            this.l2Timer = setTimeout(() => this.setActiveL2(item, l2), L2_INTENT_DELAY);
+            this.l2Timer = setTimeout(() => {
+              this.activateL2(item, l2);
+              this.showCategoryMedia(item, l2);
+            }, L2_INTENT_DELAY);
           });
-          l2.addEventListener('mouseleave', () => clearTimeout(this.l2Timer));
-          l2.addEventListener('focusin', () => {
+          l2Link?.addEventListener('focusin', () => {
+            clearTimeout(this.l3Timer);
             clearTimeout(this.l2Timer);
-            this.setActiveL2(item, l2);
+            this.activateL2(item, l2);
+            this.showCategoryMedia(item, l2);
+          });
+          l2.querySelectorAll('.coach-mega__l3-link').forEach((link) => {
+            const showLink = () => {
+              clearTimeout(this.l2Timer);
+              clearTimeout(this.l3Timer);
+              this.l3Timer = setTimeout(() => {
+                this.activateL2(item, l2);
+                const id = link.dataset.l3;
+                if (id && item.querySelector(`[data-media="${id}"]`)) this.showMedia(item, id);
+              }, 40);
+            };
+            link.addEventListener('mouseenter', showLink);
+            link.addEventListener('focusin', showLink);
           });
         });
       });
@@ -501,6 +520,7 @@
     closeMega() {
       clearTimeout(this.openTimer);
       clearTimeout(this.l2Timer);
+      clearTimeout(this.l3Timer);
       if (!this.openItem) return;
       const item = this.openItem;
       item.classList.remove('is-open');
@@ -509,18 +529,41 @@
     }
 
     resetL2(item) {
+      const first = item.querySelector('.coach-mega__l2-item');
       item.querySelectorAll('.coach-mega__l2-item.is-active').forEach((el) => el.classList.remove('is-active'));
-      this.showMedia(item, '0');
-      this.fitColumns(item, null);
-
+      if (first) {
+        this.activateL2(item, first);
+        this.showCategoryMedia(item, first);
+      } else {
+        this.showMedia(item, '0');
+        this.fitColumns(item, null);
+      }
     }
 
-    setActiveL2(item, l2) {
+    activateL2(item, l2) {
       if (l2.classList.contains('is-active')) return;
       item.querySelectorAll('.coach-mega__l2-item.is-active').forEach((el) => el.classList.remove('is-active'));
       l2.classList.add('is-active');
-      this.showMedia(item, l2.dataset.l2);
       this.fitColumns(item, l2);
+    }
+
+    showCategoryMedia(item, l2) {
+      const index = l2.dataset.l2;
+      if (index && item.querySelector(`[data-media="${index}"]`)) {
+        this.showMedia(item, index);
+        return;
+      }
+      const child = l2.querySelector('[data-l3]');
+      if (child?.dataset.l3 && item.querySelector(`[data-media="${child.dataset.l3}"]`)) {
+        this.showMedia(item, child.dataset.l3);
+        return;
+      }
+      this.showMedia(item, '0');
+    }
+
+    setActiveL2(item, l2) {
+      this.activateL2(item, l2);
+      this.showCategoryMedia(item, l2);
     }
 
     /* The third-level column is positioned beside the list, so grow the panel when it is taller */
@@ -538,9 +581,10 @@
     showMedia(item, index) {
       const media = [...item.querySelectorAll('[data-media]')];
       if (!media.length) return;
-      const target = media.find((el) => el.dataset.media === index) || media.find((el) => el.dataset.media === '0');
+      const target = media.find((el) => el.dataset.media === String(index));
+      if (!target) return;
       media.forEach((el) => {
-        el.hidden = el !== target;
+        el.classList.toggle('is-active', el === target);
       });
     }
 
@@ -553,9 +597,10 @@
       this.editorPinned = true;
       this.openMega(item);
       const index = media.dataset.media;
-      const l2 = item.querySelector(`.coach-mega__l2-item[data-l2="${index}"]`);
-      if (l2) this.setActiveL2(item, l2);
-      else this.showMedia(item, index);
+      const l3 = item.querySelector(`.coach-mega__l3-link[data-l3="${index}"]`);
+      const l2 = l3?.closest('.coach-mega__l2-item') || item.querySelector(`.coach-mega__l2-item[data-l2="${index}"]`);
+      if (l2) this.activateL2(item, l2);
+      this.showMedia(item, index);
     }
 
     onBlockDeselect(event) {
