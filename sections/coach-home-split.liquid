@@ -23,14 +23,26 @@
   assign heading_font = 'GaramondMTProRegular, Times New Roman, Times, serif'
   if section.settings.heading_font == 'helvetica'
     assign heading_font = 'HelveticaLTPro-Roman, Helvetica, Arial, sans-serif'
+  elsif section.settings.heading_font == 'extended'
+    assign heading_font = 'HelveticaNeue63ExtendedMedium, Helvetica, Arial, sans-serif'
+  elsif section.settings.heading_font == 'extended_53'
+    assign heading_font = 'HelveticaNeue53ExtendedNormal, Helvetica, Arial, sans-serif'
   endif
   assign text_font = 'HelveticaLTPro-Roman, Helvetica, Arial, sans-serif'
   if section.settings.text_font == 'garamond'
     assign text_font = 'GaramondMTProRegular, Times New Roman, Times, serif'
+  elsif section.settings.text_font == 'extended'
+    assign text_font = 'HelveticaNeue63ExtendedMedium, Helvetica, Arial, sans-serif'
+  elsif section.settings.text_font == 'extended_53'
+    assign text_font = 'HelveticaNeue53ExtendedNormal, Helvetica, Arial, sans-serif'
   endif
   assign button_font = 'HelveticaLTPro-Roman, Helvetica, Arial, sans-serif'
   if section.settings.button_font == 'garamond'
     assign button_font = 'GaramondMTProRegular, Times New Roman, Times, serif'
+  elsif section.settings.button_font == 'extended'
+    assign button_font = 'HelveticaNeue63ExtendedMedium, Helvetica, Arial, sans-serif'
+  elsif section.settings.button_font == 'extended_53'
+    assign button_font = 'HelveticaNeue53ExtendedNormal, Helvetica, Arial, sans-serif'
   endif
 -%}
 
@@ -87,6 +99,8 @@
     { "type": "header", "content": "Heading" },
     { "type": "text", "id": "heading", "label": "Heading", "default": "Make the moment even more beautiful." },
     { "type": "select", "id": "heading_font", "label": "Font", "default": "garamond", "options": [
+      { "value": "extended_53", "label": "Helvetica Extended" },
+      { "value": "extended", "label": "Helvetica Extended Medium" },
       { "value": "garamond", "label": "Garamond" },
       { "value": "helvetica", "label": "Helvetica" }
     ] },
@@ -96,12 +110,14 @@
       { "value": "400", "label": "Regular" },
       { "value": "700", "label": "Bold" }
     ] },
-    { "type": "range", "id": "heading_spacing", "min": 0, "max": 12, "step": 1, "unit": "px", "label": "Letter spacing", "default": 0 },
+    { "type": "range", "id": "heading_spacing", "min": 0, "max": 2, "step": 0.1, "unit": "px", "label": "Letter spacing", "default": 0 },
     { "type": "color", "id": "heading_color", "label": "Color", "default": "#111111" },
     { "type": "header", "content": "Description" },
     { "type": "textarea", "id": "text", "label": "Description", "default": "Add a complimentary gift note to your order and purchase a bow-topped gift box." },
     { "type": "select", "id": "text_font", "label": "Font", "default": "helvetica", "options": [
       { "value": "helvetica", "label": "Helvetica" },
+      { "value": "extended_53", "label": "Helvetica Extended" },
+      { "value": "extended", "label": "Helvetica Extended Medium" },
       { "value": "garamond", "label": "Garamond" }
     ] },
     { "type": "range", "id": "text_size", "min": 12, "max": 22, "step": 1, "unit": "px", "label": "Desktop size", "default": 16 },
@@ -116,6 +132,8 @@
     { "type": "text", "id": "button_text", "label": "Button text", "default": "Explore Our Gift Guide" },
     { "type": "url", "id": "button_link", "label": "Button link" },
     { "type": "select", "id": "button_font", "label": "Font", "default": "helvetica", "options": [
+      { "value": "extended_53", "label": "Helvetica Extended" },
+      { "value": "extended", "label": "Helvetica Extended Medium" },
       { "value": "helvetica", "label": "Helvetica" },
       { "value": "garamond", "label": "Garamond" }
     ] },
