@@ -92,6 +92,10 @@
   margin-top: var(--cl-label-space, 18px);
   margin-bottom: 0;
 }
+.coach-check-list.is-outside .coach-check-list__title {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
 .coach-check-list.is-outside .coach-check-list__text {
   margin-top: 4px;
 }

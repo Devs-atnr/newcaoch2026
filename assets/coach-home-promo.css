@@ -1,0 +1,44 @@
+.coach-home-promo {
+  box-sizing: border-box;
+  background: var(--hp-bg, #000);
+  color: var(--hp-color, #fff);
+  padding: var(--hp-pt, 28px) 20px var(--hp-pb, 16px);
+  text-align: center;
+  font-family: HelveticaLTPro-Roman, Helvetica, Arial, sans-serif;
+}
+.coach-home-promo h2 {
+  margin: 0;
+  font-family: GaramondMTProRegular, "Times New Roman", Times, serif;
+  font-size: var(--hp-h-m, 26px);
+  font-weight: 400;
+  line-height: 1.2;
+}
+.coach-home-promo p {
+  margin: 8px 0 0;
+  font-size: var(--hp-b-m, 14px);
+  line-height: 1.4;
+}
+.coach-home-promo__links {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 8px 22px;
+  margin-top: 14px;
+}
+.coach-home-promo a {
+  color: inherit;
+  font-size: var(--hp-btn, 14px);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.coach-home-promo__note {
+  margin-top: 16px;
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  line-height: 1.5;
+  text-transform: uppercase;
+}
+@media screen and (min-width: 750px) {
+  .coach-home-promo h2 { font-size: var(--hp-h, 32px); }
+  .coach-home-promo p { font-size: var(--hp-b, 16px); }
+}

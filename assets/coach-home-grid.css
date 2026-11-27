@@ -35,15 +35,15 @@
   background: var(--hg-img, #e8d4be);
   overflow: hidden;
 }
+.coach-home-grid__media picture,
 .coach-home-grid__media img,
 .coach-home-grid__media svg {
   position: absolute;
-  top: 0;
-  left: 0;
+  inset: 0;
   display: block;
   width: 100%;
-  height: calc(100% - 46px);
-  object-fit: contain;
+  height: 100%;
+  object-fit: var(--hg-fit, cover);
   object-position: center center;
 }
 .coach-home-grid__title,

@@ -31,16 +31,32 @@
       -%}
       <a class="coach-check-list__card" href="{{ card_link }}" {{ block.shopify_attributes }}>
         <span class="coach-check-list__media">
-          {%- if block.settings.image != blank or block.settings.image_mobile != blank -%}
+          {%- liquid
+            assign card_desk = ''
+            assign card_mob = ''
+            if block.settings.image != blank
+              assign card_desk = block.settings.image | image_url: width: 1200
+            elsif block.settings.image_url != blank
+              assign card_desk = block.settings.image_url
+            endif
+            if block.settings.image_mobile != blank
+              assign card_mob = block.settings.image_mobile | image_url: width: 900
+            elsif block.settings.image_mobile_url != blank
+              assign card_mob = block.settings.image_mobile_url
+            endif
+            if card_mob == blank
+              assign card_mob = card_desk
+            endif
+            if card_desk == blank
+              assign card_desk = card_mob
+            endif
+          -%}
+          {%- if card_desk != blank -%}
             <picture>
-              {%- if block.settings.image_mobile != blank -%}
-                <source media="(max-width: 749px)" srcset="{{ block.settings.image_mobile | image_url: width: 900 }}">
+              {%- if card_mob != blank and card_mob != card_desk -%}
+                <source media="(max-width: 749px)" srcset="{{ card_mob | escape }}">
               {%- endif -%}
-              {%- if block.settings.image != blank -%}
-                {{ block.settings.image | image_url: width: 1200 | image_tag: alt: block.settings.title, loading: 'lazy' }}
-              {%- else -%}
-                {{ block.settings.image_mobile | image_url: width: 900 | image_tag: alt: block.settings.title, loading: 'lazy' }}
-              {%- endif -%}
+              <img src="{{ card_desk | escape }}" alt="{{ block.settings.title | escape }}" loading="lazy" width="800" height="1000">
             </picture>
           {%- else -%}
             {{ 'collection-1' | placeholder_svg_tag }}
@@ -137,7 +153,9 @@
       "name": "Card",
       "settings": [
         { "type": "image_picker", "id": "image", "label": "Desktop image" },
+        { "type": "text", "id": "image_url", "label": "Desktop image URL", "info": "Used when no desktop image is uploaded." },
         { "type": "image_picker", "id": "image_mobile", "label": "Mobile image" },
+        { "type": "text", "id": "image_mobile_url", "label": "Mobile image URL", "info": "Used when no mobile image is uploaded." },
         { "type": "text", "id": "title", "label": "Title", "default": "New Arrivals" },
         { "type": "text", "id": "text", "label": "Text" },
         { "type": "collection", "id": "collection", "label": "Collection" },

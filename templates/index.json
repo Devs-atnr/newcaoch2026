@@ -9,8 +9,8 @@
  */
 {
   "sections": {
-    "uk_promo": {
-      "type": "uk-promo-bar",
+    "coach_home_promo": {
+      "type": "coach-home-promo",
       "settings": {
         "heading": "Black Friday Sale",
         "heading_size": 32,
@@ -32,14 +32,14 @@
         "padding_bottom": 16
       }
     },
-    "uk_hero": {
-      "type": "uk-hero-slider",
+    "coach_home_banner": {
+      "type": "coach-home-banner",
       "blocks": {
         "slide_1": {
           "type": "slide",
           "settings": {
-            "image_url": "https://cms.coach.com/i/coach/ce-20261125-hp2-1?w=1920&fmt=webp",
-            "mobile_url": "https://cms.coach.com/i/coach/ce-20261125-hp2-1m?w=1920&fmt=webp",
+            "desktop_image_url": "https://cms.coach.com/i/coach/ce-20261125-hp2-1?w=1920&fmt=webp",
+            "mobile_image_url": "https://cms.coach.com/i/coach/ce-20261125-hp2-1m?w=1920&fmt=webp",
             "heading": "You deserve the best.",
             "text": "",
             "button_1_text": "Shop All",
@@ -51,8 +51,8 @@
         "slide_2": {
           "type": "slide",
           "settings": {
-            "image_url": "https://cms.coach.com/i/coach/ce-20261125-hp2-2?w=1920&fmt=webp",
-            "mobile_url": "https://cms.coach.com/i/coach/ce-20261125-hp2-2m?w=1920&fmt=webp",
+            "desktop_image_url": "https://cms.coach.com/i/coach/ce-20261125-hp2-2?w=1920&fmt=webp",
+            "mobile_image_url": "https://cms.coach.com/i/coach/ce-20261125-hp2-2m?w=1920&fmt=webp",
             "heading": "You deserve the best.",
             "text": "",
             "button_1_text": "Shop All",
@@ -64,8 +64,8 @@
         "slide_3": {
           "type": "slide",
           "settings": {
-            "image_url": "https://cms.coach.com/i/coach/ce-20261126-hp2-1?w=1920&fmt=webp",
-            "mobile_url": "https://cms.coach.com/i/coach/ce-20261126-hp2-1m?w=1920&fmt=webp",
+            "desktop_image_url": "https://cms.coach.com/i/coach/ce-20261126-hp2-1?w=1920&fmt=webp",
+            "mobile_image_url": "https://cms.coach.com/i/coach/ce-20261126-hp2-1m?w=1920&fmt=webp",
             "heading": "You deserve the best.",
             "text": "",
             "button_1_text": "Shop All",
@@ -75,188 +75,232 @@
           }
         }
       },
-      "block_order": [
-        "slide_1",
-        "slide_2",
-        "slide_3"
-      ],
+      "block_order": ["slide_1", "slide_2", "slide_3"],
       "settings": {
-        "full_screen": true,
+        "full_height": true,
         "screen_offset": 180,
-        "screen_offset_mobile": 120,
         "desktop_height": 760,
         "mobile_height": 620,
-        "image_fit": "cover",
         "image_position": "center",
-        "text_position": "bottom-left",
+        "background": "#111111",
+        "heading": "",
+        "heading_font": "garamond",
         "heading_size": 36,
         "heading_size_mobile": 28,
+        "heading_weight": "400",
+        "heading_color": "#ffffff",
+        "text": "",
+        "text_font": "helvetica",
         "text_size": 16,
         "text_size_mobile": 14,
-        "button_size": 14,
         "text_color": "#ffffff",
-        "autoplay": false,
-        "autoplay_speed": 6
+        "text_width": 420,
+        "button_1_text": "",
+        "button_1_color": "#ffffff",
+        "button_2_text": "",
+        "button_2_color": "#ffffff",
+        "button_size": 14,
+        "button_gap": 18,
+        "content_horizontal": "left",
+        "content_vertical": "bottom",
+        "content_left": 56,
+        "content_bottom": 48,
+        "content_horizontal_mobile": "left",
+        "content_vertical_mobile": "bottom",
+        "content_left_mobile": 16,
+        "content_bottom_mobile": 32
       }
     },
-    "uk_tiles": {
-      "type": "uk-product-tiles",
+    "coach_check_list": {
+      "type": "coach-check-list",
       "blocks": {
-        "tile_1": {
-          "type": "tile",
+        "card_1": {
+          "type": "card",
           "settings": {
             "image_url": "https://cms.coach.com/i/coach/ce-20261125-hp2c-1?w=1920&fmt=webp",
-            "label": "Shop Now",
+            "title": "Shop Now",
             "link": "https://uk.coach.com/products/belted-ergo-shoulder-bag-26/CEN80-B4%2FBK.html"
           }
         },
-        "tile_2": {
-          "type": "tile",
+        "card_2": {
+          "type": "card",
           "settings": {
             "image_url": "https://cms.coach.com/i/coach/ce-20261125-hp2c-2?w=1920&fmt=webp",
-            "label": "Shop Now",
+            "title": "Shop Now",
             "link": "https://uk.coach.com/products/barrel-bag/CDY80-B4MPL.html"
           }
         },
-        "tile_3": {
-          "type": "tile",
+        "card_3": {
+          "type": "card",
           "settings": {
             "image_url": "https://cms.coach.com/i/coach/ce-20261125-hp2c-3?w=1920&fmt=webp",
-            "label": "Shop Now",
+            "title": "Shop Now",
             "link": "https://uk.coach.com/products/twin-turnlock-waverly-bag/CDZ20-B4%2FBK.html"
           }
         },
-        "tile_4": {
-          "type": "tile",
+        "card_4": {
+          "type": "card",
           "settings": {
             "image_url": "https://cms.coach.com/i/coach/ce-20261125-hp2c-4?w=1920&fmt=webp",
-            "label": "Shop Now",
+            "title": "Shop Now",
             "link": "https://uk.coach.com/products/waverly-bag/CCC36-B4MPL.html"
           }
         }
       },
-      "block_order": [
-        "tile_1",
-        "tile_2",
-        "tile_3",
-        "tile_4"
-      ],
+      "block_order": ["card_1", "card_2", "card_3", "card_4"],
       "settings": {
-        "product_limit": 4,
-        "show_title": false,
-        "show_price": false,
-        "label": "Shop Now",
+        "heading": "",
+        "show_heading_desktop": false,
+        "show_heading_mobile": false,
+        "content_position": "outside",
+        "content_align": "center",
         "columns_desktop": 4,
         "columns_mobile": 2,
+        "gap": 4,
+        "gap_mobile": 4,
+        "image_height": 125,
+        "image_height_mobile": 125,
+        "background": "#ffffff",
+        "image_background": "#f3f3f3",
         "image_fit": "cover",
-        "image_position": "center",
+        "label_font": "helvetica",
         "label_size": 14,
         "label_size_mobile": 13,
-        "background": "#ffffff",
-        "gap": 4,
+        "label_weight": "400",
+        "label_space": 10,
+        "label_space_mobile": 10,
+        "label_color": "#111111",
         "padding_top": 0,
         "padding_bottom": 0,
-        "padding_x": 0
+        "padding_left": 0,
+        "padding_right": 0,
+        "padding_top_mobile": 0,
+        "padding_bottom_mobile": 0,
+        "padding_left_mobile": 0,
+        "padding_right_mobile": 0
       }
     },
-    "uk_banner": {
-      "type": "uk-full-banner",
+    "coach_home_banner_gifts": {
+      "type": "coach-home-banner",
       "settings": {
-        "image_url": "https://cms.coach.com/i/coach/ce-20261125-hp3?w=1920&fmt=webp",
-        "mobile_url": "https://cms.coach.com/i/coach/ce-20261125-hp3m?w=1920&fmt=webp",
+        "desktop_image_url": "https://cms.coach.com/i/coach/ce-20261125-hp3?w=1920&fmt=webp",
+        "mobile_image_url": "https://cms.coach.com/i/coach/ce-20261125-hp3m?w=1920&fmt=webp",
+        "full_height": false,
         "desktop_height": 560,
         "mobile_height": 420,
-        "image_fit": "cover",
         "image_position": "center",
+        "background": "#111111",
         "heading": "Brighten their season.",
+        "heading_font": "garamond",
         "heading_size": 40,
         "heading_size_mobile": 28,
+        "heading_weight": "400",
+        "heading_color": "#ffffff",
         "text": "The perfect presents for everyone on your list.",
+        "text_font": "helvetica",
         "text_size": 16,
         "text_size_mobile": 14,
-        "button_text": "Shop All Gifts",
-        "button_link": "https://uk.coach.com/shop/gifts/for-her",
+        "text_color": "#ffffff",
+        "text_width": 480,
+        "button_1_text": "Shop All Gifts",
+        "button_1_link": "https://uk.coach.com/shop/gifts/for-her",
+        "button_1_color": "#ffffff",
+        "button_2_text": "",
+        "button_2_color": "#ffffff",
         "button_size": 14,
-        "text_position": "center",
-        "text_color": "#ffffff"
+        "content_horizontal": "center",
+        "content_vertical": "middle",
+        "content_horizontal_mobile": "center",
+        "content_vertical_mobile": "middle"
       }
     },
-    "uk_categories": {
-      "type": "uk-category-grid",
+    "coach_home_grid": {
+      "type": "coach-home-grid",
       "blocks": {
-        "cat_1": {
+        "card_1": {
           "type": "card",
           "settings": {
             "image_url": "https://cms.coach.com/i/coach/ce-20261125-hp4-1?w=1920&fmt=webp",
-            "mobile_url": "https://cms.coach.com/i/coach/ce-20261125-hp4-1m?w=1920&fmt=webp",
+            "image_mobile_url": "https://cms.coach.com/i/coach/ce-20261125-hp4-1m?w=1920&fmt=webp",
             "title": "New Arrivals",
             "link": "https://uk.coach.com/shop/new/womens-new-arrivals/view-all"
           }
         },
-        "cat_2": {
+        "card_2": {
           "type": "card",
           "settings": {
             "image_url": "https://cms.coach.com/i/coach/ce-20261125-hp4-2?w=1920&fmt=webp",
-            "mobile_url": "https://cms.coach.com/i/coach/ce-20261125-hp4-2m?w=1920&fmt=webp",
+            "image_mobile_url": "https://cms.coach.com/i/coach/ce-20261125-hp4-2m?w=1920&fmt=webp",
             "title": "Shoulder Bags",
             "link": "https://uk.coach.com/shop/women/bags/shoulder-bags"
           }
         },
-        "cat_3": {
+        "card_3": {
           "type": "card",
           "settings": {
             "image_url": "https://cms.coach.com/i/coach/ce-20261125-hp4-3?w=1920&fmt=webp",
-            "mobile_url": "https://cms.coach.com/i/coach/ce-20261125-hp4-3m?w=1920&fmt=webp",
+            "image_mobile_url": "https://cms.coach.com/i/coach/ce-20261125-hp4-3m?w=1920&fmt=webp",
             "title": "Wallets & Wristlets",
             "link": "https://uk.coach.com/shop/women/small-leather-goods/view-all"
           }
         },
-        "cat_4": {
+        "card_4": {
           "type": "card",
           "settings": {
             "image_url": "https://cms.coach.com/i/coach/ce-20261125-hp4-4?w=1920&fmt=webp",
-            "mobile_url": "https://cms.coach.com/i/coach/ce-20261125-hp4-4m?w=1920&fmt=webp",
+            "image_mobile_url": "https://cms.coach.com/i/coach/ce-20261125-hp4-4m?w=1920&fmt=webp",
             "title": "Women's",
             "link": "https://uk.coach.com/shop/women/view-all"
           }
         }
       },
-      "block_order": [
-        "cat_1",
-        "cat_2",
-        "cat_3",
-        "cat_4"
-      ],
+      "block_order": ["card_1", "card_2", "card_3", "card_4"],
       "settings": {
         "heading": "Shop by category",
+        "show_heading_desktop": true,
+        "show_heading_mobile": true,
+        "heading_font": "helvetica",
         "heading_size": 13,
         "heading_size_mobile": 12,
+        "heading_weight": "400",
+        "heading_spacing": 2,
+        "heading_space": 22,
+        "heading_color": "#111111",
         "columns_desktop": 4,
         "columns_mobile": 2,
+        "gap": 4,
+        "gap_mobile": 4,
+        "image_height": 140,
+        "image_height_mobile": 140,
+        "background": "#ffffff",
+        "image_background": "#e8d4be",
         "image_fit": "cover",
-        "image_position": "center",
+        "label_font": "helvetica",
         "label_size": 16,
         "label_size_mobile": 14,
-        "background": "#ffffff",
-        "text_color": "#ffffff",
-        "gap": 4,
+        "label_weight": "400",
+        "label_space": 18,
+        "label_color": "#ffffff",
         "padding_top": 36,
         "padding_bottom": 0,
-        "padding_x": 0
+        "padding_left": 0,
+        "padding_right": 0,
+        "padding_top_mobile": 24,
+        "padding_bottom_mobile": 0,
+        "padding_left_mobile": 0,
+        "padding_right_mobile": 0
       }
     },
-    "uk_gift": {
-      "type": "uk-split-story",
+    "coach_home_split": {
+      "type": "coach-home-split",
       "settings": {
         "image_url": "https://cms.coach.com/i/coach/ce-gift-wrap?w=1920&fmt=webp",
         "mobile_url": "https://cms.coach.com/i/coach/ce-gift-wrap-m?w=1920&fmt=webp",
         "image_side": "left",
-        "fixed_height": false,
-        "desktop_height": 520,
-        "mobile_height": 320,
         "image_fit": "cover",
         "image_position": "center",
         "heading": "Make the moment even more beautiful.",
+        "heading_font": "garamond",
         "heading_size": 36,
         "heading_size_mobile": 28,
         "text": "Add a complimentary gift note to your order and purchase a bow-topped gift box.",
@@ -271,11 +315,11 @@
     }
   },
   "order": [
-    "uk_promo",
-    "uk_hero",
-    "uk_tiles",
-    "uk_banner",
-    "uk_categories",
-    "uk_gift"
+    "coach_home_promo",
+    "coach_home_banner",
+    "coach_check_list",
+    "coach_home_banner_gifts",
+    "coach_home_grid",
+    "coach_home_split"
   ]
 }

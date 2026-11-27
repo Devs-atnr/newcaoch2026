@@ -1,17 +1,17 @@
-{{ 'uk-home.css' | asset_url | stylesheet_tag }}
+{{ 'coach-home-promo.css' | asset_url | stylesheet_tag }}
 
 <section
-  class="uk-promo"
-  style="--uk-bg: {{ section.settings.background }}; --uk-color: {{ section.settings.text_color }}; --uk-heading: {{ section.settings.heading_size }}px; --uk-heading-m: {{ section.settings.heading_size_mobile }}px; --uk-b: {{ section.settings.text_size }}px; --uk-b-m: {{ section.settings.text_size_mobile }}px; --uk-btn: {{ section.settings.button_size }}px; --uk-pt: {{ section.settings.padding_top }}px; --uk-pb: {{ section.settings.padding_bottom }}px;"
+  class="coach-home-promo"
+  style="--hp-bg: {{ section.settings.background }}; --hp-color: {{ section.settings.text_color }}; --hp-h: {{ section.settings.heading_size }}px; --hp-h-m: {{ section.settings.heading_size_mobile }}px; --hp-b: {{ section.settings.text_size }}px; --hp-b-m: {{ section.settings.text_size_mobile }}px; --hp-btn: {{ section.settings.button_size }}px; --hp-pt: {{ section.settings.padding_top }}px; --hp-pb: {{ section.settings.padding_bottom }}px;"
 >
   {%- if section.settings.heading != blank -%}
-    <h2 class="uk-promo__heading">{{ section.settings.heading | escape }}</h2>
+    <h2>{{ section.settings.heading | escape }}</h2>
   {%- endif -%}
   {%- if section.settings.text != blank -%}
-    <p class="uk-promo__text">{{ section.settings.text | escape }}</p>
+    <p>{{ section.settings.text | escape }}</p>
   {%- endif -%}
   {%- if section.settings.button_1_text != blank or section.settings.button_2_text != blank -%}
-    <div class="uk-links">
+    <div class="coach-home-promo__links">
       {%- if section.settings.button_1_text != blank -%}
         <a href="{{ section.settings.button_1_link | default: '#' }}">{{ section.settings.button_1_text | escape }}</a>
       {%- endif -%}
@@ -21,7 +21,7 @@
     </div>
   {%- endif -%}
   {%- if section.settings.note != blank -%}
-    <p class="uk-promo__note">
+    <p class="coach-home-promo__note">
       {{ section.settings.note | escape }}
       {%- if section.settings.note_label != blank -%}
         <a href="{{ section.settings.note_link | default: '#' }}">{{ section.settings.note_label | escape }}</a>
@@ -32,9 +32,9 @@
 
 {% schema %}
 {
-  "name": "UK promo bar",
+  "name": "Home promo bar",
   "tag": "section",
-  "class": "uk-promo-section",
+  "class": "coach-home-promo-section",
   "settings": [
     { "type": "text", "id": "heading", "label": "Heading", "default": "Black Friday Sale" },
     { "type": "range", "id": "heading_size", "min": 18, "max": 56, "step": 1, "unit": "px", "label": "Desktop heading size", "default": 32 },
@@ -55,6 +55,6 @@
     { "type": "range", "id": "padding_top", "min": 0, "max": 80, "step": 4, "unit": "px", "label": "Top spacing", "default": 28 },
     { "type": "range", "id": "padding_bottom", "min": 0, "max": 80, "step": 4, "unit": "px", "label": "Bottom spacing", "default": 16 }
   ],
-  "presets": [{ "name": "UK promo bar" }]
+  "presets": [{ "name": "Home promo bar" }]
 }
 {% endschema %}

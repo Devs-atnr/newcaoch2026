@@ -16,7 +16,35 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: center right;
+  object-position: var(--hb-pos, center right);
+}
+.coach-home-banner.is-screen .coach-home-banner__frame,
+.coach-home-banner.is-screen .coach-home-banner__viewport {
+  height: calc(100svh - var(--hb-offset, 180px));
+  min-height: 520px;
+}
+.coach-home-banner__viewport {
+  position: relative;
+  height: var(--hb-h, 560px);
+  overflow: hidden;
+}
+.coach-home-banner__track {
+  display: flex;
+  height: 100%;
+  transition: transform 0.45s ease;
+}
+.coach-home-banner__viewport .coach-home-banner__frame {
+  flex: 0 0 100%;
+  height: 100%;
+}
+.coach-home-banner__arrow {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font-size: 22px;
+  line-height: 1;
+  cursor: pointer;
 }
 .coach-home-banner__img--mob { display: none; }
 .coach-home-banner__copy {
@@ -41,7 +69,7 @@
   margin: 0 0 8px;
   font-family: var(--hb-heading, HelveticaLTPro-Roman, Helvetica, Arial, sans-serif);
   font-size: var(--hb-heading-size, 26px);
-  font-weight: 700;
+  font-weight: var(--hb-heading-weight, 700);
   line-height: 1.2;
   letter-spacing: 0;
   color: var(--hb-heading-color, #111);
@@ -73,7 +101,12 @@
   .coach-home-banner {
     padding: var(--hb-pt-m, 0) var(--hb-pr-m, 0) var(--hb-pb-m, 0) var(--hb-pl-m, 0);
   }
-  .coach-home-banner__frame { height: var(--hb-h-m, 620px); }
+  .coach-home-banner__frame,
+  .coach-home-banner__viewport { height: var(--hb-h-m, 620px); }
+  .coach-home-banner.is-screen .coach-home-banner__frame,
+  .coach-home-banner.is-screen .coach-home-banner__viewport {
+    height: calc(100svh - 120px);
+  }
   .coach-home-banner__img--desk { display: none; }
   .coach-home-banner__img--mob {
     display: block;

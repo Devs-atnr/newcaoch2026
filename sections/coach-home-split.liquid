@@ -1,38 +1,62 @@
-{{ 'uk-home.css' | asset_url | stylesheet_tag }}
+{{ 'coach-home-split.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign desk_src = ''
+  assign mob_src = ''
+  if section.settings.image != blank
+    assign desk_src = section.settings.image | image_url: width: 1600
+  elsif section.settings.image_url != blank
+    assign desk_src = section.settings.image_url
+  endif
+  if section.settings.mobile_image != blank
+    assign mob_src = section.settings.mobile_image | image_url: width: 1200
+  elsif section.settings.mobile_url != blank
+    assign mob_src = section.settings.mobile_url
+  endif
+  if mob_src == blank
+    assign mob_src = desk_src
+  endif
+  if desk_src == blank
+    assign desk_src = mob_src
+  endif
+  assign heading_font = 'GaramondMTProRegular, Times New Roman, Times, serif'
+  if section.settings.heading_font == 'helvetica'
+    assign heading_font = 'HelveticaLTPro-Roman, Helvetica, Arial, sans-serif'
+  endif
+-%}
 
 <section
-  class="uk-split is-image-{{ section.settings.image_side }}{% if section.settings.fixed_height %} is-fixed{% endif %}"
-  style="--uk-bg: {{ section.settings.background }}; --uk-color: {{ section.settings.text_color }}; --uk-frame: {{ section.settings.desktop_height }}px; --uk-frame-m: {{ section.settings.mobile_height }}px; --uk-fit: {{ section.settings.image_fit }}; --uk-pos: {{ section.settings.image_position }}; --uk-heading: {{ section.settings.heading_size }}px; --uk-heading-m: {{ section.settings.heading_size_mobile }}px; --uk-b: {{ section.settings.text_size }}px; --uk-b-m: {{ section.settings.text_size_mobile }}px; --uk-btn: {{ section.settings.button_size }}px;"
+  class="coach-home-split is-image-{{ section.settings.image_side }}"
+  style="--hs-bg: {{ section.settings.background }}; --hs-color: {{ section.settings.text_color }}; --hs-heading: {{ heading_font }}; --hs-h: {{ section.settings.heading_size }}px; --hs-h-m: {{ section.settings.heading_size_mobile }}px; --hs-b: {{ section.settings.text_size }}px; --hs-b-m: {{ section.settings.text_size_mobile }}px; --hs-btn: {{ section.settings.button_size }}px; --hs-fit: {{ section.settings.image_fit }}; --hs-pos: {{ section.settings.image_position }};"
 >
-  <div class="uk-split__media">
-    {%- render 'uk-media',
-      image: section.settings.image,
-      image_url: section.settings.image_url,
-      mobile_image: section.settings.mobile_image,
-      mobile_url: section.settings.mobile_url,
-      alt: section.settings.heading
-    -%}
+  <div class="coach-home-split__media">
+    {%- if desk_src != blank -%}
+      <picture>
+        {%- if mob_src != blank and mob_src != desk_src -%}
+          <source media="(max-width: 749px)" srcset="{{ mob_src | escape }}">
+        {%- endif -%}
+        <img src="{{ desk_src | escape }}" alt="{{ section.settings.heading | escape }}" loading="lazy" width="800" height="656">
+      </picture>
+    {%- endif -%}
   </div>
-  <div class="uk-split__copy">
+  <div class="coach-home-split__copy">
     {%- if section.settings.heading != blank -%}
-      <h2 class="uk-split__heading">{{ section.settings.heading | escape }}</h2>
+      <h2>{{ section.settings.heading | escape }}</h2>
     {%- endif -%}
     {%- if section.settings.text != blank -%}
-      <p class="uk-split__text">{{ section.settings.text | escape }}</p>
+      <p>{{ section.settings.text | escape }}</p>
     {%- endif -%}
     {%- if section.settings.button_text != blank -%}
-      <div class="uk-links">
-        <a href="{{ section.settings.button_link | default: '#' }}">{{ section.settings.button_text | escape }}</a>
-      </div>
+      <a href="{{ section.settings.button_link | default: '#' }}">{{ section.settings.button_text | escape }}</a>
     {%- endif -%}
   </div>
 </section>
 
 {% schema %}
 {
-  "name": "UK split story",
+  "name": "Home split story",
   "tag": "section",
-  "class": "uk-split-section",
+  "class": "coach-home-split-section",
   "settings": [
     { "type": "image_picker", "id": "image", "label": "Desktop image" },
     { "type": "text", "id": "image_url", "label": "Desktop image URL", "info": "Used when no desktop image is uploaded." },
@@ -42,9 +66,6 @@
       { "value": "left", "label": "Left" },
       { "value": "right", "label": "Right" }
     ] },
-    { "type": "checkbox", "id": "fixed_height", "label": "Use a fixed image height", "default": false },
-    { "type": "range", "id": "desktop_height", "min": 320, "max": 800, "step": 20, "unit": "px", "label": "Desktop height", "default": 520 },
-    { "type": "range", "id": "mobile_height", "min": 220, "max": 640, "step": 20, "unit": "px", "label": "Mobile height", "default": 320 },
     { "type": "select", "id": "image_fit", "label": "Image fit", "default": "cover", "options": [
       { "value": "cover", "label": "Cover" },
       { "value": "contain", "label": "Contain" }
@@ -55,6 +76,10 @@
       { "value": "bottom", "label": "Bottom" }
     ] },
     { "type": "text", "id": "heading", "label": "Heading", "default": "Make the moment even more beautiful." },
+    { "type": "select", "id": "heading_font", "label": "Heading font", "default": "garamond", "options": [
+      { "value": "garamond", "label": "Garamond" },
+      { "value": "helvetica", "label": "Helvetica" }
+    ] },
     { "type": "range", "id": "heading_size", "min": 20, "max": 56, "step": 1, "unit": "px", "label": "Desktop heading size", "default": 36 },
     { "type": "range", "id": "heading_size_mobile", "min": 18, "max": 36, "step": 1, "unit": "px", "label": "Mobile heading size", "default": 28 },
     { "type": "textarea", "id": "text", "label": "Description", "default": "Add a complimentary gift note to your order and purchase a bow-topped gift box." },
@@ -66,6 +91,6 @@
     { "type": "color", "id": "background", "label": "Background", "default": "#ffffff" },
     { "type": "color", "id": "text_color", "label": "Text color", "default": "#111111" }
   ],
-  "presets": [{ "name": "UK split story" }]
+  "presets": [{ "name": "Home split story" }]
 }
 {% endschema %}
