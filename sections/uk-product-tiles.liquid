@@ -1,0 +1,96 @@
+{{ 'uk-home.css' | asset_url | stylesheet_tag }}
+
+<section
+  class="uk-tiles"
+  style="--uk-bg: {{ section.settings.background }}; --uk-cols: {{ section.settings.columns_desktop }}; --uk-cols-m: {{ section.settings.columns_mobile }}; --uk-gap: {{ section.settings.gap }}px; --uk-pt: {{ section.settings.padding_top }}px; --uk-pb: {{ section.settings.padding_bottom }}px; --uk-px: {{ section.settings.padding_x }}px; --uk-b: {{ section.settings.label_size }}px; --uk-b-m: {{ section.settings.label_size_mobile }}px; --uk-fit: {{ section.settings.image_fit }}; --uk-pos: {{ section.settings.image_position }};"
+>
+  {%- if section.blocks.size > 0 -%}
+    <div class="uk-tiles__grid">
+      {%- for block in section.blocks -%}
+        <a class="uk-tiles__card" href="{{ block.settings.link | default: '#' }}" {{ block.shopify_attributes }}>
+          <div class="uk-tiles__media">
+            {%- render 'uk-media',
+              image: block.settings.image,
+              image_url: block.settings.image_url,
+              mobile_image: block.settings.mobile_image,
+              mobile_url: block.settings.mobile_url,
+              alt: block.settings.label
+            -%}
+          </div>
+          {%- if block.settings.label != blank -%}
+            <span class="uk-tiles__label">{{ block.settings.label | escape }}</span>
+          {%- endif -%}
+        </a>
+      {%- endfor -%}
+    </div>
+  {%- elsif section.settings.collection != blank -%}
+    <div class="uk-tiles__grid">
+      {%- for product in section.settings.collection.products limit: section.settings.product_limit -%}
+        <a class="uk-tiles__card" href="{{ product.url }}">
+          <div class="uk-tiles__media">
+            {%- if product.featured_image -%}
+              {{ product.featured_image | image_url: width: 900 | image_tag: alt: product.title, loading: 'lazy' }}
+            {%- endif -%}
+          </div>
+          {%- if section.settings.show_title -%}
+            <span class="uk-tiles__label">{{ product.title | escape }}</span>
+          {%- elsif section.settings.label != blank -%}
+            <span class="uk-tiles__label">{{ section.settings.label | escape }}</span>
+          {%- endif -%}
+          {%- if section.settings.show_price -%}
+            <span class="uk-tiles__label">{{ product.price | money }}</span>
+          {%- endif -%}
+        </a>
+      {%- endfor -%}
+    </div>
+  {%- endif -%}
+</section>
+
+{% schema %}
+{
+  "name": "UK product tiles",
+  "tag": "section",
+  "class": "uk-tiles-section",
+  "max_blocks": 8,
+  "settings": [
+    { "type": "collection", "id": "collection", "label": "Collection", "info": "Used when this section has no tiles. Tiles replace the collection." },
+    { "type": "range", "id": "product_limit", "min": 2, "max": 8, "step": 1, "label": "Products", "default": 4 },
+    { "type": "checkbox", "id": "show_title", "label": "Show product title", "default": false },
+    { "type": "checkbox", "id": "show_price", "label": "Show price", "default": false },
+    { "type": "text", "id": "label", "label": "Label when title is hidden", "default": "Shop Now" },
+    { "type": "range", "id": "columns_desktop", "min": 2, "max": 4, "step": 1, "label": "Desktop columns", "default": 4 },
+    { "type": "range", "id": "columns_mobile", "min": 1, "max": 2, "step": 1, "label": "Mobile columns", "default": 2 },
+    { "type": "select", "id": "image_fit", "label": "Image fit", "default": "cover", "options": [
+      { "value": "cover", "label": "Cover" },
+      { "value": "contain", "label": "Contain" }
+    ] },
+    { "type": "select", "id": "image_position", "label": "Image position", "default": "center", "options": [
+      { "value": "center", "label": "Center" },
+      { "value": "top", "label": "Top" },
+      { "value": "bottom", "label": "Bottom" }
+    ] },
+    { "type": "range", "id": "label_size", "min": 12, "max": 20, "step": 1, "unit": "px", "label": "Desktop label size", "default": 14 },
+    { "type": "range", "id": "label_size_mobile", "min": 12, "max": 18, "step": 1, "unit": "px", "label": "Mobile label size", "default": 13 },
+    { "type": "color", "id": "background", "label": "Background", "default": "#ffffff" },
+    { "type": "range", "id": "gap", "min": 0, "max": 24, "step": 2, "unit": "px", "label": "Gap", "default": 4 },
+    { "type": "range", "id": "padding_top", "min": 0, "max": 80, "step": 4, "unit": "px", "label": "Top spacing", "default": 0 },
+    { "type": "range", "id": "padding_bottom", "min": 0, "max": 80, "step": 4, "unit": "px", "label": "Bottom spacing", "default": 0 },
+    { "type": "range", "id": "padding_x", "min": 0, "max": 40, "step": 4, "unit": "px", "label": "Side spacing", "default": 0 }
+  ],
+  "blocks": [
+    {
+      "type": "tile",
+      "name": "Tile",
+      "settings": [
+        { "type": "image_picker", "id": "image", "label": "Image" },
+        { "type": "text", "id": "image_url", "label": "Image URL", "info": "Used when no image is uploaded." },
+        { "type": "image_picker", "id": "mobile_image", "label": "Mobile image" },
+        { "type": "text", "id": "mobile_url", "label": "Mobile image URL" },
+        { "type": "text", "id": "label", "label": "Label", "default": "Shop Now" },
+        { "type": "url", "id": "link", "label": "Link" }
+      ]
+    }
+  ],
+  "presets": [{ "name": "UK product tiles" }]
+}
+{% endschema %}

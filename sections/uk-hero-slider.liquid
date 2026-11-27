@@ -1,0 +1,124 @@
+{{ 'uk-home.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'uk-home.js' | asset_url }}" defer="defer"></script>
+
+<section
+  class="uk-hero{% if section.settings.full_screen %} is-screen{% endif %}"
+  data-uk-hero
+  data-autoplay="{% if section.settings.autoplay %}{{ section.settings.autoplay_speed | times: 1000 }}{% else %}0{% endif %}"
+  style="--uk-frame: {{ section.settings.desktop_height }}px; --uk-frame-m: {{ section.settings.mobile_height }}px; --uk-offset: {{ section.settings.screen_offset }}px; --uk-offset-m: {{ section.settings.screen_offset_mobile }}px; --uk-fit: {{ section.settings.image_fit }}; --uk-pos: {{ section.settings.image_position }}; --uk-color: {{ section.settings.text_color }}; --uk-heading: {{ section.settings.heading_size }}px; --uk-heading-m: {{ section.settings.heading_size_mobile }}px; --uk-b: {{ section.settings.text_size }}px; --uk-b-m: {{ section.settings.text_size_mobile }}px; --uk-btn: {{ section.settings.button_size }}px;"
+>
+  <div class="uk-hero__viewport">
+    <div class="uk-hero__track" data-uk-track>
+      {%- for block in section.blocks -%}
+        <article class="uk-hero__slide" data-uk-slide {{ block.shopify_attributes }}>
+          {%- render 'uk-media',
+            image: block.settings.image,
+            image_url: block.settings.image_url,
+            mobile_image: block.settings.mobile_image,
+            mobile_url: block.settings.mobile_url,
+            alt: block.settings.heading,
+            loading: 'eager',
+            class: 'uk-media'
+          -%}
+          <div class="uk-hero__copy is-{{ section.settings.text_position }}">
+            {%- if block.settings.heading != blank -%}
+              <h2 class="uk-hero__heading">{{ block.settings.heading | escape }}</h2>
+            {%- endif -%}
+            {%- if block.settings.text != blank -%}
+              <p class="uk-hero__text">{{ block.settings.text | escape }}</p>
+            {%- endif -%}
+            <div class="uk-hero__nav">
+              {%- if section.blocks.size > 1 -%}
+                <button type="button" class="uk-hero__arrow" data-uk-prev aria-label="Previous slide">
+                  <svg viewBox="0 0 16 16"><path d="M10 3L5 8l5 5"/></svg>
+                </button>
+              {%- endif -%}
+              {%- if block.settings.button_1_text != blank or block.settings.button_2_text != blank -%}
+                <div class="uk-links">
+                  {%- if block.settings.button_1_text != blank -%}
+                    <a href="{{ block.settings.button_1_link | default: '#' }}">{{ block.settings.button_1_text | escape }}</a>
+                  {%- endif -%}
+                  {%- if block.settings.button_2_text != blank -%}
+                    <a href="{{ block.settings.button_2_link | default: '#' }}">{{ block.settings.button_2_text | escape }}</a>
+                  {%- endif -%}
+                </div>
+              {%- endif -%}
+              {%- if section.blocks.size > 1 -%}
+                <button type="button" class="uk-hero__arrow" data-uk-next aria-label="Next slide">
+                  <svg viewBox="0 0 16 16"><path d="M6 3l5 5-5 5"/></svg>
+                </button>
+              {%- endif -%}
+            </div>
+          </div>
+        </article>
+      {%- endfor -%}
+    </div>
+  </div>
+  {%- if section.blocks.size > 1 -%}
+    <div class="uk-hero__dots">
+      {%- for block in section.blocks -%}
+        <button type="button" class="uk-hero__dot{% if forloop.first %} is-active{% endif %}" data-uk-dot="{{ forloop.index0 }}" aria-label="Slide {{ forloop.index }}"></button>
+      {%- endfor -%}
+    </div>
+  {%- endif -%}
+</section>
+
+{% schema %}
+{
+  "name": "UK hero slider",
+  "tag": "section",
+  "class": "uk-hero-section",
+  "max_blocks": 8,
+  "settings": [
+    { "type": "checkbox", "id": "full_screen", "label": "Fill the screen", "default": true },
+    { "type": "range", "id": "screen_offset", "min": 80, "max": 240, "step": 4, "unit": "px", "label": "Desktop screen offset", "default": 180 },
+    { "type": "range", "id": "screen_offset_mobile", "min": 60, "max": 200, "step": 4, "unit": "px", "label": "Mobile screen offset", "default": 120 },
+    { "type": "range", "id": "desktop_height", "min": 420, "max": 900, "step": 20, "unit": "px", "label": "Desktop height", "info": "Used when Fill the screen is off.", "default": 760 },
+    { "type": "range", "id": "mobile_height", "min": 420, "max": 800, "step": 20, "unit": "px", "label": "Mobile height", "default": 620 },
+    { "type": "select", "id": "image_fit", "label": "Image fit", "default": "cover", "options": [
+      { "value": "cover", "label": "Cover" },
+      { "value": "contain", "label": "Contain" }
+    ] },
+    { "type": "select", "id": "image_position", "label": "Image position", "default": "center", "options": [
+      { "value": "center", "label": "Center" },
+      { "value": "top", "label": "Top" },
+      { "value": "bottom", "label": "Bottom" },
+      { "value": "left", "label": "Left" },
+      { "value": "right", "label": "Right" }
+    ] },
+    { "type": "select", "id": "text_position", "label": "Text position", "default": "bottom-left", "options": [
+      { "value": "bottom-left", "label": "Bottom left" },
+      { "value": "bottom-center", "label": "Bottom center" },
+      { "value": "center", "label": "Center" },
+      { "value": "top-left", "label": "Top left" }
+    ] },
+    { "type": "range", "id": "heading_size", "min": 20, "max": 64, "step": 1, "unit": "px", "label": "Desktop heading size", "default": 36 },
+    { "type": "range", "id": "heading_size_mobile", "min": 18, "max": 40, "step": 1, "unit": "px", "label": "Mobile heading size", "default": 28 },
+    { "type": "range", "id": "text_size", "min": 12, "max": 24, "step": 1, "unit": "px", "label": "Desktop text size", "default": 16 },
+    { "type": "range", "id": "text_size_mobile", "min": 12, "max": 20, "step": 1, "unit": "px", "label": "Mobile text size", "default": 14 },
+    { "type": "range", "id": "button_size", "min": 12, "max": 20, "step": 1, "unit": "px", "label": "Button size", "default": 14 },
+    { "type": "color", "id": "text_color", "label": "Text color", "default": "#ffffff" },
+    { "type": "checkbox", "id": "autoplay", "label": "Autoplay", "default": false },
+    { "type": "range", "id": "autoplay_speed", "min": 3, "max": 10, "step": 1, "unit": "s", "label": "Autoplay speed", "default": 6 }
+  ],
+  "blocks": [
+    {
+      "type": "slide",
+      "name": "Slide",
+      "settings": [
+        { "type": "image_picker", "id": "image", "label": "Desktop image" },
+        { "type": "text", "id": "image_url", "label": "Desktop image URL", "info": "Used when no desktop image is uploaded." },
+        { "type": "image_picker", "id": "mobile_image", "label": "Mobile image" },
+        { "type": "text", "id": "mobile_url", "label": "Mobile image URL", "info": "Used when no mobile image is uploaded." },
+        { "type": "text", "id": "heading", "label": "Heading", "default": "You deserve the best." },
+        { "type": "textarea", "id": "text", "label": "Description" },
+        { "type": "text", "id": "button_1_text", "label": "Button text", "default": "Shop All" },
+        { "type": "url", "id": "button_1_link", "label": "Button link" },
+        { "type": "text", "id": "button_2_text", "label": "Second button text", "default": "Shop Favourites" },
+        { "type": "url", "id": "button_2_link", "label": "Second button link" }
+      ]
+    }
+  ],
+  "presets": [{ "name": "UK hero slider" }]
+}
+{% endschema %}

@@ -1,0 +1,39 @@
+{%- liquid
+  assign uk_desk = ''
+  if image != blank
+    assign uk_desk = image | image_url: width: 2400
+  elsif image_url != blank
+    assign uk_desk = image_url
+  endif
+
+  assign uk_mob = ''
+  if mobile_image != blank
+    assign uk_mob = mobile_image | image_url: width: 1400
+  elsif mobile_url != blank
+    assign uk_mob = mobile_url
+  endif
+
+  if uk_mob == blank
+    assign uk_mob = uk_desk
+  endif
+  if uk_desk == blank
+    assign uk_desk = uk_mob
+  endif
+
+  assign uk_loading = loading | default: 'lazy'
+  assign uk_class = class | default: 'uk-media'
+-%}
+{%- if uk_desk != blank -%}
+  <picture class="{{ uk_class }}">
+    {%- if uk_mob != blank and uk_mob != uk_desk -%}
+      <source media="(max-width: 749px)" srcset="{{ uk_mob | escape }}">
+    {%- endif -%}
+    <img
+      src="{{ uk_desk | escape }}"
+      alt="{{ alt | escape }}"
+      loading="{{ uk_loading }}"
+      width="1600"
+      height="900"
+    >
+  </picture>
+{%- endif -%}
