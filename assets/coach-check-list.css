@@ -76,11 +76,15 @@
   margin-bottom: var(--cl-label-space, 18px);
   font-size: var(--cl-label-size, 16px);
   font-weight: var(--cl-label-weight, 700);
+  letter-spacing: var(--cl-label-track, 0);
 }
 .coach-check-list__text {
   margin-bottom: calc(var(--cl-label-space, 18px) + var(--cl-label-size, 16px) + 4px);
+  font-family: var(--cl-text-font, HelveticaLTPro-Roman, Helvetica, Arial, sans-serif);
   font-size: var(--cl-text-size, 13px);
-  font-weight: 400;
+  font-weight: var(--cl-text-weight, 400);
+  letter-spacing: var(--cl-text-track, 0);
+  color: var(--cl-text-color, #111111);
 }
 .coach-check-list.is-outside .coach-check-list__card {
   display: flex;

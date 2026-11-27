@@ -2,8 +2,6 @@
   display: grid;
   grid-template-columns: 1fr;
   background: var(--hs-bg, #fff);
-  color: var(--hs-color, #111);
-  font-family: HelveticaLTPro-Roman, Helvetica, Arial, sans-serif;
 }
 .coach-home-split__media {
   background: #f4f4f4;
@@ -28,19 +26,28 @@
   max-width: 420px;
   font-family: var(--hs-heading, GaramondMTProRegular, "Times New Roman", Times, serif);
   font-size: var(--hs-h-m, 28px);
-  font-weight: 400;
+  font-weight: var(--hs-hw, 400);
+  letter-spacing: var(--hs-hsp, 0);
   line-height: 1.2;
+  color: var(--hs-hc, #111);
 }
 .coach-home-split p {
   margin: 14px 0 0;
   max-width: 380px;
+  font-family: var(--hs-text, HelveticaLTPro-Roman, Helvetica, Arial, sans-serif);
   font-size: var(--hs-b-m, 14px);
+  font-weight: var(--hs-tw, 400);
+  letter-spacing: var(--hs-tsp, 0);
   line-height: 1.5;
+  color: var(--hs-tc, #111);
 }
 .coach-home-split a {
   margin-top: 18px;
-  color: inherit;
-  font-size: var(--hs-btn, 14px);
+  color: var(--hs-bc, #111);
+  font-family: var(--hs-btn-font, HelveticaLTPro-Roman, Helvetica, Arial, sans-serif);
+  font-size: var(--hs-btn-m, 14px);
+  font-weight: var(--hs-bw, 400);
+  letter-spacing: var(--hs-bsp, 0);
   text-decoration: underline;
   text-underline-offset: 3px;
 }
@@ -49,5 +56,6 @@
   .coach-home-split { grid-template-columns: 1fr 1fr; }
   .coach-home-split h2 { font-size: var(--hs-h, 36px); }
   .coach-home-split p { font-size: var(--hs-b, 16px); }
+  .coach-home-split a { font-size: var(--hs-btn, 14px); }
   .coach-home-split__copy { padding: 48px 40px; }
 }

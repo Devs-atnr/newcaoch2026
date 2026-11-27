@@ -71,7 +71,7 @@
   font-size: var(--hb-heading-size, 26px);
   font-weight: var(--hb-heading-weight, 700);
   line-height: 1.2;
-  letter-spacing: 0;
+  letter-spacing: var(--hb-heading-space, 0);
   color: var(--hb-heading-color, #111);
 }
 .coach-home-banner__copy p {
@@ -79,7 +79,8 @@
   max-width: 28em;
   font-family: var(--hb-text, HelveticaLTPro-Roman, Helvetica, Arial, sans-serif);
   font-size: var(--hb-text-size, 14px);
-  font-weight: 400;
+  font-weight: var(--hb-text-weight, 400);
+  letter-spacing: var(--hb-text-space, 0);
   line-height: 1.45;
   color: var(--hb-text-color, #111);
 }
@@ -90,10 +91,13 @@
   margin-top: 16px;
 }
 .coach-home-banner__links a {
-  font-family: HelveticaLTPro-Roman, Helvetica, Arial, sans-serif;
-  font-size: var(--hb-btn-size, 14px);
-  font-weight: 400;
+  font-family: var(--hb-btn-font, HelveticaLTPro-Roman, Helvetica, Arial, sans-serif);
+  font-size: var(--hb-btn-size-m, 14px);
+  font-weight: var(--hb-btn-weight, 400);
+  letter-spacing: var(--hb-btn-space, 0);
   line-height: 1.3;
+}
+.coach-home-banner__links a {
   text-decoration: underline;
   text-underline-offset: 3px;
 }
@@ -127,4 +131,7 @@
   .coach-home-banner__copy.is-mob-right .coach-home-banner__links { justify-content: flex-end; }
   .coach-home-banner__copy h2 { font-size: var(--hb-heading-size-m, 22px); }
   .coach-home-banner__copy p { font-size: var(--hb-text-size-m, 14px); }
+}
+@media screen and (min-width: 750px) {
+  .coach-home-banner__links a { font-size: var(--hb-btn-size, 14px); }
 }

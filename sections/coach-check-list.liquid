@@ -9,11 +9,15 @@
   if section.settings.label_font == 'garamond'
     assign label_font = 'GaramondMTProRegular, Times New Roman, Times, serif'
   endif
+  assign text_font = 'HelveticaLTPro-Roman, Helvetica, Arial, sans-serif'
+  if section.settings.text_font == 'garamond'
+    assign text_font = 'GaramondMTProRegular, Times New Roman, Times, serif'
+  endif
 -%}
 
 <section
   class="coach-check-list{% if section.settings.content_position == 'outside' %} is-outside{% endif %}"
-  style="--cl-bg: {{ section.settings.background | default: '#ffffff' }}; --cl-img: {{ section.settings.image_background | default: '#e8d4be' }}; --cl-cols: {{ section.settings.columns_desktop | default: 4 }}; --cl-cols-m: {{ section.settings.columns_mobile | default: 2 }}; --cl-gap: {{ section.settings.gap | default: 4 }}px; --cl-gap-m: {{ section.settings.gap_mobile | default: 4 }}px; --cl-h: {{ section.settings.image_height | default: 140 }}; --cl-h-m: {{ section.settings.image_height_mobile | default: 140 }}; --cl-pt: {{ section.settings.padding_top | default: 28 }}px; --cl-pr: {{ section.settings.padding_right | default: 0 }}px; --cl-pb: {{ section.settings.padding_bottom | default: 36 }}px; --cl-pl: {{ section.settings.padding_left | default: 0 }}px; --cl-pt-m: {{ section.settings.padding_top_mobile | default: 24 }}px; --cl-pr-m: {{ section.settings.padding_right_mobile | default: 12 }}px; --cl-pb-m: {{ section.settings.padding_bottom_mobile | default: 28 }}px; --cl-pl-m: {{ section.settings.padding_left_mobile | default: 12 }}px; --cl-heading-font: {{ heading_font }}; --cl-heading-size: {{ section.settings.heading_size | default: 11 }}px; --cl-heading-size-m: {{ section.settings.heading_size_mobile | default: 11 }}px; --cl-heading-color: {{ section.settings.heading_color | default: '#111111' }}; --cl-heading-weight: {{ section.settings.heading_weight | default: '400' }}; --cl-heading-space: {{ section.settings.heading_space | default: 22 }}px; --cl-track: {{ section.settings.heading_spacing | default: 2 }}px; --cl-label-font: {{ label_font }}; --cl-label-size: {{ section.settings.label_size | default: 16 }}px; --cl-label-size-m: {{ section.settings.label_size_mobile | default: 16 }}px; --cl-text-size: {{ section.settings.text_size | default: 13 }}px; --cl-text-size-m: {{ section.settings.text_size_mobile | default: 13 }}px; --cl-label-color: {{ section.settings.label_color | default: '#111111' }}; --cl-label-weight: {{ section.settings.label_weight | default: '700' }}; --cl-label-space: {{ section.settings.label_space | default: 18 }}px; --cl-label-space-m: {{ section.settings.label_space_mobile | default: 18 }}px; --cl-title-pad: {{ section.settings.title_padding | default: 8 }}px; --cl-align: {{ section.settings.content_align | default: 'center' }}; --cl-fit: {{ section.settings.image_fit | default: 'cover' }};"
+  style="--cl-bg: {{ section.settings.background | default: '#ffffff' }}; --cl-img: {{ section.settings.image_background | default: '#e8d4be' }}; --cl-cols: {{ section.settings.columns_desktop | default: 4 }}; --cl-cols-m: {{ section.settings.columns_mobile | default: 2 }}; --cl-gap: {{ section.settings.gap | default: 4 }}px; --cl-gap-m: {{ section.settings.gap_mobile | default: 4 }}px; --cl-h: {{ section.settings.image_height | default: 140 }}; --cl-h-m: {{ section.settings.image_height_mobile | default: 140 }}; --cl-pt: {{ section.settings.padding_top | default: 28 }}px; --cl-pr: {{ section.settings.padding_right | default: 0 }}px; --cl-pb: {{ section.settings.padding_bottom | default: 36 }}px; --cl-pl: {{ section.settings.padding_left | default: 0 }}px; --cl-pt-m: {{ section.settings.padding_top_mobile | default: 24 }}px; --cl-pr-m: {{ section.settings.padding_right_mobile | default: 12 }}px; --cl-pb-m: {{ section.settings.padding_bottom_mobile | default: 28 }}px; --cl-pl-m: {{ section.settings.padding_left_mobile | default: 12 }}px; --cl-heading-font: {{ heading_font }}; --cl-heading-size: {{ section.settings.heading_size | default: 11 }}px; --cl-heading-size-m: {{ section.settings.heading_size_mobile | default: 11 }}px; --cl-heading-color: {{ section.settings.heading_color | default: '#111111' }}; --cl-heading-weight: {{ section.settings.heading_weight | default: '400' }}; --cl-heading-space: {{ section.settings.heading_space | default: 22 }}px; --cl-track: {{ section.settings.heading_spacing | default: 2 }}px; --cl-label-font: {{ label_font }}; --cl-label-size: {{ section.settings.label_size | default: 16 }}px; --cl-label-size-m: {{ section.settings.label_size_mobile | default: 16 }}px; --cl-text-size: {{ section.settings.text_size | default: 13 }}px; --cl-text-size-m: {{ section.settings.text_size_mobile | default: 13 }}px; --cl-label-color: {{ section.settings.label_color | default: '#111111' }}; --cl-label-weight: {{ section.settings.label_weight | default: '700' }}; --cl-label-track: {{ section.settings.label_spacing | default: 0 }}px; --cl-text-font: {{ text_font }}; --cl-text-weight: {{ section.settings.text_weight | default: '400' }}; --cl-text-color: {{ section.settings.text_color | default: '#111111' }}; --cl-text-track: {{ section.settings.text_spacing | default: 0 }}px; --cl-label-space: {{ section.settings.label_space | default: 18 }}px; --cl-label-space-m: {{ section.settings.label_space_mobile | default: 18 }}px; --cl-title-pad: {{ section.settings.title_padding | default: 8 }}px; --cl-align: {{ section.settings.content_align | default: 'center' }}; --cl-fit: {{ section.settings.image_fit | default: 'cover' }};"
 >
   {%- if section.settings.heading != blank -%}
     <h2 class="coach-check-list__heading{% if section.settings.show_heading_desktop == false %} is-desk-hide{% endif %}{% if section.settings.show_heading_mobile == false %} is-mob-hide{% endif %}">{{ section.settings.heading | escape }}</h2>
@@ -130,12 +134,24 @@
       { "value": "400", "label": "Regular" },
       { "value": "700", "label": "Bold" }
     ] },
+    { "type": "range", "id": "label_spacing", "min": 0, "max": 8, "step": 1, "unit": "px", "label": "Letter spacing", "default": 0 },
     { "type": "range", "id": "label_space", "min": 0, "max": 80, "step": 2, "unit": "px", "label": "Desktop space", "default": 18 },
     { "type": "range", "id": "label_space_mobile", "min": 0, "max": 80, "step": 2, "unit": "px", "label": "Mobile space", "default": 18 },
     { "type": "range", "id": "title_padding", "min": 0, "max": 40, "step": 2, "unit": "px", "label": "Side space", "default": 8 },
-    { "type": "range", "id": "text_size", "min": 0, "max": 32, "step": 1, "unit": "px", "label": "Text desktop size", "default": 13 },
-    { "type": "range", "id": "text_size_mobile", "min": 0, "max": 32, "step": 1, "unit": "px", "label": "Text mobile size", "default": 13 },
     { "type": "color", "id": "label_color", "label": "Color", "default": "#111111" },
+    { "type": "header", "content": "Card text" },
+    { "type": "select", "id": "text_font", "label": "Font", "default": "helvetica", "options": [
+      { "value": "helvetica", "label": "Helvetica" },
+      { "value": "garamond", "label": "Garamond" }
+    ] },
+    { "type": "range", "id": "text_size", "min": 0, "max": 32, "step": 1, "unit": "px", "label": "Desktop size", "default": 13 },
+    { "type": "range", "id": "text_size_mobile", "min": 0, "max": 32, "step": 1, "unit": "px", "label": "Mobile size", "default": 13 },
+    { "type": "select", "id": "text_weight", "label": "Weight", "default": "400", "options": [
+      { "value": "400", "label": "Regular" },
+      { "value": "700", "label": "Bold" }
+    ] },
+    { "type": "range", "id": "text_spacing", "min": 0, "max": 8, "step": 1, "unit": "px", "label": "Letter spacing", "default": 0 },
+    { "type": "color", "id": "text_color", "label": "Color", "default": "#111111" },
     { "type": "header", "content": "Desktop padding" },
     { "type": "range", "id": "padding_top", "min": 0, "max": 120, "step": 4, "unit": "px", "label": "Top", "default": 28 },
     { "type": "range", "id": "padding_bottom", "min": 0, "max": 120, "step": 4, "unit": "px", "label": "Bottom", "default": 36 },

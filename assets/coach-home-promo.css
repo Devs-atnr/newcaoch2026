@@ -1,22 +1,26 @@
 .coach-home-promo {
   box-sizing: border-box;
   background: var(--hp-bg, #000);
-  color: var(--hp-color, #fff);
   padding: var(--hp-pt, 28px) 20px var(--hp-pb, 16px);
   text-align: center;
-  font-family: HelveticaLTPro-Roman, Helvetica, Arial, sans-serif;
 }
 .coach-home-promo h2 {
   margin: 0;
-  font-family: GaramondMTProRegular, "Times New Roman", Times, serif;
+  font-family: var(--hp-heading, GaramondMTProRegular, "Times New Roman", Times, serif);
   font-size: var(--hp-h-m, 26px);
-  font-weight: 400;
+  font-weight: var(--hp-hw, 400);
+  letter-spacing: var(--hp-hsp, 0);
   line-height: 1.2;
+  color: var(--hp-hc, #fff);
 }
 .coach-home-promo p {
   margin: 8px 0 0;
+  font-family: var(--hp-text, HelveticaLTPro-Roman, Helvetica, Arial, sans-serif);
   font-size: var(--hp-b-m, 14px);
+  font-weight: var(--hp-tw, 400);
+  letter-spacing: var(--hp-tsp, 0);
   line-height: 1.4;
+  color: var(--hp-tc, #fff);
 }
 .coach-home-promo__links {
   display: flex;
@@ -25,20 +29,37 @@
   gap: 8px 22px;
   margin-top: 14px;
 }
-.coach-home-promo a {
-  color: inherit;
-  font-size: var(--hp-btn, 14px);
+.coach-home-promo__links a {
+  color: var(--hp-bc, #fff);
+  font-family: var(--hp-btn-font, HelveticaLTPro-Roman, Helvetica, Arial, sans-serif);
+  font-size: var(--hp-btn-m, 14px);
+  font-weight: var(--hp-bw, 400);
+  letter-spacing: var(--hp-bsp, 0);
   text-decoration: underline;
   text-underline-offset: 3px;
 }
 .coach-home-promo__note {
   margin-top: 16px;
-  font-size: 10px;
-  letter-spacing: 0.08em;
+  font-family: var(--hp-note-font, HelveticaLTPro-Roman, Helvetica, Arial, sans-serif);
+  font-size: var(--hp-note-m, 10px);
+  font-weight: var(--hp-nw, 400);
+  letter-spacing: var(--hp-nsp, 1px);
   line-height: 1.5;
-  text-transform: uppercase;
+  text-transform: var(--hp-nt, uppercase);
+  color: var(--hp-nc, #fff);
+}
+.coach-home-promo__note a {
+  color: inherit;
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: inherit;
+  letter-spacing: inherit;
+  text-decoration: underline;
+  text-underline-offset: 2px;
 }
 @media screen and (min-width: 750px) {
   .coach-home-promo h2 { font-size: var(--hp-h, 32px); }
   .coach-home-promo p { font-size: var(--hp-b, 16px); }
+  .coach-home-promo__links a { font-size: var(--hp-btn, 14px); }
+  .coach-home-promo__note { font-size: var(--hp-note, 10px); }
 }
