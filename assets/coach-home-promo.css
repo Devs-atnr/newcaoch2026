@@ -7,20 +7,23 @@
 .coach-home-promo h2 {
   margin: 0;
   font-family: var(--hp-heading, GaramondMTProRegular, "Times New Roman", Times, serif);
-  font-size: var(--hp-h-m, 26px);
+  font-size: var(--hp-h-m, 20px);
   font-weight: var(--hp-hw, 400);
-  letter-spacing: var(--hp-hsp, 0);
+  letter-spacing: var(--hp-hsp-m, 0.4px);
   line-height: 1.2;
   color: var(--hp-hc, #fff);
 }
 .coach-home-promo p {
   margin: 8px 0 0;
   font-family: var(--hp-text, HelveticaLTPro-Roman, Helvetica, Arial, sans-serif);
-  font-size: var(--hp-b-m, 14px);
+  font-size: var(--hp-b-m, 16px);
   font-weight: var(--hp-tw, 400);
-  letter-spacing: var(--hp-tsp, 0);
-  line-height: 1.4;
+  letter-spacing: var(--hp-tsp-m, 0.4px);
+  line-height: 1.2;
   color: var(--hp-tc, #fff);
+}
+.coach-home-promo p strong {
+  font-weight: 700;
 }
 .coach-home-promo__links {
   display: flex;
@@ -58,8 +61,16 @@
   text-underline-offset: 2px;
 }
 @media screen and (min-width: 750px) {
-  .coach-home-promo h2 { font-size: var(--hp-h, 32px); }
-  .coach-home-promo p { font-size: var(--hp-b, 16px); }
+  .coach-home-promo h2 {
+    font-size: var(--hp-h, 32px);
+    letter-spacing: var(--hp-hsp, 0.2px);
+    line-height: 1.15;
+  }
+  .coach-home-promo p {
+    font-size: var(--hp-b, 22px);
+    letter-spacing: var(--hp-tsp, 0.2px);
+    line-height: 1.15;
+  }
   .coach-home-promo__links a { font-size: var(--hp-btn, 14px); }
   .coach-home-promo__note { font-size: var(--hp-note, 10px); }
 }

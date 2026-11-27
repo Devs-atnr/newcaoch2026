@@ -1,33 +1,53 @@
 {{ 'coach-home-promo.css' | asset_url | stylesheet_tag }}
+{% render 'coach-home-fonts' %}
 
 {%- liquid
   assign heading_font = 'HelveticaLTPro-Roman, Helvetica, Arial, sans-serif'
   if section.settings.heading_font == 'garamond'
     assign heading_font = 'GaramondMTProRegular, Times New Roman, Times, serif'
+  elsif section.settings.heading_font == 'extended'
+    assign heading_font = 'HelveticaNeue63ExtendedMedium, Helvetica, Arial, sans-serif'
+  elsif section.settings.heading_font == 'extended_53'
+    assign heading_font = 'HelveticaNeue53ExtendedNormal, Helvetica, Arial, sans-serif'
   endif
   assign text_font = 'HelveticaLTPro-Roman, Helvetica, Arial, sans-serif'
   if section.settings.text_font == 'garamond'
     assign text_font = 'GaramondMTProRegular, Times New Roman, Times, serif'
+  elsif section.settings.text_font == 'extended'
+    assign text_font = 'HelveticaNeue63ExtendedMedium, Helvetica, Arial, sans-serif'
+  elsif section.settings.text_font == 'extended_53'
+    assign text_font = 'HelveticaNeue53ExtendedNormal, Helvetica, Arial, sans-serif'
   endif
   assign button_font = 'HelveticaLTPro-Roman, Helvetica, Arial, sans-serif'
   if section.settings.button_font == 'garamond'
     assign button_font = 'GaramondMTProRegular, Times New Roman, Times, serif'
+  elsif section.settings.button_font == 'extended'
+    assign button_font = 'HelveticaNeue63ExtendedMedium, Helvetica, Arial, sans-serif'
+  elsif section.settings.button_font == 'extended_53'
+    assign button_font = 'HelveticaNeue53ExtendedNormal, Helvetica, Arial, sans-serif'
   endif
   assign note_font = 'HelveticaLTPro-Roman, Helvetica, Arial, sans-serif'
   if section.settings.note_font == 'garamond'
     assign note_font = 'GaramondMTProRegular, Times New Roman, Times, serif'
+  elsif section.settings.note_font == 'extended'
+    assign note_font = 'HelveticaNeue63ExtendedMedium, Helvetica, Arial, sans-serif'
+  elsif section.settings.note_font == 'extended_53'
+    assign note_font = 'HelveticaNeue53ExtendedNormal, Helvetica, Arial, sans-serif'
   endif
 -%}
 
 <section
   class="coach-home-promo"
-  style="--hp-bg: {{ section.settings.background }}; --hp-heading: {{ heading_font }}; --hp-h: {{ section.settings.heading_size }}px; --hp-h-m: {{ section.settings.heading_size_mobile }}px; --hp-hw: {{ section.settings.heading_weight }}; --hp-hc: {{ section.settings.heading_color }}; --hp-hsp: {{ section.settings.heading_spacing }}px; --hp-text: {{ text_font }}; --hp-b: {{ section.settings.text_size }}px; --hp-b-m: {{ section.settings.text_size_mobile }}px; --hp-tw: {{ section.settings.text_weight }}; --hp-tc: {{ section.settings.text_color }}; --hp-tsp: {{ section.settings.text_spacing }}px; --hp-btn-font: {{ button_font }}; --hp-btn: {{ section.settings.button_size }}px; --hp-btn-m: {{ section.settings.button_size_mobile }}px; --hp-bw: {{ section.settings.button_weight }}; --hp-bc: {{ section.settings.button_color }}; --hp-bsp: {{ section.settings.button_spacing }}px; --hp-note-font: {{ note_font }}; --hp-note: {{ section.settings.note_size }}px; --hp-note-m: {{ section.settings.note_size_mobile }}px; --hp-nw: {{ section.settings.note_weight }}; --hp-nc: {{ section.settings.note_color }}; --hp-nsp: {{ section.settings.note_spacing }}px; --hp-nt: {{ section.settings.note_transform }}; --hp-pt: {{ section.settings.padding_top }}px; --hp-pb: {{ section.settings.padding_bottom }}px;"
+  style="--hp-bg: {{ section.settings.background }}; --hp-heading: {{ heading_font }}; --hp-h: {{ section.settings.heading_size }}px; --hp-h-m: {{ section.settings.heading_size_mobile }}px; --hp-hw: {{ section.settings.heading_weight }}; --hp-hc: {{ section.settings.heading_color }}; --hp-hsp: {{ section.settings.heading_spacing }}px; --hp-hsp-m: {{ section.settings.heading_spacing_mobile }}px; --hp-text: {{ text_font }}; --hp-b: {{ section.settings.text_size }}px; --hp-b-m: {{ section.settings.text_size_mobile }}px; --hp-tw: {{ section.settings.text_weight }}; --hp-tc: {{ section.settings.text_color }}; --hp-tsp: {{ section.settings.text_spacing }}px; --hp-tsp-m: {{ section.settings.text_spacing_mobile }}px; --hp-btn-font: {{ button_font }}; --hp-btn: {{ section.settings.button_size }}px; --hp-btn-m: {{ section.settings.button_size_mobile }}px; --hp-bw: {{ section.settings.button_weight }}; --hp-bc: {{ section.settings.button_color }}; --hp-bsp: {{ section.settings.button_spacing }}px; --hp-note-font: {{ note_font }}; --hp-note: {{ section.settings.note_size }}px; --hp-note-m: {{ section.settings.note_size_mobile }}px; --hp-nw: {{ section.settings.note_weight }}; --hp-nc: {{ section.settings.note_color }}; --hp-nsp: {{ section.settings.note_spacing }}px; --hp-nt: {{ section.settings.note_transform }}; --hp-pt: {{ section.settings.padding_top }}px; --hp-pb: {{ section.settings.padding_bottom }}px;"
 >
   {%- if section.settings.heading != blank -%}
     <h2>{{ section.settings.heading | escape }}</h2>
   {%- endif -%}
-  {%- if section.settings.text != blank -%}
-    <p>{{ section.settings.text | escape }}</p>
+  {%- if section.settings.text_lead != blank or section.settings.text != blank -%}
+    <p>
+      {%- if section.settings.text_lead != blank -%}<strong>{{ section.settings.text_lead | escape }}</strong>{%- endif -%}
+      {%- if section.settings.text != blank -%}{{ section.settings.text | escape }}{%- endif -%}
+    </p>
   {%- endif -%}
   {%- if section.settings.button_1_text != blank or section.settings.button_2_text != blank -%}
     <div class="coach-home-promo__links">
@@ -57,48 +77,57 @@
   "settings": [
     { "type": "header", "content": "Heading" },
     { "type": "text", "id": "heading", "label": "Heading", "default": "Black Friday Sale" },
-    { "type": "select", "id": "heading_font", "label": "Font", "default": "garamond", "options": [
-      { "value": "garamond", "label": "Garamond" },
-      { "value": "helvetica", "label": "Helvetica" }
+    { "type": "select", "id": "heading_font", "label": "Font", "default": "extended", "options": [
+      { "value": "extended", "label": "Helvetica Extended Medium" },
+      { "value": "extended_53", "label": "Helvetica Extended" },
+      { "value": "helvetica", "label": "Helvetica" },
+      { "value": "garamond", "label": "Garamond" }
     ] },
     { "type": "range", "id": "heading_size", "min": 18, "max": 56, "step": 1, "unit": "px", "label": "Desktop size", "default": 32 },
-    { "type": "range", "id": "heading_size_mobile", "min": 16, "max": 40, "step": 1, "unit": "px", "label": "Mobile size", "default": 26 },
+    { "type": "range", "id": "heading_size_mobile", "min": 16, "max": 40, "step": 1, "unit": "px", "label": "Mobile size", "default": 20 },
     { "type": "select", "id": "heading_weight", "label": "Weight", "default": "400", "options": [
       { "value": "400", "label": "Regular" },
       { "value": "700", "label": "Bold" }
     ] },
-    { "type": "range", "id": "heading_spacing", "min": 0, "max": 12, "step": 1, "unit": "px", "label": "Letter spacing", "default": 0 },
+    { "type": "range", "id": "heading_spacing", "min": 0, "max": 2, "step": 0.1, "unit": "px", "label": "Desktop letter spacing", "default": 0.2 },
+    { "type": "range", "id": "heading_spacing_mobile", "min": 0, "max": 2, "step": 0.1, "unit": "px", "label": "Mobile letter spacing", "default": 0.4 },
     { "type": "color", "id": "heading_color", "label": "Color", "default": "#ffffff" },
     { "type": "header", "content": "Description" },
-    { "type": "text", "id": "text", "label": "Description", "default": "20% off select styles. Code: BLACKFRIDAY" },
-    { "type": "select", "id": "text_font", "label": "Font", "default": "helvetica", "options": [
+    { "type": "text", "id": "text_lead", "label": "Bold lead", "default": "20% off" },
+    { "type": "text", "id": "text", "label": "Description", "default": " select styles. Code: BLACKFRIDAY" },
+    { "type": "select", "id": "text_font", "label": "Font", "default": "garamond", "options": [
+      { "value": "garamond", "label": "Garamond" },
       { "value": "helvetica", "label": "Helvetica" },
-      { "value": "garamond", "label": "Garamond" }
+      { "value": "extended", "label": "Helvetica Extended Medium" },
+      { "value": "extended_53", "label": "Helvetica Extended" }
     ] },
-    { "type": "range", "id": "text_size", "min": 12, "max": 24, "step": 1, "unit": "px", "label": "Desktop size", "default": 16 },
-    { "type": "range", "id": "text_size_mobile", "min": 12, "max": 20, "step": 1, "unit": "px", "label": "Mobile size", "default": 14 },
+    { "type": "range", "id": "text_size", "min": 12, "max": 32, "step": 1, "unit": "px", "label": "Desktop size", "default": 22 },
+    { "type": "range", "id": "text_size_mobile", "min": 12, "max": 24, "step": 1, "unit": "px", "label": "Mobile size", "default": 16 },
     { "type": "select", "id": "text_weight", "label": "Weight", "default": "400", "options": [
       { "value": "400", "label": "Regular" },
       { "value": "700", "label": "Bold" }
     ] },
-    { "type": "range", "id": "text_spacing", "min": 0, "max": 8, "step": 1, "unit": "px", "label": "Letter spacing", "default": 0 },
+    { "type": "range", "id": "text_spacing", "min": 0, "max": 2, "step": 0.1, "unit": "px", "label": "Desktop letter spacing", "default": 0.2 },
+    { "type": "range", "id": "text_spacing_mobile", "min": 0, "max": 2, "step": 0.1, "unit": "px", "label": "Mobile letter spacing", "default": 0.4 },
     { "type": "color", "id": "text_color", "label": "Color", "default": "#ffffff" },
     { "type": "header", "content": "Buttons" },
     { "type": "text", "id": "button_1_text", "label": "Button text", "default": "Shop All" },
     { "type": "url", "id": "button_1_link", "label": "Button link" },
     { "type": "text", "id": "button_2_text", "label": "Second button text", "default": "Shop Favourites" },
     { "type": "url", "id": "button_2_link", "label": "Second button link" },
-    { "type": "select", "id": "button_font", "label": "Font", "default": "helvetica", "options": [
+    { "type": "select", "id": "button_font", "label": "Font", "default": "extended", "options": [
+      { "value": "extended", "label": "Helvetica Extended Medium" },
+      { "value": "extended_53", "label": "Helvetica Extended" },
       { "value": "helvetica", "label": "Helvetica" },
       { "value": "garamond", "label": "Garamond" }
     ] },
     { "type": "range", "id": "button_size", "min": 12, "max": 20, "step": 1, "unit": "px", "label": "Desktop size", "default": 14 },
-    { "type": "range", "id": "button_size_mobile", "min": 12, "max": 20, "step": 1, "unit": "px", "label": "Mobile size", "default": 14 },
+    { "type": "range", "id": "button_size_mobile", "min": 12, "max": 20, "step": 1, "unit": "px", "label": "Mobile size", "default": 12 },
     { "type": "select", "id": "button_weight", "label": "Weight", "default": "400", "options": [
       { "value": "400", "label": "Regular" },
       { "value": "700", "label": "Bold" }
     ] },
-    { "type": "range", "id": "button_spacing", "min": 0, "max": 8, "step": 1, "unit": "px", "label": "Letter spacing", "default": 0 },
+    { "type": "range", "id": "button_spacing", "min": 0, "max": 2, "step": 0.1, "unit": "px", "label": "Letter spacing", "default": 0.2 },
     { "type": "color", "id": "button_color", "label": "Color", "default": "#ffffff" },
     { "type": "header", "content": "Disclaimer" },
     { "type": "text", "id": "note", "label": "Disclaimer", "default": "EXCLUSIONS APPLY. VALID UNTIL 30/11/26, 23:59 GMT. FULL T&CS" },
@@ -106,15 +135,17 @@
     { "type": "url", "id": "note_link", "label": "Link" },
     { "type": "select", "id": "note_font", "label": "Font", "default": "helvetica", "options": [
       { "value": "helvetica", "label": "Helvetica" },
-      { "value": "garamond", "label": "Garamond" }
+      { "value": "garamond", "label": "Garamond" },
+      { "value": "extended", "label": "Helvetica Extended Medium" },
+      { "value": "extended_53", "label": "Helvetica Extended" }
     ] },
     { "type": "range", "id": "note_size", "min": 8, "max": 18, "step": 1, "unit": "px", "label": "Desktop size", "default": 10 },
-    { "type": "range", "id": "note_size_mobile", "min": 8, "max": 16, "step": 1, "unit": "px", "label": "Mobile size", "default": 10 },
+    { "type": "range", "id": "note_size_mobile", "min": 8, "max": 16, "step": 1, "unit": "px", "label": "Mobile size", "default": 8 },
     { "type": "select", "id": "note_weight", "label": "Weight", "default": "400", "options": [
       { "value": "400", "label": "Regular" },
       { "value": "700", "label": "Bold" }
     ] },
-    { "type": "range", "id": "note_spacing", "min": 0, "max": 8, "step": 1, "unit": "px", "label": "Letter spacing", "default": 1 },
+    { "type": "range", "id": "note_spacing", "min": 0, "max": 2, "step": 0.1, "unit": "px", "label": "Letter spacing", "default": 0.2 },
     { "type": "select", "id": "note_transform", "label": "Case", "default": "uppercase", "options": [
       { "value": "uppercase", "label": "Uppercase" },
       { "value": "none", "label": "As typed" }

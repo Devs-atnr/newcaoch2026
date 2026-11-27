@@ -37,15 +37,27 @@
   flex: 0 0 100%;
   height: 100%;
 }
-.coach-home-banner__arrow {
+.coach-home-banner__arrow,
+.coach-home-banner__edge {
   padding: 0;
   border: 0;
   background: transparent;
-  color: inherit;
-  font-size: 22px;
+  color: #fff;
+  font-size: 28px;
   line-height: 1;
   cursor: pointer;
 }
+.coach-home-banner__edge {
+  position: absolute;
+  top: 50%;
+  z-index: 2;
+  transform: translateY(-50%);
+  width: 36px;
+  height: 36px;
+}
+.coach-home-banner__edge--prev { left: 8px; }
+.coach-home-banner__edge--next { right: 8px; }
+.coach-home-banner__links .coach-home-banner__arrow[data-home-next] { display: none; }
 .coach-home-banner__img--mob { display: none; }
 .coach-home-banner__copy {
   position: absolute;
@@ -118,7 +130,15 @@
     object-position: center top;
   }
   .coach-home-banner__copy.is-mob-left { left: var(--hb-cl-m, 16px); right: auto; width: auto; margin: 0; text-align: left; transform: none; }
-  .coach-home-banner__copy.is-mob-center { left: 0; right: 0; width: min(320px, calc(100% - 32px)); margin: 0 auto; text-align: center; transform: none; }
+  .coach-home-banner__copy.is-mob-center {
+    left: 16px;
+    right: 16px;
+    width: auto;
+    max-width: none;
+    margin: 0;
+    text-align: center;
+    transform: none;
+  }
   .coach-home-banner__copy.is-mob-right { right: var(--hb-cr-m, 16px); left: auto; width: auto; margin: 0; text-align: right; transform: none; }
   .coach-home-banner__copy.is-mob-top { top: var(--hb-ct-m, 24px); bottom: auto; }
   .coach-home-banner__copy.is-mob-middle { top: 50%; bottom: auto; }
@@ -129,8 +149,19 @@
   .coach-home-banner__copy.is-mob-left .coach-home-banner__links { justify-content: flex-start; }
   .coach-home-banner__copy.is-mob-center .coach-home-banner__links { justify-content: center; }
   .coach-home-banner__copy.is-mob-right .coach-home-banner__links { justify-content: flex-end; }
-  .coach-home-banner__copy h2 { font-size: var(--hb-heading-size-m, 22px); }
-  .coach-home-banner__copy p { font-size: var(--hb-text-size-m, 14px); }
+  .coach-home-banner__copy h2 {
+    font-size: var(--hb-heading-size-m, 20px);
+    letter-spacing: var(--hb-heading-space-m, 0.4px);
+  }
+  .coach-home-banner__copy p {
+    font-size: var(--hb-text-size-m, 14px);
+    letter-spacing: var(--hb-text-space-m, 0);
+  }
+  .coach-home-banner__links .coach-home-banner__arrow { display: none; }
+  .coach-home-banner__edge--prev { display: block; }
+}
+@media screen and (min-width: 750px) {
+  .coach-home-banner__edge--prev { display: none; }
 }
 @media screen and (min-width: 750px) {
   .coach-home-banner__links a { font-size: var(--hb-btn-size, 14px); }
